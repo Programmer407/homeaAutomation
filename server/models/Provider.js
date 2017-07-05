@@ -2,10 +2,11 @@
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize';
 
-const Role = sequelize.define(
-  "roles",
+const Provider = sequelize.define(
+  "providers",
   {
-    roleName: { type: Sequelize.STRING(128), field: "role_name" }
+    providerName: { type: Sequelize.STRING(128), field: "provider_name" },
+    status: { type: Sequelize.INTEGER, field: "status" }
   },
   {
     // don't add the timestamp attributes (updatedAt, createdAt)
@@ -18,4 +19,4 @@ const Role = sequelize.define(
   }
 )
 //User.sync({force: true});
-export default Role
+export default Provider

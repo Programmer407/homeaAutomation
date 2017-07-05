@@ -1,5 +1,10 @@
 /* @flow */
 import User from '../models/User';
+import Provider from '../models/Provider';
+import UserProvider from '../models/UserProvider';
+import UserWallet from '../models/UserWallet';
+import Transaction from '../models/Transaction';
+
 
 const USER_OBJECTS = [{
     id: 1,

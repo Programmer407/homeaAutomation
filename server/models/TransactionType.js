@@ -2,10 +2,10 @@
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize';
 
-const Role = sequelize.define(
-  "roles",
+const TransactionType = sequelize.define(
+  "transactiontype",
   {
-    roleName: { type: Sequelize.STRING(128), field: "role_name" }
+    typeName: { type: Sequelize.STRING(128), field: "type_name" }
   },
   {
     // don't add the timestamp attributes (updatedAt, createdAt)
@@ -17,5 +17,5 @@ const Role = sequelize.define(
     underscored: true
   }
 )
-//User.sync({force: true});
-export default Role
+
+export default TransactionType
