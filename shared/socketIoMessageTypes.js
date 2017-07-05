@@ -1,0 +1,8 @@
+export const NEW_NOTIFICATION = 'message'
+export const NEW_COMMENT = 'NEW_COMMENT'
+export const LIKE_ON_COMMENT = 'LIKE_ON_COMMENT'
+export const UNDO_LIKE_ON_COMMENT = 'UNDO_LIKE_ON_COMMENT'
+export const COMMENT_UPDATED = 'COMMENT_UPDATED'
+export const COMMENT_DELETED = 'COMMENT_DELETED'
+export const GOING = 'GOING'
+export const UNDO_GOING = 'UNDO_GOING'
