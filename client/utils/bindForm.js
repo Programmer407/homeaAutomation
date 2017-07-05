@@ -96,11 +96,14 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
       const { submitting } = this.props
 
       return (
+        /*
         <RaisedButton
           label={submitting ? labelWhenSubmitting : label}
           secondary
           onClick={this.handleSubmit}
           disabled={submitting}/>
+        */
+        <a href="#/" onClick={this.handleSubmit} className="color-primary">{submitting ? labelWhenSubmitting : label}</a>
       )
     }
     renderMessage = () => {

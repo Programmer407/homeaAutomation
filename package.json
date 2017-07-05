@@ -94,6 +94,7 @@
     "path-to-regexp": "^1.7.0",
     "q": "^1.4.1",
     "radium": "^0.18.1",
+    "rc-queue-anim": "^1.0.3",
     "react": "^15.1.0",
     "react-addons-css-transition-group": "^15.1.0",
     "react-autosuggest": "^9.0.1",
