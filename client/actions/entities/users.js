@@ -67,7 +67,7 @@ export const USER_REGISTER = 'USER_REGISTER'
 export const USER_REGISTER_SUCCESS = 'USER_REGISTER_SUCCESS'
 export const USER_REGISTER_FAILURE = 'USER_REGISTER_FAILURE'
 
-export function register(firstName, lastName, email) {
+export function register(username, email, password) {
   return {
     [CALL_API]: {
       types: [
@@ -78,7 +78,7 @@ export function register(firstName, lastName, email) {
       endpoint: `/api/users/create`,
       method: 'POST'
     },
-    payload: {firstName, lastName, email}
+    payload: {username, email, password}
   }
 }
 

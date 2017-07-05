@@ -10,31 +10,32 @@ import TextField from 'material-ui/TextField';
 import QueueAnim from 'rc-queue-anim';
 
 // src
-import './PageLoginInner.scss';
+import './PageForgotPasswordInner.scss';
 import { renderTextField } from '../../utils'
 
-const PageLoginInner = props => {
+const PageForgotPasswordInner = props => {
   const { onSubmit, renderSubmitButton, renderMessage } = props;
 
   return (
     <div className="page-login">
       <div className="main-body">
-        <DocumentTitle title="Login - CrypTax"/>
+        <DocumentTitle title="Forgot Password - CrypTax"/>
         <QueueAnim type="bottom" className="ui-animate">
           <div key="1">
+            
             <div className="body-inner">
               <div className="card bg-white">
                 <div className="card-content">
                   <section className="logo text-center">
-                    <h1><a href="#/">CrypTax</a></h1>
+                    <h1><a href="#/">Forgot Password</a></h1>
                   </section>
-                  <form className="form-horizontal" onSubmit={onSubmit}>
+                  <form>
                     <fieldset>
                       <div className="form-group">
                         <Field name="email" label="Email" component={renderTextField} autoFocus/>
-                      </div>
-                      <div className="form-group">
-                        <Field name="password" label="Password" component={renderTextField} type="password"/>
+                        <div className="additional-info text-center text-small">
+                          Enter your email address that you used to register. We'll send you an email with your username and a link to reset your password.
+                        </div>
                       </div>
                     </fieldset>
                   </form>
@@ -42,18 +43,14 @@ const PageLoginInner = props => {
                 <div className="card-action no-border text-right">
                   {
                     renderSubmitButton({
-                      label: 'Login',
-                      labelWhenSubmitting: 'Logging in ...'
+                      label: 'Reset',
+                      labelWhenSubmitting: 'Reset'
                     })
                   }
                 </div>
               </div>
-              <div className="additional-info">
-                <Link to="/register">Sign up</Link>
-                <span className="divider-h" />
-                <Link to="/forgotPassword">Forgot your password?</Link>
-              </div>
             </div>
+
           </div>
         </QueueAnim>
       </div>
@@ -86,7 +83,7 @@ const PageLoginInner = props => {
       </div>
     </div>
     */
-  )
+  );
 }
 
-export default PageLoginInner
+export default PageForgotPasswordInner

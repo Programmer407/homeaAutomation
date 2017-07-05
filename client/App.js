@@ -23,6 +23,8 @@ import './styles/css/app.scss';
 import MUITheme from "../config/theme"
 import {
   PageLogin,
+  PageRegister,
+  PageForgotPassword,
   PageLogout,
   Page404,
   PageSystemView,
@@ -70,6 +72,8 @@ export default class App extends React.Component {
                   <div className={`container-fluid`}>
                     <Switch>
                       <PublicRoute path="/login" component={PageLogin} />
+                      <PublicRoute path="/register" component={PageRegister} />
+                      <PublicRoute path="/forgotPassword" component={PageForgotPassword} />
                       <Route path="/logout" component={PageLogout} />
 
                       <PrivateRoute
