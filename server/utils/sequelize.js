@@ -21,6 +21,15 @@ const sequelize = new Sequelize(dbName, username, password, {
   }
 })
 
+sequelize
+  .sync({
+    force: false
+  })
+  .then(function(err) {
+
+  }, function(err) {
+    console.log('Unable to connect to the database:', err);
+  });
 export default sequelize
 
 const cache = {}

@@ -1,4 +1,5 @@
 /* @flow */
+import User from '../models/User';
 
 const USER_OBJECTS = [{
     id: 1,

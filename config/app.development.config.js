@@ -4,7 +4,7 @@ export default {
         username: 'root',
         password: 'root',
         multiStatement: false,
-        dbName: 'fo',
+        dbName: 'cryptax',
         host: 'localhost',
         enableLogging: true
     },
