@@ -9,10 +9,28 @@ import PageRegisterInner from './PageRegisterInner'
 import {register} from '../../actions/entities/users'
 import { bindForm } from '../../utils'
 
-const fields = ['username', 'email', 'password']
+const fields = ['firstName', 'lastName', 'email', 'password']
 
 const validate = values => {
-  return {}
+  let errors = {};
+  let hasErrors = false;
+  if( !values.firstName || !values.firstName.trim() === '' ) {
+    errors.firstName = 'Missing first name field.';
+    hasErrors = true;
+  }
+  if( !values.lastName || !values.lastName.trim() === '' ) {
+    errors.lastName = 'Missing last name field.';
+    hasErrors = true;
+  }
+  if( !values.email || !values.email.trim() === '' ) {
+    errors.email = 'Missing email field.';
+    hasErrors = true;
+  }
+  if( !values.password || !values.password.trim() === '' ) {
+    errors.password = 'Missing password field.';
+    hasErrors = true;
+  }
+  return hasErrors && errors;
 }
 
 @reduxForm({
@@ -23,14 +41,14 @@ const validate = values => {
 @bindForm({
   onSubmit: (values, dispatch, props) => {
     debugger;
-    const { username, email, password } = values
+    const { firstName, lastName, email, password } = values
 
-    return dispatch(register(username, email, password))
+    return dispatch(register(firstName, lastName, email, password))
       .then(action => {
         const { error, payload } = action
 
         if ( !error ) {
-          const linkNext = get(payload, 'user.linkHome', '/login')
+          const linkNext = get(payload, 'user.linkHome', '/')
           dispatch(push(linkNext))
         }
         return action

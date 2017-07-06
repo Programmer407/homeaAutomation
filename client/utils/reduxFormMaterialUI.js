@@ -11,10 +11,22 @@ import SelectField from 'material-ui/SelectField'
 import { hasFeed as fnHasFeed, getFeed } from './utils'
 import { fetchAllEnvironmentTypes, fetchAllEnvironmentLocations, fetchAllNodeTypes, fetchAllEnvironments } from '../actions'
 
-export const renderTextField = ({ input, label, innerRef, meta: { touched, error }, ...custom }) => (
+export const renderTextFieldWithFixedLabel = ({ input, label, innerRef, meta: { touched, error }, ...custom }) => (
   <TextField
     floatingLabelText={label}
     floatingLabelFixed
+    fullWidth
+    errorText={touched && error}
+    ref={innerRef}
+    hintStyle={{fontSize: 12}}
+    {...input}
+    {...custom}
+  />
+)
+
+export const renderTextField = ({ input, label, innerRef, meta: { touched, error }, ...custom }) => (
+  <TextField
+    floatingLabelText={label}
     fullWidth
     errorText={touched && error}
     ref={innerRef}

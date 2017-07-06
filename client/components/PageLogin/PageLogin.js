@@ -13,7 +13,17 @@ import { bindForm } from '../../utils'
 const fields = ['email', 'password']
 
 const validate = values => {
-  return {}
+  let errors = {};
+  let hasErrors = false;
+  if( !values.email || !values.email.trim() === '' ) {
+    errors.email = 'Missing email field.';
+    hasErrors = true;
+  }
+  if( !values.password || !values.password.trim() === '' ) {
+    errors.password = 'Missing password field.';
+    hasErrors = true;
+  }
+  return hasErrors && errors;
 }
 
 @reduxForm({
@@ -26,18 +36,19 @@ const validate = values => {
     const { email, password } = values
 
     return dispatch(login(email, password))
-      .then(action => {
-        const { error, payload } = action
+    .then(action => {
+      const { error, payload } = action
 
-        if ( !error ) {
-          const linkNext = get(payload, 'user.linkHome', '/')
-          dispatch(push(linkNext))
-        } else {
-          console.log(error)
-        }
-        
-        return action
-      }) 
+      if ( !error ) {
+        // const linkNext = get(payload, 'user.linkHome', '/')
+        const linkNext = get(payload, 'user.linkHome', '/')
+        console.log(linkNext)
+        dispatch(push(linkNext))
+      } else {
+        console.log(error)
+      }
+      return action
+    }) 
   }
 })
 export default class PageLogin extends React.Component {
