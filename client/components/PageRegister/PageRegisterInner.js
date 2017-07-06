@@ -28,6 +28,9 @@ const PageRegisterInner = props => {
                 <div className="card-content">
                   <section className="logo text-center">
                     <h1><a href="#/">Sign Up</a></h1>
+                    {
+                      renderMessage()
+                    }
                   </section>
 
                   <form className="form-horizontal">

@@ -1,11 +1,11 @@
 /* @flow */
 
 // libs
-import React from 'react'
-import RaisedButton from 'material-ui/RaisedButton'
+import React from 'react';
+import RaisedButton from 'material-ui/RaisedButton';
 import get from 'lodash/get'
-import has from 'lodash/has'
-
+import has from 'lodash/has';
+import { Link } from 'react-router-dom';
 // src
 import { ENTITY_STATUS_DATA_AVAILABLE } from './utils'
 
@@ -105,14 +105,14 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
           onClick={this.handleSubmit}
           disabled={submitting}/>
         */
-        <a href="#/" onClick={this.handleSubmit} className="color-primary">{submitting ? labelWhenSubmitting : label}</a>
+        <Link to="#/" onClick={this.handleSubmit} className="color-primary">{submitting ? labelWhenSubmitting : label}</Link>
       )
     }
     renderMessage = () => {
 
       const { error, errorMessage } = this.state
 
-      return error ? <div style={{color: 'red'}}>{ errorMessage }</div> : <span></span>
+      return error ? <div style={{color: '#EF5350', fontSize: '12pt'}}>{ errorMessage }</div> : <span></span>
     }
     render() {
       return (
