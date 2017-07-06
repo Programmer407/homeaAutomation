@@ -12,6 +12,7 @@ import QueueAnim from 'rc-queue-anim';
 // src
 import './PageLoginInner.scss';
 import { renderTextField } from '../../utils'
+import { renderCheckbox } from '../../utils'
 
 const PageLoginInner = props => {
   const { onSubmit, renderSubmitButton, renderMessage } = props;
@@ -27,6 +28,9 @@ const PageLoginInner = props => {
                 <div className="card-content">
                   <section className="logo text-center">
                     <h1><a href="#/">CrypTax</a></h1>
+                    {
+                      renderMessage()
+                    }
                   </section>
                   <form className="form-horizontal" onSubmit={onSubmit}>
                     <fieldset>
@@ -35,6 +39,9 @@ const PageLoginInner = props => {
                       </div>
                       <div className="form-group">
                         <Field name="password" label="Password" component={renderTextField} type="password"/>
+                      </div>
+                      <div className="form-group">
+                        <Field name="rememberMeOption" label="Remember Me" component={renderCheckbox} />
                       </div>
                     </fieldset>
                   </form>

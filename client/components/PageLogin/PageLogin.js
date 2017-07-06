@@ -3,6 +3,7 @@ import React from 'react'
 import {reduxForm} from 'redux-form'
 import {push} from 'react-router-redux'
 import get from 'lodash/get'
+import isEmpty from 'lodash/isEmpty'
 
 // src
 import PageLoginInner from './PageLoginInner'
@@ -31,10 +32,12 @@ const validate = values => {
         if ( !error ) {
           const linkNext = get(payload, 'user.linkHome', '/')
           dispatch(push(linkNext))
+        } else {
+          console.log(error)
         }
         
         return action
-      })
+      }) 
   }
 })
 export default class PageLogin extends React.Component {

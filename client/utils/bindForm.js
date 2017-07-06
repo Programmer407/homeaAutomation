@@ -21,6 +21,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
   })
 
   return class BoundForm extends React.Component {
+
     handleSubmit: Function;
     
     state = getDefaultState();
@@ -80,12 +81,13 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
             const {error, payload} = action
 
             if (error) {
+              
               this.setState({
                 error: true,
-                errorMessage: payload.errorMessage
+                errorMessage: payload.message
               })
 
-              throw new Error(`An error occurred while submitting the form: ${payload.errorMessage}`)
+              throw new Error(`An error occurred while submitting the form: ${payload.message}`)
             }
 
             return action
@@ -107,6 +109,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
       )
     }
     renderMessage = () => {
+
       const { error, errorMessage } = this.state
 
       return error ? <div style={{color: 'red'}}>{ errorMessage }</div> : <span></span>
