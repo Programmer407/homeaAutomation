@@ -59,3 +59,17 @@ export const findUserByEmailAndPassword = (email:string, password:string): Promi
     return item
   })
 
+export const findUserByEmail = (email:string): Promise<any> =>
+  User.findOne(Object.assign({
+    where: {
+      email
+    }
+  }))
+  .then(item => {
+    if (!item) {
+      throw new NotFoundError(`Couldn't find an object with email ${email}`)
+    }
+    //console.log(item.dataValues)
+    return item
+  })
+
