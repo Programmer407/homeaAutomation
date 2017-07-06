@@ -12,7 +12,13 @@ import { bindForm } from '../../utils'
 const fields = ['email']
 
 const validate = values => {
-  return {}
+  let errors = {};
+  let hasErrors = false;
+  if( !values.email || !values.email.trim() === '' ) {
+    errors.email = 'Missing email field.';
+    hasErrors = true;
+  }
+  return hasErrors && errors;
 }
 
 @reduxForm({

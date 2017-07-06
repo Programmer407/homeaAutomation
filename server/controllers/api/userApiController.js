@@ -28,7 +28,7 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
     res
       .status(400)
       .send({
-        message: 'Missing requied arguments'
+        message: 'Missing required arguments'
       })
   }
 
