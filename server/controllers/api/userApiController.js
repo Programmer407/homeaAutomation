@@ -5,7 +5,8 @@ import express from 'express'
 
 // src
 import { ensureAnonymity, caughtError } from '../../utils'
-import { findUserByEmailAndPassword } from '../../managers'
+import { findUserByEmailAndPassword, findUserByEmailAndPassword1 } from '../../managers'
+
 
 const router = express.Router()
 
@@ -31,8 +32,30 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
       })
   }
 
-  const user = findUserByEmailAndPassword(email, password)
+  findUserByEmailAndPassword(email, password)
+    .then(user => {
+      //console.log('user : ' + JSON.stringify(user))
 
+      return req.login(user, err => {
+        if ( err ) {
+          caughtError(res, err)
+        } else {
+          res.send({ user })
+        }
+      })
+    })
+    .catch(error => {
+      //console.log('error')
+      //caughtError(res, error)
+      res
+      .status(400)
+      .send({
+        message: 'Invalid username or password'
+      })
+    })
+
+  /*const user = findUserByEmailAndPassword(email, password)
+  console.log('user : ' + user)
   if ( !user ) {
     res
       .status(400)
@@ -47,7 +70,7 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
     } else {
       res.send({ user })
     }
-  })
+  })*/
 })
 
 router.get('/api/logout', (req, res) => {

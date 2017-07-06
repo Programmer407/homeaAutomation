@@ -1,7 +1,6 @@
 // libs
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize';
-// src
 
 const UserAccountType = sequelize.define(
   "useraccounttype",

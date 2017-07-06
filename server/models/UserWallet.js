@@ -1,15 +1,17 @@
 // libs
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize';
+import UserProvider from './UserProvider';
 
-const Role = sequelize.define(
-  "roles",
+const UserWallet = sequelize.define(
+  "userwallet",
   {
-    roleName: { type: Sequelize.STRING(128), field: "role_name" }
+    walletType: { type: Sequelize.STRING(128), field: "wallet_type" },
+    balance: { type: Sequelize.STRING(128), field: "balance" }
   },
   {
     // don't add the timestamp attributes (updatedAt, createdAt)
-    timestamps: false,
+    timestamps: true,
     // disable the modification of table names
     freezeTableName: true,
     // don't use camelcase for automatically added attributes but underscore style
@@ -17,5 +19,6 @@ const Role = sequelize.define(
     underscored: true
   }
 )
-//User.sync({force: true});
-export default Role
+UserWallet.belongsTo(UserProvider);
+
+export default UserWallet

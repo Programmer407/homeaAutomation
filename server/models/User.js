@@ -5,8 +5,6 @@ import Role from './Role';
 import UserAccountType from './UserAccountType';
 import TimeZone from './TimeZone';
 
-// src
-
 const User = sequelize.define(
   "users",
   {
