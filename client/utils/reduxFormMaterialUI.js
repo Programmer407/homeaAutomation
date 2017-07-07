@@ -36,10 +36,12 @@ export const renderTextField = ({ input, label, innerRef, meta: { touched, error
   />
 )
 
-export const renderCheckbox = ({ input, label }) => (
+export const renderCheckbox = ({ input, label, padding }) => (
   <Checkbox label={label}
     checked={input.value ? true : false}
-    onCheck={input.onChange}/>
+    onCheck={input.onChange}
+    style={{paddingTop: padding[0], paddingRight: padding[1], paddingBottom: padding[2], paddingLeft: padding[3]}}
+  />
 )
 
 export const renderRadioGroup = ({ input, label, ...rest }) => (

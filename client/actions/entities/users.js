@@ -8,7 +8,7 @@ export const USER_LOGIN = 'USER_LOGIN'
 export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS'
 export const USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE'
 
-function callApiLogin(email, password) {
+function callApiLogin(email, password, rememberMe) {
   return {
     [CALL_API]: {
       types: [
@@ -19,13 +19,13 @@ function callApiLogin(email, password) {
       endpoint: `/api/login`,
       method: 'POST'
     },
-    payload: {email, password}
+    payload: {email, password, rememberMe}
   }
 }
 
-export function login(email, password) {
+export function login(email, password, rememberMe) {
   return (dispatch, getState) =>
-    dispatch(callApiLogin(email, password))
+    dispatch(callApiLogin(email, password, rememberMe))
       // adding setTimeout to avoid this warning
       // Warning: setState(...): Cannot update during an existing state transition (such as within `render` or another component's constructor). Render methods should be a pure function of props and state; constructor side-effects are an anti-pattern, but can be moved to `componentWillMount`.
       /*

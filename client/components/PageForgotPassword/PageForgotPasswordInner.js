@@ -28,6 +28,9 @@ const PageForgotPasswordInner = props => {
                 <div className="card-content">
                   <section className="logo text-center">
                     <h1><a href="#/">Forgot Password</a></h1>
+                    {
+                      renderMessage()
+                    }
                   </section>
                   <form>
                     <fieldset>
