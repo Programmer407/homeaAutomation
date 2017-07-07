@@ -13,7 +13,8 @@ export default {
   zIndex: zIndex,
   textTransform: 'none',
   palette: {
-    primary1Color: '#384757',
+    // Changed colors @muhammadkasim
+    primary1Color: '#00BCD4',
     primary2Color: colors.orangeA400,
     primary3Color: colors.lightBlack,
     accent1Color: 'rgb(0, 123, 255)',
