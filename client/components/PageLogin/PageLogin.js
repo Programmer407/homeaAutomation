@@ -10,7 +10,7 @@ import PageLoginInner from './PageLoginInner'
 import {login} from '../../actions/entities/users'
 import { bindForm } from '../../utils'
 
-const fields = ['email', 'password']
+const fields = ['email', 'password', 'rememberMe']
 
 const validate = values => {
   let errors = {};
@@ -33,16 +33,13 @@ const validate = values => {
 })
 @bindForm({
   onSubmit: (values, dispatch, props) => {
-    const { email, password } = values
+    const { email, password, rememberMe } = values
 
-    return dispatch(login(email, password))
+    return dispatch(login(email, password, rememberMe))
     .then(action => {
       const { error, payload } = action
-
       if ( !error ) {
-        // const linkNext = get(payload, 'user.linkHome', '/')
         const linkNext = get(payload, 'user.linkHome', '/')
-        console.log(linkNext)
         dispatch(push(linkNext))
       } else {
         console.log(error)

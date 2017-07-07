@@ -41,7 +41,7 @@ const PageLoginInner = props => {
                         <Field name="password" label="Password" component={renderTextField} type="password"/>
                       </div>
                       <div className="form-group">
-                        <Field name="rememberMeOption" label="Remember Me" component={renderCheckbox} />
+                        <Field name="rememberMe" label="Remember Me" component={renderCheckbox} padding={[15, 0, 0, 0]}/>
                       </div>
                     </fieldset>
                   </form>
