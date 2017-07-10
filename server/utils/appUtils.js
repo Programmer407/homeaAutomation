@@ -50,8 +50,10 @@ export const setupSessionStore = (app) => {
     user: username, // Database user.
     password, // Password for the above database user.
     database: dbName, // Database name.
-    checkExpirationInterval: 900000, // How frequently expired sessions will be cleared; milliseconds.
-    expiration: 86400000, // The maximum age of a valid session; milliseconds.
+    //checkExpirationInterval: 900000, // How frequently expired sessions will be cleared; milliseconds.
+    //expiration: 86400000, // The maximum age of a valid session; milliseconds.
+    checkExpirationInterval: 600000, // How frequently expired sessions will be cleared; milliseconds.
+    expiration: 1800000, // The maximum age of a valid session; milliseconds.
     createDatabaseTable: true, // Whether or not to create the sessions database table, if one does not already exist.
     schema: {
       tableName: 'sessions',
@@ -75,10 +77,12 @@ export const setupSessionStore = (app) => {
     store: sessionStore,
     cookie: {
       domain: domain,
-      maxAge: 31536000000
+      //maxAge: 31536000000
+      maxAge: 1800000
     },
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: true,
+    rolling: true
   }))
 
   return sessionStore
