@@ -1,6 +1,7 @@
 export { default as PageLogin } from "./PageLogin"
 export { default as PageRegister } from "./PageRegister"
 export { default as PageForgotPassword } from "./PageForgotPassword"
+export { default as PageResetPassword } from "./PageResetPassword"
 export { default as PageLogout } from "./PageLogout"
 export { default as Page404 } from "./Page404"
 export { default as PageErrorView } from "./PageErrorView"
