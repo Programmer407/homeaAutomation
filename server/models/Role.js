@@ -17,5 +17,4 @@ const Role = sequelize.define(
     underscored: true
   }
 )
-//User.sync({force: true});
 export default Role

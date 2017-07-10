@@ -17,5 +17,4 @@ const TransactionType = sequelize.define(
     underscored: true
   }
 )
-
 export default TransactionType

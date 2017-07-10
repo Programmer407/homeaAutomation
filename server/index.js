@@ -82,5 +82,5 @@ httpServer.listen(port, err => {
     console.error(`Server startup failed: `, err)
   }
 
-  console.info('==> 🌎 Listening on port %s. Open up http://0.0.0.0:%s/ in your browser.', port, port);
+  console.info('==> 🌎 Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port);
 })

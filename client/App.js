@@ -7,19 +7,13 @@ import { DragDropContextProvider } from "react-dnd"
 import HTML5Backend from "react-dnd-html5-backend"
 
 // src
-//import styles from "./App.less"
-
-
-
+import styles from "./App.scss"
 import './styles/css/bootstrap.scss';
 // custom
 import './styles/css/layout.scss';
 import './styles/css/theme.scss';
 import './styles/css/ui.scss';
 import './styles/css/app.scss';
-
-
-
 import MUITheme from "../config/theme"
 import {
   PageLogin,
@@ -64,10 +58,10 @@ export default class App extends React.Component {
       <DragDropContextProvider backend={HTML5Backend}>
         <Provider store={store}>
           <Router {...routerProps}>
-            <div className=''>
+            <div className={styles.root}>
               <NotificationSystemConnector />
-              <div className=''>
-                <div className=''>
+              <div className={styles.layout}>
+                <div className={styles.primaryColumn}>
 
                   <div className={`container-fluid`}>
                     <Switch>

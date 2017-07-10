@@ -12,7 +12,7 @@ const User = sequelize.define(
     lastName: { type: Sequelize.STRING(128), field: "last_name" },
     email: { type: Sequelize.STRING(128), field: "email" },
     password: { type: Sequelize.STRING(128), field: "password" },
-    status: { type: Sequelize.INTEGER, field: "status" }
+    status: { type: Sequelize.INTEGER, defaultValue: 1, field: "status" }
   },
   {
     // don't add the timestamp attributes (updatedAt, createdAt)
@@ -27,5 +27,5 @@ const User = sequelize.define(
 User.belongsTo(Role);
 User.belongsTo(UserAccountType);
 User.belongsTo(TimeZone);
-//User.sync({force: true});
+
 export default User

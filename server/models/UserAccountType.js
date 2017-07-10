@@ -17,5 +17,5 @@ const UserAccountType = sequelize.define(
     underscored: true
   }
 )
-//User.sync({force: true});
+
 export default UserAccountType

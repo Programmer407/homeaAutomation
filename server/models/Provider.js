@@ -18,5 +18,4 @@ const Provider = sequelize.define(
     underscored: true
   }
 )
-//User.sync({force: true});
 export default Provider

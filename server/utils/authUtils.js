@@ -10,7 +10,10 @@ export const setupPassport = () => {
   })
 
   passport.deserializeUser((id, done) => {
-    done(null, findUserByID(id))
+    findUserByID(id)
+    .then(user => { 
+      done(null, user)
+    }) 
   })
 }
 
