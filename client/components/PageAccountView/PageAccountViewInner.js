@@ -1,13 +1,13 @@
 // libs
-import React from "react"
-import DocumentTitle from "react-document-title"
-import styles from "./PageSystemViewInner.scss"
+import React from "react";
+import DocumentTitle from "react-document-title";
+import styles from "./PageAccountViewInner.scss";
 import { Link } from "react-router-dom";
 
-const PageSystemViewInner = props => {
+const PageAccountViewInner = props => {
   return (
     <div className={`${styles.root}`}>
-      <DocumentTitle title="Transactions - Cryptax" />
+      <DocumentTitle title="Account - Cryptax" />
       {/*<div className="row">
         <div className="col-lg-12">
           Home Page
@@ -15,7 +15,7 @@ const PageSystemViewInner = props => {
       </div>*/}
       <div className="container-fluid">
         <nav class="navbar navbar-inverse bg-primary">
-          <h2>Transactions</h2>
+          <h2>Account</h2>
           <Link to="/system" className="color-primary">Transactions</Link>
           <span className="divider-pipe" />
           <Link to="/account" className="color-primary">Account</Link>
@@ -27,4 +27,4 @@ const PageSystemViewInner = props => {
   )
 }
 
-export default PageSystemViewInner
+export default PageAccountViewInner

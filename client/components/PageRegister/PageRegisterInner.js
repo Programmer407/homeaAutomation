@@ -42,14 +42,17 @@ const PageRegisterInner = props => {
                         <Field name="lastName" label="Last Name" component={renderTextField} />
                       </div>
                       <div className="form-group">
-                        <Field name="email" label="Email" component={renderTextField} />
+                        <Field name="email" label="Email" autoComplete="off" component={renderTextField} />
                       </div>
                       <div className="form-group">
-                        <Field name="password" label="Password" type="password" component={renderTextField} />
+                        <Field name="password" label="Password" type="password" autoComplete="off" component={renderTextField} />
+                      </div>
+                      <div className="form-group">
+                        <Field name="confirmPassword" label="Confirm Password" type="password" autoComplete="off" component={renderTextField} />
                       </div>
                       <div className="divider" />
                       <div className="form-group">
-                        <p className="text-small">By clicking on sign up, you agree to <a href="javascript:;"><i>terms</i></a> and <a href="javascript:;"><i>privacy policy</i></a></p>
+                        <p className="text-small">By clicking on sign up, you agree to <Link to="/terms"><i>terms</i></Link> and <Link to="/privacy"><i>privacy policy</i></Link></p>
                       </div>
                     </fieldset>
                   </form>

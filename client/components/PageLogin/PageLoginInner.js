@@ -35,10 +35,10 @@ const PageLoginInner = props => {
                   <form className="form-horizontal" onSubmit={onSubmit}>
                     <fieldset>
                       <div className="form-group">
-                        <Field name="email" label="Email" component={renderTextField} autoFocus/>
+                        <Field name="email" label="Email" component={renderTextField} autoComplete="off" autoFocus/>
                       </div>
                       <div className="form-group">
-                        <Field name="password" label="Password" component={renderTextField} type="password"/>
+                        <Field name="password" label="Password" type="password" component={renderTextField} autoComplete="off"/>
                       </div>
                     </fieldset>
                   </form>

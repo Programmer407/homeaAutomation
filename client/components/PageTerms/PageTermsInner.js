@@ -1,10 +1,10 @@
 // libs
 import React from "react"
 import DocumentTitle from "react-document-title"
-import styles from "./PageSystemViewInner.scss"
+import styles from "./PageTermsInner.scss"
 import { Link } from "react-router-dom";
 
-const PageSystemViewInner = props => {
+const PageTermsInner = props => {
   return (
     <div className={`${styles.root}`}>
       <DocumentTitle title="Transactions - Cryptax" />
@@ -16,15 +16,13 @@ const PageSystemViewInner = props => {
       <div className="container-fluid">
         <nav class="navbar navbar-inverse bg-primary">
           <h2>Transactions</h2>
-          <Link to="/system" className="color-primary">Transactions</Link>
+          <Link to="/login" className="color-primary">Login</Link>
           <span className="divider-pipe" />
-          <Link to="/account" className="color-primary">Account</Link>
-          <span className="divider-pipe" />
-          <Link to="/logout" className="color-primary">Logout</Link>
+          <Link to="/register" className="color-primary">Register</Link>
         </nav>
       </div>
     </div>
   )
 }
 
-export default PageSystemViewInner
+export default PageTermsInner
