@@ -17,6 +17,4 @@ const TimeZone = sequelize.define(
     underscored: true
   }
 )
-//User.sync({force: true});
-//console.log('---------------------------------------------------------')
 export default TimeZone
