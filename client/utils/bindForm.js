@@ -3,6 +3,7 @@
 // libs
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import get from 'lodash/get'
 import has from 'lodash/has';
 import { Link } from 'react-router-dom';
@@ -105,7 +106,14 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
           onClick={this.handleSubmit}
           disabled={submitting}/>
         */
-        <Link to="#/" onClick={this.handleSubmit} className="color-primary">{submitting ? labelWhenSubmitting : label}</Link>
+        
+        <FlatButton
+          label={submitting ? labelWhenSubmitting : label}
+          secondary
+          onClick={this.handleSubmit}
+          disabled={submitting}/>
+        
+        // <Link to="#/" onClick={this.handleSubmit} className="color-primary">{submitting ? labelWhenSubmitting : label}</Link>
       )
     }
     renderMessage = () => {

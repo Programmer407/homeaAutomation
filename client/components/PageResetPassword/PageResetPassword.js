@@ -16,7 +16,7 @@ const validate = values => {
   let errors = {};
   let hasErrors = false;
   if (!values.password || !values.password.trim() === '') {
-    errors.password = 'Required';
+    errors.password = 'Missing password field';
     hasErrors = true;
   }
   if (!values.confirmPassword || !values.confirmPassword.trim() === '') {
@@ -24,7 +24,7 @@ const validate = values => {
       errors.confirmPassword = 'Re-type password';
       hasErrors = true;
     } else {
-      errors.confirmPassword = 'Required';
+      errors.confirmPassword = 'Missing confirm password field';
       hasErrors = true;
     }
   }

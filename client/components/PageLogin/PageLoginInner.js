@@ -40,9 +40,6 @@ const PageLoginInner = props => {
                       <div className="form-group">
                         <Field name="password" label="Password" component={renderTextField} type="password"/>
                       </div>
-                      <div className="form-group">
-                        <Field name="rememberMe" label="Remember Me" component={renderCheckbox} padding={[15, 0, 0, 0]}/>
-                      </div>
                     </fieldset>
                   </form>
                 </div>
@@ -56,7 +53,7 @@ const PageLoginInner = props => {
                 </div>
               </div>
               <div className="additional-info">
-                <Link to="/register">Sign up</Link>
+                <Link to="/register">Sign Up</Link>
                 <span className="divider-h" />
                 <Link to="/forgotPassword">Forgot your password?</Link>
               </div>
