@@ -12,6 +12,8 @@ const User = sequelize.define(
     lastName: { type: Sequelize.STRING(128), field: "last_name" },
     email: { type: Sequelize.STRING(128), field: "email" },
     password: { type: Sequelize.STRING(128), field: "password" },
+    resetPasswordToken: { type: Sequelize.STRING(128), defaultValue: null, field: "reset_pass_token" },
+    resetPasswordExpires: { type: Sequelize.STRING(128), defaultValue: null, field: "reset_pass_expires" },
     status: { type: Sequelize.INTEGER, defaultValue: 1, field: "status" }
   },
   {

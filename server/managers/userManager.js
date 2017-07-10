@@ -73,3 +73,8 @@ export const insertUser = (userObj): Promise<any> =>
     return obj
   })
   
+export const updateUser = (userObj): Promise<any> =>
+  userObj.save()
+  .then(obj => {
+    return obj
+  })

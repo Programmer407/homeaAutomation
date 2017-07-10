@@ -1,9 +1,11 @@
 // libs
 import express from 'express'
+import async from 'async';
+import crypto from 'crypto';
 
 // src
 import { ensureAnonymity, caughtError } from '../../utils'
-import { insertUser, findUserByEmail, findUserByEmailAndPassword } from '../../managers/userManager'
+import { insertUser, updateUser, findUserByEmail, findUserByEmailAndPassword } from '../../managers/userManager'
 import { findRoleById } from '../../managers/roleManager'
 import { findUserAccountTypeById } from '../../managers/userAccountTypeManager'
 import { findTimeZoneById } from '../../managers/timeZoneManager'
@@ -204,16 +206,115 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
         message: 'Missing required arguments'
       })
   }
-  
-  findUserByEmail(email)
+
+
+  async.waterfall([
+    function(done) {
+      console.log('11111111111111111111111111')
+      crypto.randomBytes(20, function(err, buf) {
+        var token = buf.toString('hex');
+        done(err, token);
+      });
+    },
+    function(token, done) {
+      console.log('222222222222222222222222222')
+      findUserByEmail(email)
+        .then(user => {
+          if (user) {
+            user.resetPasswordToken = token;
+            user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+            updateUser(user)
+              .then(user => {
+                console.log('save called.')
+                done(null, token, user);
+              })
+              .catch(error => {
+                console.log('save called.')
+                done(error, token, user);
+              })
+            //user.save(function(err) {
+              //console.log('save called.')
+              //done(err, token, user);
+              //done(null, token, user);
+            //});
+          }
+        })
+    },
+    function(token, user, done) {
+      console.log('33333333333333333')
+      //done(err, 'done');
+      done(null, 'done');
+    }
+  ], function(err) {
+    console.log('444444444444444444444444')
+    if (err) {
+      console.log('err found............ ' + err)
+      res
+        .status(200)
+        .send({
+          message: 'Something went wrong'
+        })
+    } else {
+      console.log('err not found')
+      res
+        .status(200)
+        .send({
+          message: 'Email has been sent to change the password'
+        })
+    }
+  });
+
+
+
+
+
+
+  /*findUserByEmail(email)
     .then(user => {
       console.log('user : ' + JSON.stringify(user))
       if (user) {
-        res
-          .status(200)
-          .send({
-            message: 'Email has been sent to change the password'
-          })
+        async.waterfall([
+          function(done) {
+            console.log('first asynch called.')
+            crypto.randomBytes(20, function(err, buf) {
+              var token = buf.toString('hex');
+              done(err, token);
+            });
+          },
+          function(token, done) {
+            console.log('second asynch called.')
+            user.resetPasswordToken = token;
+            user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+            user.save(function(err) {
+              done(token, user, err);
+            });
+          },
+          function(token, user, done) {
+            console.log('third asynch called.')
+            console.log('Email sending code here.......')
+            done(err, 'done');
+          }
+        ], function(err) {
+          console.log('err asynch called.')
+          if (err) {
+            console.log('err is : ' + err)
+            res
+              .status(400)
+              .send({
+                message: 'Something went wrong'
+              })
+          } else {
+            console.log('Successfull........................')
+            res
+            .status(200)
+            .send({
+              message: 'Email has been sent to change the password'
+            })
+          }
+        });
+        console.log('called. this success below.')
       } else {
         console.log('User not found')
         //caughtError(res, error)
@@ -226,12 +327,14 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
     })
     .catch(error => {
       //caughtError(res, error)
+      console.log('err is 2 : ' + error)
       res
       .status(500)
       .send({
         message: 'Something went wrong'
       })
     })
+    */
 })
 
 export default router

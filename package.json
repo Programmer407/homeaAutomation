@@ -43,6 +43,7 @@
     }
   },
   "dependencies": {
+    "async": "^2.5.0",
     "aws-sdk": "^2.3.5",
     "base64-url": "^1.2.2",
     "bitly": "^4.1.1",
