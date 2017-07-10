@@ -22,7 +22,10 @@ import {
   PageResetPassword,
   PageLogout,
   Page404,
+  PageAccountView,
   PageSystemView,
+  PagePrivacy,
+  PageTerms,
   PageErrorView,
   PublicRoute,
   PrivateRoute,
@@ -70,6 +73,8 @@ export default class App extends React.Component {
                       <PublicRoute path="/register" component={PageRegister} />
                       <PublicRoute path="/forgotPassword" component={PageForgotPassword} />
                       <PublicRoute path="/resetPassword" component={PageResetPassword} />
+                      <PublicRoute path="/privacy" component={PagePrivacy} />
+                      <PublicRoute path="/terms" component={PageTerms} />
                       <Route path="/logout" component={PageLogout} />
 
                       <PrivateRoute
@@ -81,6 +86,11 @@ export default class App extends React.Component {
                         exact
                         path="/system"
                         component={PageSystemView}
+                      />
+                      <PrivateRoute
+                        exact
+                        path="/account"
+                        component={PageAccountView}
                       />
                       
                       <Route exact path="/errors" component={PageErrorView} />

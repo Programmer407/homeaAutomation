@@ -33,6 +33,21 @@ const validate = values => {
   errors.password = 'Missing password field';
     hasErrors = true;
   }
+  if (!values.confirmPassword || !values.confirmPassword.trim() === '') {
+    if (values.password) {
+      errors.confirmPassword = 'Re-type password';
+      hasErrors = true;
+    } else {
+      errors.confirmPassword = 'Missing confirm password field';
+      hasErrors = true;
+    }
+  }
+  if(values.password && values.confirmPassword) {
+    if(values.password != values.confirmPassword) {
+      errors.confirmPassword = 'These passwords don\'t match. Try again?';
+      hasErrors = true;
+    }
+  }
   return hasErrors && errors;
 }
 
@@ -49,10 +64,10 @@ const validate = values => {
     .then(action => {
       const { error, payload } = action
 
-      if ( !error ) {
-        const linkNext = get(payload, 'user.linkHome', '/')
-        dispatch(push(linkNext))
-      }
+      // if ( !error ) {
+      //   const linkNext = get(payload, 'user.linkHome', '/')
+      //   dispatch(push(linkNext))
+      // }
       return action
     })
   }

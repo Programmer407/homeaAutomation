@@ -24,12 +24,13 @@ export const renderTextFieldWithFixedLabel = ({ input, label, innerRef, meta: { 
   />
 )
 
-export const renderTextField = ({ input, label, innerRef, meta: { touched, error }, ...custom }) => (
+export const renderTextField = ({ input, label, autoComplete, innerRef, meta: { touched, error }, ...custom }) => (
   <TextField
     floatingLabelText={label}
     fullWidth
     errorText={touched && error}
     ref={innerRef}
+    autoComplete={autoComplete}
     hintStyle={{fontSize: 12}}
     {...input}
     {...custom}

@@ -37,10 +37,10 @@ const validate = values => {
       .then(action => {
         const { error, payload } = action
 
-        if ( !error ) {
-          const linkNext = get(payload, 'user.linkHome', '/login')
-          dispatch(push(linkNext))
-        }
+        // if ( !error ) {
+        //   const linkNext = get(payload, 'user.linkHome', '/login')
+        //   dispatch(push(linkNext))
+        // }
         return action
       })
   }
