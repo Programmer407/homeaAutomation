@@ -14,8 +14,11 @@ const fields = ['email']
 const validate = values => {
   let errors = {};
   let hasErrors = false;
-  if( !values.email || !values.email.trim() === '' ) {
-    errors.email = 'Missing email field.';
+  if (!values.email || !values.email.trim() === '') {
+    errors.email = 'Required';
+    hasErrors = true;
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'Invalid email address';
     hasErrors = true;
   }
   return hasErrors && errors;
@@ -28,9 +31,6 @@ const validate = values => {
 })
 @bindForm({
   onSubmit: (values, dispatch, props) => {
-    debugger;
-    const { email } = values
-
     return dispatch(forgotPassword(email))
       .then(action => {
         const { error, payload } = action

@@ -6,58 +6,65 @@ import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 
 // src
-import PageLoginInner from './PageLoginInner'
+import PageResetPasswordInner from './PageResetPasswordInner'
 import {login} from '../../actions/entities/users'
 import { bindForm } from '../../utils'
 
-const fields = ['email', 'password', 'rememberMe']
+const fields = ['password', 'confirmPassword']
 
 const validate = values => {
   let errors = {};
   let hasErrors = false;
-  if (!values.email || !values.email.trim() === '') {
-    errors.email = 'Required';
-    hasErrors = true;
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address';
-    hasErrors = true;
-  }
-
   if (!values.password || !values.password.trim() === '') {
     errors.password = 'Required';
     hasErrors = true;
+  }
+  if (!values.confirmPassword || !values.confirmPassword.trim() === '') {
+    if (values.password) {
+      errors.confirmPassword = 'Re-type password';
+      hasErrors = true;
+    } else {
+      errors.confirmPassword = 'Required';
+      hasErrors = true;
+    }
+  }
+  if(values.password && values.confirmPassword) {
+    if(values.password != values.confirmPassword) {
+      errors.confirmPassword = 'These passwords don\'t match. Try again?';
+      hasErrors = true;
+    }
   }
   return hasErrors && errors;
 }
 
 @reduxForm({
-  form: 'loginForm',
+  form: 'resetPasswordForm',
   fields,
   validate
 })
 @bindForm({
   onSubmit: (values, dispatch, props) => {
-    const { email, password, rememberMe } = values
+    const { password, confirmPassword } = values;
 
-    return dispatch(login(email, password, rememberMe))
+    return dispatch(resetPassword(password, confirmPassword))
     .then(action => {
       const { error, payload } = action
       if ( !error ) {
-        const linkNext = get(payload, 'user.linkHome', '/')
-        dispatch(push(linkNext))
+        const linkNext = get(payload, 'user.linkHome', '/');
+        dispatch(push(linkNext));
       } else {
-        console.log(error)
+        console.log(error);
       }
-      return action
+      return action;
     }) 
   }
 })
-export default class PageLogin extends React.Component {
+export default class PageResetPassword extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
   render() {
-    return <PageLoginInner {...this.props}/>
+    return <PageResetPasswordInner {...this.props}/>
   }
   
   //HH: sorry @umar, I am ruining some beautiful code. 
