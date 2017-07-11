@@ -14,7 +14,9 @@ const HeaderIconButtonStyle = {
 };
 
 const listItemStyle = {
-  paddingLeft: '40px' // 36 + 16, algin with sub list
+  paddingRight: '20px', // 36 + 16, algin with sub list
+  lineHeight: '60px',
+  color: '#42A5F5'
 };
 
 class NavLeftList extends React.Component {
@@ -26,14 +28,24 @@ class NavLeftList extends React.Component {
   render() {
     return (
       <ul className="list-unstyled list-inline">
-        <li className="list-inline-item">
-          {/*<Link to="/system" style={{textDecoration: 'none'}}><MenuItem primaryText="Transaction" style={{lineHeight: '60px', color: '#2196F3'}}/></Link>
-          <Link to="/account" style={{textDecoration: 'none'}}><MenuItem primaryText="Account" style={{lineHeight: '60px', color: '#2196F3'}}/></Link>*/}
+        <Link to="/system">
+          <li className="list-inline-item" style={listItemStyle}>Transactions</li>
+        </Link>
+        <Link to="/account">
+          <li className="list-inline-item" style={listItemStyle}>Account</li>
+        </Link>
+
+        {/*<li className="list-inline-item" >
+          <Link to="/system" style={{textDecoration: 'none'}}><MenuItem primaryText="Transaction" style={{lineHeight: '60px', color: '#2196F3'}}/></Link>
+          <Link to="/account" style={{textDecoration: 'none'}}><MenuItem primaryText="Account" style={{lineHeight: '60px', color: '#2196F3'}}/></Link>
           
-          <Link to="/system" className="color-primary">Transactions</Link>
+          <Link to="/system" className="color-primary" style={{textDecoration: 'none', lineHeight: '60px'}}>Transactions</Link>
           <span className="divider-pipe" />
           <Link to="/account" className="color-primary">My Account</Link>
         </li>
+        <li className="list-inline-item" style={listItemStyle}>
+          <Link to="/account" className="color-primary" style={{textDecoration: 'none', lineHeight: '60px'}}>My Account</Link>
+        </li>*/}
       </ul>
     );
   }
