@@ -4,7 +4,7 @@ import crypto from 'crypto';
 
 // src
 import { ensureAnonymity, caughtError } from '../../utils'
-import { insertUser, updateUser, findUserByEmail, findUserByEmailAndPassword } from '../../managers/userManager'
+import { findUserByToken, insertUser, updateUser, findUserByID, findUserByEmail, findUserByEmailAndPassword } from '../../managers/userManager'
 import { findRoleById } from '../../managers/roleManager'
 import { findUserAccountTypeById } from '../../managers/userAccountTypeManager'
 import { findTimeZoneById } from '../../managers/timeZoneManager'
@@ -47,9 +47,9 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
               req.session.cookie.expires = false;
             }*/
             
-            var hour = 120000
+            //var hour = 120000
             //req.session.cookie.expires = new Date(Date.now() + hour)
-            req.session.cookie.maxAge = hour
+            //req.session.cookie.maxAge = hour
             res.send({ user })
           }
         })
@@ -75,7 +75,9 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
 
 router.get('/api/logout', (req, res) => {
   req.logout()
-  res.send({
+  res
+    .status(200)
+    .send({
     message: 'User logged out successfully!'
   })
 })
@@ -135,7 +137,7 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
                               console.log('user inserted')
                               if (user) {
 
-                                /*return req.login(user, err => {
+                                return req.login(user, err => {
                                   console.log('user1 : ' + JSON.stringify(user))
 
                                   if ( err ) {
@@ -146,7 +148,7 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
                                     req.session.cookie.expires = false;
                                     res.send({ user })
                                   }
-                                })*/
+                                })
                               } else {
                                 console.log('User not registered')
                                 //caughtError(res, error)
@@ -223,7 +225,7 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
             .then(user => {
               console.log('Successfull........................')
               res
-              .status(400)
+              .status(200)
               .send({
                 message: 'Reset password email has been sent to the email address'
               })
@@ -231,7 +233,7 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
             .catch(error => {
               console.log('Error in updating user with the token')
               res
-              .status(200)
+              .status(400)
               .send({
                 message: 'Something went wrong'
               })
@@ -250,11 +252,131 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
   .catch(error => {
     console.log('Error in find user from DB')
     res
-      .status(200)
+      .status(400)
       .send({
         message: 'Something went wrong'
       })
   })
+})
+
+router.post('/api/users/search-user-token', (req, res) => {
+  const { body } = req
+
+  if ( !body ) {
+    return res
+      .status(400)
+      .send({
+        message: 'Missing request body'
+      })
+  }
+
+  const { tokenString } = body
+
+  if ( !tokenString ) {
+    return res
+      .status(400)
+      .send({
+        message: 'Missing requied arguments'
+      })
+  }
+  console.log('tokenString : ' + tokenString)
+  findUserByToken(tokenString)
+    .then(user => {
+      if (user) {
+        console.log('user exist')
+        res
+          .status(200)
+          .send({
+            message: 'true'
+          })
+      } else {
+        console.log('user not exist')
+        res
+          .status(400)
+          .send({
+            message: 'false'
+          })
+      }
+    })
+    .catch(error => {
+      console.log('Error in updating user with the token')
+      res
+        .status(200)
+        .send({
+          message: 'Something went wrong'
+        })
+    }) 
+})
+
+router.post('/api/users/reset-password', (req, res) => {
+  const { body } = req
+
+  if ( !body ) {
+    return res
+      .status(400)
+      .send({
+        message: 'Missing request body'
+      })
+  }
+
+  const { token, password, confirmPassword } = body
+
+  if ( !token || !password || !confirmPassword ) {
+    return res
+      .status(400)
+      .send({
+        message: 'Missing requied arguments'
+      })
+  } else if (password !== confirmPassword) {
+    return res
+      .status(400)
+      .send({
+        message: 'Password and Confirm Password does not match.'
+      })
+  }
+  findUserByToken(token)
+    .then(user => {
+      if (user) {
+        console.log('user exist')
+        user.password = password;
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
+        updateUser(user)
+          .then(user => {
+            console.log('Successfull........................')
+            res
+              .status(200)
+              .send({
+                message: 'Password has been changed, please login.'
+              })
+            })
+            .catch(error => {
+              console.log('Error in updating user with the token')
+              res
+              .status(200)
+              .send({
+                message: 'Something went wrong'
+              })
+            })
+      } else {
+        console.log('user does not exist')
+        // now instantiate an object
+        res
+          .status(400)
+          .send({
+            message: 'User does not exist'
+          })
+      } 
+    })
+    .catch(error => {
+      console.log('error')
+      //caughtError(res, error)
+      return res
+      .status(500)
+      .send({
+        message: 'Something went wrong'
+      })
+    })
 })
 
 export default router

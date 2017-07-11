@@ -89,6 +89,12 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
               })
 
               throw new Error(`An error occurred while submitting the form: ${payload.message}`)
+            } else {
+              //console.log('action is : ' + JSON.stringify(action))
+              this.setState({
+                error: false,
+                errorMessage: payload.message
+              })
             }
 
             return action
@@ -117,10 +123,11 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
       )
     }
     renderMessage = () => {
-
+      
       const { error, errorMessage } = this.state
 
-      return error ? <div style={{color: '#EF5350', fontSize: '12pt'}}>{ errorMessage }</div> : <span></span>
+      //return error ? <div style={{color: '#EF5350', fontSize: '12pt'}}>{ errorMessage }</div> : <span></span>
+      return error ? <div style={{color: '#EF5350', fontSize: '12pt'}}>{ errorMessage }</div> : !error && errorMessage !== '' ? <div style={{color: '#4F8A10', fontSize: '12pt'}}>{ errorMessage }</div> : <span></span>
     }
     render() {
       return (

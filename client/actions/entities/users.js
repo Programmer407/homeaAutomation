@@ -124,18 +124,18 @@ export const USER_RESET_PASSWORD = 'USER_RESET_PASSWORD'
 export const USER_RESET_PASSWORD_SUCCESS = 'USER_RESET_PASSWORD_SUCCESS'
 export const USER_RESET_PASSWORD_FAILURE = 'USER_RESET_PASSWORD_FAILURE'
 
-export function resetPassword(id, password, confirmPassword) {
+export function resetPassword(token, password, confirmPassword) {
   return {
     [CALL_API]: {
       types: [
-        USER_CONFIRM_REGISTRATION,
-        USER_CONFIRM_REGISTRATION_SUCCESS,
-        USER_CONFIRM_REGISTRATION_FAILURE
+        USER_RESET_PASSWORD,
+        USER_RESET_PASSWORD_SUCCESS,
+        USER_RESET_PASSWORD_FAILURE
       ],
-      endpoint: `/api/users/reset-password?id=${id}`,
+      endpoint: `/api/users/reset-password?token=${token}`,
       method: 'POST'
     },
-    payload: {id, password, confirmPassword}
+    payload: {token, password, confirmPassword}
   }
 }
 
@@ -147,9 +147,9 @@ export function changePassword(currentPassword, newPassword, confirmNewPassword)
   return {
     [CALL_API]: {
       types: [
-        USER_CONFIRM_REGISTRATION,
-        USER_CONFIRM_REGISTRATION_SUCCESS,
-        USER_CONFIRM_REGISTRATION_FAILURE
+        USER_CHANGE_PASSWORD,
+        USER_CHANGE_PASSWORD_SUCCESS,
+        USER_CHANGE_PASSWORD_FAILURE
       ],
       endpoint: `/api/users/change-password`,
       method: 'POST'
@@ -189,5 +189,24 @@ export function searchUsersByName(searchString) {
       ],
       endpoint: `/api/users/search-by-name?search=${searchString}`
     }
+  }
+}
+
+export const CHECK_TOKEN_RESET = 'CHECK_TOKEN_RESET'
+export const CHECK_TOKEN_RESET_SUCCESS = 'CHECK_TOKEN_RESET_SUCCESS'
+export const CHECK_TOKEN_RESET_FAILURE = 'CHECK_TOKEN_RESET_FAILURE'
+
+export function isValidResetToken(tokenString) {
+  return {
+    [CALL_API]: {
+      types: [
+        CHECK_TOKEN_RESET,
+        CHECK_TOKEN_RESET_SUCCESS,
+        CHECK_TOKEN_RESET_FAILURE
+      ],
+      endpoint: `/api/users/search-user-token?search=${tokenString}`,
+      method: 'POST'
+    },
+    payload: {tokenString}
   }
 }
