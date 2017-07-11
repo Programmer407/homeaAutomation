@@ -13,4 +13,5 @@ export { default as PageSystemView } from "./PageSystemView"
 export { default as PrivateRoute } from "./PrivateRoute"
 export { default as PublicRoute } from "./PublicRoute"
 export { default as NotificationSystemConnector } from "./NotificationSystemConnector"
+export { default as PageLoading } from "./PageLoading"
 

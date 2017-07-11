@@ -78,3 +78,14 @@ export const updateUser = (userObj): Promise<any> =>
   .then(obj => {
     return obj
   })
+
+export const findUserByToken = (resetPasswordToken:string): Promise<any> =>
+  User.findOne(Object.assign({
+    where: {
+      resetPasswordToken, 
+      resetPasswordExpires: { $gt: Date.now() }
+    }
+  }))
+  .then(obj => {
+    return obj
+  })

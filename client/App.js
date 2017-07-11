@@ -74,11 +74,11 @@ export default class App extends React.Component {
                       <PublicRoute path="/login" component={PageLogin} />
                       <PublicRoute path="/register" component={PageRegister} />
                       <PublicRoute path="/forgotPassword" component={PageForgotPassword} />
-                      <PublicRoute path="/resetPassword" component={PageResetPassword} />
+                      <PublicRoute path="/resetPassword/:usertoken" component={PageResetPassword} />
                       <PublicRoute path="/privacy" component={PagePrivacy} />
                       <PublicRoute path="/terms" component={PageTerms} />
                       <Route path="/logout" component={PageLogout} />
-
+                      
                       <PrivateRoute
                         exact
                         path="/"
