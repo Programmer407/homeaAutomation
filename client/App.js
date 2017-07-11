@@ -16,6 +16,7 @@ import './styles/css/ui.scss';
 import './styles/css/app.scss';
 import MUITheme from "../config/theme"
 import {
+  Header,
   PageLogin,
   PageRegister,
   PageForgotPassword,
@@ -63,6 +64,7 @@ export default class App extends React.Component {
         <Provider store={store}>
           <Router {...routerProps}>
             <div className={styles.root}>
+              <Header />
               <NotificationSystemConnector />
               <div className={styles.layout}>
                 <div className={styles.primaryColumn}>

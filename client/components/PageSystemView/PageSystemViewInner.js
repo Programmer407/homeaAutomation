@@ -14,13 +14,8 @@ const PageSystemViewInner = props => {
         </div>
       </div>*/}
       <div className="container-fluid">
-        <nav class="navbar navbar-inverse bg-primary">
+        <nav>
           <h2>Transactions</h2>
-          <Link to="/system" className="color-primary">Transactions</Link>
-          <span className="divider-pipe" />
-          <Link to="/account" className="color-primary">Account</Link>
-          <span className="divider-pipe" />
-          <Link to="/logout" className="color-primary">Logout</Link>
         </nav>
       </div>
     </div>

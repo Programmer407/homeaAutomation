@@ -36,7 +36,7 @@ const PageRegisterInner = props => {
                   <form className="form-horizontal">
                     <fieldset>
                       <div className="form-group">
-                        <Field name="firstName" label="First Name" component={renderTextField} autoFocus/>
+                        <Field name="firstName" label="First Name" component={renderTextField}/>
                       </div>
                       <div className="form-group">
                         <Field name="lastName" label="Last Name" component={renderTextField} />

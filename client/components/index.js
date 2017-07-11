@@ -1,3 +1,4 @@
+export { default as Header } from "./Header"
 export { default as PageLogin } from "./PageLogin"
 export { default as PageRegister } from "./PageRegister"
 export { default as PageForgotPassword } from "./PageForgotPassword"

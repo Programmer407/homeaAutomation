@@ -11,8 +11,8 @@ import QueueAnim from 'rc-queue-anim';
 
 // src
 import './PageLoginInner.scss';
-import { renderTextField } from '../../utils'
-import { renderCheckbox } from '../../utils'
+import { renderTextField } from '../../utils';
+import { renderCheckbox } from '../../utils';
 
 const PageLoginInner = props => {
   const { onSubmit, renderSubmitButton, renderMessage } = props;
@@ -35,10 +35,11 @@ const PageLoginInner = props => {
                   <form className="form-horizontal" onSubmit={onSubmit}>
                     <fieldset>
                       <div className="form-group">
-                        <Field name="email" label="Email" component={renderTextField} autoComplete="off" autoFocus/>
+                        <Field name="email" label="Email" component={renderTextField} autoComplete="off" />
                       </div>
                       <div className="form-group">
-                        <Field name="password" label="Password" type="password" component={renderTextField} autoComplete="off"/>
+                        <Field name="password" label="Password" type="password" component={renderTextField}
+                          autoComplete="off"/>
                       </div>
                     </fieldset>
                   </form>

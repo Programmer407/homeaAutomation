@@ -35,7 +35,7 @@ const PageForgotPasswordInner = props => {
                   <form>
                     <fieldset>
                       <div className="form-group">
-                        <Field name="email" label="Email" component={renderTextField} autoFocus/>
+                        <Field name="email" label="Email" component={renderTextField} />
                         <div className="additional-info text-center text-small">
                           Provide the email address that you used to register. We'll send you an email with a link to reset your password.
                         </div>
