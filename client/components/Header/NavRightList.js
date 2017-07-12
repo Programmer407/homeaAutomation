@@ -8,7 +8,8 @@ import { Link } from "react-router-dom";
 const ImgIconButtonStyle = {
   width: '60px',
   height: '60px',
-  color: 'white'
+  color: 'white',
+  lineHeight: '60px'
 };
 
 const listItemStyle = {

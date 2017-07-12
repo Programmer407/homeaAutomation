@@ -30,7 +30,10 @@ const validate = values => {
     hasErrors = true;
   }
   if( !values.password || !values.password.trim() === '' ) {
-  errors.password = 'Missing password field';
+    errors.password = 'Missing password field';
+    hasErrors = true;
+  } else if(values.password.length < 6) {
+    errors.password = "Password should have at least 6 characters"
     hasErrors = true;
   }
   if (!values.confirmPassword || !values.confirmPassword.trim() === '') {
