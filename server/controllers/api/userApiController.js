@@ -145,7 +145,7 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
                                     caughtError(res, err)
                                   } else {
                                     console.log('setting cookies.')
-                                    req.session.cookie.expires = false;
+                                    //req.session.cookie.expires = 1800000;
                                     res.send({ user })
                                   }
                                 })

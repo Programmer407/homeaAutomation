@@ -63,11 +63,13 @@ const validate = values => {
     return dispatch(register(firstName, lastName, email, password))
     .then(action => {
       const { error, payload } = action
-
-      // if ( !error ) {
-      //   const linkNext = get(payload, 'user.linkHome', '/')
-      //   dispatch(push(linkNext))
-      // }
+      console.log('action is : ' + JSON.stringify(action))
+      if ( !error ) {
+         const linkNext = get(payload, 'user.linkHome', '/')
+         dispatch(push(linkNext))
+      } else {
+        console.log(error)
+      }
       return action
     })
   }

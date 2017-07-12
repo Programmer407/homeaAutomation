@@ -12,6 +12,15 @@ export default function users(state = {}, action) {
 
     return mergeNewEntities(state, [user], ENTITY_STATUS_DATA_AVAILABLE)
   }
+  case ActionTypes.USER_REGISTER_SUCCESS: {
+    if (!action.payload) {
+      throw new Error(`Can't execute ${ ActionTypes.USER_REGISTER_SUCCESS }. {payload} isn't available in action`)
+    }
+
+    const { payload: { user } } = action
+
+    return mergeNewEntities(state, [user], ENTITY_STATUS_DATA_AVAILABLE)
+  }
   default: {
     return state
   }
