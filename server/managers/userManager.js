@@ -57,6 +57,22 @@ export const findUserByEmailAndPassword = (email:string, password:string): Promi
     return obj
   })
 
+export const isActiveUser = (id:int): Promise<any> =>
+  User.findOne(Object.assign({
+    where: {
+      id,
+      status: 1
+    }
+  }))
+  .then(obj => {
+    if(obj) {
+      return true;
+    } else {
+      return false;
+    }
+    //return obj
+  })
+
 export const findUserByEmail = (email:string): Promise<any> =>
   User.findOne(Object.assign({
     where: {
@@ -84,6 +100,17 @@ export const findUserByToken = (resetPasswordToken:string): Promise<any> =>
     where: {
       resetPasswordToken, 
       resetPasswordExpires: { $gt: Date.now() }
+    }
+  }))
+  .then(obj => {
+    return obj
+  })
+
+export const findUserByRegistrationToken = (registerToken:string): Promise<any> =>
+  User.findOne(Object.assign({
+    where: {
+      registerToken, 
+      registerExpires: { $gt: Date.now() }
     }
   }))
   .then(obj => {

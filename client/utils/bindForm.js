@@ -122,12 +122,21 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
         // <Link to="#/" onClick={this.handleSubmit} className="color-primary">{submitting ? labelWhenSubmitting : label}</Link>
       )
     }
-    renderMessage = () => {
-      
+    renderMessage = (msg) => {
+      //console.log('msg : ' + msg)
       const { error, errorMessage } = this.state
 
-      //return error ? <div style={{color: '#EF5350', fontSize: '12pt'}}>{ errorMessage }</div> : <span></span>
-      return error ? <div style={{color: '#EF5350', fontSize: '12pt'}}>{ errorMessage }</div> : !error && errorMessage !== '' ? <div style={{color: '#4F8A10', fontSize: '12pt'}}>{ errorMessage }</div> : <span></span>
+      if (error) {
+        return <div style={{color: '#EF5350', fontSize: '12pt'}} dangerouslySetInnerHTML={{__html: errorMessage}}></div>
+      } else if (!error && errorMessage !== '') {
+        return <div style={{color: '#4F8A10', fontSize: '12pt'}} dangerouslySetInnerHTML={{__html: errorMessage}}></div>
+      } else if (msg) {
+        return <div style={{color: '#4F8A10', fontSize: '12pt'}} dangerouslySetInnerHTML={{__html: msg}}></div>
+      } else {
+        return <span></span>
+      }
+      
+      //return error ? <div style={{color: '#EF5350', fontSize: '12pt'}} dangerouslySetInnerHTML={{__html: errorMessage}}></div> : !error && errorMessage !== '' ? <div style={{color: '#4F8A10', fontSize: '12pt'}} dangerouslySetInnerHTML={{__html: errorMessage}}></div> : <span></span>
     }
     render() {
       return (

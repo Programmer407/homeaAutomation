@@ -4,7 +4,7 @@ import crypto from 'crypto';
 
 // src
 import { ensureAnonymity, caughtError } from '../../utils'
-import { findUserByToken, insertUser, updateUser, findUserByID, findUserByEmail, findUserByEmailAndPassword } from '../../managers/userManager'
+import { findUserByRegistrationToken, isActiveUser, findUserByToken, insertUser, updateUser, findUserByID, findUserByEmail, findUserByEmailAndPassword } from '../../managers/userManager'
 import { findRoleById } from '../../managers/roleManager'
 import { findUserAccountTypeById } from '../../managers/userAccountTypeManager'
 import { findTimeZoneById } from '../../managers/timeZoneManager'
@@ -37,24 +37,33 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
   
   findUserByEmailAndPassword(email, password)
     .then(user => {
-      console.log('user : ' + JSON.stringify(user))
       if (user) {
-        return req.login(user, err => {
-          if ( err ) {
-            caughtError(res, err)
-          } else {
-            /*if (!rememberMe || rememberMe == null) {
-              req.session.cookie.expires = false;
-            }*/
-            
-            //var hour = 120000
-            //req.session.cookie.expires = new Date(Date.now() + hour)
-            //req.session.cookie.maxAge = hour
-            res.send({ user })
-          }
-        })
+        isActiveUser(user.id)
+          .then(isActive => {
+            if (isActive) {
+              return req.login(user, err => {
+                if ( err ) {
+                  caughtError(res, err)
+                } else {
+                  /*if (!rememberMe || rememberMe == null) {
+                    req.session.cookie.expires = false;
+                  }*/
+                  
+                  //var hour = 120000
+                  //req.session.cookie.expires = new Date(Date.now() + hour)
+                  //req.session.cookie.maxAge = hour
+                  res.send({ user })
+                }
+              })
+            } else {
+              res
+                .status(404)
+                .send({
+                  message: 'Your account is currently inactive. Please click <a href="/resend/activation/'+user.id+'">here</a> to resend the email containing activation link'
+                })
+            }
+          })
       } else {
-        console.log('User not found')
         //caughtError(res, error)
         res
         .status(404)
@@ -68,12 +77,13 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
       res
       .status(500)
       .send({
-        message: 'Something went wrong'
+        message: 'Something went wrong, Please try again'
       })
     })
 })
 
 router.get('/api/logout', (req, res) => {
+  console.log('logout called.')
   req.logout()
   res
     .status(200)
@@ -105,69 +115,60 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
   findUserByEmail(email)
     .then(user => {
       if (user) {
-        console.log('user already exist')
         return res
           .status(404)
           .send({
             message: 'Username already exist'
           })
       } else {
-        console.log('user does not exist')
         // now instantiate an object
         const userObj = User.build({firstName: firstName, lastName: lastName, email: email, password: password})
         
         findRoleById(2)
           .then(role => {
             if (role) {
-              console.log('role exist ' + JSON.stringify(role))
               userObj.setRole(role, {save: false})
               findUserAccountTypeById(1)
                 .then(userAccountType => {
                   if (userAccountType) {
-                    console.log('userAccountType exist ' + JSON.stringify(userAccountType))
-                    console.log('userObj exist ' + JSON.stringify(userObj))
                     userObj.setUseraccounttype(userAccountType, {save: false})
                     findTimeZoneById(1)
                       .then(timeZone => {
                         if (timeZone) {
-                          console.log('timeZone exist ' + JSON.stringify(timeZone))
                           userObj.setTimezone(timeZone, {save: false})
-                          insertUser(userObj)
-                            .then(user => {
-                              console.log('user inserted')
-                              if (user) {
-
-                                return req.login(user, err => {
-                                  console.log('user1 : ' + JSON.stringify(user))
-
-                                  if ( err ) {
-                                    console.log('err is : ' + err)
-                                    caughtError(res, err)
-                                  } else {
-                                    console.log('setting cookies.')
-                                    //req.session.cookie.expires = 1800000;
-                                    res.send({ user })
-                                  }
-                                })
-                              } else {
-                                console.log('User not registered')
-                                //caughtError(res, error)
-                                res
-                                .status(400)
-                                .send({
-                                  message: 'Something went wrong'
-                                })
-                              }
-                            })
-                            .catch(error => {
-                              console.log('error')
-                              //caughtError(res, error)
-                              return res
-                              .status(500)
-                              .send({
-                                message: 'Something went wrong'
+                          userObj.status = 0
+                          
+                          crypto.randomBytes(20, function(err, buf) {
+                            var token = buf.toString('hex');
+                            userObj.registerToken = token;
+                            userObj.registerExpires = Date.now() + 86400000; // 24 hours; 1 hour = 3600000
+                            
+                            insertUser(userObj)
+                              .then(user => {
+                                if (user) {
+                                  res
+                                    .status(200)
+                                    .send({
+                                      message: 'Sign up Successfully! Please follow a link in your email to activate your account'
+                                    })
+                                } else {
+                                  //caughtError(res, error)
+                                  res
+                                  .status(400)
+                                  .send({
+                                    message: 'Something went wrong, Please try again'
+                                  })
+                                }
                               })
-                            })
+                              .catch(error => {
+                                //caughtError(res, error)
+                                return res
+                                .status(500)
+                                .send({
+                                  message: 'Something went wrong, Please try again'
+                                })
+                              })
+                          })
                         } else {
                           console.log('timeZone does not exist')
                         }
@@ -183,12 +184,11 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
       } 
     })
     .catch(error => {
-      console.log('error')
       //caughtError(res, error)
       return res
       .status(500)
       .send({
-        message: 'Something went wrong'
+        message: 'Something went wrong, Please try again'
       })
     })
 })
@@ -220,10 +220,9 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
         crypto.randomBytes(20, function(err, buf) {
           var token = buf.toString('hex');
           user.resetPasswordToken = token;
-          user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+          user.resetPasswordExpires = Date.now() + 86400000; // 24 hours; 1 hour = 3600000
           updateUser(user)
             .then(user => {
-              console.log('Successfull........................')
               res
               .status(200)
               .send({
@@ -231,16 +230,14 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
               })
             })
             .catch(error => {
-              console.log('Error in updating user with the token')
               res
               .status(400)
               .send({
-                message: 'Something went wrong'
+                message: 'Something went wrong, Please try again'
               })
             })
         });
       } else {
-        console.log('User not found')
         //caughtError(res, error)
         res
         .status(404)
@@ -250,11 +247,10 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
       }
   })
   .catch(error => {
-    console.log('Error in find user from DB')
     res
       .status(400)
       .send({
-        message: 'Something went wrong'
+        message: 'Something went wrong, Please try again'
       })
   })
 })
@@ -279,18 +275,15 @@ router.post('/api/users/search-user-token', (req, res) => {
         message: 'Missing requied arguments'
       })
   }
-  console.log('tokenString : ' + tokenString)
   findUserByToken(tokenString)
     .then(user => {
       if (user) {
-        console.log('user exist')
         res
           .status(200)
           .send({
             message: 'true'
           })
       } else {
-        console.log('user not exist')
         res
           .status(400)
           .send({
@@ -299,11 +292,10 @@ router.post('/api/users/search-user-token', (req, res) => {
       }
     })
     .catch(error => {
-      console.log('Error in updating user with the token')
       res
-        .status(200)
+        .status(400)
         .send({
-          message: 'Something went wrong'
+          message: 'Something went wrong, Please try again'
         })
     }) 
 })
@@ -337,29 +329,25 @@ router.post('/api/users/reset-password', (req, res) => {
   findUserByToken(token)
     .then(user => {
       if (user) {
-        console.log('user exist')
         user.password = password;
         user.resetPasswordToken = null;
         user.resetPasswordExpires = null;
         updateUser(user)
           .then(user => {
-            console.log('Successfull........................')
             res
               .status(200)
               .send({
-                message: 'Password has been changed, please login.'
+                message: 'Password has been changed, please <a href="/login">login</a>'
               })
             })
             .catch(error => {
-              console.log('Error in updating user with the token')
               res
-              .status(200)
+              .status(400)
               .send({
-                message: 'Something went wrong'
+                message: 'Something went wrong, Please try again'
               })
             })
       } else {
-        console.log('user does not exist')
         // now instantiate an object
         res
           .status(400)
@@ -369,12 +357,135 @@ router.post('/api/users/reset-password', (req, res) => {
       } 
     })
     .catch(error => {
-      console.log('error')
       //caughtError(res, error)
       return res
       .status(500)
       .send({
-        message: 'Something went wrong'
+        message: 'Something went wrong, Please try again'
+      })
+    })
+})
+
+router.post('/api/users/verify-account', (req, res) => {
+  const { body } = req
+
+  if ( !body ) {
+    return res
+      .status(400)
+      .send({
+        message: 'Missing request body'
+      })
+  }
+
+  const { token } = body
+
+  if ( !token ) {
+    return res
+      .status(400)
+      .send({
+        message: 'Missing requied arguments'
+      })
+  }
+  findUserByRegistrationToken(token)
+    .then(user => {
+      if (user) {
+        user.status = 1;
+        user.registerToken = null;
+        user.registerExpires = null;
+        updateUser(user)
+          .then(user => {
+            res
+              .status(200)
+              .send({
+                //message: 'Your account has been activated, please <a href="/login">login</a>'
+                message: 'Your account has been activated, please login'
+              })
+            })
+            .catch(error => {
+              res
+              .status(400)
+              .send({
+                message: 'Something went wrong, Please try again'
+              })
+            })
+      } else {
+        // now instantiate an object
+        res
+          .status(400)
+          .send({
+            message: 'User does not exist'
+          })
+      } 
+    })
+    .catch(error => {
+      //caughtError(res, error)
+      return res
+      .status(500)
+      .send({
+        message: 'Something went wrong, Please try again'
+      })
+    })
+})
+
+router.post('/api/users/resend-activation', (req, res) => {
+  const { body } = req
+
+  if ( !body ) {
+    return res
+      .status(400)
+      .send({
+        message: 'Missing request body'
+      })
+  }
+
+  const { userId } = body
+
+  if ( !userId ) {
+    return res
+      .status(400)
+      .send({
+        message: 'Missing requied arguments'
+      })
+  }
+  findUserByID(userId)
+    .then(user => {
+      if (user) {
+        crypto.randomBytes(20, function(err, buf) {
+          var token = buf.toString('hex');
+          user.registerToken = token;
+          user.registerExpires = Date.now() + 86400000; // 24 hours; 1 hour = 3600000
+          user.status = 0;
+          updateUser(user)
+            .then(user => {
+              res
+                .status(200)
+                .send({
+                  message: 'Activation email sent Successfully! Please follow a link in your email to activate your account'
+                })
+              })
+              .catch(error => {
+                res
+                .status(400)
+                .send({
+                message: 'Something went wrong, Please try again'
+                })
+              })
+         })
+      } else {
+        // now instantiate an object
+        res
+          .status(400)
+          .send({
+            message: 'User does not exist'
+          })
+      } 
+    })
+    .catch(error => {
+      //caughtError(res, error)
+      return res
+      .status(400)
+      .send({
+        message: 'Something went wrong, Please try again'
       })
     })
 })

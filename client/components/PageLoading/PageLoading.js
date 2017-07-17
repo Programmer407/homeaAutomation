@@ -16,7 +16,7 @@ export default class PageLoading extends React.Component {
   render() {
     return <div className="page-login">
               <div className="main-body">
-                <DocumentTitle title="Reset Password - CrypTax"/>
+                <DocumentTitle title="Wisdom"/>
                 <QueueAnim type="bottom" className="ui-animate">
                 <div key="1">
                 <div className="text-center">

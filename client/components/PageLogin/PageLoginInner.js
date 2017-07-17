@@ -14,22 +14,22 @@ import './PageLoginInner.scss';
 import { renderTextField } from '../../utils';
 import { renderCheckbox } from '../../utils';
 
-const PageLoginInner = props => {
+const PageLoginInner = (props) => {
   const { onSubmit, renderSubmitButton, renderMessage } = props;
 
   return (
     <div className="page-login">
       <div className="main-body">
-        <DocumentTitle title="Login - CrypTax"/>
+        <DocumentTitle title="Login - Wisdom"/>
         <QueueAnim type="bottom" className="ui-animate">
           <div key="1">
             <div className="body-inner">
               <div className="card bg-white">
                 <div className="card-content">
                   <section className="logo text-center">
-                    <h1><a href="#/">CrypTax</a></h1>
+                    <h1><a href="#/">Wisdom</a></h1>
                     {
-                      renderMessage()
+                      renderMessage(props.message)
                     }
                   </section>
                   <form className="form-horizontal" onSubmit={onSubmit}>

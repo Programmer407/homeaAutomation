@@ -4,10 +4,12 @@ import {reduxForm} from 'redux-form'
 import {push} from 'react-router-redux'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
+import { connect } from 'react-redux'
 
 // src
 import PageLoginInner from './PageLoginInner'
-import {login} from '../../actions/entities/users'
+import PageLoading from '../PageLoading';
+import {login, confirmRegistration, resendActivation} from '../../actions/entities/users'
 import { bindForm } from '../../utils'
 
 const fields = ['email', 'password', 'rememberMe']
@@ -33,7 +35,8 @@ const validate = values => {
 @reduxForm({
   form: 'loginForm',
   fields,
-  validate
+  validate,
+  touchOnBlur: false
 })
 @bindForm({
   onSubmit: (values, dispatch, props) => {
@@ -45,31 +48,82 @@ const validate = values => {
       if ( !error ) {
         const linkNext = get(payload, 'user.linkHome', '/')
         dispatch(push(linkNext))
-      } else {
-        console.log(error)
       }
       return action
     }) 
   }
 })
-export default class PageLogin extends React.Component {
+
+
+class PageLogin extends React.Component {
+  state = {
+    check : 1
+  }
+
+  componentWillMount() {
+    let token = this.props.match.params.usertoken
+    let userId = this.props.match.params.id
+    if (token) {
+      this.props.dispatch(confirmRegistration(token))
+      .then(action => {
+        const { error, payload } = action
+        if ( !error ) {
+          this.setState({
+            check : 2
+          });
+        } else {
+          this.setState({
+            check : 3
+          });
+        }
+      })
+    } else if (userId) {
+      this.props.dispatch(resendActivation(userId))
+      .then(action => {
+        const { error, payload } = action
+        if ( !error ) {
+          this.setState({
+            check : 2
+          });
+        } else {
+          this.setState({
+            check : 3
+          });
+        }
+      })
+    } else {
+      this.setState({
+          check : 2
+        });
+    }
+  }
+  
   constructor(props) {
     super(props)
   }
   render() {
-    return <PageLoginInner {...this.props}/>
-  }
-  
-  //HH: sorry @umar, I am ruining some beautiful code. 
-  getParameterByName(name, url) {
-    if (!url) 
-      url = window.location.href;
     
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
+    if (this.state.check == 1) {
+      return <PageLoading {...this.props}/>
+    } else if(this.state.check == 2) {
+      return <PageLoginInner {...this.props}/>
+    } else {
+      return <div>
+            <h1>Bad Request!</h1>
+            <h3>Activate account token is invalid</h3>
+          </div>;
+    }
   }
 }
+
+const mapStateToProps = state => {
+  if (state.errorMessage) {
+    const {errorMessage: {message}} = state
+    return {message}
+  } else {
+    const {auth: {user}} = state
+    return {user}
+  }
+}
+
+export default connect(mapStateToProps)(PageLogin);

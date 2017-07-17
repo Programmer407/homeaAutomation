@@ -9,13 +9,15 @@ import entities from './entities'
 // Updates error message to notify about the failed fetches.
 function errorMessage(state = null, action) {
   const { type, error, payload } = action
-
+  
   if (type === ActionTypes.RESET_ERROR_MESSAGE) {
     return null
   } else if (error) {
     return payload || null
+  } else if (!error && payload && payload.message) {
+    return payload || null
   }
-
+  
   return state
 }
 
@@ -26,9 +28,9 @@ function auth(state = {user: null}, action) {
     case ActionTypes.USER_LOGIN_SUCCESS: {
       return {...state, user: payload.user.id}
     }
-    case ActionTypes.USER_REGISTER_SUCCESS: {
+    /*case ActionTypes.USER_REGISTER_SUCCESS: {
       return {...state, user: payload.user.id}
-    }
+    }*/
     case ActionTypes.USER_LOGOUT_SUCCESS: {
       return {...state, user: null}
     }

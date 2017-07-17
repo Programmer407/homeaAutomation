@@ -105,7 +105,7 @@ export const USER_CONFIRM_REGISTRATION = 'USER_CONFIRM_REGISTRATION'
 export const USER_CONFIRM_REGISTRATION_SUCCESS = 'USER_CONFIRM_REGISTRATION_SUCCESS'
 export const USER_CONFIRM_REGISTRATION_FAILURE = 'USER_CONFIRM_REGISTRATION_FAILURE'
 
-export function confirmRegistration(id, password, confirmPassword) {
+export function confirmRegistration(token) {
   return {
     [CALL_API]: {
       types: [
@@ -113,10 +113,10 @@ export function confirmRegistration(id, password, confirmPassword) {
         USER_CONFIRM_REGISTRATION_SUCCESS,
         USER_CONFIRM_REGISTRATION_FAILURE
       ],
-      endpoint: `/api/users/verify-account?id=${id}`,
+      endpoint: `/api/users/verify-account?token=${token}`,
       method: 'POST'
     },
-    payload: {password, confirmPassword}
+    payload: {token}
   }
 }
 
@@ -208,5 +208,24 @@ export function isValidResetToken(tokenString) {
       method: 'POST'
     },
     payload: {tokenString}
+  }
+}
+
+export const USER_RESEND_ACTIVATION = 'USER_RESEND_ACTIVATION'
+export const USER_RESEND_ACTIVATION_SUCCESS = 'USER_RESEND_ACTIVATION_SUCCESS'
+export const USER_RESEND_ACTIVATION_FAILURE = 'USER_RESEND_ACTIVATION_FAILURE'
+
+export function resendActivation(userId) {
+  return {
+    [CALL_API]: {
+      types: [
+        USER_RESEND_ACTIVATION,
+        USER_RESEND_ACTIVATION_SUCCESS,
+        USER_RESEND_ACTIVATION_FAILURE
+      ],
+      endpoint: `/api/users/resend-activation?id=${userId}`,
+      method: 'POST'
+    },
+    payload: {userId}
   }
 }

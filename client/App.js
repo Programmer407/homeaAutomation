@@ -65,18 +65,19 @@ export default class App extends React.Component {
           <Router {...routerProps}>
             <div className={styles.root}>
               <Header />
-              <NotificationSystemConnector />
               <div className={styles.layout}>
                 <div className={styles.primaryColumn}>
 
                   <div className={`container-fluid`}>
                     <Switch>
                       <PublicRoute path="/login" component={PageLogin} />
+                      <PublicRoute path="/activateAccount/:usertoken" component={PageLogin} />
                       <PublicRoute path="/register" component={PageRegister} />
                       <PublicRoute path="/forgotPassword" component={PageForgotPassword} />
                       <PublicRoute path="/resetPassword/:usertoken" component={PageResetPassword} />
                       <PublicRoute path="/privacy" component={PagePrivacy} />
                       <PublicRoute path="/terms" component={PageTerms} />
+                      <PublicRoute path="/resend/activation/:id" component={PageLogin} />
                       <Route path="/logout" component={PageLogout} />
                       
                       <PrivateRoute
