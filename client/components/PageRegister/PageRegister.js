@@ -17,10 +17,28 @@ const validate = values => {
   if( !values.firstName || !values.firstName.trim() === '' ) {
     errors.firstName = 'Missing first name field';
     hasErrors = true;
+  } else {
+    if (!/^[A-Za-z]/.test(values.firstName)) {
+      errors.firstName = 'Invalid input. Type with an open eye?';
+      hasErrors = true;
+    }
+    if (values.firstName.length > 32) {
+      errors.firstName = 'You can\'t possibly have that huge a first name. Try again?';
+      hasErrors = true;
+    }
   }
   if( !values.lastName || !values.lastName.trim() === '' ) {
     errors.lastName = 'Missing last name field';
     hasErrors = true;
+  } else {
+    if (!/^[A-Za-z]/.test(values.lastName)) {
+      errors.lastName = 'Invalid input. Type with an open eye?';
+      hasErrors = true;
+    }
+    if (values.lastName.length > 32) {
+      errors.lastName = 'You can\'t possibly have that huge a first name. Try again?';
+      hasErrors = true;
+    }
   }
   if (!values.email || !values.email.trim() === '') {
     errors.email = 'Missing email field';
@@ -57,7 +75,8 @@ const validate = values => {
 @reduxForm({
   form: 'registerForm',
   fields,
-  validate
+  validate,
+  touchOnBlur: false
 })
 @bindForm({
   onSubmit: (values, dispatch, props) => {
@@ -65,14 +84,6 @@ const validate = values => {
 
     return dispatch(register(firstName, lastName, email, password))
     .then(action => {
-      const { error, payload } = action
-      console.log('action is : ' + JSON.stringify(action))
-      if ( !error ) {
-         const linkNext = get(payload, 'user.linkHome', '/')
-         dispatch(push(linkNext))
-      } else {
-        console.log(error)
-      }
       return action
     })
   }
@@ -86,7 +97,7 @@ export default class PageRegister extends React.Component {
   }
   
   //HH: sorry @umar, I am ruining some beautiful code. 
-  getParameterByName(name, url) {
+  /*getParameterByName(name, url) {
     if (!url) 
       url = window.location.href;
     
@@ -96,5 +107,5 @@ export default class PageRegister extends React.Component {
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }
+  }*/
 }

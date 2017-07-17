@@ -20,7 +20,7 @@ const PageResetPasswordInner = props => {
   return (
     <div className="page-login">
       <div className="main-body">
-        <DocumentTitle title="Reset Password - CrypTax"/>
+        <DocumentTitle title="Reset Password - Wisdom"/>
         <QueueAnim type="bottom" className="ui-animate">
           <div key="1">
             <div className="body-inner">

@@ -7,17 +7,8 @@ import { Link } from "react-router-dom";
 const PageSystemViewInner = props => {
   return (
     <div className={`${styles.root}`}>
-      <DocumentTitle title="Transactions - Cryptax" />
-      {/*<div className="row">
-        <div className="col-lg-12">
-          Home Page
-        </div>
-      </div>*/}
-      <div className="container-fluid">
-        <nav>
-          <h2>Transactions</h2>
-        </nav>
-      </div>
+      <DocumentTitle title="Transactions - Wisdom" />
+      <h2>Transactions</h2>
     </div>
   )
 }

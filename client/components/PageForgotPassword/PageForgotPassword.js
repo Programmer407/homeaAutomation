@@ -27,7 +27,8 @@ const validate = values => {
 @reduxForm({
   form: 'forgotPasswordForm',
   fields,
-  validate
+  validate,
+  touchOnBlur: false
 })
 @bindForm({
   onSubmit: (values, dispatch, props) => {

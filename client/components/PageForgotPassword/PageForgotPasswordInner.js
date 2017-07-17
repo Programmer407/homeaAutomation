@@ -19,7 +19,7 @@ const PageForgotPasswordInner = props => {
   return (
     <div className="page-login">
       <div className="main-body">
-        <DocumentTitle title="Forgot Password - CrypTax"/>
+        <DocumentTitle title="Forgot Password - Wisdom"/>
         <QueueAnim type="bottom" className="ui-animate">
           <div key="1">
             
@@ -35,7 +35,7 @@ const PageForgotPasswordInner = props => {
                   <form>
                     <fieldset>
                       <div className="form-group">
-                        <Field name="email" label="Email" component={renderTextField} />
+                        <Field name="email" label="Email" component={renderTextField} autoComplete="off"/>
                         <div className="additional-info text-center text-small">
                           Provide the email address that you used to register. We'll send you an email with a link to reset your password.
                         </div>
@@ -51,6 +51,11 @@ const PageForgotPasswordInner = props => {
                     })
                   }
                 </div>
+              </div>
+              <div className="additional-info">
+                <Link to="/login">Login</Link>
+                <span className="divider-h" />
+                <Link to="/register">Sign Up</Link>
               </div>
             </div>
 
