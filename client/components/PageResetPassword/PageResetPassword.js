@@ -41,7 +41,8 @@ const validate = values => {
 @reduxForm({
   form: 'resetPasswordForm',
   fields,
-  validate
+  validate,
+  touchOnBlur: false
 })
 @bindForm({
   onSubmit: (values, dispatch, props) => {
@@ -64,7 +65,7 @@ const validate = values => {
 })
 export default class PageResetPassword extends React.Component {
   state = {
-    check : 1,
+    check : 1
   }
 
   componentWillMount() {
@@ -76,7 +77,7 @@ export default class PageResetPassword extends React.Component {
         const tokenMessage = get(payload, 'message', '');
         if (tokenMessage == 'true') {
           this.setState({
-            check : 2,
+            check : 2
           });
         } else {
           this.setState({
@@ -100,10 +101,12 @@ export default class PageResetPassword extends React.Component {
     } else if(this.state.check == 2) {
       return <PageResetPasswordInner {...this.props}/>
     } else {
-      return <div>
-            <h1>Bad Request!</h1>
-            <h3>Reset Password Token is invalid</h3>
-          </div>;
+      return (
+				<div>
+					<h1>Bad Request!</h1>
+					<h3>Reset Password Token is invalid</h3>
+				</div>
+			);
     }
   }
   

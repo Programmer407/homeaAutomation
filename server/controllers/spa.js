@@ -34,7 +34,7 @@ const makeUniversalHTML = (req, res, preloadedState) => {
 
 const makeEmptyHTML = () => {
   const html = ''
-  const title = 'CrypTax'
+  const title = 'Wisdom'
   const terminate = false
 
   return { html, title, terminate }
