@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { Link, Route } from 'react-router-dom'
+import { NavLink, Link, Route } from 'react-router-dom'
 import classnames from 'classnames';
 // import APPCONFIG from 'constants/Config';
 import NavLeftList from './NavLeftList';
@@ -15,13 +15,13 @@ const HeaderInner = props => {
 		<div>
 			<Choose>
 				<When condition={ user }>
-					<nav className="navbar navbar-inverse navbar-primary navbar-static-top">
+					<nav className="navbar navbar-inverse navbar-primary navbar-fixed-top">
 						<div className="container-fluid">
 							<div className="row">
-								<div className="col-xs-6 my-col-6">
-									<div className="float-left-primary">
+								<div className="col-xs-7 my-col-6">
+									<div className="">
 										<div className="navbar-header">
-											<Link className="navbar-brand float-left-primary my-brand" to="#">Wisdom</Link>
+											<Link className="navbar-brand my-brand" to="/system">Wisdom</Link>
 											<div className="dropdown float-left-primary">
 												<button className="navbar-toggle toggle-primary dropdown-toggle-primary float-left-primary" type="button" data-toggle="dropdown">
 													<span className="icon-bar"></span>
@@ -29,26 +29,24 @@ const HeaderInner = props => {
 													<span className="icon-bar"></span>
 												</button>
 												<ul className="dropdown-menu">
-													<li><Link to="/system">Transactions</Link></li>
-													<li><Link to="/account">Account</Link></li>
+													<li><Link to="/system" activeClassName="activeNavLink">Transactions</Link></li>
+													<li><Link to="/account" activeClassName="activeNavLink">Accounts</Link></li>
 												</ul>
 											</div>
 										</div>
-										<div className="collapse navbar-collapse float-left-primary" id="myNavbar">
+										<div className="collapse navbar-collapse float-left-primary fill-height" id="myNavbar">
 											<ul className="nav navbar-nav">
-												<li><Link to="/system">Transactions</Link></li>
-												<li><Link to="/account">Account</Link></li>
+												<li><NavLink to="/system" activeClassName="activeNavLink">Transactions</NavLink></li>
+												<li><NavLink to="/account" activeClassName="activeNavLink">Accounts</NavLink></li>
 											</ul>
 										</div>
 									</div>
 								</div>
-								<div className="col-xs-6">
+								<div className="col-xs-5">
 									<ul className="nav navbar-nav navbar-right dropdown">
 										<li className="nav-right menu-item">
-											<Link to="#" className="dropdown-toggle toggle-primary" data-toggle="dropdown">{user.firstName + ' ' + user.lastName}</Link>
-											<ul className="dropdown-menu">
-												<li><Link to="#">Profile</Link></li>
-												<li><Link to="#">Settings</Link></li>
+											<Link to="#" className="dropdown-toggle toggle-primary" data-toggle="dropdown">{user.firstName}</Link>
+											<ul className="dropdown-menu"> 
 												<li><Link to="/logout">Logout</Link></li>
 											</ul>
 										</li>
@@ -65,7 +63,7 @@ const HeaderInner = props => {
 								<div className="col-xs-6 my-col-6">
 									<div className="float-left-primary">
 										<div className="navbar-header">
-											<Link className="navbar-brand float-left-primary my-brand" to="#">Wisdom</Link>
+											<Link className="navbar-brand float-left-primary my-brand" to="/login">Wisdom</Link>
 											<div className="dropdown float-left-primary">
 												<button className="navbar-toggle toggle-primary dropdown-toggle-primary float-left-primary" type="button" data-toggle="dropdown">
 													<span className="icon-bar"></span>
