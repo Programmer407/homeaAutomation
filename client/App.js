@@ -96,6 +96,12 @@ export default class App extends React.Component {
                         component={PageAccountView}
                       />
                       
+                      <PrivateRoute
+                        exact
+                        path="/account/:providername/callback"
+                        component={PageAccountView}
+                      />
+                      
                       <Route exact path="/errors" component={PageErrorView} />
                       <Route component={Page404} />
                     </Switch>

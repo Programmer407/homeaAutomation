@@ -6,7 +6,7 @@ export default {
         multiStatement: false,
         dbName: 'cryptax',
         host: 'localhost',
-        enableLogging: true
+        enableLogging: false
     },
     influx: {
         // TODO remove url property, use host instead

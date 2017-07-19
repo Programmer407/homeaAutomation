@@ -9,6 +9,8 @@ import { findRoleById } from '../../managers/roleManager'
 import { findUserAccountTypeById } from '../../managers/userAccountTypeManager'
 import { findTimeZoneById } from '../../managers/timeZoneManager'
 import User from './../../models/User'
+import emailUtils from './../../utils/emailUtils'
+var Client = require('coinbase').Client;
 
 const router = express.Router()
 
@@ -41,6 +43,18 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
         isActiveUser(user.id)
           .then(isActive => {
             if (isActive) {
+              /*var client = new Client({'apiKey': 'lKwiLoagJZilnknI', 'apiSecret': 'aqTKBqF2HBkytYYJJfPeZ08Jh4bCE9Xh'});
+
+              client.getAccounts({}, function(err, accounts) {
+                if (err) {
+                  console.log('err is : ' + err)
+                } else {
+                accounts.forEach(function(account) {
+                  console.log(account.name);
+                });
+                }
+              });
+*/
               return req.login(user, err => {
                 if ( err ) {
                   caughtError(res, err)
@@ -146,10 +160,24 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
                             insertUser(userObj)
                               .then(user => {
                                 if (user) {
-                                  res
-                                    .status(200)
-                                    .send({
-                                      message: 'Sign up Successfully! Please follow a link in your email to activate your account'
+                                  var activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + user.registerToken
+                                  const data = {firstName: user.firstName, activationUrl: activationUrl};
+                                  emailUtils.sendAccountActivationEmail('majid.hussain@emumba.com', data)
+                                    .then(result => {
+                                      console.log('Email Sent')
+                                      res
+                                      .status(200)
+                                      .send({
+                                        message: 'Sign up Successfully! Please follow a link in your email to activate your account'
+                                      })
+                                    })
+                                    .catch(error => {
+                                      console.log('Email not Sent, Error here. ' + error)
+                                      res
+                                        .status(400)
+                                        .send({
+                                        message: 'Something went wrong, Please try again'
+                                        })
                                     })
                                 } else {
                                   //caughtError(res, error)
@@ -223,11 +251,25 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
           user.resetPasswordExpires = Date.now() + 86400000; // 24 hours; 1 hour = 3600000
           updateUser(user)
             .then(user => {
-              res
-              .status(200)
-              .send({
-                message: 'Reset password email has been sent to the email address'
-              })
+              var resetUrl = req.protocol + '://' + req.get('host') + '/resetPassword/' + user.resetPasswordToken
+              const data = {firstName: user.firstName, resetLink: resetUrl};
+              emailUtils.sendResendPasswordEmail('majid.hussain@emumba.com', data)
+                .then(result => {
+                  console.log('Email Sent')
+                  res
+                  .status(200)
+                  .send({
+                    message: 'Reset password email has been sent to the email address'
+                  })
+                })
+                .catch(error => {
+                  console.log('Email not Sent, Error here. ' + error)
+                  res
+                    .status(400)
+                    .send({
+                    message: 'Something went wrong, Please try again'
+                    })
+                })
             })
             .catch(error => {
               res
@@ -457,10 +499,24 @@ router.post('/api/users/resend-activation', (req, res) => {
           user.status = 0;
           updateUser(user)
             .then(user => {
-              res
-                .status(200)
-                .send({
-                  message: 'Activation email sent Successfully! Please follow a link in your email to activate your account'
+              var activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + user.registerToken
+              const data = {firstName: user.firstName, activationUrl: activationUrl};
+              emailUtils.resendAccountActivationEmail('majid.hussain@emumba.com', data)
+                .then(result => {
+                  console.log('Email Sent')
+                  res
+                    .status(200)
+                    .send({
+                      message: 'Activation email sent Successfully! Please follow a link in your email to activate your account'
+                    })
+                })
+                .catch(error => {
+                  console.log('Email not Sent, Error here. ' + error)
+                  res
+                    .status(400)
+                    .send({
+                    message: 'Something went wrong, Please try again'
+                    })
                 })
               })
               .catch(error => {
