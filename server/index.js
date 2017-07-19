@@ -9,6 +9,7 @@ import compression from 'compression'
 import { Server } from 'http'
 import { renderFile } from 'ejs'
 import setupSocketIO from 'socket.io'
+import cors from 'cors'
 
 // src
 import { default as appUtils } from './utils/appUtils'
@@ -53,6 +54,22 @@ app.use(passport.initialize())
 app.use(passport.session())
 setupPassport()
 
+var whitelist = [
+    'http://0.0.0.0:3000',
+    'http://0.0.0.0:80',
+    'http://localhost',
+    'http://localhost:80',
+    'coinbase.com',
+];
+var corsOptions = {
+    origin: function(origin, callback){
+        var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+        callback(null, originIsWhitelisted);
+    },
+    credentials: true
+};
+  app.use(cors(corsOptions));
+
 if ( isProduction() ) {
   // handle logging
   logUtils.setupWinstonProductionLogs()
@@ -68,6 +85,7 @@ if ( process.env.UNIVERSAL_RENDERING === 'false' ) {
 // Include server routes as a middleware
 [
   'api/userApiController',
+  'api/accountApiController',
   'defaultController'
 ].forEach(name => app.use(require(`./controllers/${name}`)))
 
