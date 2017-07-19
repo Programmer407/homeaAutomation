@@ -70,7 +70,8 @@ class PageAccountView extends React.Component {
 
   render() {
     return <div>
-      <RaisedButton className="mWidthStyle" label="Connect" primary  onClick={this.connectProvider}/><div className="divider" />
+			<PageAccountViewInner />
+      {/*<RaisedButton className="mWidthStyle" label="Connect" primary  onClick={this.connectProvider}/><div className="divider" />*/}
       </div>
   }
 }
