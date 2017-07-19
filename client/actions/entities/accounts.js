@@ -49,7 +49,9 @@ export function authenticateCoinBase(code) {
   let grant_type = 'authorization_code'
   let client_id = '45a38875c5f7a2563c36cf347ebef69d428bbee77d6d9ece0878f1f54fb92f78'
   let client_secret = 'bbdb10e9e75699e9b865d553bfc82be6d4c05f64db988026ca82e33e44c780c0'
-  let redirect_uri = encodeURIComponent('http://localhost/account/coinbase/callback2')
+  //let redirect_uri = encodeURIComponent('http://localhost/account/coinbase/callback')
+  let redirect_uri = 'http://localhost/account/coinbase/callback'
+  console.log('code is : ' + code)
   return {
     [CALL_API]: {
       types: [
@@ -61,5 +63,22 @@ export function authenticateCoinBase(code) {
       method: 'POST'
     },
     payload: {grant_type, code, client_id, client_secret, redirect_uri}
+  }
+}
+
+export const ACCOUNT_COINBASE_WALLET = 'ACCOUNT_COINBASE_WALLET'
+export const ACCOUNT_COINBASE_WALLET_SUCCESS = 'ACCOUNT_COINBASE_WALLET_SUCCESS'
+export const ACCOUNT_COINBASE_WALLET_FAILURE = 'ACCOUNT_COINBASE_WALLET_FAILURE'
+
+export function accountwallets() {
+  return {
+    [CALL_API]: {
+      types: [
+        ACCOUNT_COINBASE_WALLET,
+        ACCOUNT_COINBASE_WALLET_SUCCESS,
+        ACCOUNT_COINBASE_WALLET_FAILURE
+      ],
+      endpoint: `/api/accounts/account-coinbase-wallets`
+    }
   }
 }

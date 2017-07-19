@@ -59,6 +59,8 @@ class PageAccountView extends React.Component {
         const { error, payload } = action
         if ( !error ) {
           console.log('Not errors')
+          console.log('action is : ' + JSON.stringify(action))
+          console.log('payload is : ' + JSON.stringify(payload))
         } else {
           console.log('There are errors')
         }
