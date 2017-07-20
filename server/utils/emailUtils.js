@@ -24,7 +24,7 @@ const resendAccountActivationEmail = (to, data) => {
 
 const sendEmail = (templateName, to, subject, data) => {
 
-  console.log('sending email to: ' + to + ' AND data is : ' + data);
+  //console.log('sending email to: ' + to + ' AND data is : ' + data);
   let promise = q.defer();
   
   //read template file from disk
@@ -38,7 +38,7 @@ const sendEmail = (templateName, to, subject, data) => {
     //feed the content to _.template
     let template = _.template(content);
     let result = template(data);
-    console.log('result : ' + result)
+    //console.log('result : ' + result)
     let receivers = typeof (to) === 'string' ? [to] : to;
     
     //if(appUtils.isTest())
@@ -70,9 +70,9 @@ const sendEmail = (templateName, to, subject, data) => {
 };
 
 const sendSimpleEmail = (to, subject, data) => {
-console.log('awsConfig accessKeyId : ' + awsConfig.accessKeyId)
+//console.log('awsConfig accessKeyId : ' + awsConfig.accessKeyId)
 
-  console.log('sending email to: ' + to + ' AND data is : ' + data);
+  //console.log('sending email to: ' + to + ' AND data is : ' + data);
   let promise = q.defer();
   
   let receivers = typeof (to) === 'string' ? [to] : to;
