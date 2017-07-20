@@ -6,6 +6,7 @@ const Provider = sequelize.define(
   "providers",
   {
     providerName: { type: Sequelize.STRING(128), field: "provider_name" },
+    displayName: { type: Sequelize.STRING(128), field: "display_name" },
     status: { type: Sequelize.INTEGER, field: "status" }
   },
   {

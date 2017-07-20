@@ -54,21 +54,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 setupPassport()
 
-var whitelist = [
-    'http://0.0.0.0:3000',
-    'http://0.0.0.0:80',
-    'http://localhost',
-    'http://localhost:80',
-    'coinbase.com',
-];
-var corsOptions = {
-    origin: function(origin, callback){
-        var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-        callback(null, originIsWhitelisted);
-    },
-    credentials: true
-};
-  app.use(cors(corsOptions));
+app.use(cors());
 
 if ( isProduction() ) {
   // handle logging

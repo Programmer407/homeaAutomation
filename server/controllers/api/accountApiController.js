@@ -3,15 +3,20 @@ import express from 'express'
 
 // src
 import { ensureAnonymity, caughtError } from '../../utils'
-//import { findAllByUserID } from '../../managers/userProviderManager'
+import UserProvider from './../../models/UserProvider'
+import UserWallet from './../../models/UserWallet'
+import { findAllProviderList, findProviderByName } from '../../managers/providerManager'
+import { insertUserProvider } from '../../managers/userProviderManager'
+import { findUserByID } from '../../managers/userManager'
+import { insertUserWallet } from '../../managers/userWalletManager'
 
 const router = express.Router()
 
-/*router.get('/api/accounts/my-account-listn', (req, res) => {
+router.get('/api/accounts/my-account-all-providers', (req, res) => {
     const {user} = req
     console.log('logged in user is : ' + JSON.stringify(user))
     if (user) {
-        findAllByUserID(user.id)
+        findAllProviderList()
             .then(providerList => {
                 res
                     .status(200)
@@ -28,7 +33,7 @@ const router = express.Router()
                 })
             })
     }
-})*/
+})
 
 router.get('/api/accounts/my-account-connect', (req, res) => {
     console.log('my-account-connect called.')
@@ -64,6 +69,92 @@ router.get('/api/accounts/my-account-connect', (req, res) => {
         .send({
         redirecturl: redirectUrl
     })
+})
+
+router.post('/api/accounts/coinbase-wallets', (req, res) => {
+    //console.log('req is : ' + JSON.stringify(req))
+    const { body, user } = req
+
+    if ( !body ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing request body'
+        })
+    }
+
+    //const { email, password, rememberMe } = body
+    const { accessToken, refreshTokan, providerName } = body
+
+    if ( !accessToken || !refreshTokan || !providerName ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing required arguments'
+        })
+    }
+    console.log('refreshTokan : ' + refreshTokan)
+    const userProviderObj = UserProvider.build({accountName: '', accessToken: accessToken, refreshTokan: refreshTokan})
+
+    findUserByID(user.id)
+        .then(userObj => {
+            if (userObj) {
+                userProviderObj.setUser(userObj, {save: false})
+                findProviderByName(providerName)
+                    .then(providerObj => {
+                        if (providerObj) {
+                            userProviderObj.setProvider(providerObj, {save: false})
+                            insertUserProvider(userProviderObj)
+                                .then(userProvider => {
+                                    if (userProvider) {
+                                        var Client = require('coinbase').Client;
+                                        var client = new Client({'accessToken': accessToken, 'refreshToken': refreshTokan});
+                                        client.getAccounts({}, function(err, accounts) {
+                                            accounts.forEach(function(acct) {
+                                                console.log('my bal: ' + acct.balance.amount + ' for ' + acct.name + ' In Currency : ' + JSON.stringify(acct.currency));
+                                                const userWalletObj = UserWallet.build({walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code})
+                                                userWalletObj.setUserprovider(userProvider, {save: false})
+                                                insertUserWallet(userWalletObj)
+                                                    .then(userWallet => {
+                                                        console.log('wallet inserted')
+                                                        client.getAccount(acct.id, function(err, account) {
+                                                            account.getTransactions(function(err, txs) {
+                                                                console.log(txs);
+                                                            });
+                                                        });
+                                                    })
+                                            });
+                                        });
+
+                                        res
+                                            .status(200)
+                                            .send({
+                                                message: 'Successful!'
+                                        })
+                                    } else {
+                                        res
+                                            .status(400)
+                                            .send({
+                                                message: 'Something went wrong, Please try again'
+                                            })
+                                    }
+                                })
+                        } else {
+                            res
+                                .status(400)
+                                .send({
+                                    message: 'Something went wrong, Please try again'
+                                })
+                        }
+                    })
+            } else {
+                res
+                    .status(400)
+                    .send({
+                        message: 'Something went wrong, Please try again'
+                    })
+            }
+        })
 })
 
 export default router
