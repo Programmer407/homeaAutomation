@@ -20,7 +20,7 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import {grey400, grey600, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import CommunicationEmail from 'material-ui/svg-icons/communication/email';
 
-const MyAccounts = () => (
+const MyAccounts = ({ onClickConnect }) => (
 	<article className="article">
 		<h2 className="article-title">Wallets</h2>
 		<div className="row">
@@ -105,7 +105,7 @@ const MyAccounts = () => (
 									<MenuItem value={7} primaryText="Mt.Gox" />
 								</SelectField>
 							</div>
-							<RaisedButton label="Connect" primary />
+							<RaisedButton label="Connect" onClick={ onClickConnect } primary />
 							<div className="divider" />
 						</form>
 					</div>
@@ -233,12 +233,12 @@ const MyAddresses = () => (
 	</article>
 )
 
-const PageAccountViewInner = () => {
+const PageAccountViewInner = ({ onClickConnect }) => {
   return (
     <section className="container-fluid chapter">
 			<DocumentTitle title="Accounts" />
       <QueueAnim type="bottom" className="ui-animate">
-        <div key="1"><MyAccounts /></div>
+        <div key="1"><MyAccounts onClickConnect={ onClickConnect }/></div>
         <div key="2"><MyAddresses /></div>
       </QueueAnim>
     </section>
