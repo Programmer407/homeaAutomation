@@ -1,26 +1,73 @@
-.root {
-  
+/* VARIABLES */
+$theme-color: #00BCD4;
+$heading-color: #444;
+
+article.article {
+	h2.article-title {
+		color: $heading-color;
+		font-size: 34px;
+		font-weight: 300;
+		padding-top: 50px;
+		margin: 0px 0px 30px !important;
+	}
+
+	table {
+		border: 0px;
+
+		thead {
+			background-color: #E6E6E6;
+
+			tr > th {
+				font-size: 16px;
+				color: #555;
+				font-weight: 500;
+				border-bottom: 1px solid #CCC;
+			}
+		}
+
+		tbody {
+			tr {
+				td {
+					font-size: 14px;
+					border-bottom: 1px solid #DDD;
+
+					a {
+						margin-left: 10px;
+						svg > path {
+							fill: rgba(0, 188, 212, 0.6);
+						}
+					}
+				}
+
+			}
+			
+		}
+	}
+
+	.box {
+		.box-header {
+			padding-top: 30px;
+			font-size: 1.7em;
+			font-weight: 400;
+			color: $heading-color;
+		}
+
+		.box-body {
+			padding-top: 0px;
+
+			.connect-btn-box {
+				align-self: center;
+			}
+		}
+
+		// .primary-select-field {
+		// 	max-width: 100%;
+		// }
+	}
 }
 
-.actionContainer {
-  text-align: right;
 
-  & > * {
-    margin: 2rem;
-  }
-}
-
-.divider-pipe {
-  color: #999;
-  padding-left: 8px;
-}
-
-.divider-pipe:after {
-  content: "|";
-  padding-right: 8px;
-}
-
-.article > .box {
+/*.article > .box {
 	padding-top: 20px;
 }
 
@@ -121,4 +168,32 @@ h6.text-muted {
 
 .tbl-body > tr > td {
 	font-size: 1.1em !important;
+}*/
+
+
+
+
+/*ORIG SASS*/
+
+/*.root {
+  
 }
+
+.actionContainer {
+  text-align: right;
+
+  & > * {
+    margin: 2rem;
+  }
+}
+
+.divider-pipe {
+  color: #999;
+  padding-left: 8px;
+}
+
+.divider-pipe:after {
+  content: "|";
+  padding-right: 8px;
+}
+*/

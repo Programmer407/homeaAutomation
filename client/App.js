@@ -17,6 +17,9 @@ import './styles/css/app.scss';
 import MUITheme from "../config/theme"
 import {
   Header,
+	PageCalculateView,
+	PageChartsView,
+	PageReportsView,
   PageLogin,
   PageRegister,
   PageForgotPassword,
@@ -95,11 +98,25 @@ export default class App extends React.Component {
                         path="/account"
                         component={PageAccountView}
                       />
-                      
                       <PrivateRoute
                         exact
                         path="/account/:providername/callback"
                         component={PageAccountView}
+                      />
+											<PrivateRoute
+                        exact
+                        path="/calculate"
+                        component={PageCalculateView}
+                      />
+											<PrivateRoute
+                        exact
+                        path="/reports"
+                        component={PageReportsView}
+                      />
+											<PrivateRoute
+                        exact
+                        path="/charts"
+                        component={PageChartsView}
                       />
                       
                       <Route exact path="/errors" component={PageErrorView} />

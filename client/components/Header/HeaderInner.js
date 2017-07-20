@@ -29,8 +29,11 @@ const HeaderInner = props => {
 													<span className="icon-bar"></span>
 												</button>
 												<ul className="dropdown-menu">
-													<li><Link to="/system" activeClassName="activeNavLink">Transactions</Link></li>
-													<li><Link to="/account" activeClassName="activeNavLink">Accounts</Link></li>
+													<li><Link to="/system">Transactions</Link></li>
+													<li><Link to="/account">Accounts</Link></li>
+													<li><Link to="/calculate">Calculate</Link></li>
+													<li><Link to="/reports">Reports</Link></li>
+													<li><Link to="/charts">Charts</Link></li>
 												</ul>
 											</div>
 										</div>
@@ -38,6 +41,9 @@ const HeaderInner = props => {
 											<ul className="nav navbar-nav">
 												<li><NavLink to="/system" activeClassName="activeNavLink">Transactions</NavLink></li>
 												<li><NavLink to="/account" activeClassName="activeNavLink">Accounts</NavLink></li>
+												<li><NavLink to="/calculate" activeClassName="activeNavLink">Calculate</NavLink></li>
+												<li><NavLink to="/reports" activeClassName="activeNavLink">Reports</NavLink></li>
+												<li><NavLink to="/charts" activeClassName="activeNavLink">Charts</NavLink></li>
 											</ul>
 										</div>
 									</div>
@@ -58,39 +64,41 @@ const HeaderInner = props => {
 				</When>
 				<Otherwise>
 					<nav className="navbar navbar-inverse navbar-primary navbar-static-top">
-						<div className="container">
+						<div className="container-fluid">
 							<div className="row">
-								<div className="col-xs-6 my-col-6">
-									<div className="float-left-primary">
-										<div className="navbar-header">
-											<Link className="navbar-brand float-left-primary my-brand" to="/login">Wisdom</Link>
-											<div className="dropdown float-left-primary">
-												<button className="navbar-toggle toggle-primary dropdown-toggle-primary float-left-primary" type="button" data-toggle="dropdown">
-													<span className="icon-bar"></span>
-													<span className="icon-bar"></span>
-													<span className="icon-bar"></span>
-												</button>
-												<ul className="dropdown-menu">
+								<div className="col-xs-12">
+									<div className="col-xs-7 my-col-x">
+										<div className="float-left-primary">
+											<div className="navbar-header">
+												<Link className="navbar-brand my-brand" to="/login">Wisdom</Link>
+												<div className="dropdown float-left-primary">
+													<button className="navbar-toggle toggle-primary dropdown-toggle-primary float-left-primary" type="button" data-toggle="dropdown">
+														<span className="icon-bar"></span>
+														<span className="icon-bar"></span>
+														<span className="icon-bar"></span>
+													</button>
+													<ul className="dropdown-menu">
+														<li><Link to="#">Features</Link></li>
+														<li><Link to="#">Pricing</Link></li>
+														<li><Link to="#">Contact Us</Link></li>
+													</ul>
+												</div>
+											</div>
+											<div className="collapse navbar-collapse float-left-primary" id="myNavbar">
+												<ul className="nav navbar-nav">
 													<li><Link to="#">Features</Link></li>
 													<li><Link to="#">Pricing</Link></li>
 													<li><Link to="#">Contact Us</Link></li>
 												</ul>
 											</div>
 										</div>
-										<div className="collapse navbar-collapse float-left-primary" id="myNavbar">
-											<ul className="nav navbar-nav">
-												<li><Link to="#">Features</Link></li>
-												<li><Link to="#">Pricing</Link></li>
-												<li><Link to="#">Contact Us</Link></li>
-											</ul>
-										</div>
 									</div>
-								</div>
-								<div className="col-xs-6">
-									<ul className="nav navbar-nav navbar-right">
-										<li className="nav-right menu-item"><Link to="/login">Login</Link></li>
-										<li className="nav-right menu-item"><Link to="/register">Sign Up</Link></li>
-									</ul>
+									<div className="col-xs-5 my-col-x">
+										<ul className="nav navbar-nav navbar-right">
+											<li className="nav-right menu-item"><Link to="/login">Login</Link></li>
+											<li className="nav-right menu-item"><Link to="/register">Sign Up</Link></li>
+										</ul>
+									</div>
 								</div>
 							</div>
 						</div>

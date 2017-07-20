@@ -24,7 +24,7 @@ const MyAccounts = () => (
 	<article className="article">
 		<h2 className="article-title">Wallets</h2>
 		<div className="row">
-			<div className="col-lg-8">
+			<div className="col-lg-8 col-md-12 col-sm-12">
 				<div className="box box-default table-box table-responsive mdl-shadow--2dp">
 					<table className="mdl-data-table">
 						<thead className="tbl-header">
@@ -85,31 +85,32 @@ const MyAccounts = () => (
 					</table>
 				</div>
 			</div>
-			<div className="col-lg-4">
+			<div className="col-lg-4 col-md-12 col-sm-12">
 				<div className="box box-default">
 					<div className="box-header box-header-primary">Add Account</div>
 					<div className="box-body">
 						<p>Connect to an online account by selecting a service provider from the dropdown.</p>
-						<form className="form-inline" role="form">
-							<SelectField
-								className="select-field-primary"
-								floatingLabelText="Select a provider">
-								<MenuItem value={1} primaryText="BitGo" />
-								<MenuItem value={2} primaryText="Bitstamp" />
-								<MenuItem value={3} primaryText="Blockchain.info" />
-								<MenuItem value={4} primaryText="CEX.IO" />
-								<MenuItem value={5} primaryText="Coinbase" />
-								<MenuItem value={6} primaryText="Kraken" />
-								<MenuItem value={7} primaryText="Mt.Gox" />
-							</SelectField>
+						<form role="form">
+							<div className="form-group">
+								<SelectField
+									fullWidth
+									className="primary-select-field"
+									floatingLabelText="Select a provider">
+									<MenuItem value={1} primaryText="BitGo" />
+									<MenuItem value={2} primaryText="Bitstamp" />
+									<MenuItem value={3} primaryText="Blockchain.info" />
+									<MenuItem value={4} primaryText="CEX.IO" />
+									<MenuItem value={5} primaryText="Coinbase" />
+									<MenuItem value={6} primaryText="Kraken" />
+									<MenuItem value={7} primaryText="Mt.Gox" />
+								</SelectField>
+							</div>
 							<RaisedButton label="Connect" primary />
+							<div className="divider" />
 						</form>
 					</div>
 				</div>
 			</div>
-		</div>
-
-		<div className="row">
 			<div className="col-lg-8">
 				<div className="box box-default">
 					<div className="box-header box-header-primary">Associated Addresses</div>
@@ -127,7 +128,7 @@ const MyAccounts = () => (
 								<tbody className="tbl-body">
 									<tr>
 										<td className="mdl-data-table__cell--non-numeric">145J2KWhnYgMpkMUGBrXfm6E9pFmrn5at3</td>
-										<td className="mdl-data-table__cell--non-numeric">145J2KWhnYgMpkMUGBrXfm6E9pFmrn5at3</td>
+										<td className="mdl-data-table__cell--non-numeric">Some BTC</td>
 										<td>
 											<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
 											<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
@@ -181,7 +182,7 @@ const MyAddresses = () => (
 								<tbody className="tbl-body">
 									<tr>
 										<td className="mdl-data-table__cell--non-numeric">145J2KWhnYgMpkMUGBrXfm6E9pFmrn5at3</td>
-										<td className="mdl-data-table__cell--non-numeric">145J2KWhnYgMpkMUGBrXfm6E9pFmrn5at3</td>
+										<td className="mdl-data-table__cell--non-numeric">Some BTC</td>
 										<td>
 											<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
 											<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
@@ -235,6 +236,7 @@ const MyAddresses = () => (
 const PageAccountViewInner = () => {
   return (
     <section className="container-fluid chapter">
+			<DocumentTitle title="Accounts" />
       <QueueAnim type="bottom" className="ui-animate">
         <div key="1"><MyAccounts /></div>
         <div key="2"><MyAddresses /></div>
