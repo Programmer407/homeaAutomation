@@ -6,8 +6,10 @@ import UserProvider from './UserProvider';
 const UserWallet = sequelize.define(
   "userwallet",
   {
+    walletName: { type: Sequelize.STRING(128), field: "wallet_name" },
     walletType: { type: Sequelize.STRING(128), field: "wallet_type" },
-    balance: { type: Sequelize.STRING(128), field: "balance" }
+    balance: { type: Sequelize.STRING(128), field: "balance" },
+    currency: { type: Sequelize.STRING(128), field: "currency" }
   },
   {
     // don't add the timestamp attributes (updatedAt, createdAt)

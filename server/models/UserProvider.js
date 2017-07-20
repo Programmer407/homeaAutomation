@@ -7,7 +7,9 @@ import Provider from './Provider';
 const UserProvider = sequelize.define(
   "userprovider",
   {
-    accountName: { type: Sequelize.STRING(128), field: "account_name" }
+    accountName: { type: Sequelize.STRING(128), field: "account_name" },
+    accessToken: { type: Sequelize.STRING(128), field: "access_token" },
+    refreshTokan: { type: Sequelize.STRING(128), field: "refresh_token" }
   },
   {
     // don't add the timestamp attributes (updatedAt, createdAt)

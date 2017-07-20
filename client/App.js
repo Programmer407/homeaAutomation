@@ -1,5 +1,5 @@
 // libs
-import React from "react"
+import React, {PropTypes} from "react"
 import { Provider } from "react-redux"
 import { Route, Switch, Redirect } from "react-router-dom"
 import getMuiTheme from "material-ui/styles/getMuiTheme"
@@ -35,10 +35,10 @@ import {
 
 export default class App extends React.Component {
   static propTypes = {
-    userAgent: React.PropTypes.string,
-    store: React.PropTypes.object,
-    Router: React.PropTypes.element,
-    routerProps: React.PropTypes.routerProps
+    userAgent: PropTypes.string,
+    store: PropTypes.object,
+    //Router: React.PropTypes.element,
+    //routerProps: React.PropTypes.routerProps
   }
 
   static childContextTypes = {

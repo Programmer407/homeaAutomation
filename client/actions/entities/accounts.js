@@ -70,7 +70,7 @@ export const ACCOUNT_COINBASE_WALLET = 'ACCOUNT_COINBASE_WALLET'
 export const ACCOUNT_COINBASE_WALLET_SUCCESS = 'ACCOUNT_COINBASE_WALLET_SUCCESS'
 export const ACCOUNT_COINBASE_WALLET_FAILURE = 'ACCOUNT_COINBASE_WALLET_FAILURE'
 
-export function accountwallets() {
+export function coinbasewallets(accessToken, refreshTokan, providerName) {
   return {
     [CALL_API]: {
       types: [
@@ -78,7 +78,9 @@ export function accountwallets() {
         ACCOUNT_COINBASE_WALLET_SUCCESS,
         ACCOUNT_COINBASE_WALLET_FAILURE
       ],
-      endpoint: `/api/accounts/account-coinbase-wallets`
-    }
+      endpoint: `/api/accounts/coinbase-wallets`,
+      method: 'POST'
+    },
+    payload: {accessToken, refreshTokan, providerName}
   }
 }
