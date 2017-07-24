@@ -93,23 +93,6 @@ class PageAccountView extends React.Component {
 
   componentWillMount() {
     const { dispatch } = this.props
-
-    dispatch(getAllProviders())
-			.then(action => {
-        const { error, payload } = action
-        if ( !error ) {
-					console.log('not errors')
-					dispatch(userProvidersList())
-						.then(action => {
-							const { error, payload } = action
-							if ( !error ) {
-								this.setState({
-									check : 2
-								});
-							}	
-					});
-				}
-      });
       
     //console.log('componentWillMount this.props is : ' + JSON.stringify(this.props))
     
@@ -121,7 +104,7 @@ class PageAccountView extends React.Component {
           const { error, payload } = action
           if ( !error ) {
             let providerObj = payload.providerObj
-            if (providerObj.id = 1) {
+            if (providerObj.id == 1) {
               let paramsString = this.props.location.search
               console.log('paramsString is : ' + paramsString)
               if (paramsString) {
@@ -143,6 +126,22 @@ class PageAccountView extends React.Component {
                                 const { error, payload } = action
                                 if ( !error ) {
                                   console.log('Not errors 3')
+																	dispatch(getAllProviders())
+																		.then(action => {
+																			const { error, payload } = action
+																			if ( !error ) {
+																				console.log('not errors')
+																				dispatch(userProvidersList())
+																					.then(action => {
+																						const { error, payload } = action
+																						if ( !error ) {
+																							this.setState({
+																								check : 2
+																							});
+																						}	
+																				});
+																			}
+																		});
                                 }
                               })
                           } else {
@@ -157,7 +156,24 @@ class PageAccountView extends React.Component {
             }
           }
         })
-    }
+    } else {
+			dispatch(getAllProviders())
+				.then(action => {
+					const { error, payload } = action
+					if ( !error ) {
+						console.log('not errors')
+						dispatch(userProvidersList())
+							.then(action => {
+								const { error, payload } = action
+								if ( !error ) {
+									this.setState({
+										check : 2
+									});
+								}	
+						});
+					}
+				});
+		}
   }
 
   
