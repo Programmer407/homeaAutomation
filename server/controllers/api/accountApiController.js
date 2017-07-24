@@ -1,5 +1,6 @@
 // libs
 import express from 'express'
+var request = require('request');
 
 // src
 import { ensureAnonymity, caughtError } from '../../utils'
@@ -85,7 +86,8 @@ router.post('/api/accounts/my-account-connect-url', (req, res) => {
                     var callBackUrl = req.protocol + '://' + req.get('host') + providerObj.redirectUrl1
                     //console.log('callBackUrl : ' + callBackUrl)
                     let encodedCallBackUrl = encodeURIComponent(callBackUrl)
-                    let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&scope=wallet:user:read,wallet:accounts:read'
+                    //let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&scope=wallet:user:read,wallet:accounts:read'
+                    let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&scope=balance+transactions+transfers+user'
                    // console.log('redirectUrl : ' + redirectUrl)
                     res
                         .status(200)
@@ -332,12 +334,25 @@ router.post('/api/accounts/delete-userprovider-wallet', (req, res) => {
                 message: 'Missing required arguments'
         })
     }
-    let result = deleteUserWalletById(userWalletId)
+    deleteUserWalletById(userWalletId)
+    .then(result => {
+    //console.log('result : ' + JSON.stringify(result))
         if (result) {
-            res
-            .status(200)
+            findAllUserProviderList(user.id)
+            .then(userProviderList => {
+                res
+                    .status(200)
+                    .send({
+                        userProviderList
+                    })
+            })
+            .catch(error => {
+                //caughtError(res, error)
+                res
+                .status(500)
                 .send({
-                message: 'Wallet deleted'
+                    message: 'Something went wrong, Please try again'
+                })
             })
         } else {
             res
@@ -346,6 +361,171 @@ router.post('/api/accounts/delete-userprovider-wallet', (req, res) => {
                 message: 'Something went wrong, Please try again'
             })
         }
+    })
+})
+
+router.get('/api/accounts/refresh-userproviders', (req, res) => {
+    const { body, user } = req
+
+    if ( !body ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing request body'
+        })
+    }
+    console.log('user.id : ' + user.id)
+    findAllUserProviderList(user.id)
+        .then(userProviderList => {
+            console.log('userProviderList : ' + JSON.stringify(userProviderList))
+            userProviderList.forEach(function(userProviderObj) {
+                console.log('userProvider : ' + JSON.stringify(userProviderObj))
+                if (userProviderObj.provider.id = 1) {
+                    console.log('its coinbase')
+                    var Client = require('coinbase').Client;
+                    var client = new Client({'accessToken': userProviderObj.accessToken, 'refreshToken': userProviderObj.refreshToken});
+                    /*
+                        console.log('err is : ' + err)
+                            console.log('accounts : ' + accounts)
+                            var headers = {
+                                'User-Agent':       'Super Agent/0.0.1',
+                                'Content-Type':     'application/x-www-form-urlencoded'
+                            }
+
+                            // Configure the request
+                            var options = {
+                                url: 'https://api.coinbase.com/oauth/revoke',
+                                method: 'POST',
+                                headers: headers,
+                                form: {'token': 'aaee094a50f2e120ed0cd94d7ce9143c5a29bcc06a11d8d5633f78153b4c9446'}
+                            }
+
+                            // Start the request
+                            request(options, function (error, response, body) {
+                                if (!error && response.statusCode == 200) {
+                                    // Print out the response body
+                                    console.log('body 1 : ' + body)
+                                    console.log('body 2 : ' + JSON.stringify(body))
+                                    console.log('response 1 : ' + response)
+                                    console.log('response 2 : ' + JSON.stringify(response))
+                                } else {
+                                    console.log('there are errors : ' + error)
+                                }
+                            })
+*/
+
+                    client.getAccounts({}, function(err, accounts) {
+                        if (err && !accounts) {
+                            console.log('err is : ' + err)
+                            console.log('accounts : ' + accounts)
+                            var headers = {
+                                'User-Agent':       'Super Agent/0.0.1',
+                                'Content-Type':     'application/x-www-form-urlencoded'
+                            }
+
+                            // Configure the request
+                            var options = {
+                                url: 'https://api.coinbase.com/oauth/token',
+                                method: 'POST',
+                                form: {'grant_type': 'refresh_token', 
+                                        'client_id': userProviderObj.provider.clientId,
+                                        'client_secret': userProviderObj.provider.clientSecret,
+                                        'refresh_token': userProviderObj.refreshToken}
+                            }
+
+                            // Start the request
+                            request(options, function (error, response, body) {
+                                if (!error && response.statusCode == 200) {
+                                    // Print out the response body
+                                    console.log('body 1 : ' + body)
+                                    userProviderObj.accessToken = body.access_token
+                                    userProviderObj.refreshToken = body.refresh_token
+                                    updateUserProvider(userProviderObj)
+                                        .then(updatedUserProvider => {
+                                            client = new Client({'accessToken': updatedUserProvider.accessToken, 'refreshToken': updatedUserProvider.refreshToken});
+                                            client.getAccounts({}, function(err, accounts) {
+                                                accounts.forEach(function(acct) {
+                                                //console.log('my bal: ' + acct.balance.amount + ' for ' + acct.name + ' In Currency : ' + JSON.stringify(acct.currency));
+                                                findUserWalletByWalletId(acct.id)
+                                                    .then(userWallet => {
+                                                        if (userWallet) {
+                                                            userWallet.walletName = acct.name
+                                                            userWallet.walletType = acct.type
+                                                            userWallet.balance = acct.balance.amount
+                                                            userWallet.currency = acct.currency.code
+                                                            updateUserWallet(userWallet)
+                                                                .then(updatedUserWallet => {
+                                                                    //console.log('wallet updated')
+                                                                })
+                                                        } else {
+                                                            const userWalletObj = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code})
+                                                            userWalletObj.setUserprovider(userProviderObj, {save: false})
+                                                            insertUserWallet(userWalletObj)
+                                                                .then(insertedUserWallet => {
+                                                                    //console.log('wallet inserted')
+                                                                })
+                                                        }
+                                                    });
+                                                });
+                                            })
+                                            res
+                                                .status(200)
+                                                .send({
+                                                    message: 'User Provider List is Refreshed 1'
+                                                })
+                                        })
+                                } else {
+                                    console.log('there are errors : ' + error)
+                                    res
+                                        .status(400)
+                                        .send({
+                                            message: 'Something went wrong, Please try again'
+                                        })
+                                }
+                            })
+                        } else {
+                            console.log('there are no errors')
+                            accounts.forEach(function(acct) {
+                                //console.log('my bal: ' + acct.balance.amount + ' for ' + acct.name + ' In Currency : ' + JSON.stringify(acct.currency));
+                                findUserWalletByWalletId(acct.id)
+                                    .then(userWallet => {
+                                        if (userWallet) {
+                                            userWallet.walletName = acct.name
+                                            userWallet.walletType = acct.type
+                                            userWallet.balance = acct.balance.amount
+                                            userWallet.currency = acct.currency.code
+                                            updateUserWallet(userWallet)
+                                                .then(updatedUserWallet => {
+                                                    //console.log('wallet updated')
+                                                })
+                                        } else {
+                                            const userWalletObj = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code})
+                                            userWalletObj.setUserprovider(userProviderObj, {save: false})
+                                            insertUserWallet(userWalletObj)
+                                                .then(insertedUserWallet => {
+                                                    //console.log('wallet inserted')
+                                                })
+                                        }
+                                    });
+                            });
+                        }
+                    });
+                }
+            })
+            res
+                .status(200)
+                .send({
+                    message: 'User Provider List is Refreshed 2'
+                })
+        })
+        .catch(error => {
+            //caughtError(res, error)
+            res
+                .status(500)
+                .send({
+                    message: 'Something went wrong, Please try again'
+                })
+        })
 })
 
 export default router

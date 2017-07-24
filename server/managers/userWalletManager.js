@@ -28,5 +28,5 @@ export const deleteUserWalletById = (walletId:number):Object =>
       if(null == object)
         return;
       
-      return object.destroy();
+      return object.destroy({ force: true });
     });
