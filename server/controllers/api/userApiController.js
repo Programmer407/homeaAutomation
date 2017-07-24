@@ -162,7 +162,14 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
                                 if (user) {
                                   var activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + user.registerToken
                                   const data = {firstName: user.firstName, activationUrl: activationUrl};
-                                  emailUtils.sendAccountActivationEmail('majid.hussain@emumba.com', data)
+                                  
+                                  var allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
+                                  var toEmailAddress = 'majid.hussain@emumba.com'
+                                  if (allowedEmailList.indexOf(email) > -1) {
+                                    toEmailAddress = email
+                                  }
+
+                                  emailUtils.sendAccountActivationEmail(toEmailAddress, data)
                                     .then(result => {
                                       console.log('Email Sent')
                                       res
@@ -253,7 +260,14 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
             .then(user => {
               var resetUrl = req.protocol + '://' + req.get('host') + '/resetPassword/' + user.resetPasswordToken
               const data = {firstName: user.firstName, resetLink: resetUrl};
-              emailUtils.sendResendPasswordEmail('majid.hussain@emumba.com', data)
+
+              var allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
+              var toEmailAddress = 'majid.hussain@emumba.com'
+              if (allowedEmailList.indexOf(email) > -1) {
+                toEmailAddress = email
+              }
+
+              emailUtils.sendResendPasswordEmail(toEmailAddress, data)
                 .then(result => {
                   console.log('Email Sent')
                   res
@@ -501,7 +515,14 @@ router.post('/api/users/resend-activation', (req, res) => {
             .then(user => {
               var activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + user.registerToken
               const data = {firstName: user.firstName, activationUrl: activationUrl};
-              emailUtils.resendAccountActivationEmail('majid.hussain@emumba.com', data)
+
+              var allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
+              var toEmailAddress = 'majid.hussain@emumba.com'
+              if (allowedEmailList.indexOf(user.email) > -1) {
+                toEmailAddress = user.email
+              }
+
+              emailUtils.resendAccountActivationEmail(toEmailAddress, data)
                 .then(result => {
                   console.log('Email Sent')
                   res

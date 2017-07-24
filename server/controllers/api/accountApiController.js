@@ -117,11 +117,11 @@ router.post('/api/accounts/coinbase-wallets', (req, res) => {
                                                 insertUserWallet(userWalletObj)
                                                     .then(userWallet => {
                                                         console.log('wallet inserted')
-                                                        client.getAccount(acct.id, function(err, account) {
+                                                        /*client.getAccount(acct.id, function(err, account) {
                                                             account.getTransactions(function(err, txs) {
                                                                 console.log(txs);
                                                             });
-                                                        });
+                                                        });*/
                                                     })
                                             });
                                         });
