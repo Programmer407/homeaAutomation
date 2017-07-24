@@ -1,5 +1,5 @@
 // libs
-import React from "react";
+import React, {PropTypes} from "react";
 import QueueAnim from 'rc-queue-anim';
 import DocumentTitle from "react-document-title";
 import styles from "./PageAccountViewInner.scss";
@@ -20,72 +20,121 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import {grey400, grey600, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import CommunicationEmail from 'material-ui/svg-icons/communication/email';
 
-const MyAccounts = ({ onClickConnect }) => (
+const MyAccounts = ({ onSubmit, onChange, selectedProvider, providers }) => (
 	<article className="article">
 		<h2 className="article-title">Wallets</h2>
 		<div className="row">
-			<div className="col-lg-8 col-md-12 col-sm-12">
-				<div className="box box-default table-box table-responsive mdl-shadow--2dp">
-					<table className="mdl-data-table">
-						<thead className="tbl-header">
-							<tr>
-								<th className="mdl-data-table__cell--non-numeric">Wallet</th>
-								<th className="mdl-data-table__cell--non-numeric">Provider</th>
-								<th>Balance</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody className="tbl-body">
-							<tr>
-								<td className="mdl-data-table__cell--non-numeric">BTC Wallet</td>
-								<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
-								<td>12.4566 BTC</td>
-								<td>
-									<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
-									<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-								</td>
-							</tr>
-							<tr>
-								<td className="mdl-data-table__cell--non-numeric">BTC Wallet</td>
-								<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
-								<td>174.9541 BTC</td>
-								<td>
-									<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
-									<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-								</td>
-							</tr>
-							<tr>
-								<td className="mdl-data-table__cell--non-numeric">ETH Wallet</td>
-								<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
-								<td>287.7412 ETH</td>
-								<td>
-									<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
-									<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-								</td>
-							</tr>
-							<tr>
-								<td className="mdl-data-table__cell--non-numeric">DOGE Wallet</td>
-								<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
-								<td>9.4574 DOGE</td>
-								<td>
-									<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
-									<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-								</td>
-							</tr>
-							<tr>
-								<td className="mdl-data-table__cell--non-numeric">BTC Wallet</td>
-								<td className="mdl-data-table__cell--non-numeric">Blockchain.info</td>
-								<td>7.5241 BTC</td>
-								<td>
-									<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
-									<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+			<div className="col-lg-8 ">
+				<div>
+					<div className="box box-default table-box table-responsive mdl-shadow--2dp">
+						<table className="mdl-data-table">
+							<thead className="tbl-header">
+								<tr>
+									<th className="mdl-data-table__cell--non-numeric">Wallet</th>
+									<th className="mdl-data-table__cell--non-numeric">Provider</th>
+									<th>Balance</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody className="tbl-body">
+								<tr>
+									<td className="mdl-data-table__cell--non-numeric">BTC Wallet</td>
+									<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
+									<td>12.4566 BTC</td>
+									<td>
+										<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
+										<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+									</td>
+								</tr>
+								<tr>
+									<td className="mdl-data-table__cell--non-numeric">BTC Wallet</td>
+									<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
+									<td>174.9541 BTC</td>
+									<td>
+										<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
+										<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+									</td>
+								</tr>
+								<tr>
+									<td className="mdl-data-table__cell--non-numeric">ETH Wallet</td>
+									<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
+									<td>287.7412 ETH</td>
+									<td>
+										<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
+										<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+									</td>
+								</tr>
+								<tr>
+									<td className="mdl-data-table__cell--non-numeric">DOGE Wallet</td>
+									<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
+									<td>9.4574 DOGE</td>
+									<td>
+										<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
+										<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+									</td>
+								</tr>
+								<tr>
+									<td className="mdl-data-table__cell--non-numeric">BTC Wallet</td>
+									<td className="mdl-data-table__cell--non-numeric">Blockchain.info</td>
+									<td>7.5241 BTC</td>
+									<td>
+										<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
+										<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div>
+					<div className="box box-default">
+						<div className="box-header box-header-primary">Associated Addresses</div>
+						<div className="box-body">
+							<p>These addresses were found in the transaction histories of your connected wallets.</p>
+							<div className="box box-default table-box table-responsive mdl-shadow--2dp">
+								<table className="mdl-data-table">
+									<thead className="tbl-header">
+										<tr>
+											<th className="mdl-data-table__cell--non-numeric">Nickname</th>
+											<th className="mdl-data-table__cell--non-numeric">Address</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody className="tbl-body">
+										<tr>
+											<td className="mdl-data-table__cell--non-numeric">145J2KWhnYgMpkMUGBrXfm6E9pFmrn5at3</td>
+											<td className="mdl-data-table__cell--non-numeric">Some BTC</td>
+											<td>
+												<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
+												<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+											</td>
+										</tr>
+										<tr>
+											<td className="mdl-data-table__cell--non-numeric">1JeK3CgCuPHVw9S5niUj4D7HFJ5bXc1JYR</td>
+											<td className="mdl-data-table__cell--non-numeric">BTC-Income</td>
+											<td>
+												<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
+												<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+											</td>
+										</tr>
+										<tr>
+											<td className="mdl-data-table__cell--non-numeric">3BUp6EH8Vs2BAYsPQCLX8hdo8oyFpM28R9</td>
+											<td className="mdl-data-table__cell--non-numeric">ETH-Alice</td>
+											<td>
+												<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
+												<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div className="col-lg-4 col-md-12 col-sm-12">
+
+			<div className="col-lg-4">
 				<div className="box box-default">
 					<div className="box-header box-header-primary">Add Account</div>
 					<div className="box-body">
@@ -95,64 +144,17 @@ const MyAccounts = ({ onClickConnect }) => (
 								<SelectField
 									fullWidth
 									className="primary-select-field"
-									floatingLabelText="Select a provider">
-									<MenuItem value={1} primaryText="BitGo" />
-									<MenuItem value={2} primaryText="Bitstamp" />
-									<MenuItem value={3} primaryText="Blockchain.info" />
-									<MenuItem value={4} primaryText="CEX.IO" />
-									<MenuItem value={5} primaryText="Coinbase" />
-									<MenuItem value={6} primaryText="Kraken" />
-									<MenuItem value={7} primaryText="Mt.Gox" />
+									floatingLabelText="Select a provider"
+									onChange={ onChange }
+									value={ selectedProvider }>
+									{providers.map(provider => 
+										<MenuItem key={ provider.id } value={ provider.id } primaryText={ provider.displayName } />
+									)}
 								</SelectField>
 							</div>
-							<RaisedButton label="Connect" onClick={ onClickConnect } primary />
+							<RaisedButton label="Connect" onClick={ onSubmit } primary />
 							<div className="divider" />
 						</form>
-					</div>
-				</div>
-			</div>
-			<div className="col-lg-8">
-				<div className="box box-default">
-					<div className="box-header box-header-primary">Associated Addresses</div>
-					<div className="box-body">
-						<p>These addresses were found in the transaction histories of your connected wallets.</p>
-						<div className="box box-default table-box table-responsive mdl-shadow--2dp">
-							<table className="mdl-data-table">
-								<thead className="tbl-header">
-									<tr>
-										<th className="mdl-data-table__cell--non-numeric">Nickname</th>
-										<th className="mdl-data-table__cell--non-numeric">Address</th>
-										<th></th>
-									</tr>
-								</thead>
-								<tbody className="tbl-body">
-									<tr>
-										<td className="mdl-data-table__cell--non-numeric">145J2KWhnYgMpkMUGBrXfm6E9pFmrn5at3</td>
-										<td className="mdl-data-table__cell--non-numeric">Some BTC</td>
-										<td>
-											<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
-											<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-										</td>
-									</tr>
-									<tr>
-										<td className="mdl-data-table__cell--non-numeric">1JeK3CgCuPHVw9S5niUj4D7HFJ5bXc1JYR</td>
-										<td className="mdl-data-table__cell--non-numeric">BTC-Income</td>
-										<td>
-											<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
-											<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-										</td>
-									</tr>
-									<tr>
-										<td className="mdl-data-table__cell--non-numeric">3BUp6EH8Vs2BAYsPQCLX8hdo8oyFpM28R9</td>
-										<td className="mdl-data-table__cell--non-numeric">ETH-Alice</td>
-										<td>
-											<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
-											<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -233,16 +235,22 @@ const MyAddresses = () => (
 	</article>
 )
 
-const PageAccountViewInner = ({ onClickConnect }) => {
+const PageAccountViewInner = ({ onSubmit, onChange, selectedProvider, providers }) => {
   return (
     <section className="container-fluid chapter">
 			<DocumentTitle title="Accounts" />
       <QueueAnim type="bottom" className="ui-animate">
-        <div key="1"><MyAccounts onClickConnect={ onClickConnect }/></div>
+        <div key="1"><MyAccounts onSubmit={ onSubmit } onChange={ onChange } providers={ providers } selectedProvider={ selectedProvider }/></div>
         <div key="2"><MyAddresses /></div>
       </QueueAnim>
     </section>
   )
 }
+
+PageAccountViewInner.propTypes = {
+  providers: PropTypes.array,
+	onChange: React.PropTypes.func.isRequired,
+	onSubmit: React.PropTypes.func.isRequired
+};
 
 export default PageAccountViewInner;
