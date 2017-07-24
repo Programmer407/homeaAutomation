@@ -15,8 +15,6 @@ import cors from 'cors'
 import { default as appUtils } from './utils/appUtils'
 import devUtils from './utils/devUtils'
 import logUtils from './utils/logUtils'
-// import scheduledTaskUtils from './utils/scheduledTaskUtils'
-// import notificationService from './services/notificationService'
 import {
   build404ErrorHandler, build500ErrorHandler,
   setupPassport, setupSessionStore,
@@ -77,9 +75,6 @@ if ( process.env.UNIVERSAL_RENDERING === 'false' ) {
 
 app.use(build404ErrorHandler())
 app.use(build500ErrorHandler())
-
-// scheduledTaskUtils.initializeScheduledTasks()
-// notificationService.setupSocketIo(sessionStore, setupSocketIO(httpServer))
 
 httpServer.listen(port, err => {
   if (err) {

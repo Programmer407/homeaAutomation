@@ -4,38 +4,29 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {push} from 'react-router-redux'
 import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
-import {myaccountconnect, coinbasewallets, authenticateCoinBase} from '../../actions/entities/accounts'
-
+import {userproviderslist, providerInfo, accountconnectUrl, insertUserProvider, userproviderwallets, authenticateCoinBaseApi, getAllProviders} from '../../actions/entities/accounts'
 
 class PageAccountView extends React.Component {
   constructor(props) {
-    console.log('props are : ' + props)
-    super(props)
-    //this.state = {}
-    this.connectProvider = this.connectProvider.bind(this);
+    super(props);
+		this.state = {
+			check: 1,
+      provider: Object.assign({}, this.props.provider)
+    };
+
+    this.updateProviderSelection = this.updateProviderSelection.bind(this);
+		this.connectProvider = this.connectProvider.bind(this);
+
   }
 
   connectProvider(event) {
-    console.log('connectProvider method called. ' + this.props)
     event.preventDefault();
-    return this.props.dispatch(myaccountconnect())
+    return this.props.dispatch(accountconnectUrl(1))
       .then(action => {
         const { error, payload } = action
         if ( !error ) {
-          console.log('response received. : ' + JSON.stringify(action))
-          //this.props.dispatch('https://www.coinbase.com/oauth/authorize?response_type=code&client_id=45a38875c5f7a2563c36cf347ebef69d428bbee77d6d9ece0878f1f54fb92f78&redirect_uri=http%3A%2F%2Flocalhost%2Fapi%2Faccounts%2Fcoinbase%2Fcallback&state=134ef5504a942&scope=wallet:user:read,wallet:accounts:read')
-          //window.open('https://www.coinbase.com/oauth/authorize?response_type=code&client_id=45a38875c5f7a2563c36cf347ebef69d428bbee77d6d9ece0878f1f54fb92f78&redirect_uri=http%3A%2F%2Flocalhost%2Fapi%2Faccounts%2Fcoinbase%2Fcallback&state=134ef5504a942&scope=wallet:user:read,wallet:accounts:readhttps://www.coinbase.com/oauth/authorize?response_type=code&client_id=45a38875c5f7a2563c36cf347ebef69d428bbee77d6d9ece0878f1f54fb92f78&redirect_uri=http%3A%2F%2Flocalhost%2Fapi%2Faccounts%2Fcoinbase%2Fcallback&state=134ef5504a942&scope=wallet:user:read,wallet:accounts:read', 'sharer', 'toolbar=0,status=0,width=548,height=625');
-          //var url = "https://www.coinbase.com/oauth/authorize?response_type=code&client_id=45a38875c5f7a2563c36cf347ebef69d428bbee77d6d9ece0878f1f54fb92f78&redirect_uri=http%3A%2F%2Flocalhost%2Fapi%2Faccounts%2Fcoinbase%2Fcallback&state=134ef5504a942&scope=wallet:user:read,wallet:accounts:readhttps://www.coinbase.com/oauth/authorize?response_type=code&client_id=45a38875c5f7a2563c36cf347ebef69d428bbee77d6d9ece0878f1f54fb92f78&redirect_uri=http%3A%2F%2Flocalhost%2Fapi%2Faccounts%2Fcoinbase%2Fcallback&state=134ef5504a942&scope=wallet:user:read,wallet:accounts:read";
+          console.log('response received : ' + JSON.stringify(action))
           var url = payload.redirecturl
-          //var width = 450;
-          //var height = 650;
-          //var left = parseInt((screen.availWidth/2) - (width/2));
-          //var top = parseInt((screen.availHeight/2) - (height/2));
-          //var windowFeatures = "width=" + width + ",height=" + height +   
-          //    ",status,resizable,left=" + left + ",top=" + top + 
-          //    "screenX=" + left + ",screenY=" + top + ",scrollbars=yes";
-
-          //window.open(url, "subWind", windowFeatures, "POS");
           window.location = url
           return action
         }
@@ -45,44 +36,95 @@ class PageAccountView extends React.Component {
       })
   }
   
+  updateProviderSelection(event, index, value) {
+    return this.setState({provider: value});
+  }
+
   componentWillMount() {
-    console.log('componentWillMount this.props is : ' + JSON.stringify(this.props))
-    let providerName = this.props.match.params.providername
-    let tokenCode = this.props.location.search
-    console.log('tokenCode 1 is : ' + tokenCode)
-    if (tokenCode) {
-      tokenCode = tokenCode.substring(tokenCode.indexOf('=')+1, tokenCode.indexOf('&'))
-      console.log('tokenCode is : ' + tokenCode)
-      this.props.dispatch(authenticateCoinBase(tokenCode))
-      .then(action => {
+    const { dispatch } = this.props
+
+    dispatch(getAllProviders())
+			.then(action => {
         const { error, payload } = action
         if ( !error ) {
-          console.log('Not errors')
-          console.log('action is : ' + JSON.stringify(action))
-          console.log('payload is : ' + JSON.stringify(payload))
-          this.props.dispatch(coinbasewallets(payload.access_token, payload.refresh_token, providerName))
-          .then(action => {
-            const { error, payload } = action
-            if ( !error ) {
-              console.log('Not errors 2')
-            } else {
-              console.log('There are errors 2')
-            }
-          })
-        } else {
-          console.log('There are errors')
-        }
+					this.setState({
+						check : 2
+					});
+				}
       })
+      
+    //console.log('componentWillMount this.props is : ' + JSON.stringify(this.props))
+    
+    let providerName = this.props.match.params.providername
+    //console.log('componentWillMount providerName is : ' + providerName)
+    if (providerName) {
+      dispatch(providerInfo(providerName))
+        .then(action => {
+          const { error, payload } = action
+          if ( !error ) {
+            let providerObj = payload.providerObj
+            if (providerObj.id = 1) {
+              let paramsString = this.props.location.search
+              console.log('paramsString is : ' + paramsString)
+              if (paramsString) {
+                let tokenCode = paramsString.substring(paramsString.indexOf('=')+1)
+                console.log('tokenCode is : ' + tokenCode)
+                dispatch(authenticateCoinBaseApi(tokenCode, providerObj.grantType, providerObj.clientId, providerObj.clientSecret))
+                  .then(action => {
+                    const { error, payload } = action
+                    if ( !error ) {
+                      console.log('Not errors')
+                      console.log('payload is : ' + JSON.stringify(payload))
+                      dispatch(insertUserProvider(payload.access_token, payload.refresh_token, providerObj.id))
+                        .then(action => {
+                          const { error, payload } = action
+                          if ( !error ) {
+                            console.log('Not errors 2')
+                            dispatch(userproviderwallets(payload.userProvider.id))
+                              .then(action => {
+                                const { error, payload } = action
+                                if ( !error ) {
+                                  console.log('Not errors 3')
+                                }
+                              })
+                          } else {
+                            console.log('There are errors 2')
+                          }
+                        })
+                    } else {
+                      console.log('There are errors')
+                    }
+                  })
+              }
+            }
+          }
+        })
     }
   }
 
+  
   render() {
-    return <div>
-			<PageAccountViewInner onClickConnect={this.connectProvider} />
-      {/*<RaisedButton className="mWidthStyle" label="Connect" primary  onClick={this.connectProvider}/><div className="divider" />*/}
-      </div>
+    if (this.state.check == 1) {
+			return <PageLoading {...this.props}/>
+		} else if(this.state.check == 2) {
+			const {providers} = this.props;
+			return (
+				<div>
+					<PageAccountViewInner onSubmit={this.connectProvider} onChange={this.updateProviderSelection} selectedProvider={this.state.provider} providers={providers} />
+				</div>
+			)
+    }
   }
 }
 
-export default connect(null)(PageAccountView);
+/* redux connect() and related functions */
+function mapStateToProps(state, ownProps) {
+  let provider = {};
 
+  return {
+		provider,
+    providers: state.entities.accounts
+  };
+}
+
+export default connect(mapStateToProps)(PageAccountView);

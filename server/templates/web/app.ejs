@@ -5,22 +5,13 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title><%- title %></title>
     <link rel="icon" type="image/png" href="/favicon.png" />
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="/vendors/bootstrap/css/bootstrap.min.css">
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
     <script src="/vendors/jquery/jquery-3.2.1.min.js"></script>
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <script src="/vendors/bootstrap/js/bootstrap.min.js"></script>
-    <!--<link rel="stylesheet" type="text/css" href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css">-->
     <meta name="description" content="An infrastructure monitoring system for FusionOps">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/public_website/css/multiselect.css">
-    <link rel="stylesheet" type="text/css" href="/<%- manifest['app.css'] %>"> -->
-
+    
     <link rel="stylesheet" href="/css/material-design-icons/iconfont/material-icons.css" rel="stylesheet" >
-    <!--<link rel="stylesheet" type="text/css" href="/css/main.css">-->
     
     <script type="text/javascript">
       window.GAW = {
@@ -67,22 +58,6 @@
     </section>
     <script>__REACT_DEVTOOLS_GLOBAL_HOOK__ = parent.__REACT_DEVTOOLS_GLOBAL_HOOK__</script>
     
-
-    
-   <!-- <script>
-    var WebFontConfig = {
-      google: { families: [ 'Roboto:400,300,500:latin' ] }
-    };
-    (function() {
-      var wf = document.createElement('script');
-      wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-      wf.type = 'text/javascript';
-      wf.async = 'true';
-      var s = document.getElementsByTagName('script')[0];
-      s.parentNode.insertBefore(wf, s);
-    })();
-    </script>-->
     <% if (manifest['vendor.js']) { %>
       <script src="/<%- manifest['vendor.js'] %>"></script>
     <% } %>

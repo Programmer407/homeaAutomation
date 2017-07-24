@@ -4,30 +4,11 @@ import { push } from 'react-router-redux'
 // src
 import { CALL_API } from '../../middleware/api'
 
-export const MYACCOUNT_LIST = 'MYACCOUNT_LIST'
-export const MYACCOUNT_LIST_SUCCESS = 'MYACCOUNT_LIST_SUCCESS'
-export const MYACCOUNT_LIST_FAILURE = 'MYACCOUNT_LIST_FAILURE'
-
-export function myaccountlist() {
-    console.log('myaccountList')
-  return {
-    [CALL_API]: {
-      types: [
-        MYACCOUNT_LIST,
-        MYACCOUNT_LIST_SUCCESS,
-        MYACCOUNT_LIST_FAILURE
-      ],
-      endpoint: `/api/accounts/my-account-list`,
-      method: 'GET'
-    }
-  }
-}
-
 export const MYACCOUNT_CONNECT = 'MYACCOUNT_CONNECT'
 export const MYACCOUNT_CONNECT_SUCCESS = 'MYACCOUNT_CONNECT_SUCCESS'
 export const MYACCOUNT_CONNECT_FAILURE = 'MYACCOUNT_CONNECT_FAILURE'
 
-export function myaccountconnect() {
+export function accountconnectUrl(providerId) {
   return {
     [CALL_API]: {
       types: [
@@ -35,8 +16,29 @@ export function myaccountconnect() {
         MYACCOUNT_CONNECT_SUCCESS,
         MYACCOUNT_CONNECT_FAILURE
       ],
-      endpoint: `/api/accounts/my-account-connect`
-    }
+      endpoint: `/api/accounts/my-account-connect-url`,
+      method: 'POST'
+    },
+    payload: {providerId}
+  }
+}
+
+export const MYACCOUNT_PROVIDERINFO = 'MYACCOUNT_PROVIDERINFO'
+export const MYACCOUNT_PROVIDERINFO_SUCCESS = 'MYACCOUNT_PROVIDERINFO_SUCCESS'
+export const MYACCOUNT_PROVIDERINFO_FAILURE = 'MYACCOUNT_PROVIDERINFO_FAILURE'
+
+export function providerInfo(providerName) {
+  return {
+    [CALL_API]: {
+      types: [
+        MYACCOUNT_PROVIDERINFO,
+        MYACCOUNT_PROVIDERINFO_SUCCESS,
+        MYACCOUNT_PROVIDERINFO_FAILURE
+      ],
+      endpoint: `/api/accounts/my-account-provider-info`,
+      method: 'POST'
+    },
+    payload: {providerName}
   }
 }
 
@@ -44,14 +46,8 @@ export const COINBASE_CODE_CONNECT = 'COINBASE_CODE_CONNECT'
 export const COINBASE_CODE_CONNECT_SUCCESS = 'COINBASE_CODE_CONNECT_SUCCESS'
 export const COINBASE_CODE_CONNECT_FAILURE = 'COINBASE_CODE_CONNECT_FAILURE'
 
-export function authenticateCoinBase(code) {
-  console.log('authenticateCoinBase called.')
-  let grant_type = 'authorization_code'
-  let client_id = '45a38875c5f7a2563c36cf347ebef69d428bbee77d6d9ece0878f1f54fb92f78'
-  let client_secret = 'bbdb10e9e75699e9b865d553bfc82be6d4c05f64db988026ca82e33e44c780c0'
-  //let redirect_uri = encodeURIComponent('http://localhost/account/coinbase/callback')
+export function authenticateCoinBaseApi(code, grant_type, client_id, client_secret) {
   let redirect_uri = 'http://localhost/account/coinbase/callback'
-  console.log('code is : ' + code)
   return {
     [CALL_API]: {
       types: [
@@ -62,25 +58,78 @@ export function authenticateCoinBase(code) {
       endpoint: `https://api.coinbase.com/oauth/token`,
       method: 'POST'
     },
-    payload: {grant_type, code, client_id, client_secret, redirect_uri}
+    payload: {code, grant_type, client_id, client_secret, redirect_uri}
   }
 }
 
-export const ACCOUNT_COINBASE_WALLET = 'ACCOUNT_COINBASE_WALLET'
-export const ACCOUNT_COINBASE_WALLET_SUCCESS = 'ACCOUNT_COINBASE_WALLET_SUCCESS'
-export const ACCOUNT_COINBASE_WALLET_FAILURE = 'ACCOUNT_COINBASE_WALLET_FAILURE'
+export const INSERT_USER_PROVIDER = 'INSERT_USER_PROVIDER'
+export const INSERT_USER_PROVIDER_SUCCESS = 'INSERT_USER_PROVIDER_SUCCESS'
+export const INSERT_USER_PROVIDER_FAILURE = 'INSERT_USER_PROVIDER_FAILURE'
 
-export function coinbasewallets(accessToken, refreshTokan, providerName) {
+export function insertUserProvider(accessToken, refreshToken, providerId) {
   return {
     [CALL_API]: {
       types: [
-        ACCOUNT_COINBASE_WALLET,
-        ACCOUNT_COINBASE_WALLET_SUCCESS,
-        ACCOUNT_COINBASE_WALLET_FAILURE
+        INSERT_USER_PROVIDER,
+        INSERT_USER_PROVIDER_SUCCESS,
+        INSERT_USER_PROVIDER_FAILURE
       ],
-      endpoint: `/api/accounts/coinbase-wallets`,
+      endpoint: `/api/accounts/insert-userprovider`,
       method: 'POST'
     },
-    payload: {accessToken, refreshTokan, providerName}
+    payload: {accessToken, refreshToken, providerId}
+  }
+}
+
+export const USERPROVIDER_WALLET = 'USERPROVIDER_WALLET'
+export const USERPROVIDER_WALLET_SUCCESS = 'USERPROVIDER_WALLET_SUCCESS'
+export const USERPROVIDER_WALLET_FAILURE = 'USERPROVIDER_WALLET_FAILURE'
+
+export function userproviderwallets(userProviderId) {
+  return {
+    [CALL_API]: {
+      types: [
+        USERPROVIDER_WALLET,
+        USERPROVIDER_WALLET_SUCCESS,
+        USERPROVIDER_WALLET_FAILURE
+      ],
+      endpoint: `/api/accounts/update-userprovider-wallets`,
+      method: 'POST'
+    },
+    payload: {userProviderId}
+  }
+}
+
+export const USERPROVIDER_LIST = 'USERPROVIDER_LIST'
+export const USERPROVIDER_LIST_SUCCESS = 'USERPROVIDER_LIST_SUCCESS'
+export const USERPROVIDER_LIST_FAILURE = 'USERPROVIDER_LIST_FAILURE'
+
+export function userproviderslist() {
+  return {
+    [CALL_API]: {
+      types: [
+        USERPROVIDER_LIST,
+        USERPROVIDER_LIST_SUCCESS,
+        USERPROVIDER_LIST_FAILURE
+      ],
+      endpoint: `/api/accounts/my-account-all-userwallets`
+    }
+  }
+}
+
+export const GET_ALL_PROVIDERS = 'GET_ALL_PROVIDERS'
+export const GET_ALL_PROVIDERS_SUCCESS = 'GET_ALL_PROVIDERS_SUCCESS'
+export const GET_ALL_PROVIDERS_FAILURE = 'GET_ALL_PROVIDERS_FAILURE'
+
+export function getAllProviders() {
+  return {
+    [CALL_API]: {
+      types: [
+        GET_ALL_PROVIDERS,
+        GET_ALL_PROVIDERS_SUCCESS,
+        GET_ALL_PROVIDERS_FAILURE
+      ],
+      endpoint: `/api/accounts/my-account-all-providers`
+    }
   }
 }

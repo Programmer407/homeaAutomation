@@ -19,7 +19,7 @@ server {
 #server {
 #    listen 80;
 #
-#    server_name design.givingat.work;
+#    server_name design.wisdom.com;
 #
 #    location / {
 #        proxy_pass http://localhost:5000;
@@ -33,6 +33,6 @@ server {
 
 server {
     listen 80;
-    server_name www.givingat.work;
-    return 301 $scheme://givingat.work$request_uri;
+    server_name www.wisdom.com;
+    return 301 $scheme://wisdom.com$request_uri;
 }

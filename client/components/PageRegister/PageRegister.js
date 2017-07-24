@@ -3,8 +3,6 @@ import React from 'react'
 import {reduxForm} from 'redux-form'
 import {push} from 'react-router-redux'
 import get from 'lodash/get'
-
-// src
 import PageRegisterInner from './PageRegisterInner'
 import {register} from '../../actions/entities/users'
 import { bindForm } from '../../utils'
@@ -95,17 +93,4 @@ export default class PageRegister extends React.Component {
   render() {
     return <PageRegisterInner {...this.props}/>
   }
-  
-  //HH: sorry @umar, I am ruining some beautiful code. 
-  /*getParameterByName(name, url) {
-    if (!url) 
-      url = window.location.href;
-    
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }*/
 }

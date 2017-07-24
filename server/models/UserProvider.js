@@ -3,13 +3,14 @@ import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize';
 import User from './User';
 import Provider from './Provider';
+//import UserWallet from './UserWallet';
 
 const UserProvider = sequelize.define(
   "userprovider",
   {
     accountName: { type: Sequelize.STRING(128), field: "account_name" },
     accessToken: { type: Sequelize.STRING(128), field: "access_token" },
-    refreshTokan: { type: Sequelize.STRING(128), field: "refresh_token" }
+    refreshToken: { type: Sequelize.STRING(128), field: "refresh_token" }
   },
   {
     // don't add the timestamp attributes (updatedAt, createdAt)

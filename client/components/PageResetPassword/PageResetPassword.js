@@ -4,8 +4,6 @@ import {reduxForm} from 'redux-form'
 import {push} from 'react-router-redux'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
-
-// src
 import PageResetPasswordInner from './PageResetPasswordInner'
 import PageLoading from '../PageLoading';
 import {resetPassword, isValidResetToken} from '../../actions/entities/users'
@@ -48,17 +46,8 @@ const validate = values => {
   onSubmit: (values, dispatch, props) => {
     const { password, confirmPassword } = values;
     let userToken = props.match.params.usertoken
-    //console.log('props are : ' + userToken)
     return dispatch(resetPassword(userToken, password, confirmPassword))
     .then(action => {
-      const { error, payload } = action
-      /****if ( !error ) {
-        const linkNext = get(payload, 'user.linkHome', '/');
-        console.log('linkNext is : ' + linkNext)
-        dispatch(push(linkNext));
-      }/* else {
-        console.log(error);
-      }*/
       return action;
     }) 
   }
@@ -69,8 +58,10 @@ export default class PageResetPassword extends React.Component {
   }
 
   componentWillMount() {
+    const { dispatch } = this.props
+
     let token = this.props.match.params.usertoken
-    this.props.dispatch(isValidResetToken(token))
+    dispatch(isValidResetToken(token))
     .then(action => {
       const { error, payload } = action
       if ( !error ) {
@@ -109,17 +100,4 @@ export default class PageResetPassword extends React.Component {
 			);
     }
   }
-  
-  //HH: sorry @umar, I am ruining some beautiful code. 
-  /*getParameterByName(name, url) {
-    if (!url) 
-      url = window.location.href;
-    
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
-  }*/
 }

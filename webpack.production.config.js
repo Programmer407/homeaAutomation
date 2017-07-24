@@ -97,7 +97,7 @@ module.exports = {
       loader: "url-loader?limit=10000&mimetype=image/svg+xml"
     }, {
       test: /\.scss$/,
-      include: /.server/,
+      include: /.client/,
       loaders: ["style-loader", "css-loader", "sass-loader"]
     }]
   }

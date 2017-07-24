@@ -2,8 +2,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import DocumentTitle from 'react-document-title'
-
-// src
 import styles from './PageErrorView.scss'
 
 const mapStateToProps = state => {
@@ -26,12 +24,12 @@ export default class PageErrorView extends React.Component {
   render() {
     return (
       <div className={`${styles.root} row`}>
-        <DocumentTitle title="Dashboard - GivingAt.work"/>
+        <DocumentTitle title="Dashboard - Wisdom"/>
         <div className="col-lg-2"></div>
         <div className="col-lg-8">
           <div className="row">
             <div className="col-lg-8">
-              <h1>Environment Editor</h1>
+              <h1>Error Page</h1>
             </div>
             <div className="col-lg-4">
             </div>

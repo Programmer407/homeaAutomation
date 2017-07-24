@@ -51,7 +51,7 @@ module.exports = {
         loader: 'json-loader'
       }, {
         test: /\.scss$/,
-        include: /.server/,
+        include: /.client/,
         loaders: ["style-loader", "css-loader", "sass-loader"]
       }
     ]

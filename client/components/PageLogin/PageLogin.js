@@ -5,8 +5,6 @@ import {push} from 'react-router-redux'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import { connect } from 'react-redux'
-
-// src
 import PageLoginInner from './PageLoginInner'
 import PageLoading from '../PageLoading';
 import {login, confirmRegistration, resendActivation} from '../../actions/entities/users'
@@ -61,10 +59,12 @@ class PageLogin extends React.Component {
   }
 
   componentWillMount() {
+    const { dispatch } = this.props
+    
     let token = this.props.match.params.usertoken
     let userId = this.props.match.params.id
     if (token) {
-      this.props.dispatch(confirmRegistration(token))
+      dispatch(confirmRegistration(token))
       .then(action => {
         const { error, payload } = action
         if ( !error ) {
@@ -78,7 +78,7 @@ class PageLogin extends React.Component {
         }
       })
     } else if (userId) {
-      this.props.dispatch(resendActivation(userId))
+      dispatch(resendActivation(userId))
       .then(action => {
         const { error, payload } = action
         if ( !error ) {
