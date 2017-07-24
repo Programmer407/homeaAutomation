@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {push} from 'react-router-redux'
 import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
-import {userproviderslist, providerInfo, accountconnectUrl, insertUserProvider, userproviderwallets, authenticateCoinBaseApi, getAllProviders} from '../../actions/entities/accounts'
+import {providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList} from '../../actions/entities/accounts'
 import PageLoading from '../PageLoading';
 
 class PageAccountView extends React.Component {
@@ -12,7 +12,7 @@ class PageAccountView extends React.Component {
     super(props);
 		this.state = {
 			check: 1,
-      provider: Object.assign({}, this.props.provider)
+      selectedProvider: Object.assign({}, this.props.selectedProvider)
     };
 
     this.updateProviderSelection = this.updateProviderSelection.bind(this);
@@ -22,7 +22,7 @@ class PageAccountView extends React.Component {
 
   connectProvider(event) {
     event.preventDefault();
-    return this.props.dispatch(accountconnectUrl(this.state.provider))
+    return this.props.dispatch(accountconnectUrl(this.state.selectedProvider))
       .then(action => {
         const { error, payload } = action
         if ( !error ) {
@@ -38,21 +38,28 @@ class PageAccountView extends React.Component {
   }
   
   updateProviderSelection(event, index, value) {
-    return this.setState({provider: value});
+    return this.setState({selectedProvider: value});
   }
 
   componentWillMount() {
     const { dispatch } = this.props
 
-    dispatch(getAllProviders())
+    dispatch(getAllProviders('my@my.com'))
 			.then(action => {
         const { error, payload } = action
         if ( !error ) {
-					this.setState({
-						check : 2
+					console.log('not errors')
+					dispatch(userProvidersList())
+						.then(action => {
+							const { error, payload } = action
+							if ( !error ) {
+								this.setState({
+									check : 2
+								});
+							}	
 					});
 				}
-      })
+      });
       
     //console.log('componentWillMount this.props is : ' + JSON.stringify(this.props))
     
@@ -81,7 +88,7 @@ class PageAccountView extends React.Component {
                           const { error, payload } = action
                           if ( !error ) {
                             console.log('Not errors 2')
-                            dispatch(userproviderwallets(payload.userProvider.id))
+                            dispatch(userProviderWallets(payload.userProvider.id))
                               .then(action => {
                                 const { error, payload } = action
                                 if ( !error ) {
@@ -108,10 +115,17 @@ class PageAccountView extends React.Component {
     if (this.state.check == 1) {
 			return <PageLoading {...this.props}/>
 		} else if(this.state.check == 2) {
-			const {providers} = this.props;
+			// const {providerList} = this.props;
+
 			return (
 				<div>
-					<PageAccountViewInner onSubmit={this.connectProvider} onChange={this.updateProviderSelection} selectedProvider={this.state.provider} providers={providers} />
+					{/*<PageAccountViewInner onSubmit={this.connectProvider} onChange={this.updateProviderSelection} selectedProvider={this.state.selectedProvider} providerList={providerList} />*/}
+					<PageAccountViewInner 
+						onChange={ this.updateProviderSelection }
+						onSubmit={ this.connectProvider }
+						{...this.props}
+						{...this.state}
+					/>
 				</div>
 			)
     }
@@ -120,11 +134,13 @@ class PageAccountView extends React.Component {
 
 /* redux connect() and related functions */
 function mapStateToProps(state, ownProps) {
-  let provider = {};
+	let selectedProvider = {};
 
   return {
-		provider,
-    providers: state.entities.accounts
+		selectedProvider,
+    providerList: state.entities.accounts.providerList,
+		userProviderList: state.entities.accounts.userProviderList
+
   };
 }
 

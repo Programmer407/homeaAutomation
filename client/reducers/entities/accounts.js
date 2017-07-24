@@ -14,10 +14,23 @@ export default function accounts(state = {}, action) {
     }
 
 		case ActionTypes.GET_ALL_PROVIDERS_SUCCESS: {
-      if (!action.payload) {
+			const {payload} = action;
+			const {providerList} = payload;
+      if (!payload) {
         throw new Error(`Can't execute ${ ActionTypes.GET_ALL_PROVIDERS_SUCCESS }. {payload} isn't available in action`)
       }
-			return action.payload.providerList;
+			
+			return {...state, providerList};
+    }
+
+		case ActionTypes.USERPROVIDER_LIST_SUCCESS: {
+			const {payload} = action;
+			const {userProviderList} = payload;
+      if (!payload) {
+        throw new Error(`Can't execute ${ ActionTypes.USERPROVIDER_LIST_SUCCESS }. {payload} isn't available in action`)
+      }
+			
+			return {...state, userProviderList};
     }
 
     default: {

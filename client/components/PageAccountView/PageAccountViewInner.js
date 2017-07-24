@@ -20,7 +20,7 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import {grey400, grey600, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import CommunicationEmail from 'material-ui/svg-icons/communication/email';
 
-const MyAccounts = ({ onSubmit, onChange, selectedProvider, providers }) => (
+const MyAccounts = ({ onSubmit, onChange, selectedProvider, providerList, userProviderList }) => (
 	<article className="article">
 		<h2 className="article-title">Wallets</h2>
 		<div className="row">
@@ -37,7 +37,21 @@ const MyAccounts = ({ onSubmit, onChange, selectedProvider, providers }) => (
 								</tr>
 							</thead>
 							<tbody className="tbl-body">
-								<tr>
+								{userProviderList.map(userProviderListItem =>
+									userProviderListItem.UserWallets.map(userWallet => 
+										<tr key={userWallet.id}>
+											<td className="mdl-data-table__cell--non-numeric">{userWallet.walletName}</td>
+											<td className="mdl-data-table__cell--non-numeric">{userProviderListItem.provider.displayName}</td>
+											<td>{userWallet.balance}</td>
+											<td>
+												<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
+												<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+											</td>
+										</tr>
+									)
+								)} 
+
+								{/*<tr>
 									<td className="mdl-data-table__cell--non-numeric">BTC Wallet</td>
 									<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
 									<td>12.4566 BTC</td>
@@ -81,7 +95,7 @@ const MyAccounts = ({ onSubmit, onChange, selectedProvider, providers }) => (
 										<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
 										<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
 									</td>
-								</tr>
+								</tr>*/}
 							</tbody>
 						</table>
 					</div>
@@ -147,7 +161,7 @@ const MyAccounts = ({ onSubmit, onChange, selectedProvider, providers }) => (
 									floatingLabelText="Select a provider"
 									onChange={ onChange }
 									value={ selectedProvider }>
-									{providers.map(provider => 
+									{providerList.map(provider => 
 										<MenuItem key={ provider.id } value={ provider.id } primaryText={ provider.displayName } />
 									)}
 								</SelectField>
@@ -235,12 +249,12 @@ const MyAddresses = () => (
 	</article>
 )
 
-const PageAccountViewInner = ({ onSubmit, onChange, selectedProvider, providers }) => {
+const PageAccountViewInner = ({ onSubmit, onChange, selectedProvider, providerList, userProviderList }) => {
   return (
     <section className="container-fluid chapter">
 			<DocumentTitle title="Accounts" />
       <QueueAnim type="bottom" className="ui-animate">
-        <div key="1"><MyAccounts onSubmit={ onSubmit } onChange={ onChange } providers={ providers } selectedProvider={ selectedProvider }/></div>
+        <div key="1"><MyAccounts onSubmit={ onSubmit } onChange={ onChange }  selectedProvider={ selectedProvider } providerList={ providerList } userProviderList={ userProviderList }/></div>
         <div key="2"><MyAddresses /></div>
       </QueueAnim>
     </section>
@@ -248,7 +262,8 @@ const PageAccountViewInner = ({ onSubmit, onChange, selectedProvider, providers 
 }
 
 PageAccountViewInner.propTypes = {
-  providers: PropTypes.array,
+  providerList: PropTypes.array,
+	userProviderList: PropTypes.array,
 	onChange: React.PropTypes.func.isRequired,
 	onSubmit: React.PropTypes.func.isRequired
 };

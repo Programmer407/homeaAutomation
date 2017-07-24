@@ -47,7 +47,7 @@ export const COINBASE_CODE_CONNECT_SUCCESS = 'COINBASE_CODE_CONNECT_SUCCESS'
 export const COINBASE_CODE_CONNECT_FAILURE = 'COINBASE_CODE_CONNECT_FAILURE'
 
 export function authenticateCoinBaseApi(code, grant_type, client_id, client_secret) {
-  let redirect_uri = 'http://localhost/account/coinbase/callback'
+  let redirect_uri = 'http://localhost:3000/account/coinbase/callback'
   return {
     [CALL_API]: {
       types: [
@@ -85,7 +85,7 @@ export const USERPROVIDER_WALLET = 'USERPROVIDER_WALLET'
 export const USERPROVIDER_WALLET_SUCCESS = 'USERPROVIDER_WALLET_SUCCESS'
 export const USERPROVIDER_WALLET_FAILURE = 'USERPROVIDER_WALLET_FAILURE'
 
-export function userproviderwallets(userProviderId) {
+export function userProviderWallets(userProviderId) {
   return {
     [CALL_API]: {
       types: [
@@ -104,7 +104,7 @@ export const USERPROVIDER_LIST = 'USERPROVIDER_LIST'
 export const USERPROVIDER_LIST_SUCCESS = 'USERPROVIDER_LIST_SUCCESS'
 export const USERPROVIDER_LIST_FAILURE = 'USERPROVIDER_LIST_FAILURE'
 
-export function userproviderslist() {
+export function userProvidersList() {
   return {
     [CALL_API]: {
       types: [
@@ -130,6 +130,42 @@ export function getAllProviders() {
         GET_ALL_PROVIDERS_FAILURE
       ],
       endpoint: `/api/accounts/my-account-all-providers`
+    }
+  }
+}
+
+export const DELETE_WALLET = 'DELETE_WALLET'
+export const DELETE_WALLET_SUCCESS = 'DELETE_WALLET_SUCCESS'
+export const DELETE_WALLET_FAILURE = 'DELETE_WALLET_FAILURE'
+
+export function deleteWallet(userWalletId) {
+  return {
+    [CALL_API]: {
+      types: [
+        DELETE_WALLET,
+        DELETE_WALLET_SUCCESS,
+        DELETE_WALLET_FAILURE
+      ],
+      endpoint: `/api/accounts/delete-userprovider-wallet`,
+      method: 'POST'
+    },
+    payload: {userWalletId}
+  }
+}
+
+export const REFRESH_USERPROVIDERS = 'REFRESH_USERPROVIDERS'
+export const REFRESH_USERPROVIDERS_SUCCESS = 'REFRESH_USERPROVIDERS_SUCCESS'
+export const REFRESH_USERPROVIDERS_FAILURE = 'REFRESH_USERPROVIDERS_FAILURE'
+
+export function refreshUserProviders() {
+  return {
+    [CALL_API]: {
+      types: [
+        REFRESH_USERPROVIDERS,
+        REFRESH_USERPROVIDERS_SUCCESS,
+        REFRESH_USERPROVIDERS_FAILURE
+      ],
+      endpoint: `/api/accounts/refresh-userproviders`
     }
   }
 }
