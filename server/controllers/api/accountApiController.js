@@ -86,7 +86,7 @@ router.post('/api/accounts/my-account-connect-url', (req, res) => {
                     var callBackUrl = req.protocol + '://' + req.get('host') + providerObj.redirectUrl1
                     //console.log('callBackUrl : ' + callBackUrl)
                     let encodedCallBackUrl = encodeURIComponent(callBackUrl)
-                    let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&scope=wallet:user:read,wallet:accounts:read'
+                    let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&account=all&scope=wallet:user:read,wallet:accounts:read,wallet:addresses:read,wallet:transactions:read'
                     //let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&scope=balance+transactions+transfers+user'
                    // console.log('redirectUrl : ' + redirectUrl)
                     res
