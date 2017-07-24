@@ -12,6 +12,14 @@ export default function accounts(state = {}, action) {
 
       return mergeNewEntities(state, [user], ENTITY_STATUS_DATA_AVAILABLE)
     }
+
+		case ActionTypes.GET_ALL_PROVIDERS_SUCCESS: {
+      if (!action.payload) {
+        throw new Error(`Can't execute ${ ActionTypes.GET_ALL_PROVIDERS_SUCCESS }. {payload} isn't available in action`)
+      }
+			return action.payload.providerList;
+    }
+
     default: {
       return state
     }

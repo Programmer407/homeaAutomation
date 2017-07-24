@@ -2,6 +2,26 @@
 $theme-color: #00BCD4;
 $heading-color: #444;
 
+@media (min-width: 1030px) {
+	.chapter {
+		padding-left: 18px;
+		padding-right: 18px;
+	}
+}
+
+@media (min-width: 767px) and (max-width: 1030px) {
+	.chapter {
+		padding-left: 6px;
+		padding-right: 6px;
+	}
+}
+
+@media (max-width: 767px) {
+	.chapter {
+		padding: 0px;
+	}
+}
+
 article.article {
 	h2.article-title {
 		color: $heading-color;
@@ -39,8 +59,30 @@ article.article {
 					}
 				}
 
+				tr {
+					td {
+						padding: 0px;
+
+						.no-padding {
+							div {
+								padding: 0px !important;
+
+								div {
+									padding: 0px !important;
+
+									div {
+										display: block !important;
+									}
+								}
+							}
+
+							td {
+								border: 0px;
+							}
+						}
+					}
+				}
 			}
-			
 		}
 	}
 
