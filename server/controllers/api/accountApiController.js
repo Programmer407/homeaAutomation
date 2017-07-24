@@ -86,8 +86,8 @@ router.post('/api/accounts/my-account-connect-url', (req, res) => {
                     var callBackUrl = req.protocol + '://' + req.get('host') + providerObj.redirectUrl1
                     //console.log('callBackUrl : ' + callBackUrl)
                     let encodedCallBackUrl = encodeURIComponent(callBackUrl)
-                    //let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&scope=wallet:user:read,wallet:accounts:read'
-                    let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&scope=balance+transactions+transfers+user'
+                    let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&scope=wallet:user:read,wallet:accounts:read'
+                    //let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&scope=balance+transactions+transfers+user'
                    // console.log('redirectUrl : ' + redirectUrl)
                     res
                         .status(200)
@@ -185,8 +185,55 @@ router.post('/api/accounts/insert-userprovider', (req, res) => {
     client.getCurrentUser(function(err, accountUser) {
         //console.log('current user is : ' + JSON.stringify(accountUser));
         //console.log('current user is : ' + JSON.stringify(accountUser.id));
-        
-        findUserProviderByAccountName(accountUser.id)
+        if (err && !accountUser) {
+            console.log('there are errors : ' + err)
+            findProviderByID(providerId)
+                .then(providerObj => {
+                    
+                    var headers = {
+                        'User-Agent':       'Super Agent/0.0.1',
+                        'Content-Type':     'application/x-www-form-urlencoded'
+                    }
+
+                    // Configure the request
+                    var options = {
+                        url: 'https://api.coinbase.com/oauth/token',
+                        method: 'POST',
+                        form: {'grant_type': 'refresh_token', 
+                            'client_id': providerObj.clientId,
+                            'client_secret': providerObj.clientSecret,
+                            'refresh_token': refreshToken}
+                    }
+
+                    // Start the request
+                    request(options, function (error, response, body) {
+                        if (!error && response.statusCode == 200) {
+                            // Print out the response body
+                            console.log('body 1 : ' + body)
+                            client = new Client({'accessToken': body.access_token, 'refreshToken': body.refresh_token});
+                            client.getCurrentUser(function(err, accountUser) {
+                                findUserProviderByAccountName(accountUser.id)
+                                    .then(userProvider => {
+                                        if (userProvider) {
+                                            //console.log('userprovider account exist in the system')
+                                            userProvider.accessToken = body.access_token
+                                            userProvider.refreshToken = body.refresh_token
+                                            updateUserProvider(userProvider)
+                                                .then(updatedUserProvider => {
+                                                    res
+                                                        .status(200)
+                                                        .send({
+                                                            userProvider: updatedUserProvider
+                                                        })
+                                                })
+                                        }
+                                    })
+                            })
+                        }
+                    })
+                })
+        } else {
+            findUserProviderByAccountName(accountUser.id)
             .then(userProvider => {
                 if (userProvider) {
                     //console.log('userprovider account exist in the system')
@@ -246,6 +293,7 @@ router.post('/api/accounts/insert-userprovider', (req, res) => {
                         })
                 }
             })
+        }
     });  
 })
 
