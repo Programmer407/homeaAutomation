@@ -22,7 +22,7 @@ class PageAccountView extends React.Component {
 
   connectProvider(event) {
     event.preventDefault();
-    return this.props.dispatch(accountconnectUrl(1))
+    return this.props.dispatch(accountconnectUrl(this.state.provider))
       .then(action => {
         const { error, payload } = action
         if ( !error ) {
