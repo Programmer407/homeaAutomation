@@ -5,6 +5,7 @@ import {push} from 'react-router-redux'
 import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
 import {userproviderslist, providerInfo, accountconnectUrl, insertUserProvider, userproviderwallets, authenticateCoinBaseApi, getAllProviders} from '../../actions/entities/accounts'
+import PageLoading from '../PageLoading';
 
 class PageAccountView extends React.Component {
   constructor(props) {
