@@ -12,7 +12,7 @@ $logo-color: #B2EBF2;
 
 	.navbar-brand {
 		flex-direction: inherit !important;
-		padding: 34px 15px 34px 30px !important;
+		padding: 30px 15px 30px 30px !important;
 		font-weight: 700;
 		font-size: 2.5em;
 		text-transform: lowercase;
@@ -31,11 +31,11 @@ $logo-color: #B2EBF2;
 
 		li > a {
 			color: #FFF;
-			font-size: 1.2em;
+			font-size: 1.1em;
 			font-weight: 400;
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
-			padding: 34px 15px;
+			padding: 30px 15px;
 		}
 
 		li > a:focus, li > a:active {

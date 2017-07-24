@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {push} from 'react-router-redux'
 import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
-import {providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList} from '../../actions/entities/accounts'
+import {providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet} from '../../actions/entities/accounts'
 import PageLoading from '../PageLoading';
 
 class PageAccountView extends React.Component {
@@ -16,6 +16,7 @@ class PageAccountView extends React.Component {
     };
 
     this.updateProviderSelection = this.updateProviderSelection.bind(this);
+		this.deleteUserWallet = this.deleteUserWallet.bind(this);
 		this.connectProvider = this.connectProvider.bind(this);
 
   }
@@ -41,10 +42,35 @@ class PageAccountView extends React.Component {
     return this.setState({selectedProvider: value});
   }
 
+	deleteUserWallet(value) {
+		// event.preventDefault();
+		console.log('WALLET SHALL BE DELETED HERE! WALLET ID IS ', value);
+		this.setState({
+			check: 1
+		});
+		const { dispatch } = this.props;
+		dispatch(deleteWallet(value))
+			.then(action => {
+				const { error, payload } = action
+				if ( !error ) {
+					console.log('Wallet with the WalletID', value, 'has been deleted');
+					dispatch(userProvidersList())
+						.then(action => {
+							const { error, payload } = action
+							if ( !error ) {
+								this.setState({
+									check : 2
+								});
+							}	
+					});
+				}
+			});
+	}
+
   componentWillMount() {
     const { dispatch } = this.props
 
-    dispatch(getAllProviders('my@my.com'))
+    dispatch(getAllProviders())
 			.then(action => {
         const { error, payload } = action
         if ( !error ) {
@@ -119,9 +145,9 @@ class PageAccountView extends React.Component {
 
 			return (
 				<div>
-					{/*<PageAccountViewInner onSubmit={this.connectProvider} onChange={this.updateProviderSelection} selectedProvider={this.state.selectedProvider} providerList={providerList} />*/}
 					<PageAccountViewInner 
 						onChange={ this.updateProviderSelection }
+						onDeleteClick={this.deleteUserWallet}
 						onSubmit={ this.connectProvider }
 						{...this.props}
 						{...this.state}

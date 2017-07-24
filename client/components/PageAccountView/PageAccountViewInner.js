@@ -20,7 +20,7 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import {grey400, grey600, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import CommunicationEmail from 'material-ui/svg-icons/communication/email';
 
-const MyAccounts = ({ onSubmit, onChange, selectedProvider, providerList, userProviderList }) => (
+const MyAccounts = ({ onSubmit, onChange, onDeleteClick, selectedProvider, providerList, userProviderList }) => (
 	<article className="article">
 		<h2 className="article-title">Wallets</h2>
 		<div className="row">
@@ -44,8 +44,8 @@ const MyAccounts = ({ onSubmit, onChange, selectedProvider, providerList, userPr
 											<td className="mdl-data-table__cell--non-numeric">{userProviderListItem.provider.displayName}</td>
 											<td>{userWallet.balance}</td>
 											<td>
-												<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
-												<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+												<a href="#" className="action-icon"><ActionCached /></a>
+												<a href="#" onClick={ onDeleteClick.bind(this, userWallet.id) } className="action-icon"><ActionDelete/></a>
 											</td>
 										</tr>
 									)
@@ -249,12 +249,12 @@ const MyAddresses = () => (
 	</article>
 )
 
-const PageAccountViewInner = ({ onSubmit, onChange, selectedProvider, providerList, userProviderList }) => {
+const PageAccountViewInner = ({ onSubmit, onChange, onDeleteClick, selectedProvider, providerList, userProviderList }) => {
   return (
     <section className="container-fluid chapter">
 			<DocumentTitle title="Accounts" />
       <QueueAnim type="bottom" className="ui-animate">
-        <div key="1"><MyAccounts onSubmit={ onSubmit } onChange={ onChange }  selectedProvider={ selectedProvider } providerList={ providerList } userProviderList={ userProviderList }/></div>
+        <div key="1"><MyAccounts onSubmit={ onSubmit } onChange={ onChange } onDeleteClick={ onDeleteClick }  selectedProvider={ selectedProvider } providerList={ providerList } userProviderList={ userProviderList }/></div>
         <div key="2"><MyAddresses /></div>
       </QueueAnim>
     </section>
