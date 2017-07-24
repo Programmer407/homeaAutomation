@@ -21,3 +21,12 @@ export const insertUserWallet = (userWalletObj): Promise<any> =>
   .then(obj => {
     return obj
   })
+
+export const deleteUserWalletById = (walletId:number):Object =>
+    UserWallet.findById(walletId)
+    .then((object) => {
+      if(null == object)
+        return;
+      
+      return object.destroy();
+    });
