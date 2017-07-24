@@ -15,8 +15,8 @@ export const findAllUserProviderList = (id:number):Object =>
     return obj
   })
 
-export const findProviderByID = (id:number):Object =>
-  Provider.findOne(Object.assign({
+export const findUserProviderByID = (id:number):Object =>
+  UserProvider.findOne(Object.assign({
     where: {
       id
     }

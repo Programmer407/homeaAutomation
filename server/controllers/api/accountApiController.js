@@ -9,7 +9,7 @@ import { findProviderByID, findAllProviderList, findProviderByName } from '../..
 import { insertUserProvider, updateUserProvider, findUserProviderByID, findUserProviderByAccountName, findAllUserProviderList } from '../../managers/userProviderManager'
 //import { insertUserProvider, updateUserProvider, findUserProviderByID, findUserProviderByAccountName } from '../../managers/userProviderManager'
 import { findUserByID } from '../../managers/userManager'
-import { insertUserWallet, updateUserWallet, findUserWalletByWalletId } from '../../managers/userWalletManager'
+import { insertUserWallet, updateUserWallet, findUserWalletByWalletId, deleteUserWalletById } from '../../managers/userWalletManager'
 
 const router = express.Router()
 
@@ -274,7 +274,7 @@ router.post('/api/accounts/update-userprovider-wallets', (req, res) => {
                 var client = new Client({'accessToken': userProviderObj.accessToken, 'refreshToken': userProviderObj.refreshToken});
                 client.getAccounts({}, function(err, accounts) {
                     accounts.forEach(function(acct) {
-                        console.log('my bal: ' + acct.balance.amount + ' for ' + acct.name + ' In Currency : ' + JSON.stringify(acct.currency));
+                        //console.log('my bal: ' + acct.balance.amount + ' for ' + acct.name + ' In Currency : ' + JSON.stringify(acct.currency));
                         findUserWalletByWalletId(acct.id)
                             .then(userWallet => {
                                 if (userWallet) {
@@ -284,14 +284,14 @@ router.post('/api/accounts/update-userprovider-wallets', (req, res) => {
                                     userWallet.currency = acct.currency.code
                                     updateUserWallet(userWallet)
                                         .then(updatedUserWallet => {
-                                            console.log('wallet updated')
+                                            //console.log('wallet updated')
                                         })
                                 } else {
                                     const userWalletObj = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code})
                                     userWalletObj.setUserprovider(userProviderObj, {save: false})
                                     insertUserWallet(userWalletObj)
                                         .then(insertedUserWallet => {
-                                            console.log('wallet inserted')
+                                            //console.log('wallet inserted')
                                         })
                                 }
                             });
@@ -310,6 +310,42 @@ router.post('/api/accounts/update-userprovider-wallets', (req, res) => {
                     })
             }
         })
+})
+
+router.post('/api/accounts/delete-userprovider-wallet', (req, res) => {
+    const { body, user } = req
+
+    if ( !body ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing request body'
+        })
+    }
+
+    const { userWalletId } = body
+
+    if ( !userWalletId ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing required arguments'
+        })
+    }
+    let result = deleteUserWalletById(userWalletId)
+        if (result) {
+            res
+            .status(200)
+                .send({
+                message: 'Wallet deleted'
+            })
+        } else {
+            res
+            .status(400)
+            .send({
+                message: 'Something went wrong, Please try again'
+            })
+        }
 })
 
 export default router
