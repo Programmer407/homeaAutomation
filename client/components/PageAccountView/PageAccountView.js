@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {push} from 'react-router-redux'
 import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
-import {providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet} from '../../actions/entities/accounts'
+import {providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet, refreshUserProviders} from '../../actions/entities/accounts'
 import PageLoading from '../PageLoading';
 
 class PageAccountView extends React.Component {
@@ -18,7 +18,7 @@ class PageAccountView extends React.Component {
     this.updateProviderSelection = this.updateProviderSelection.bind(this);
 		this.deleteUserWallet = this.deleteUserWallet.bind(this);
 		this.connectProvider = this.connectProvider.bind(this);
-
+		this.refreshUserWallets = this.refreshUserWallets.bind(this);
   }
 
   connectProvider(event) {
@@ -54,6 +54,30 @@ class PageAccountView extends React.Component {
 				const { error, payload } = action
 				if ( !error ) {
 					console.log('Wallet with the WalletID', value, 'has been deleted');
+					dispatch(userProvidersList())
+						.then(action => {
+							const { error, payload } = action
+							if ( !error ) {
+								this.setState({
+									check : 2
+								});
+							}	
+					});
+				}
+			});
+	}
+
+	refreshUserWallets(value) {
+		// event.preventDefault();
+		console.log('WALLETS WITH PROVIDER ID', value, 'SHALL BE RELOADED');
+		this.setState({
+			check: 1
+		});
+		const { dispatch } = this.props;
+		dispatch(refreshUserProviders(value))
+			.then(action => {
+				const { error, payload } = action
+				if ( !error ) {
 					dispatch(userProvidersList())
 						.then(action => {
 							const { error, payload } = action
@@ -148,6 +172,7 @@ class PageAccountView extends React.Component {
 					<PageAccountViewInner 
 						onChange={ this.updateProviderSelection }
 						onDeleteClick={this.deleteUserWallet}
+						onRefreshClick={this.refreshUserWallets}
 						onSubmit={ this.connectProvider }
 						{...this.props}
 						{...this.state}
@@ -166,7 +191,6 @@ function mapStateToProps(state, ownProps) {
 		selectedProvider,
     providerList: state.entities.accounts.providerList,
 		userProviderList: state.entities.accounts.userProviderList
-
   };
 }
 
