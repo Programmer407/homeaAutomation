@@ -12,7 +12,7 @@ import { insertUserProvider, updateUserProvider, findUserProviderByID, findUserP
 //import { insertUserProvider, updateUserProvider, findUserProviderByID, findUserProviderByAccountName } from '../../managers/userProviderManager'
 import { findUserByID } from '../../managers/userManager'
 import { insertUserWallet, updateUserWallet, findUserWalletByWalletId, deleteUserWalletById } from '../../managers/userWalletManager'
-import { findAllUserAddresses, findUserAddressByAddress, insertUserAddress, updateUserAddress } from '../../managers/userAddressesManager'
+import { findAllUserAddresses, findUserAddressByAddress, findUserAddressById, insertUserAddress, updateUserAddress } from '../../managers/userAddressesManager'
 
 const router = express.Router()
 
@@ -635,16 +635,48 @@ router.post('/api/accounts/insert-user-addresses', (req, res) => {
     }
 })
 
-router.get('/api/accounts/user-addresses-refresh', (req, res) => {
-    const {user} = req
+router.post('/api/accounts/user-addresses-refresh', (req, res) => {
+    const { body, user } = req
+
+    if ( !body ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing request body'
+        })
+    }
+
+    const { userAddressId } = body
+
+    if ( !userAddressId ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing required arguments'
+        })
+    }
     if (user) {
-        findAllUserAddresses(user.id)
-            .then(userAddressesList => {
-                res
-                    .status(200)
-                    .send({
-                        userAddressesList
+        findUserAddressById(userAddressId)
+            .then(userAddress => {
+                if (userAddress) {
+                    findAllUserAddresses(user.id)
+                        .then(userAddressesList => {
+                            res
+                                .status(200)
+                                .send({
+                                    userAddressesList
+                                })
+                            })
+                        .catch(error => {
+                            caughtError(res, error)
+                        })
+                } else {
+                    res
+                        .status(400)
+                        .send({
+                            message: 'Address not found'
                     })
+                }
             })
             .catch(error => {
                 caughtError(res, error)

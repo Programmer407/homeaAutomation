@@ -27,6 +27,16 @@ export const findUserAddressByAddress = (id:number, address:string):Object =>
     return obj
   })
 
+export const findUserAddressById = (id:number):Object =>
+  UserAddress.findOne(Object.assign({
+    where: {
+      id
+    }
+  }))
+  .then(obj => {
+    return obj
+  })
+
 export const insertUserAddress = (userAddressObj): Promise<any> =>
   userAddressObj.save()
   .then(obj => {
