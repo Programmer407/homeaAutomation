@@ -11,6 +11,7 @@ import { insertUserProvider, updateUserProvider, findUserProviderByID, findUserP
 //import { insertUserProvider, updateUserProvider, findUserProviderByID, findUserProviderByAccountName } from '../../managers/userProviderManager'
 import { findUserByID } from '../../managers/userManager'
 import { insertUserWallet, updateUserWallet, findUserWalletByWalletId, deleteUserWalletById } from '../../managers/userWalletManager'
+import { findAllUserAddresses } from '../../managers/userAddressesManager'
 
 const router = express.Router()
 
@@ -32,6 +33,13 @@ router.get('/api/accounts/my-account-all-providers', (req, res) => {
                 .send({
                     message: 'Something went wrong, Please try again'
                 })
+            })
+    } else {
+        console.log('user not found.')
+        res
+            .status(500)
+            .send({
+                message: 'Something went wrong, Please try again'
             })
     }
 })
@@ -567,13 +575,26 @@ router.get('/api/accounts/refresh-userproviders', (req, res) => {
                 })
         })
         .catch(error => {
-            //caughtError(res, error)
-            res
-                .status(500)
-                .send({
-                    message: 'Something went wrong, Please try again'
-                })
+            caughtError(res, error)
         })
 })
+
+router.get('/api/accounts/user-addresses-list', (req, res) => {
+    const {user} = req
+    if (user) {
+        findAllUserAddresses(user.id)
+            .then(UserAddressesList => {
+                res
+                    .status(200)
+                    .send({
+                        UserAddressesList
+                    })
+            })
+            .catch(error => {
+                caughtError(res, error)
+            })
+    }
+})
+
 
 export default router
