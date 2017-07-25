@@ -193,7 +193,6 @@ const MyAccounts = ({ onSubmit, onChange, onDeleteClick, onRefreshClick, selecte
 
 const MyAddresses = ({ userAddressesList }) => (
 	<article className="article">
-		{console.log('userAddressesList from AccountViewInner: ', userAddressesList)}
 		<h2 className="article-title">Addresses</h2>
 		
 		<div className="row">
@@ -219,7 +218,7 @@ const MyAddresses = ({ userAddressesList }) => (
 												<tr>
 													<td className="mdl-data-table__cell--non-numeric">{userAddressesListItem.nickName}</td>
 													<td className="mdl-data-table__cell--non-numeric">{userAddressesListItem.address}</td>
-													<td>{userAddressesListItem.balance} {userAddressesListItem.currency}</td>
+													<td>{userAddressesListItem.balance} {userAddressesListItem}</td>
 													<td>
 														<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
 														<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
