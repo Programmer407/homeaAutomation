@@ -47,8 +47,8 @@ export const COINBASE_CODE_CONNECT_SUCCESS = 'COINBASE_CODE_CONNECT_SUCCESS'
 export const COINBASE_CODE_CONNECT_FAILURE = 'COINBASE_CODE_CONNECT_FAILURE'
 
 export function authenticateCoinBaseApi(code, grant_type, client_id, client_secret) {
-  //let redirect_uri = 'http://localhost:3000/account/coinbase/callback'
-  let redirect_uri = 'http://ec2-52-53-128-32.us-west-1.compute.amazonaws.com/account/coinbase/callback'
+  let redirect_uri = 'http://localhost:3000/account/coinbase/callback'
+  //let redirect_uri = 'http://ec2-52-53-128-32.us-west-1.compute.amazonaws.com/account/coinbase/callback'
   return {
     [CALL_API]: {
       types: [
