@@ -28,15 +28,9 @@ router.get('/api/accounts/my-account-all-providers', (req, res) => {
                     })
             })
             .catch(error => {
-                //caughtError(res, error)
-                res
-                .status(500)
-                .send({
-                    message: 'Something went wrong, Please try again'
-                })
+                caughtError(res, error)
             })
     } else {
-        console.log('user not found.')
         res
             .status(500)
             .send({
@@ -57,12 +51,7 @@ router.get('/api/accounts/my-account-all-userwallets', (req, res) => {
                     })
             })
             .catch(error => {
-                //caughtError(res, error)
-                res
-                .status(500)
-                .send({
-                    message: 'Something went wrong, Please try again'
-                })
+                caughtError(res, error)
             })
     }
 })
@@ -92,8 +81,7 @@ router.post('/api/accounts/my-account-connect-url', (req, res) => {
         .then(providerObj => {
             if (providerObj) {
                 if (providerId == 1) {
-                    var callBackUrl = req.protocol + '://' + req.get('host') + providerObj.redirectUrl1
-                    //console.log('callBackUrl : ' + callBackUrl)
+                    let callBackUrl = req.protocol + '://' + req.get('host') + providerObj.redirectUrl1
                     let encodedCallBackUrl = encodeURIComponent(callBackUrl)
                     let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&account=all&scope=wallet:user:read,wallet:accounts:read,wallet:addresses:read,wallet:transactions:read'
                     //let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&scope=balance+transactions+transfers+user'
@@ -113,11 +101,7 @@ router.post('/api/accounts/my-account-connect-url', (req, res) => {
             }
         })
         .catch(error => {
-            res
-                .status(400)
-                .send({
-                    message: 'Something went wrong, Please try again'
-                })
+            caughtError(res, error)
         })
 })
 
@@ -159,11 +143,7 @@ router.post('/api/accounts/my-account-provider-info', (req, res) => {
             }
         })
         .catch(error => {
-            res
-                .status(400)
-                .send({
-                    message: 'Something went wrong, Please try again'
-                })
+            caughtError(res, error)
         })
 })
 
@@ -392,33 +372,27 @@ router.post('/api/accounts/delete-userprovider-wallet', (req, res) => {
         })
     }
     deleteUserWalletById(userWalletId)
-    .then(result => {
-    //console.log('result : ' + JSON.stringify(result))
-        if (result) {
-            findAllUserProviderList(user.id)
-            .then(userProviderList => {
+        .then(result => {
+            if (result) {
+                findAllUserProviderList(user.id)
+                .then(userProviderList => {
+                    res
+                        .status(200)
+                        .send({
+                            userProviderList
+                        })
+                })
+                .catch(error => {
+                    caughtError(res, error)
+                })
+            } else {
                 res
-                    .status(200)
-                    .send({
-                        userProviderList
-                    })
-            })
-            .catch(error => {
-                //caughtError(res, error)
-                res
-                .status(500)
+                .status(400)
                 .send({
                     message: 'Something went wrong, Please try again'
                 })
-            })
-        } else {
-            res
-            .status(400)
-            .send({
-                message: 'Something went wrong, Please try again'
-            })
-        }
-    })
+            }
+        })
 })
 
 router.get('/api/accounts/refresh-userproviders', (req, res) => {
