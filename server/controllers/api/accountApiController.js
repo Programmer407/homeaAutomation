@@ -6,12 +6,13 @@ var request = require('request');
 import { ensureAnonymity, caughtError } from '../../utils'
 import UserProvider from './../../models/UserProvider'
 import UserWallet from './../../models/UserWallet'
+import UserAddress from './../../models/UserAddress'
 import { findProviderByID, findAllProviderList, findProviderByName } from '../../managers/providerManager'
 import { insertUserProvider, updateUserProvider, findUserProviderByID, findUserProviderByAccountName, findAllUserProviderList } from '../../managers/userProviderManager'
 //import { insertUserProvider, updateUserProvider, findUserProviderByID, findUserProviderByAccountName } from '../../managers/userProviderManager'
 import { findUserByID } from '../../managers/userManager'
 import { insertUserWallet, updateUserWallet, findUserWalletByWalletId, deleteUserWalletById } from '../../managers/userWalletManager'
-import { findAllUserAddresses } from '../../managers/userAddressesManager'
+import { findAllUserAddresses, findUserAddressByAddress, insertUserAddress, updateUserAddress } from '../../managers/userAddressesManager'
 
 const router = express.Router()
 
@@ -27,15 +28,9 @@ router.get('/api/accounts/my-account-all-providers', (req, res) => {
                     })
             })
             .catch(error => {
-                //caughtError(res, error)
-                res
-                .status(500)
-                .send({
-                    message: 'Something went wrong, Please try again'
-                })
+                caughtError(res, error)
             })
     } else {
-        console.log('user not found.')
         res
             .status(500)
             .send({
@@ -56,12 +51,7 @@ router.get('/api/accounts/my-account-all-userwallets', (req, res) => {
                     })
             })
             .catch(error => {
-                //caughtError(res, error)
-                res
-                .status(500)
-                .send({
-                    message: 'Something went wrong, Please try again'
-                })
+                caughtError(res, error)
             })
     }
 })
@@ -91,8 +81,7 @@ router.post('/api/accounts/my-account-connect-url', (req, res) => {
         .then(providerObj => {
             if (providerObj) {
                 if (providerId == 1) {
-                    var callBackUrl = req.protocol + '://' + req.get('host') + providerObj.redirectUrl1
-                    //console.log('callBackUrl : ' + callBackUrl)
+                    let callBackUrl = req.protocol + '://' + req.get('host') + providerObj.redirectUrl1
                     let encodedCallBackUrl = encodeURIComponent(callBackUrl)
                     let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&account=all&scope=wallet:user:read,wallet:accounts:read,wallet:addresses:read,wallet:transactions:read'
                     //let redirectUrl = 'https://www.coinbase.com/oauth/authorize?response_type=code&client_id='+providerObj.clientId+'&redirect_uri='+encodedCallBackUrl+'&scope=balance+transactions+transfers+user'
@@ -112,11 +101,7 @@ router.post('/api/accounts/my-account-connect-url', (req, res) => {
             }
         })
         .catch(error => {
-            res
-                .status(400)
-                .send({
-                    message: 'Something went wrong, Please try again'
-                })
+            caughtError(res, error)
         })
 })
 
@@ -158,11 +143,7 @@ router.post('/api/accounts/my-account-provider-info', (req, res) => {
             }
         })
         .catch(error => {
-            res
-                .status(400)
-                .send({
-                    message: 'Something went wrong, Please try again'
-                })
+            caughtError(res, error)
         })
 })
 
@@ -391,33 +372,27 @@ router.post('/api/accounts/delete-userprovider-wallet', (req, res) => {
         })
     }
     deleteUserWalletById(userWalletId)
-    .then(result => {
-    //console.log('result : ' + JSON.stringify(result))
-        if (result) {
-            findAllUserProviderList(user.id)
-            .then(userProviderList => {
+        .then(result => {
+            if (result) {
+                findAllUserProviderList(user.id)
+                .then(userProviderList => {
+                    res
+                        .status(200)
+                        .send({
+                            userProviderList
+                        })
+                })
+                .catch(error => {
+                    caughtError(res, error)
+                })
+            } else {
                 res
-                    .status(200)
-                    .send({
-                        userProviderList
-                    })
-            })
-            .catch(error => {
-                //caughtError(res, error)
-                res
-                .status(500)
+                .status(400)
                 .send({
                     message: 'Something went wrong, Please try again'
                 })
-            })
-        } else {
-            res
-            .status(400)
-            .send({
-                message: 'Something went wrong, Please try again'
-            })
-        }
-    })
+            }
+        })
 })
 
 router.get('/api/accounts/refresh-userproviders', (req, res) => {
@@ -595,6 +570,88 @@ router.get('/api/accounts/user-addresses-list', (req, res) => {
             })
     }
 })
+
+router.post('/api/accounts/insert-user-addresses', (req, res) => {
+    const { body, user } = req
+
+    if ( !body ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing request body'
+        })
+    }
+
+    const { coinAddresses } = body
+
+    if ( !coinAddresses ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing required arguments'
+        })
+    }
+    if (user) {
+        findUserAddressByAddress(user.id, coinAddresses)
+            .then(userAddress => {
+                if (userAddress) {
+                    userAddress.address = coinAddresses
+                    updateUserAddress(userAddress)
+                        .then(updatedUserAddress => {
+                            findAllUserAddresses(user.id)
+                                .then(userAddressesList => {
+                                    res
+                                        .status(200)
+                                        .send({
+                                            userAddressesList
+                                        })
+                                })
+                                .catch(error => {
+                                    caughtError(res, error)
+                                })
+                        })
+                } else {
+                    const userAddressObj = UserAddress.build({address: coinAddresses, nickName: 'test nickname', balance: '20', currency: 'BTC'})
+                    userAddressObj.setUser(user, {save: false})
+                    insertUserAddress(userAddressObj)
+                        .then(insertedUserAddress => {
+                            findAllUserAddresses(user.id)
+                                .then(userAddressesList => {
+                                    res
+                                        .status(200)
+                                        .send({
+                                            userAddressesList
+                                        })
+                                })
+                                .catch(error => {
+                                    caughtError(res, error)
+                                })
+                        })
+                }
+            })
+            .catch(error => {
+                caughtError(res, error)
+            })
+    }
+})
+
+router.get('/api/accounts/user-addresses-refresh', (req, res) => {
+    const {user} = req
+    if (user) {
+        findAllUserAddresses(user.id)
+            .then(userAddressesList => {
+                res
+                    .status(200)
+                    .send({
+                        userAddressesList
+                    })
+            })
+            .catch(error => {
+                caughtError(res, error)
+            })
+    }
+})
+
 
 
 export default router
