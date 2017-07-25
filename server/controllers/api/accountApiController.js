@@ -35,6 +35,7 @@ router.get('/api/accounts/my-account-all-providers', (req, res) => {
                 })
             })
     } else {
+        console.log('user not found.')
         res
             .status(500)
             .send({
