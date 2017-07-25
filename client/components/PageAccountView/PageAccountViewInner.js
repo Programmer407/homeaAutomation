@@ -37,19 +37,34 @@ const MyAccounts = ({ onSubmit, onChange, onDeleteClick, onRefreshClick, selecte
 								</tr>
 							</thead>
 							<tbody className="tbl-body">
-								{userProviderList.map(userProviderListItem =>
-									userProviderListItem.UserWallets.map(userWallet => 
-										<tr key={userWallet.id}>
-											<td className="mdl-data-table__cell--non-numeric">{userWallet.walletName}</td>
-											<td className="mdl-data-table__cell--non-numeric">{userProviderListItem.provider.displayName}</td>
-											<td>{userWallet.balance}</td>
-											<td>
-												<a href="#" onClick={ onRefreshClick.bind(this, userProviderListItem.provider.id) } className="action-icon"><ActionCached /></a>
-												<a href="#" onClick={ onDeleteClick.bind(this, userWallet.id) } className="action-icon"><ActionDelete/></a>
-											</td>
+								<Choose>
+									<When condition={ userProviderList[0].UserWallets.length > 0 }>
+										{console.log('PROVIDER LIST FOUND')}
+										{userProviderList.map(userProviderListItem =>
+											userProviderListItem.UserWallets.map(userWallet => 
+												<tr key={userWallet.id}>
+													<td className="mdl-data-table__cell--non-numeric">
+														{userWallet.walletName}<br/>
+														<span className="secondary-text">{userWallet.walletId}</span>
+													</td>
+													<td className="mdl-data-table__cell--non-numeric">{userProviderListItem.provider.displayName}</td>
+													<td>{userWallet.balance}</td>
+													<td>
+														<a href="#" onClick={ onRefreshClick.bind(this, userProviderListItem.provider.id) } className="action-icon"><ActionCached /></a>
+														<a href="#" onClick={ onDeleteClick.bind(this, userWallet.id) } className="action-icon"><ActionDelete/></a>
+													</td>
+												</tr>
+											)
+										)}
+									</When>
+									<Otherwise>
+										{console.log('PROVIDER LIST NOT FOUND')}
+										<tr>
+											<td colSpan="4" className="text-center">Wallets from connected accounts will show up here.</td>
 										</tr>
-									)
-								)} 
+									</Otherwise>
+								</Choose>
+
 
 								{/*<tr>
 									<td className="mdl-data-table__cell--non-numeric">BTC Wallet</td>

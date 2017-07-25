@@ -114,6 +114,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
         */
         
         <FlatButton
+					type="submit"
           label={submitting ? labelWhenSubmitting : label}
           secondary
           onClick={this.handleSubmit}

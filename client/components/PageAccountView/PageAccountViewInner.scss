@@ -51,6 +51,11 @@ article.article {
 					font-size: 14px;
 					border-bottom: 1px solid #DDD;
 
+					.secondary-text {
+						font-size: 0.9em;
+						color: #777;
+					}
+
 					a {
 						margin-left: 10px;
 						svg > path {

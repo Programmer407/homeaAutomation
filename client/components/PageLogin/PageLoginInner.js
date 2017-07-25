@@ -42,15 +42,15 @@ const PageLoginInner = (props) => {
                           autoComplete="off"/>
                       </div>
                     </fieldset>
+										<div className="card-action no-border text-right">
+											{
+												renderSubmitButton({
+													label: 'Login',
+													labelWhenSubmitting: 'Logging in ...'
+												})
+											}
+										</div>
                   </form>
-                </div>
-                <div className="card-action no-border text-right">
-                  {
-                    renderSubmitButton({
-                      label: 'Login',
-                      labelWhenSubmitting: 'Logging in ...'
-                    })
-                  }
                 </div>
               </div>
               <div className="additional-info back-plate">
