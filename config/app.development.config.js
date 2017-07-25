@@ -18,7 +18,7 @@ export default {
         host: '54.245.163.213:4000'
     },
     app: {
-        host: '52.53.128.32',
+        host: 'http://ec2-52-53-128-32.us-west-1.compute.amazonaws.com',
         serveDummyStatusData: true
     }
 }
