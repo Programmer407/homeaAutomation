@@ -48,7 +48,6 @@ class PageAccountView extends React.Component {
 
 	deleteUserWallet(value) {
 		// event.preventDefault();
-		console.log('WALLET SHALL BE DELETED HERE! WALLET ID IS ', value);
 		this.setState({
 			check: 1
 		});
@@ -57,7 +56,6 @@ class PageAccountView extends React.Component {
 			.then(action => {
 				const { error, payload } = action
 				if ( !error ) {
-					console.log('Wallet with the WalletID', value, 'has been deleted');
 					dispatch(userProvidersList())
 						.then(action => {
 							const { error, payload } = action
@@ -73,7 +71,6 @@ class PageAccountView extends React.Component {
 
 	refreshUserWallets(value) {
 		// event.preventDefault();
-		console.log('WALLETS WITH PROVIDER ID', value, 'SHALL BE RELOADED');
 		this.setState({
 			check: 1
 		});
@@ -98,8 +95,6 @@ class PageAccountView extends React.Component {
 	/* ADD BTC ADDRESSES */
 
 	addNewAddresses() {
-		console.log(this.state.newAddressesValue);
-
 		this.setState({
 			check: 1
 		});
@@ -117,7 +112,6 @@ class PageAccountView extends React.Component {
 
 	onRefreshAddressClick(value) {
 		// event.preventDefault();
-		console.log('ADDRESS WITH ID', value, 'SHALL BE RELOADED');
 		this.setState({
 			check: 1
 		});
@@ -140,8 +134,9 @@ class PageAccountView extends React.Component {
 	}
 
 	updateAddressesValue(event) {
-		console.log(event.target.value);
-    this.setState({newAddressesValue: event.target.value});
+    this.setState({
+			newAddressesValue: event.target.value
+		});
   }
 
   componentWillMount() {
@@ -269,7 +264,6 @@ class PageAccountView extends React.Component {
 
 /* redux connect() and related functions */
 function mapStateToProps(state, ownProps) {
-	console.log('STATE: ', state);
 	let selectedProvider = {};
 	let newAddressesValue = {};
 

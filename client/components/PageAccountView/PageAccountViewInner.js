@@ -39,7 +39,6 @@ const MyAccounts = ({ onSelectionSubmit, onSelectionChange, onDeleteClick, onRef
 							<tbody className="tbl-body">
 								<Choose>
 									<When condition={ userProviderList && userProviderList[0] && userProviderList[0].UserWallets.length > 0 }>
-										{console.log('PROVIDER LIST FOUND')}
 										{userProviderList.map(userProviderListItem =>
 											userProviderListItem.UserWallets.map(userWallet => 
 												<tr key={userWallet.id}>
@@ -145,7 +144,6 @@ const MyAccounts = ({ onSelectionSubmit, onSelectionChange, onDeleteClick, onRef
 
 const MyAddresses = ({ userAddressesList, onAddAddressesClick, newAddressesValue, updateAddressesValue, onRefreshAddressClick }) => (
 	<article className="article">
-		{console.log('UserAddress: ', userAddressesList)}
 		<h2 className="article-title">Addresses</h2>
 		
 		<div className="row">
@@ -173,7 +171,6 @@ const MyAddresses = ({ userAddressesList, onAddAddressesClick, newAddressesValue
 													<td className="mdl-data-table__cell--non-numeric">{userAddressesListItem.address}</td>
 													<td>{userAddressesListItem.balance} {userAddressesListItem.currency}</td>
 													<td>
-														{ console.log('userAddressesListItem: ', userAddressesListItem.id)}
 														<a href="#" onClick={ onRefreshAddressClick.bind(this, userAddressesListItem.id) } className="action-icon"><ActionCached /></a>
 														<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
 														<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
@@ -222,7 +219,6 @@ const PageAccountViewInner = (props) => {
 	const { onSelectionSubmit, onSelectionChange, onDeleteClick, onRefreshClick, 
 					selectedProvider, providerList, userProviderList, userAddressesList, 
 					onAddAddressesClick, newAddressesValue, updateAddressesValue, onRefreshAddressClick } = props;
-	console.log('userAddressesList +++++++++++++++++', userAddressesList)
   return (
     <section className="container-fluid chapter">
 			<DocumentTitle title="Accounts" />
