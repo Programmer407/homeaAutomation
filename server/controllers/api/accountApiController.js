@@ -6,12 +6,13 @@ var request = require('request');
 import { ensureAnonymity, caughtError } from '../../utils'
 import UserProvider from './../../models/UserProvider'
 import UserWallet from './../../models/UserWallet'
+import UserAddress from './../../models/UserAddress'
 import { findProviderByID, findAllProviderList, findProviderByName } from '../../managers/providerManager'
 import { insertUserProvider, updateUserProvider, findUserProviderByID, findUserProviderByAccountName, findAllUserProviderList } from '../../managers/userProviderManager'
 //import { insertUserProvider, updateUserProvider, findUserProviderByID, findUserProviderByAccountName } from '../../managers/userProviderManager'
 import { findUserByID } from '../../managers/userManager'
 import { insertUserWallet, updateUserWallet, findUserWalletByWalletId, deleteUserWalletById } from '../../managers/userWalletManager'
-import { findAllUserAddresses } from '../../managers/userAddressesManager'
+import { findAllUserAddresses, findUserAddressByAddress, insertUserAddress, updateUserAddress } from '../../managers/userAddressesManager'
 
 const router = express.Router()
 
@@ -596,5 +597,68 @@ router.get('/api/accounts/user-addresses-list', (req, res) => {
     }
 })
 
+router.post('/api/accounts/insert-user-addresses', (req, res) => {
+    const { body, user } = req
+
+    if ( !body ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing request body'
+        })
+    }
+
+    const { coinAddresses } = body
+
+    if ( !coinAddresses ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing required arguments'
+        })
+    }
+    if (user) {
+        findUserAddressByAddress(user.id, coinAddresses)
+            .then(userAddress => {
+                if (userAddress) {
+                    userAddress.address = coinAddresses
+                    updateUserAddress(userAddress)
+                        .then(updatedUserAddress => {
+                            findAllUserAddresses(user.id)
+                                .then(userAddressesList => {
+                                    res
+                                        .status(200)
+                                        .send({
+                                            userAddressesList
+                                        })
+                                })
+                                .catch(error => {
+                                    caughtError(res, error)
+                                })
+                        })
+                } else {
+                    const userAddressObj = UserAddress.build({address: coinAddresses, nickName: 'test nickname', balance: '20', currency: 'BTC'})
+                    userAddressObj.setUser(user, {save: false})
+                    insertUserAddress(userAddressObj)
+                        .then(insertedUserAddress => {
+                            findAllUserAddresses(user.id)
+                                .then(userAddressesList => {
+                                    res
+                                        .status(200)
+                                        .send({
+                                            userAddressesList
+                                        })
+                                })
+                                .catch(error => {
+                                    caughtError(res, error)
+                                })
+                        })
+                }
+            })
+            .catch(error => {
+                caughtError(res, error)
+            })
+    }
+})
 
 export default router
