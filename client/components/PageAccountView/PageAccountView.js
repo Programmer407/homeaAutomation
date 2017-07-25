@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {push} from 'react-router-redux'
 import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
-import {providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet, refreshUserProviders, getUserAddressesList, addUserAddresses} from '../../actions/entities/accounts'
+import {providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet, refreshUserProviders, getUserAddressesList, addUserAddresses, refreshUserAddresses} from '../../actions/entities/accounts'
 import PageLoading from '../PageLoading';
 
 class PageAccountView extends React.Component {
@@ -22,6 +22,7 @@ class PageAccountView extends React.Component {
 		this.refreshUserWallets = this.refreshUserWallets.bind(this);
 		this.addNewAddresses = this.addNewAddresses.bind(this);
 		this.updateAddressesValue = this.updateAddressesValue.bind(this);
+		this.onRefreshAddressClick = this.onRefreshAddressClick.bind(this);
   }
 
   connectProvider(event) {
@@ -114,6 +115,30 @@ class PageAccountView extends React.Component {
 			});
 	}
 
+	onRefreshAddressClick(value) {
+		// event.preventDefault();
+		console.log('ADDRESS WITH ID', value, 'SHALL BE RELOADED');
+		this.setState({
+			check: 1
+		});
+		const { dispatch } = this.props;
+		dispatch(refreshUserAddresses(value))
+			.then(action => {
+				const { error, payload } = action
+				if ( !error ) {
+					dispatch(getUserAddressesList())
+						.then(action => {
+							const { error, payload } = action
+							if ( !error ) {
+								this.setState({
+									check : 2
+								});
+							}	
+					});
+				}
+			});
+	}
+
 	updateAddressesValue(event) {
 		console.log(event.target.value);
     this.setState({newAddressesValue: event.target.value});
@@ -163,8 +188,14 @@ class PageAccountView extends React.Component {
 																					.then(action => {
 																						const { error, payload } = action
 																						if ( !error ) {
-																							this.setState({
-																								check : 2
+																							dispatch(getUserAddressesList())
+																								.then(action => {
+																									const { error, payload } = action
+																									if ( !error ) {
+																										this.setState({
+																											check : 2
+																										});
+																									}	
 																							});
 																						}	
 																				});
@@ -226,6 +257,7 @@ class PageAccountView extends React.Component {
 						onSelectionSubmit={ this.connectProvider }
 						onAddAddressesClick={ this.addNewAddresses }
 						updateAddressesValue={ this.updateAddressesValue }
+						onRefreshAddressClick={ this.onRefreshAddressClick }
 						{...this.props}
 						{...this.state}
 					/>

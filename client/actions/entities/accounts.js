@@ -206,3 +206,22 @@ export function addUserAddresses(coinAddresses) {
     payload: { coinAddresses }
   }
 }
+
+export const REFRESH_USER_ADDRESSES = 'REFRESH_USER_ADDRESSES'
+export const REFRESH_USER_ADDRESSES_SUCCESS = 'REFRESH_USER_ADDRESSES_SUCCESS'
+export const REFRESH_USER_ADDRESSES_FAILURE = 'REFRESH_USER_ADDRESSES_FAILURE'
+
+export function refreshUserAddresses(userAddressId) {
+  return {
+    [CALL_API]: {
+      types: [
+        REFRESH_USER_ADDRESSES,
+        REFRESH_USER_ADDRESSES_SUCCESS,
+        REFRESH_USER_ADDRESSES_FAILURE
+      ],
+      endpoint: `/api/accounts/user-addresses-refresh`,
+      method: 'POST'
+    },
+    payload: { userAddressId }
+  }
+}

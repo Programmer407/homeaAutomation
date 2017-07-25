@@ -43,6 +43,26 @@ export default function accounts(state = {}, action) {
 			return {...state, userAddressesList};
     }
 
+		case ActionTypes.ADD_USER_ADDRESSES_SUCCESS: {
+			const {payload} = action;
+			const {userAddressesList} = payload;
+      if (!payload) {
+        throw new Error(`Can't execute ${ ActionTypes.ADD_USER_ADDRESSES_SUCCESS }. {payload} isn't available in action`)
+      }
+			
+			return {...state, userAddressesList};
+    }
+
+		case ActionTypes.REFRESH_USER_ADDRESSES_SUCCESS: {
+			const {payload} = action;
+			const {userAddressesList} = payload;
+      if (!payload) {
+        throw new Error(`Can't execute ${ ActionTypes.REFRESH_USER_ADDRESSES_SUCCESS }. {payload} isn't available in action`)
+      }
+			
+			return {...state, userAddressesList};
+    }
+
     default: {
       return state
     }

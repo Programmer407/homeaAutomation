@@ -143,8 +143,9 @@ const MyAccounts = ({ onSelectionSubmit, onSelectionChange, onDeleteClick, onRef
 	</article>
 )
 
-const MyAddresses = ({ userAddressesList, onAddAddressesClick, newAddressesValue, updateAddressesValue }) => (
+const MyAddresses = ({ userAddressesList, onAddAddressesClick, newAddressesValue, updateAddressesValue, onRefreshAddressClick }) => (
 	<article className="article">
+		{console.log('UserAddress: ', userAddressesList)}
 		<h2 className="article-title">Addresses</h2>
 		
 		<div className="row">
@@ -167,11 +168,13 @@ const MyAddresses = ({ userAddressesList, onAddAddressesClick, newAddressesValue
 									<Choose>
 										<When condition={ userAddressesList && userAddressesList.length > 0 }>
 											{ userAddressesList.map(userAddressesListItem =>
-												<tr>
+												<tr key={ userAddressesListItem.id }>
 													<td className="mdl-data-table__cell--non-numeric">{userAddressesListItem.nickName}</td>
 													<td className="mdl-data-table__cell--non-numeric">{userAddressesListItem.address}</td>
-													<td>{userAddressesListItem.balance} {userAddressesListItem}</td>
+													<td>{userAddressesListItem.balance} {userAddressesListItem.currency}</td>
 													<td>
+														{ console.log('userAddressesListItem: ', userAddressesListItem.id)}
+														<a href="#" onClick={ onRefreshAddressClick.bind(this, userAddressesListItem.id) } className="action-icon"><ActionCached /></a>
 														<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
 														<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
 													</td>
@@ -217,7 +220,9 @@ const MyAddresses = ({ userAddressesList, onAddAddressesClick, newAddressesValue
 
 const PageAccountViewInner = (props) => {
 	const { onSelectionSubmit, onSelectionChange, onDeleteClick, onRefreshClick, 
-					selectedProvider, providerList, userProviderList, userAddressesList, onAddAddressesClick, newAddressesValue, updateAddressesValue } = props;
+					selectedProvider, providerList, userProviderList, userAddressesList, 
+					onAddAddressesClick, newAddressesValue, updateAddressesValue, onRefreshAddressClick } = props;
+	console.log('userAddressesList +++++++++++++++++', userAddressesList)
   return (
     <section className="container-fluid chapter">
 			<DocumentTitle title="Accounts" />
@@ -235,7 +240,8 @@ const PageAccountViewInner = (props) => {
 					userAddressesList={ userAddressesList }
 					onAddAddressesClick={ onAddAddressesClick }
 					newAddressesValue={ newAddressesValue }
-					updateAddressesValue={ updateAddressesValue }/>
+					updateAddressesValue={ updateAddressesValue }
+					onRefreshAddressClick={ onRefreshAddressClick }/>
 				</div>
       </QueueAnim>
     </section>
@@ -248,7 +254,8 @@ PageAccountViewInner.propTypes={
 	userAddressesList: PropTypes.array,
 	onSelectionChange: React.PropTypes.func.isRequired,
 	onSelectionSubmit: React.PropTypes.func.isRequired,
-	updateAddressesValue: React.PropTypes.func.isRequired
+	updateAddressesValue: React.PropTypes.func.isRequired,
+	onRefreshAddressClick: React.PropTypes.func.isRequired
 };
 
 export default PageAccountViewInner;
