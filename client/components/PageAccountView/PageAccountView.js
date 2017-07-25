@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {push} from 'react-router-redux'
 import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
-import {providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet, refreshUserProviders} from '../../actions/entities/accounts'
+import {providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet, refreshUserProviders, getUserAddressesList} from '../../actions/entities/accounts'
 import PageLoading from '../PageLoading';
 
 class PageAccountView extends React.Component {
@@ -91,6 +91,8 @@ class PageAccountView extends React.Component {
 			});
 	}
 
+
+
   componentWillMount() {
     const { dispatch } = this.props
       
@@ -166,8 +168,14 @@ class PageAccountView extends React.Component {
 							.then(action => {
 								const { error, payload } = action
 								if ( !error ) {
-									this.setState({
-										check : 2
+									dispatch(getUserAddressesList())
+										.then(action => {
+											const { error, payload } = action
+											if ( !error ) {
+												this.setState({
+													check : 2
+												});
+											}	
 									});
 								}	
 						});
@@ -206,7 +214,8 @@ function mapStateToProps(state, ownProps) {
   return {
 		selectedProvider,
     providerList: state.entities.accounts.providerList,
-		userProviderList: state.entities.accounts.userProviderList
+		userProviderList: state.entities.accounts.userProviderList,
+		userAddressesList: state.entities.accounts.userAddressesList
   };
 }
 

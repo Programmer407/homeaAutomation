@@ -191,8 +191,9 @@ const MyAccounts = ({ onSubmit, onChange, onDeleteClick, onRefreshClick, selecte
 	</article>
 )
 
-const MyAddresses = () => (
+const MyAddresses = ({ userAddressesList }) => (
 	<article className="article">
+		{console.log('userAddressesList from AccountViewInner: ', userAddressesList)}
 		<h2 className="article-title">Addresses</h2>
 		
 		<div className="row">
@@ -207,11 +208,32 @@ const MyAddresses = () => (
 									<tr>
 										<th className="mdl-data-table__cell--non-numeric">Nickname</th>
 										<th className="mdl-data-table__cell--non-numeric">Address</th>
+										<th>Balance</th>
 										<th></th>
 									</tr>
 								</thead>
 								<tbody className="tbl-body">
-									<tr>
+									<Choose>
+										<When condition={ userAddressesList.length > 0 }>
+											{ userAddressesList.map(userAddressesListItem =>
+												<tr>
+													<td className="mdl-data-table__cell--non-numeric">{userAddressesListItem.nickName}</td>
+													<td className="mdl-data-table__cell--non-numeric">{userAddressesListItem.address}</td>
+													<td>{userAddressesListItem.balance} {userAddressesListItem.currency}</td>
+													<td>
+														<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
+														<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+													</td>
+												</tr>	
+											)}
+										</When>
+										<Otherwise>
+											<tr>
+												<td colSpan="3" className="text-center">BTC addresses you add manually will show up here.</td>
+											</tr>
+										</Otherwise>
+									</Choose>
+									{/*<tr>
 										<td className="mdl-data-table__cell--non-numeric">145J2KWhnYgMpkMUGBrXfm6E9pFmrn5at3</td>
 										<td className="mdl-data-table__cell--non-numeric">Some BTC</td>
 										<td>
@@ -234,7 +256,7 @@ const MyAddresses = () => (
 											<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
 											<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
 										</td>
-									</tr>
+									</tr>*/}
 								</tbody>
 							</table>
 						</div>
@@ -264,13 +286,13 @@ const MyAddresses = () => (
 	</article>
 )
 
-const PageAccountViewInner = ({ onSubmit, onChange, onDeleteClick, onRefreshClick, selectedProvider, providerList, userProviderList }) => {
+const PageAccountViewInner = ({ onSubmit, onChange, onDeleteClick, onRefreshClick, selectedProvider, providerList, userProviderList, userAddressesList }) => {
   return (
     <section className="container-fluid chapter">
 			<DocumentTitle title="Accounts" />
       <QueueAnim type="bottom" className="ui-animate">
-        <div key="1"><MyAccounts onSubmit={ onSubmit } onChange={ onChange } onDeleteClick={ onDeleteClick } onRefreshClick={ onRefreshClick } selectedProvider={ selectedProvider } providerList={ providerList } userProviderList={ userProviderList }/></div>
-        <div key="2"><MyAddresses /></div>
+        <div key="1"><MyAccounts onSubmit={ onSubmit } onChange={ onChange } onDeleteClick={ onDeleteClick } onRefreshClick={ onRefreshClick } selectedProvider={ selectedProvider } providerList={ providerList } userProviderList={ userProviderList } /></div>
+        <div key="2"><MyAddresses userAddressesList={ userAddressesList }/></div>
       </QueueAnim>
     </section>
   )
@@ -279,6 +301,7 @@ const PageAccountViewInner = ({ onSubmit, onChange, onDeleteClick, onRefreshClic
 PageAccountViewInner.propTypes = {
   providerList: PropTypes.array,
 	userProviderList: PropTypes.array,
+	userAddressesList: PropTypes.array,
 	onChange: React.PropTypes.func.isRequired,
 	onSubmit: React.PropTypes.func.isRequired
 };

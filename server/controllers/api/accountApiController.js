@@ -583,11 +583,11 @@ router.get('/api/accounts/user-addresses-list', (req, res) => {
     const {user} = req
     if (user) {
         findAllUserAddresses(user.id)
-            .then(UserAddressesList => {
+            .then(userAddressesList => {
                 res
                     .status(200)
                     .send({
-                        UserAddressesList
+                        userAddressesList
                     })
             })
             .catch(error => {

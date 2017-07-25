@@ -175,7 +175,7 @@ export const USERADDRESSES_LIST = 'USERADDRESSES_LIST'
 export const USERADDRESSES_LIST_SUCCESS = 'USERADDRESSES_LIST_SUCCESS'
 export const USERADDRESSES_LIST_FAILURE = 'USERADDRESSES_LIST_FAILURE'
 
-export function userAddressesList() {
+export function getUserAddressesList() {
   return {
     [CALL_API]: {
       types: [
