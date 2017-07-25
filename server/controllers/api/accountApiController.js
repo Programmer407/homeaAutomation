@@ -34,6 +34,12 @@ router.get('/api/accounts/my-account-all-providers', (req, res) => {
                     message: 'Something went wrong, Please try again'
                 })
             })
+    } else {
+        res
+            .status(500)
+            .send({
+                message: 'Something went wrong, Please try again'
+            })
     }
 })
 
