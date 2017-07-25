@@ -3,6 +3,7 @@ import express from 'express'
 import crypto from 'crypto';
 
 // src
+import { encrypt, decrypt } from '../../utils/encryptionUtils'
 import { ensureAnonymity, caughtError } from '../../utils'
 import { findUserByRegistrationToken, isActiveUser, findUserByToken, insertUser, updateUser, findUserByID, findUserByEmail, findUserByEmailAndPassword } from '../../managers/userManager'
 import { findRoleById } from '../../managers/roleManager'
@@ -37,46 +38,37 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
       })
   }
   
-  findUserByEmailAndPassword(email, password)
+  findUserByEmail(email)
     .then(user => {
       if (user) {
-        isActiveUser(user.id)
-          .then(isActive => {
-            if (isActive) {
-              /*var client = new Client({'apiKey': 'lKwiLoagJZilnknI', 'apiSecret': 'aqTKBqF2HBkytYYJJfPeZ08Jh4bCE9Xh'});
-
-              client.getAccounts({}, function(err, accounts) {
-                if (err) {
-                  console.log('err is : ' + err)
-                } else {
-                accounts.forEach(function(account) {
-                  console.log(account.name);
-                });
-                }
-              });
-*/
-              return req.login(user, err => {
-                if ( err ) {
-                  caughtError(res, err)
-                } else {
-                  /*if (!rememberMe || rememberMe == null) {
-                    req.session.cookie.expires = false;
-                  }*/
-                  
-                  //var hour = 120000
-                  //req.session.cookie.expires = new Date(Date.now() + hour)
-                  //req.session.cookie.maxAge = hour
-                  res.send({ user })
-                }
-              })
-            } else {
-              res
-                .status(404)
-                .send({
-                  message: 'Your account is currently inactive. Please click <a href="/resend/activation/'+user.id+'">here</a> to resend the email containing activation link'
+        let decryptedPassword = decrypt(user.password)
+        if (password == decryptedPassword) {
+          isActiveUser(user.id)
+            .then(isActive => {
+              if (isActive) {
+                return req.login(user, err => {
+                  if ( err ) {
+                    caughtError(res, err)
+                  } else {
+                    res.send({ user })
+                  }
                 })
-            }
+              } else {
+                res
+                  .status(404)
+                  .send({
+                    message: 'Your account is currently inactive. Please click <a href="/resend/activation/'+user.id+'">here</a> to resend the email containing activation link'
+                  })
+              }
+            })
+        } else {
+          //caughtError(res, error)
+          res
+          .status(404)
+          .send({
+            message: 'Invalid username or password'
           })
+        }
       } else {
         //caughtError(res, error)
         res
@@ -87,17 +79,11 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
       }
     })
     .catch(error => {
-      //caughtError(res, error)
-      res
-      .status(500)
-      .send({
-        message: 'Something went wrong, Please try again'
-      })
+      caughtError(res, error)
     })
 })
 
 router.get('/api/logout', (req, res) => {
-  console.log('logout called.')
   req.logout()
   res
     .status(200)
@@ -135,96 +121,70 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
             message: 'Username already exist'
           })
       } else {
+        let encryptedPassword = encrypt(password)
+        
         // now instantiate an object
-        const userObj = User.build({firstName: firstName, lastName: lastName, email: email, password: password})
+        const userObj = User.build({firstName: firstName, lastName: lastName, email: email, password: encryptedPassword})
         
         findRoleById(2)
           .then(role => {
-            if (role) {
-              userObj.setRole(role, {save: false})
-              findUserAccountTypeById(1)
-                .then(userAccountType => {
-                  if (userAccountType) {
-                    userObj.setUseraccounttype(userAccountType, {save: false})
-                    findTimeZoneById(1)
-                      .then(timeZone => {
-                        if (timeZone) {
-                          userObj.setTimezone(timeZone, {save: false})
-                          userObj.status = 0
+            userObj.setRole(role, {save: false})
+            findUserAccountTypeById(1)
+              .then(userAccountType => {
+                userObj.setUseraccounttype(userAccountType, {save: false})
+                findTimeZoneById(1)
+                  .then(timeZone => {
+                    userObj.setTimezone(timeZone, {save: false})
+                    userObj.status = 0
                           
-                          crypto.randomBytes(20, function(err, buf) {
-                            var token = buf.toString('hex');
-                            userObj.registerToken = token;
-                            userObj.registerExpires = Date.now() + 86400000; // 24 hours; 1 hour = 3600000
+                    crypto.randomBytes(20, function(err, buf) {
+                      var token = buf.toString('hex');
+                      userObj.registerToken = token;
+                      userObj.registerExpires = Date.now() + 86400000; // 24 hours; 1 hour = 3600000
                             
-                            insertUser(userObj)
-                              .then(user => {
-                                if (user) {
-                                  var activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + user.registerToken
-                                  const data = {firstName: user.firstName, activationUrl: activationUrl};
+                      insertUser(userObj)
+                        .then(user => {
+                          if (user) {
+                            var activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + user.registerToken
+                            const data = {firstName: user.firstName, activationUrl: activationUrl};
                                   
-                                  var allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
-                                  var toEmailAddress = 'majid.hussain@emumba.com'
-                                  if (allowedEmailList.indexOf(email) > -1) {
-                                    toEmailAddress = email
-                                  }
+                            var allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
+                            var toEmailAddress = 'majid.hussain@emumba.com'
+                            if (allowedEmailList.indexOf(email) > -1) {
+                              toEmailAddress = email
+                            }
 
-                                  emailUtils.sendAccountActivationEmail(toEmailAddress, data)
-                                    .then(result => {
-                                      console.log('Email Sent')
-                                      res
-                                      .status(200)
-                                      .send({
-                                        message: 'Sign up Successfully! Please follow a link in your email to activate your account'
-                                      })
-                                    })
-                                    .catch(error => {
-                                      console.log('Email not Sent, Error here. ' + error)
-                                      res
-                                        .status(400)
-                                        .send({
-                                        message: 'Something went wrong, Please try again'
-                                        })
-                                    })
-                                } else {
-                                  //caughtError(res, error)
-                                  res
-                                  .status(400)
+                            emailUtils.sendAccountActivationEmail(toEmailAddress, data)
+                              .then(result => {
+                                res
+                                  .status(200)
                                   .send({
-                                    message: 'Something went wrong, Please try again'
+                                    message: 'Sign up Successfully! Please follow a link in your email to activate your account'
                                   })
-                                }
                               })
                               .catch(error => {
-                                //caughtError(res, error)
-                                return res
-                                .status(500)
-                                .send({
-                                  message: 'Something went wrong, Please try again'
-                                })
+                                caughtError(res, error)
                               })
-                          })
-                        } else {
-                          console.log('timeZone does not exist')
-                        }
-                      })
-                  } else {
-                    console.log('userAccountType does not exist')
-                  }
-                })
-            } else {
-              console.log('role does not exist')
-            }
+                          } else {
+                            //caughtError(res, error)
+                            res
+                              .status(400)
+                              .send({
+                                message: 'Something went wrong, Please try again'
+                               })
+                          }
+                        })
+                        .catch(error => {
+                          caughtError(res, error)
+                        })
+                    })
+                  })
+              })
           })
       } 
     })
     .catch(error => {
-      //caughtError(res, error)
-      return res
-      .status(500)
-      .send({
-        message: 'Something went wrong, Please try again'
-      })
+      caughtError(res, error)
     })
 })
 
@@ -269,7 +229,6 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
 
               emailUtils.sendResendPasswordEmail(toEmailAddress, data)
                 .then(result => {
-                  console.log('Email Sent')
                   res
                   .status(200)
                   .send({
@@ -277,20 +236,11 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
                   })
                 })
                 .catch(error => {
-                  console.log('Email not Sent, Error here. ' + error)
-                  res
-                    .status(400)
-                    .send({
-                    message: 'Something went wrong, Please try again'
-                    })
+                  caughtError(res, error)
                 })
             })
             .catch(error => {
-              res
-              .status(400)
-              .send({
-                message: 'Something went wrong, Please try again'
-              })
+              caughtError(res, error)
             })
         });
       } else {
@@ -303,11 +253,7 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
       }
   })
   .catch(error => {
-    res
-      .status(400)
-      .send({
-        message: 'Something went wrong, Please try again'
-      })
+    caughtError(res, error)
   })
 })
 
@@ -348,11 +294,7 @@ router.post('/api/users/search-user-token', (req, res) => {
       }
     })
     .catch(error => {
-      res
-        .status(400)
-        .send({
-          message: 'Something went wrong, Please try again'
-        })
+      caughtError(res, error)
     }) 
 })
 
@@ -385,7 +327,8 @@ router.post('/api/users/reset-password', (req, res) => {
   findUserByToken(token)
     .then(user => {
       if (user) {
-        user.password = password;
+        let encryptedPassword = encrypt(password)
+        user.password = encryptedPassword;
         user.resetPasswordToken = null;
         user.resetPasswordExpires = null;
         updateUser(user)
@@ -397,14 +340,9 @@ router.post('/api/users/reset-password', (req, res) => {
               })
             })
             .catch(error => {
-              res
-              .status(400)
-              .send({
-                message: 'Something went wrong, Please try again'
-              })
+              caughtError(res, error)
             })
       } else {
-        // now instantiate an object
         res
           .status(400)
           .send({
@@ -413,12 +351,7 @@ router.post('/api/users/reset-password', (req, res) => {
       } 
     })
     .catch(error => {
-      //caughtError(res, error)
-      return res
-      .status(500)
-      .send({
-        message: 'Something went wrong, Please try again'
-      })
+      caughtError(res, error)
     })
 })
 
@@ -458,11 +391,7 @@ router.post('/api/users/verify-account', (req, res) => {
               })
             })
             .catch(error => {
-              res
-              .status(400)
-              .send({
-                message: 'Something went wrong, Please try again'
-              })
+              caughtError(res, error)
             })
       } else {
         // now instantiate an object
@@ -474,12 +403,7 @@ router.post('/api/users/verify-account', (req, res) => {
       } 
     })
     .catch(error => {
-      //caughtError(res, error)
-      return res
-      .status(500)
-      .send({
-        message: 'Something went wrong, Please try again'
-      })
+      caughtError(res, error)
     })
 })
 
@@ -524,7 +448,6 @@ router.post('/api/users/resend-activation', (req, res) => {
 
               emailUtils.resendAccountActivationEmail(toEmailAddress, data)
                 .then(result => {
-                  console.log('Email Sent')
                   res
                     .status(200)
                     .send({
@@ -532,20 +455,11 @@ router.post('/api/users/resend-activation', (req, res) => {
                     })
                 })
                 .catch(error => {
-                  console.log('Email not Sent, Error here. ' + error)
-                  res
-                    .status(400)
-                    .send({
-                    message: 'Something went wrong, Please try again'
-                    })
+                  caughtError(res, error)
                 })
               })
               .catch(error => {
-                res
-                .status(400)
-                .send({
-                message: 'Something went wrong, Please try again'
-                })
+                caughtError(res, error)
               })
          })
       } else {
@@ -558,12 +472,7 @@ router.post('/api/users/resend-activation', (req, res) => {
       } 
     })
     .catch(error => {
-      //caughtError(res, error)
-      return res
-      .status(400)
-      .send({
-        message: 'Something went wrong, Please try again'
-      })
+      caughtError(res, error)
     })
 })
 
