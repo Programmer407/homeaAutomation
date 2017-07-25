@@ -36,10 +36,10 @@ const PageRegisterInner = props => {
                   <form className="form-horizontal">
                     <fieldset>
                       <div className="form-group">
-                        <Field name="firstName" label="First Name" component={renderTextField}/>
+                        <Field name="firstName" label="First Name" autoComplete="off" component={renderTextField}/>
                       </div>
                       <div className="form-group">
-                        <Field name="lastName" label="Last Name" component={renderTextField} />
+                        <Field name="lastName" label="Last Name" autoComplete="off" component={renderTextField} />
                       </div>
                       <div className="form-group">
                         <Field name="email" label="Email" autoComplete="off" component={renderTextField} />
@@ -55,16 +55,16 @@ const PageRegisterInner = props => {
                         <p className="text-small">By clicking on sign up, you agree to <Link to="/terms"><i>terms</i></Link> and <Link to="/privacy"><i>privacy policy</i></Link></p>
                       </div>
                     </fieldset>
+										<div className="card-action no-border text-right">
+											<Link to="/login" className="color-gray-light">Login</Link>
+											{
+												renderSubmitButton({
+													label: 'Sign Up',
+													labelWhenSubmitting: 'Sign Up'
+												})
+											}
+										</div>
                   </form>
-                </div>
-                <div className="card-action no-border text-right">
-                  <Link to="/login" className="color-gray-light">Login</Link>
-                  {
-                    renderSubmitButton({
-                      label: 'Sign Up',
-                      labelWhenSubmitting: 'Sign Up'
-                    })
-                  }
                 </div>
               </div>
             </div>

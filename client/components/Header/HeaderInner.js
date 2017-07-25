@@ -85,10 +85,14 @@ const PrivateHeader = React.createClass ({
 		 					<LinkContainer to="/reports" activeClassName="activeNavLink"><NavItem eventKey={3} className="nav-item">Reports</NavItem></LinkContainer>
 		 					<LinkContainer to="/charts" activeClassName="activeNavLink"><NavItem eventKey={3} className="nav-item">Charts</NavItem></LinkContainer>
             </Nav>
-						<Nav onSelect={this.closeNav} pullRight>
+						<Nav className="nav-right-dropdown" onSelect={this.closeNav} pullRight>
 							<NavDropdown eventKey={1} title={ this.props.user.firstName } id="basic-nav-dropdown">
 								<LinkContainer to="/logout"><MenuItem eventKey={1.1}>Logout</MenuItem></LinkContainer>
 							</NavDropdown>
+						</Nav>
+						<Nav className="nav-right" pullRight>
+							<MenuItem className="menu-divider" divider/>
+							<LinkContainer to="/logout"><MenuItem eventKey={1}>Logout</MenuItem></LinkContainer>
 						</Nav>
           </Navbar.Collapse>
         </Navbar>
