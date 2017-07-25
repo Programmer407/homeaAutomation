@@ -187,3 +187,22 @@ export function getUserAddressesList() {
     }
   }
 }
+
+export const ADD_USER_ADDRESSES = 'ADD_USER_ADDRESSES'
+export const ADD_USER_ADDRESSES_SUCCESS = 'ADD_USER_ADDRESSES_SUCCESS'
+export const ADD_USER_ADDRESSES_FAILURE = 'ADD_USER_ADDRESSES_FAILURE'
+
+export function addUserAddresses(coinAddresses) {
+  return {
+    [CALL_API]: {
+      types: [
+        ADD_USER_ADDRESSES,
+        ADD_USER_ADDRESSES_SUCCESS,
+        ADD_USER_ADDRESSES_FAILURE
+      ],
+      endpoint: `/api/accounts/insert-user-addresses`,
+      method: 'POST'
+    },
+    payload: { coinAddresses }
+  }
+}

@@ -20,7 +20,7 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import {grey400, grey600, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import CommunicationEmail from 'material-ui/svg-icons/communication/email';
 
-const MyAccounts = ({ onSubmit, onChange, onDeleteClick, onRefreshClick, selectedProvider, providerList, userProviderList }) => (
+const MyAccounts = ({ onSelectionSubmit, onSelectionChange, onDeleteClick, onRefreshClick, selectedProvider, providerList, userProviderList }) => (
 	<article className="article">
 		<h2 className="article-title">Wallets</h2>
 		<div className="row">
@@ -38,7 +38,7 @@ const MyAccounts = ({ onSubmit, onChange, onDeleteClick, onRefreshClick, selecte
 							</thead>
 							<tbody className="tbl-body">
 								<Choose>
-									<When condition={ userProviderList[0].UserWallets.length > 0 }>
+									<When condition={ userProviderList && userProviderList[0] && userProviderList[0].UserWallets.length > 0 }>
 										{console.log('PROVIDER LIST FOUND')}
 										{userProviderList.map(userProviderListItem =>
 											userProviderListItem.UserWallets.map(userWallet => 
@@ -58,59 +58,11 @@ const MyAccounts = ({ onSubmit, onChange, onDeleteClick, onRefreshClick, selecte
 										)}
 									</When>
 									<Otherwise>
-										{console.log('PROVIDER LIST NOT FOUND')}
 										<tr>
 											<td colSpan="4" className="text-center">Wallets from connected accounts will show up here.</td>
 										</tr>
 									</Otherwise>
 								</Choose>
-
-
-								{/*<tr>
-									<td className="mdl-data-table__cell--non-numeric">BTC Wallet</td>
-									<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
-									<td>12.4566 BTC</td>
-									<td>
-										<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
-										<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-									</td>
-								</tr>
-								<tr>
-									<td className="mdl-data-table__cell--non-numeric">BTC Wallet</td>
-									<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
-									<td>174.9541 BTC</td>
-									<td>
-										<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
-										<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-									</td>
-								</tr>
-								<tr>
-									<td className="mdl-data-table__cell--non-numeric">ETH Wallet</td>
-									<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
-									<td>287.7412 ETH</td>
-									<td>
-										<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
-										<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-									</td>
-								</tr>
-								<tr>
-									<td className="mdl-data-table__cell--non-numeric">DOGE Wallet</td>
-									<td className="mdl-data-table__cell--non-numeric">Coinbase</td>
-									<td>9.4574 DOGE</td>
-									<td>
-										<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
-										<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-									</td>
-								</tr>
-								<tr>
-									<td className="mdl-data-table__cell--non-numeric">BTC Wallet</td>
-									<td className="mdl-data-table__cell--non-numeric">Blockchain.info</td>
-									<td>7.5241 BTC</td>
-									<td>
-										<a href="#" className="action-icon"><ActionCached color={grey400}/></a>
-										<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-									</td>
-								</tr>*/}
 							</tbody>
 						</table>
 					</div>
@@ -174,14 +126,14 @@ const MyAccounts = ({ onSubmit, onChange, onDeleteClick, onRefreshClick, selecte
 									fullWidth
 									className="primary-select-field"
 									floatingLabelText="Select a provider"
-									onChange={ onChange }
+									onChange={ onSelectionChange }
 									value={ selectedProvider }>
 									{providerList.map(provider => 
 										<MenuItem key={ provider.id } value={ provider.id } primaryText={ provider.displayName } />
 									)}
 								</SelectField>
 							</div>
-							<RaisedButton label="Connect" onClick={ onSubmit } primary />
+							<RaisedButton label="Connect" onClick={ onSelectionSubmit } primary />
 							<div className="divider" />
 						</form>
 					</div>
@@ -191,7 +143,7 @@ const MyAccounts = ({ onSubmit, onChange, onDeleteClick, onRefreshClick, selecte
 	</article>
 )
 
-const MyAddresses = ({ userAddressesList }) => (
+const MyAddresses = ({ userAddressesList, onAddAddressesClick, newAddressesValue, updateAddressesValue }) => (
 	<article className="article">
 		<h2 className="article-title">Addresses</h2>
 		
@@ -213,7 +165,7 @@ const MyAddresses = ({ userAddressesList }) => (
 								</thead>
 								<tbody className="tbl-body">
 									<Choose>
-										<When condition={ userAddressesList.length > 0 }>
+										<When condition={ userAddressesList && userAddressesList.length > 0 }>
 											{ userAddressesList.map(userAddressesListItem =>
 												<tr>
 													<td className="mdl-data-table__cell--non-numeric">{userAddressesListItem.nickName}</td>
@@ -228,34 +180,10 @@ const MyAddresses = ({ userAddressesList }) => (
 										</When>
 										<Otherwise>
 											<tr>
-												<td colSpan="3" className="text-center">BTC addresses you add manually will show up here.</td>
+												<td colSpan="4" className="text-center">BTC addresses you add manually will show up here.</td>
 											</tr>
 										</Otherwise>
 									</Choose>
-									{/*<tr>
-										<td className="mdl-data-table__cell--non-numeric">145J2KWhnYgMpkMUGBrXfm6E9pFmrn5at3</td>
-										<td className="mdl-data-table__cell--non-numeric">Some BTC</td>
-										<td>
-											<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
-											<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-										</td>
-									</tr>
-									<tr>
-										<td className="mdl-data-table__cell--non-numeric">1JeK3CgCuPHVw9S5niUj4D7HFJ5bXc1JYR</td>
-										<td className="mdl-data-table__cell--non-numeric">BTC-Income</td>
-										<td>
-											<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
-											<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-										</td>
-									</tr>
-									<tr>
-										<td className="mdl-data-table__cell--non-numeric">3BUp6EH8Vs2BAYsPQCLX8hdo8oyFpM28R9</td>
-										<td className="mdl-data-table__cell--non-numeric">ETH-Alice</td>
-										<td>
-											<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
-											<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-										</td>
-									</tr>*/}
 								</tbody>
 							</table>
 						</div>
@@ -275,8 +203,10 @@ const MyAddresses = ({ userAddressesList }) => (
 								rows={1}
 								rowsMax={10}
 								fullWidth
+								onChange={ updateAddressesValue }
+								value={ newAddressesValue }
 							/>
-							<RaisedButton label="Add" primary />
+							<RaisedButton label="Add Addresses" onClick={ onAddAddressesClick } primary />
 						</form>
 					</div>
 				</div>
@@ -285,24 +215,40 @@ const MyAddresses = ({ userAddressesList }) => (
 	</article>
 )
 
-const PageAccountViewInner = ({ onSubmit, onChange, onDeleteClick, onRefreshClick, selectedProvider, providerList, userProviderList, userAddressesList }) => {
+const PageAccountViewInner = (props) => {
+	const { onSelectionSubmit, onSelectionChange, onDeleteClick, onRefreshClick, 
+					selectedProvider, providerList, userProviderList, userAddressesList, onAddAddressesClick, newAddressesValue, updateAddressesValue } = props;
   return (
     <section className="container-fluid chapter">
 			<DocumentTitle title="Accounts" />
       <QueueAnim type="bottom" className="ui-animate">
-        <div key="1"><MyAccounts onSubmit={ onSubmit } onChange={ onChange } onDeleteClick={ onDeleteClick } onRefreshClick={ onRefreshClick } selectedProvider={ selectedProvider } providerList={ providerList } userProviderList={ userProviderList } /></div>
-        <div key="2"><MyAddresses userAddressesList={ userAddressesList }/></div>
+        <div key="1"><MyAccounts 
+					onSelectionSubmit={ onSelectionSubmit } 
+					onSelectionChange={ onSelectionChange } 
+					onDeleteClick={ onDeleteClick } 
+					onRefreshClick={ onRefreshClick } 
+					selectedProvider={ selectedProvider } 
+					providerList={ providerList } 
+					userProviderList={ userProviderList } />
+				</div>
+        <div key="2"><MyAddresses 
+					userAddressesList={ userAddressesList }
+					onAddAddressesClick={ onAddAddressesClick }
+					newAddressesValue={ newAddressesValue }
+					updateAddressesValue={ updateAddressesValue }/>
+				</div>
       </QueueAnim>
     </section>
   )
 }
 
-PageAccountViewInner.propTypes = {
+PageAccountViewInner.propTypes={
   providerList: PropTypes.array,
 	userProviderList: PropTypes.array,
 	userAddressesList: PropTypes.array,
-	onChange: React.PropTypes.func.isRequired,
-	onSubmit: React.PropTypes.func.isRequired
+	onSelectionChange: React.PropTypes.func.isRequired,
+	onSelectionSubmit: React.PropTypes.func.isRequired,
+	updateAddressesValue: React.PropTypes.func.isRequired
 };
 
 export default PageAccountViewInner;
