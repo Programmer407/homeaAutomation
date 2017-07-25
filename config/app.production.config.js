@@ -17,7 +17,7 @@ export default {
         host: '172.16.2.103:4000'
     },
     app: {
-        host: '172.16.2.103',
-        serveDummyStatusData: false
+        host: '52.53.128.32',
+        serveDummyStatusData: true
     }
 }
