@@ -635,4 +635,23 @@ router.post('/api/accounts/insert-user-addresses', (req, res) => {
     }
 })
 
+router.get('/api/accounts/user-addresses-refresh', (req, res) => {
+    const {user} = req
+    if (user) {
+        findAllUserAddresses(user.id)
+            .then(userAddressesList => {
+                res
+                    .status(200)
+                    .send({
+                        userAddressesList
+                    })
+            })
+            .catch(error => {
+                caughtError(res, error)
+            })
+    }
+})
+
+
+
 export default router
