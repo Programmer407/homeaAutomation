@@ -9,10 +9,9 @@ import UserWallet from './../../models/UserWallet'
 import UserAddress from './../../models/UserAddress'
 import { findProviderByID, findAllProviderList, findProviderByName } from '../../managers/providerManager'
 import { insertUserProvider, updateUserProvider, findUserProviderByID, findUserProviderByAccountName, findAllUserProviderList } from '../../managers/userProviderManager'
-//import { insertUserProvider, updateUserProvider, findUserProviderByID, findUserProviderByAccountName } from '../../managers/userProviderManager'
 import { findUserByID } from '../../managers/userManager'
 import { insertUserWallet, updateUserWallet, findUserWalletByWalletId, deleteUserWalletById } from '../../managers/userWalletManager'
-import { findAllUserAddresses, findUserAddressByAddress, findUserAddressById, insertUserAddress, updateUserAddress } from '../../managers/userAddressesManager'
+import { findAllUserAddresses, findUserAddressByAddress, findUserAddressById, insertUserAddress, updateUserAddress, deleteUserAddressById } from '../../managers/userAddressesManager'
 
 const router = express.Router()
 
@@ -684,6 +683,106 @@ router.post('/api/accounts/user-addresses-refresh', (req, res) => {
     }
 })
 
+router.post('/api/accounts/user-address-delete', (req, res) => {
+    const { body, user } = req
 
+    if ( !body ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing request body'
+        })
+    }
+
+    const { userAddressId } = body
+
+    if ( !userAddressId ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing required arguments'
+        })
+    }
+    if (user) {
+        deleteUserAddressById(userAddressId)
+        .then(result => {
+            if (result) {
+                findAllUserAddresses(user.id)
+                    .then(userAddressesList => {
+                        res
+                            .status(200)
+                            .send({
+                                userAddressesList
+                            })
+                        })
+                    .catch(error => {
+                        caughtError(res, error)
+                    })
+            } else {
+                res
+                .status(400)
+                .send({
+                    message: 'Something went wrong, Please try again'
+                })
+            }
+        })
+    }
+})
+
+router.post('/api/accounts/user-address-update', (req, res) => {
+    const { body, user } = req
+
+    if ( !body ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing request body'
+        })
+    }
+
+    const { userAddressId, userAddressNickName } = body
+
+    if ( !userAddressId || !userAddressNickName ) {
+        res
+            .status(400)
+            .send({
+                message: 'Missing required arguments'
+        })
+    }
+    if (user) {
+        findUserAddressById(userAddressId)
+            .then(userAddress => {
+                if (userAddress) {
+                    userAddress.nickName = userAddressNickName
+                    updateUserAddress(userAddress)
+                        .then(updatedUserAddress => {
+                            findAllUserAddresses(user.id)
+                                .then(userAddressesList => {
+                                    res
+                                        .status(200)
+                                        .send({
+                                            userAddressesList
+                                        })
+                                })
+                                .catch(error => {
+                                    caughtError(res, error)
+                                })
+                        })
+                        .catch(error => {
+                            caughtError(res, error)
+                        })    
+                } else {
+                    res
+                        .status(400)
+                        .send({
+                            message: 'Address not found'
+                    })
+                }
+            })
+            .catch(error => {
+                caughtError(res, error)
+            })
+    }
+})
 
 export default router

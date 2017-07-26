@@ -225,3 +225,41 @@ export function refreshUserAddresses(userAddressId) {
     payload: { userAddressId }
   }
 }
+
+export const DELETE_USER_ADDRESS = 'DELETE_USER_ADDRESS'
+export const DELETE_USER_ADDRESS_SUCCESS = 'DELETE_USER_ADDRESS_SUCCESS'
+export const DELETE_USER_ADDRESS_FAILURE = 'DELETE_USER_ADDRESS_FAILURE'
+
+export function deleteUserAddress(userAddressId) {
+  return {
+    [CALL_API]: {
+      types: [
+        DELETE_USER_ADDRESS,
+        DELETE_USER_ADDRESS_SUCCESS,
+        DELETE_USER_ADDRESS_FAILURE
+      ],
+      endpoint: `/api/accounts/user-address-delete`,
+      method: 'POST'
+    },
+    payload: { userAddressId }
+  }
+}
+
+export const UPDATE_USER_ADDRESS = 'UPDATE_USER_ADDRESS'
+export const UPDATE_USER_ADDRESS_SUCCESS = 'UPDATE_USER_ADDRESS_SUCCESS'
+export const UPDATE_USER_ADDRESS_FAILURE = 'UPDATE_USER_ADDRESS_FAILURE'
+
+export function updateUserAddress(userAddressId, userAddressNickName) {
+  return {
+    [CALL_API]: {
+      types: [
+        UPDATE_USER_ADDRESS,
+        UPDATE_USER_ADDRESS_SUCCESS,
+        UPDATE_USER_ADDRESS_FAILURE
+      ],
+      endpoint: `/api/accounts/user-address-update`,
+      method: 'POST'
+    },
+    payload: { userAddressId, userAddressNickName }
+  }
+}

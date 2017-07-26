@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {push} from 'react-router-redux'
 import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
-import {providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet, refreshUserProviders, getUserAddressesList, addUserAddresses, refreshUserAddresses} from '../../actions/entities/accounts'
+import {providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet, refreshUserProviders, getUserAddressesList, addUserAddresses, refreshUserAddresses, deleteUserAddress, updateUserAddress} from '../../actions/entities/accounts'
 import PageLoading from '../PageLoading';
 
 class PageAccountView extends React.Component {
@@ -26,8 +26,8 @@ class PageAccountView extends React.Component {
   }
 
   connectProvider(event) {
-    event.preventDefault();
-    return this.props.dispatch(accountconnectUrl(this.state.selectedProvider))
+		event.preventDefault();
+		return this.props.dispatch(accountconnectUrl(this.state.selectedProvider))
       .then(action => {
         const { error, payload } = action
         if ( !error ) {

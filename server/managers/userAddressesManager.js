@@ -48,3 +48,12 @@ export const updateUserAddress = (userAddressObj): Promise<any> =>
   .then(obj => {
     return obj
   })
+
+export const deleteUserAddressById = (userAddressId:number):Object =>
+    UserAddress.findById(userAddressId)
+    .then((object) => {
+      if(null == object)
+        return;
+      
+      return object.destroy({ force: true });
+    });
