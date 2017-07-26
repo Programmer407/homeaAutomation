@@ -19,6 +19,8 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 // import {indigo500} from 'material-ui/styles/colors';
 import {grey400, grey600, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import CommunicationEmail from 'material-ui/svg-icons/communication/email';
+import NicknameDialog from './DialogModalView';
+
 
 const MyAccounts = ({ onSelectionSubmit, onSelectionChange, onDeleteClick, onRefreshClick, selectedProvider, providerList, userProviderList }) => (
 	<article className="article">
@@ -86,24 +88,24 @@ const MyAccounts = ({ onSelectionSubmit, onSelectionChange, onDeleteClick, onRef
 											<td className="mdl-data-table__cell--non-numeric">145J2KWhnYgMpkMUGBrXfm6E9pFmrn5at3</td>
 											<td className="mdl-data-table__cell--non-numeric">Some BTC</td>
 											<td>
-												<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
-												<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+												<a href="#" className="action-icon"><EditorModeEdit /></a>
+												<a href="#" className="action-icon"><ActionDelete /></a>
 											</td>
 										</tr>
 										<tr>
 											<td className="mdl-data-table__cell--non-numeric">1JeK3CgCuPHVw9S5niUj4D7HFJ5bXc1JYR</td>
 											<td className="mdl-data-table__cell--non-numeric">BTC-Income</td>
 											<td>
-												<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
-												<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+												<a href="#" className="action-icon"><EditorModeEdit /></a>
+												<a href="#" className="action-icon"><ActionDelete /></a>
 											</td>
 										</tr>
 										<tr>
 											<td className="mdl-data-table__cell--non-numeric">3BUp6EH8Vs2BAYsPQCLX8hdo8oyFpM28R9</td>
 											<td className="mdl-data-table__cell--non-numeric">ETH-Alice</td>
 											<td>
-												<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
-												<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
+												<a href="#" className="action-icon"><EditorModeEdit /></a>
+												<a href="#" className="action-icon"><ActionDelete /></a>
 											</td>
 										</tr>
 									</tbody>
@@ -142,83 +144,98 @@ const MyAccounts = ({ onSelectionSubmit, onSelectionChange, onDeleteClick, onRef
 	</article>
 )
 
-const MyAddresses = ({ userAddressesList, onAddAddressesClick, newAddressesValue, updateAddressesValue, onRefreshAddressClick }) => (
-	<article className="article">
-		<h2 className="article-title">Addresses</h2>
-		
-		<div className="row">
-			<div className="col-lg-8">
-				<div className="box box-default">
-					<div className="box-header box-header-primary">My Addresses</div>
-					<div className="box-body">
-						<p>These are the addresses you added manually.</p>
-						<div className="box box-default table-box table-responsive mdl-shadow--2dp">
-							<table className="mdl-data-table">
-								<thead className="tbl-header">
-									<tr>
-										<th className="mdl-data-table__cell--non-numeric">Nickname</th>
-										<th className="mdl-data-table__cell--non-numeric">Address</th>
-										<th>Balance</th>
-										<th></th>
-									</tr>
-								</thead>
-								<tbody className="tbl-body">
-									<Choose>
-										<When condition={ userAddressesList && userAddressesList.length > 0 }>
-											{ userAddressesList.map(userAddressesListItem =>
-												<tr key={ userAddressesListItem.id }>
-													<td className="mdl-data-table__cell--non-numeric">{userAddressesListItem.nickName}</td>
-													<td className="mdl-data-table__cell--non-numeric">{userAddressesListItem.address}</td>
-													<td>{userAddressesListItem.balance} {userAddressesListItem.currency}</td>
-													<td>
-														<a href="#" onClick={ onRefreshAddressClick.bind(this, userAddressesListItem.id) } className="action-icon"><ActionCached /></a>
-														<a href="#" className="action-icon"><EditorModeEdit color={grey400}/></a>
-														<a href="#" className="action-icon"><ActionDelete color={grey400}/></a>
-													</td>
-												</tr>	
-											)}
-										</When>
-										<Otherwise>
+class MyAddresses extends React.Component {
+	constructor(props) {
+		super(props)
+	}
+
+	triggerDialogModal(params){
+		this.refs.dialog.handleOpen(params);
+	}
+
+	render() {
+		const { dialogOpen, userAddressesList, onAddAddressesClick, newAddressesValue, updateAddressesValue, onRefreshAddressClick, onDeleteAddressClick, handleModalOnSubmit } = this.props
+		return(
+
+			<article className="article">
+				<h2 className="article-title">Addresses</h2>
+				
+				<div className="row">
+					<div className="col-lg-8">
+						<div className="box box-default">
+							<div className="box-header box-header-primary">My Addresses</div>
+							<div className="box-body">
+								<p>These are the addresses you added manually.</p>
+								<div className="box box-default table-box table-responsive mdl-shadow--2dp">
+									<table className="mdl-data-table">
+										<thead className="tbl-header">
 											<tr>
-												<td colSpan="4" className="text-center">BTC addresses you add manually will show up here.</td>
+												<th className="mdl-data-table__cell--non-numeric">Nickname</th>
+												<th className="mdl-data-table__cell--non-numeric">Address</th>
+												<th>Balance</th>
+												<th></th>
 											</tr>
-										</Otherwise>
-									</Choose>
-								</tbody>
-							</table>
+										</thead>
+										<tbody className="tbl-body">
+											<Choose>
+												<When condition={ userAddressesList && userAddressesList.length > 0 }>
+													{ userAddressesList.map(userAddressesListItem =>
+														<tr key={ userAddressesListItem.id }>
+															<td className="mdl-data-table__cell--non-numeric">{userAddressesListItem.nickName}</td>
+															<td className="mdl-data-table__cell--non-numeric">{userAddressesListItem.address}</td>
+															<td>{userAddressesListItem.balance} {userAddressesListItem.currency}</td>
+															<td>
+																<NicknameDialog ref="dialog" handleModalOnSubmit={handleModalOnSubmit}/>								
+																<a href="#" onClick={ onRefreshAddressClick.bind(this, userAddressesListItem.id) } className="action-icon"><ActionCached /></a>
+																<a href="#" onClick={ this.triggerDialogModal.bind(this, {id: userAddressesListItem.id, address: userAddressesListItem.address, nickname: userAddressesListItem.nickName }) } className="action-icon"><EditorModeEdit /></a>
+																<a href="#" onClick={ onDeleteAddressClick.bind(this, userAddressesListItem.id) } className="action-icon"><ActionDelete /></a>
+															</td>
+														</tr>	
+													)}
+												</When>
+												<Otherwise>
+													<tr>
+														<td colSpan="4" className="text-center">BTC addresses you add manually will show up here.</td>
+													</tr>
+												</Otherwise>
+											</Choose>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div className="col-lg-4">
+						<div className="box box-default">
+							<div className="box-header box-header-primary">Add Addresses</div>
+							<div className="box-body">
+								<p>Enter one BTC address per line. Other addresses that are yours based on Wisdom's analysis of the blockchain will be automatically added for you.</p>
+								<form className="form-inline" role="form">
+									<TextField
+										hintText="Enter one address per line"
+										multiLine
+										rows={1}
+										rowsMax={10}
+										fullWidth
+										onChange={ updateAddressesValue }
+										value={ newAddressesValue }
+									/>
+									<RaisedButton label="Add Addresses" onClick={ onAddAddressesClick } primary />
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-
-			<div className="col-lg-4">
-				<div className="box box-default">
-					<div className="box-header box-header-primary">Add Addresses</div>
-					<div className="box-body">
-						<p>Enter one BTC address per line. Other addresses that are yours based on Wisdom's analysis of the blockchain will be automatically added for you.</p>
-						<form className="form-inline" role="form">
-							<TextField
-								hintText="Enter one address per line"
-								multiLine
-								rows={1}
-								rowsMax={10}
-								fullWidth
-								onChange={ updateAddressesValue }
-								value={ newAddressesValue }
-							/>
-							<RaisedButton label="Add Addresses" onClick={ onAddAddressesClick } primary />
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</article>
-)
+			</article>
+		)
+	}
+}
 
 const PageAccountViewInner = (props) => {
 	const { onSelectionSubmit, onSelectionChange, onDeleteClick, onRefreshClick, 
 					selectedProvider, providerList, userProviderList, userAddressesList, 
-					onAddAddressesClick, newAddressesValue, updateAddressesValue, onRefreshAddressClick } = props;
+					onAddAddressesClick, newAddressesValue, updateAddressesValue, onRefreshAddressClick, onDeleteAddressClick, handleModalOnSubmit } = props;
   return (
     <section className="container-fluid chapter">
 			<DocumentTitle title="Accounts" />
@@ -237,7 +254,10 @@ const PageAccountViewInner = (props) => {
 					onAddAddressesClick={ onAddAddressesClick }
 					newAddressesValue={ newAddressesValue }
 					updateAddressesValue={ updateAddressesValue }
-					onRefreshAddressClick={ onRefreshAddressClick }/>
+					onRefreshAddressClick={ onRefreshAddressClick }
+					onDeleteAddressClick={ onDeleteAddressClick }
+					handleModalOnSubmit={handleModalOnSubmit}
+					dialogOpen={props.dialogOpen}/>
 				</div>
       </QueueAnim>
     </section>
@@ -251,7 +271,8 @@ PageAccountViewInner.propTypes={
 	onSelectionChange: React.PropTypes.func.isRequired,
 	onSelectionSubmit: React.PropTypes.func.isRequired,
 	updateAddressesValue: React.PropTypes.func.isRequired,
-	onRefreshAddressClick: React.PropTypes.func.isRequired
+	onRefreshAddressClick: React.PropTypes.func.isRequired,
+	onDeleteAddressClick: React.PropTypes.func.isRequired
 };
 
 export default PageAccountViewInner;

@@ -4,28 +4,21 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {push} from 'react-router-redux'
 import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
-import {providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet, refreshUserProviders, getUserAddressesList, addUserAddresses, refreshUserAddresses, deleteUserAddress, updateUserAddress} from '../../actions/entities/accounts'
+import { providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet, refreshUserProviders, getUserAddressesList, addUserAddresses, refreshUserAddresses, deleteUserAddress, updateUserAddress } from "../../actions/entities/accounts"
 import PageLoading from '../PageLoading';
+
 
 class PageAccountView extends React.Component {
   constructor(props) {
     super(props);
 		this.state = {
 			check: 1,
-      selectedProvider: Object.assign({}, this.props.selectedProvider),
-			newAddressesValue: ''
+			newAddressesValue: '',
+      selectedProvider: Object.assign({}, this.props.selectedProvider)
     };
-
-    this.updateProviderSelection = this.updateProviderSelection.bind(this);
-		this.deleteUserWallet = this.deleteUserWallet.bind(this);
-		this.connectProvider = this.connectProvider.bind(this);
-		this.refreshUserWallets = this.refreshUserWallets.bind(this);
-		this.addNewAddresses = this.addNewAddresses.bind(this);
-		this.updateAddressesValue = this.updateAddressesValue.bind(this);
-		this.onRefreshAddressClick = this.onRefreshAddressClick.bind(this);
   }
 
-  connectProvider(event) {
+  connectProvider = (event) => {
 		event.preventDefault();
 		return this.props.dispatch(accountconnectUrl(this.state.selectedProvider))
       .then(action => {
@@ -42,7 +35,7 @@ class PageAccountView extends React.Component {
       })
   }
   
-  updateProviderSelection(event, index, value) {
+  updateProviderSelection = (event, index, value) => {
     return this.setState({selectedProvider: value});
   }
 
@@ -69,7 +62,7 @@ class PageAccountView extends React.Component {
 			});
 	}
 
-	refreshUserWallets(value) {
+	refreshUserWallets = (value) => {
 		// event.preventDefault();
 		this.setState({
 			check: 1
@@ -93,8 +86,7 @@ class PageAccountView extends React.Component {
 	}
 
 	/* ADD BTC ADDRESSES */
-
-	addNewAddresses() {
+	addNewAddresses = () => {
 		this.setState({
 			check: 1
 		});
@@ -110,8 +102,7 @@ class PageAccountView extends React.Component {
 			});
 	}
 
-	onRefreshAddressClick(value) {
-		// event.preventDefault();
+	onRefreshAddressClick = (value) => {
 		this.setState({
 			check: 1
 		});
@@ -133,11 +124,56 @@ class PageAccountView extends React.Component {
 			});
 	}
 
-	updateAddressesValue(event) {
+	onDeleteAddressClick = (value) => {
+		console.log('Address ID: ', value)
+		this.setState({
+			check: 1
+		});
+		const { dispatch } = this.props;
+		dispatch(deleteUserAddress(value))
+			.then(action => {
+				const { error, payload } = action
+				if ( !error ) {
+					this.setState({
+						check : 2
+					});
+				}
+			});
+	}
+
+	updateAddressesValue = (event) => {
     this.setState({
 			newAddressesValue: event.target.value
 		});
   }
+
+	handleModalOnSubmit = (value) => {
+		const { id, oldNickname } = value
+		let { nickname } = value
+		if( !nickname || !nickname.trim() === '' ) {
+			nickname = oldNickname
+		}
+		this.setState({
+			check: 1
+		});
+		const { dispatch } = this.props;
+		dispatch(updateUserAddress(id, nickname))
+			.then(action => {
+				const { error, payload } = action
+				if ( !error ) {
+					dispatch(getUserAddressesList())
+						.then(action => {
+							const { error, payload } = action
+							if ( !error ) {
+								this.setState({
+									check : 2
+								});
+							}	
+					});
+				}
+			});
+	}
+
 
   componentWillMount() {
     const { dispatch } = this.props
@@ -253,6 +289,8 @@ class PageAccountView extends React.Component {
 						onAddAddressesClick={ this.addNewAddresses }
 						updateAddressesValue={ this.updateAddressesValue }
 						onRefreshAddressClick={ this.onRefreshAddressClick }
+						onDeleteAddressClick={ this.onDeleteAddressClick }
+						handleModalOnSubmit={this.handleModalOnSubmit}
 						{...this.props}
 						{...this.state}
 					/>
