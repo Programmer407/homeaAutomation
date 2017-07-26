@@ -2,10 +2,10 @@ export default {
     name: 'production',
     mysql: {
         username: 'root',
-        password: 'Y=-w::9:c+.S',
+        password: 'root',
         multiStatement: false,
-        dbName: 'fo',
-        host: 'sensu.cwdxsdmyidcf.us-east-1.rds.amazonaws.com',
+        dbName: 'cryptax',
+        host: 'localhost',
         enableLogging: false
     },
     influx: {
@@ -17,8 +17,8 @@ export default {
         host: '172.16.2.103:4000'
     },
     app: {
-        //host: 'ec2-52-53-128-32.us-west-1.compute.amazonaws.com',
-        host: 'localhost',
+        host: 'ec2-52-53-128-32.us-west-1.compute.amazonaws.com',
+        //host: 'localhost',
         serveDummyStatusData: true
     }
 }
