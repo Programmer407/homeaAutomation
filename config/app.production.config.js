@@ -2,10 +2,10 @@ export default {
     name: 'production',
     mysql: {
         username: 'root',
-        password: 'Y=-w::9:c+.S',
+        password: 'root',
         multiStatement: false,
-        dbName: 'fo',
-        host: 'sensu.cwdxsdmyidcf.us-east-1.rds.amazonaws.com',
+        dbName: 'cryptax',
+        host: 'localhost',
         enableLogging: false
     },
     influx: {
