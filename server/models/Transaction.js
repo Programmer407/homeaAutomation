@@ -2,6 +2,10 @@
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize';
 import TransactionType from './TransactionType';
+import UserWallet from './UserWallet';
+import UserAddress from './UserAddress';
+import User from './User';
+import TransactionImportType from './TransactionImportType';
 
 const Transaction = sequelize.define(
   "transactions",
@@ -10,8 +14,7 @@ const Transaction = sequelize.define(
     note: { type: Sequelize.STRING(128), field: "note" },
     amount: { type: Sequelize.STRING(128), field: "amount" },
     asset: { type: Sequelize.STRING(128), field: "asset" },
-    value: { type: Sequelize.STRING(128), field: "value" },
-    importedFrom: { type: Sequelize.STRING(128), field: "imported_from" },
+    value: { type: Sequelize.STRING(128), field: "value" }
   },
   {
     // don't add the timestamp attributes (updatedAt, createdAt)
@@ -24,5 +27,11 @@ const Transaction = sequelize.define(
   }
 )
 Transaction.belongsTo(TransactionType);
+Transaction.belongsTo(TransactionImportType);
+Transaction.belongsTo(UserWallet);
+Transaction.belongsTo(UserAddress);
+Transaction.belongsTo(User);
+UserWallet.hasMany(Transaction, {as: 'Transactions'})
+UserAddress.hasMany(Transaction, {as: 'UserAddresses'})
 
 export default Transaction

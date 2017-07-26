@@ -117,12 +117,13 @@ class PageLogin extends React.Component {
 }
 
 const mapStateToProps = state => {
+  const isLoadingLogin = state.entities.users.isLoading
   if (state.errorMessage) {
     const {errorMessage: {message}} = state
-    return {message}
+    return {message, isLoadingLogin}
   } else {
     const {auth: {user}} = state
-    return {user}
+    return {user, isLoadingLogin}
   }
 }
 
