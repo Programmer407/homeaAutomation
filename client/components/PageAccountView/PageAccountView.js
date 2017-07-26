@@ -24,7 +24,6 @@ class PageAccountView extends React.Component {
       .then(action => {
         const { error, payload } = action
         if ( !error ) {
-          console.log('response received : ' + JSON.stringify(action))
           var url = payload.redirecturl
           window.location = url
           return action
@@ -39,106 +38,25 @@ class PageAccountView extends React.Component {
     return this.setState({selectedProvider: value});
   }
 
-	deleteUserWallet(value) {
-		// event.preventDefault();
-		this.setState({
-			check: 1
-		});
-		const { dispatch } = this.props;
-		dispatch(deleteWallet(value))
-			.then(action => {
-				const { error, payload } = action
-				if ( !error ) {
-					dispatch(userProvidersList())
-						.then(action => {
-							const { error, payload } = action
-							if ( !error ) {
-								this.setState({
-									check : 2
-								});
-							}	
-					});
-				}
-			});
+	deleteUserWallet = (value) => {
+		this.props.dispatch(deleteWallet(value))
 	}
 
 	refreshUserWallets = (value) => {
-		// event.preventDefault();
-		this.setState({
-			check: 1
-		});
-		const { dispatch } = this.props;
-		dispatch(refreshUserProviders(value))
-			.then(action => {
-				const { error, payload } = action
-				if ( !error ) {
-					dispatch(userProvidersList())
-						.then(action => {
-							const { error, payload } = action
-							if ( !error ) {
-								this.setState({
-									check : 2
-								});
-							}	
-					});
-				}
-			});
+		this.props.dispatch(refreshUserProviders(value))
 	}
 
 	/* ADD BTC ADDRESSES */
 	addNewAddresses = () => {
-		this.setState({
-			check: 1
-		});
-		const { dispatch } = this.props;
-		dispatch(addUserAddresses(this.state.newAddressesValue))
-			.then(action => {
-				const { error, payload } = action
-				if ( !error ) {
-					this.setState({
-						check : 2
-					});
-				}
-			});
+		this.props.dispatch(addUserAddresses(this.state.newAddressesValue))
 	}
 
 	onRefreshAddressClick = (value) => {
-		this.setState({
-			check: 1
-		});
-		const { dispatch } = this.props;
-		dispatch(refreshUserAddresses(value))
-			.then(action => {
-				const { error, payload } = action
-				if ( !error ) {
-					dispatch(getUserAddressesList())
-						.then(action => {
-							const { error, payload } = action
-							if ( !error ) {
-								this.setState({
-									check : 2
-								});
-							}	
-					});
-				}
-			});
+		this.props.dispatch(refreshUserAddresses(value))
 	}
 
 	onDeleteAddressClick = (value) => {
-		console.log('Address ID: ', value)
-		this.setState({
-			check: 1
-		});
-		const { dispatch } = this.props;
-		dispatch(deleteUserAddress(value))
-			.then(action => {
-				const { error, payload } = action
-				if ( !error ) {
-					this.setState({
-						check : 2
-					});
-				}
-			});
+		this.props.dispatch(deleteUserAddress(value))
 	}
 
 	updateAddressesValue = (event) => {
@@ -153,25 +71,7 @@ class PageAccountView extends React.Component {
 		if( !newNickname || !newNickname.trim() === '' ) {
 			newNickname = oldNickname
 		}
-		this.setState({
-			check: 1
-		});
-		const { dispatch } = this.props;
-		dispatch(updateUserAddress(id, newNickname))
-			.then(action => {
-				const { error, payload } = action
-				if ( !error ) {
-					dispatch(getUserAddressesList())
-						.then(action => {
-							const { error, payload } = action
-							if ( !error ) {
-								this.setState({
-									check : 2
-								});
-							}	
-					});
-				}
-			});
+		this.props.dispatch(updateUserAddress(id, newNickname))
 	}
 
 
@@ -234,12 +134,8 @@ class PageAccountView extends React.Component {
 																		});
                                 }
                               })
-                          } else {
-                            console.log('There are errors 2')
                           }
                         })
-                    } else {
-                      console.log('There are errors')
                     }
                   })
               }
@@ -277,8 +173,7 @@ class PageAccountView extends React.Component {
     if (this.state.check == 1) {
 			return <PageLoading {...this.props}/>
 		} else if(this.state.check == 2) {
-			// const {providerList} = this.props;
-
+			
 			return (
 				<div>
 					<PageAccountViewInner 
@@ -304,13 +199,17 @@ class PageAccountView extends React.Component {
 function mapStateToProps(state, ownProps) {
 	let selectedProvider = {};
 	let newAddressesValue = {};
-
+	const isRefreshUserAddressList = state.entities.accounts.refreshUserAddressList
+	const isRefreshUserWalletList = state.entities.accounts.refreshUserWalletList
+	
   return {
 		selectedProvider,
 		newAddressesValue,
     providerList: state.entities.accounts.providerList,
 		userProviderList: state.entities.accounts.userProviderList,
-		userAddressesList: state.entities.accounts.userAddressesList
+		userAddressesList: state.entities.accounts.userAddressesList,
+		isRefreshUserAddressList,
+		isRefreshUserWalletList
   };
 }
 

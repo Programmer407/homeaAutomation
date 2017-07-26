@@ -404,12 +404,12 @@ router.get('/api/accounts/refresh-userproviders', (req, res) => {
                 message: 'Missing request body'
         })
     }
-    console.log('user.id : ' + user.id)
+    //console.log('user.id : ' + user.id)
     findAllUserProviderList(user.id)
         .then(userProviderList => {
-            console.log('userProviderList : ' + JSON.stringify(userProviderList))
+            //console.log('userProviderList : ' + JSON.stringify(userProviderList))
             userProviderList.forEach(function(userProviderObj) {
-                console.log('userProvider : ' + JSON.stringify(userProviderObj))
+                //console.log('userProvider : ' + JSON.stringify(userProviderObj))
                 if (userProviderObj.provider.id = 1) {
                     console.log('its coinbase')
                     var Client = require('coinbase').Client;
@@ -498,11 +498,6 @@ router.get('/api/accounts/refresh-userproviders', (req, res) => {
                                                     });
                                                 });
                                             })
-                                            res
-                                                .status(200)
-                                                .send({
-                                                    message: 'User Provider List is Refreshed 1'
-                                                })
                                         })
                                 } else {
                                     console.log('there are errors : ' + error)
@@ -542,10 +537,16 @@ router.get('/api/accounts/refresh-userproviders', (req, res) => {
                     });
                 }
             })
-            res
-                .status(200)
-                .send({
-                    message: 'User Provider List is Refreshed 2'
+            findAllUserProviderList(user.id)
+                .then(userProviderList => {
+                    res
+                        .status(200)
+                        .send({
+                            userProviderList
+                        })
+                    })
+                .catch(error => {
+                    caughtError(res, error)
                 })
         })
         .catch(error => {
