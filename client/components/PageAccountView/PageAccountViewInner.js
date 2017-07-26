@@ -29,18 +29,14 @@ class MyAccounts extends React.Component {
 				selectedKey: props.userProviderList[0].UserWallets[0].id,
 				selectedWallet: props.userProviderList[0].UserWallets[0]
 			}
-			console.log('SELECTED KEY: ', this.state.selectedKey, this.state.selectedWallet )
 		}
 	}
 
 	handleRowClick = (value) => {
-		console.log('Row clicked! ID is: ', value)
 		this.setState({
 			selectedKey: value,
 			selectedWallet: this.props.userProviderList[0].UserWallets[findIndex(this.props.userProviderList[0].UserWallets, {id: value})]
 		})
-		console.log('SELECTED KEY: ', this.state.selectedKey, this.state.selectedWallet )
-
 	}
 
 	render() {
@@ -105,7 +101,6 @@ class MyAccounts extends React.Component {
 						</div>
 
 						<div>
-							{console.log('userProviderList: ', userProviderList)}
 							<div className="box box-default">
 								<div className="box-header box-header-primary">{'Associated Addresses of ' + this.state.selectedWallet.walletName}</div>
 								<div className="box-body">
@@ -122,22 +117,33 @@ class MyAccounts extends React.Component {
 											</thead>
 											<tbody className="tbl-body">
 												<Choose>
-													<When condition={ this.state.selectedWallet.Transactions &&  this.state.selectedWallet.Transactions.length > 0}>
-														{this.state.selectedWallet.Transactions.map(transaction =>
-															<tr key={transaction.id}>
-																<td className="mdl-data-table__cell--non-numeric">Sample Nickname</td>
-																<td className="mdl-data-table__cell--non-numeric">{transaction.destination}</td>
-																<td>{transaction.amount} {transaction.asset}</td>
-																<td>
-																	<a href="#" className="action-icon"><EditorModeEdit /></a>
-																</td>
-															</tr>
-														)}
+													<When condition={ isRefreshUserWalletList }>
+														<tr>
+															<td colSpan="4" className="text-center">
+																<CircularProgress size={30} thickness={3} />
+															</td>
+														</tr>
 													</When>
 													<Otherwise>
-														<tr>
-															<td colSpan="4" className="text-center">No associated addresses found.</td>
-														</tr>
+														<Choose>
+															<When condition={ this.state.selectedWallet.Transactions &&  this.state.selectedWallet.Transactions.length > 0}>
+																{this.state.selectedWallet.Transactions.map(transaction =>
+																	<tr key={transaction.id}>
+																		<td className="mdl-data-table__cell--non-numeric">Sample Nickname</td>
+																		<td className="mdl-data-table__cell--non-numeric">{transaction.destination}</td>
+																		<td>{transaction.amount} {transaction.asset}</td>
+																		<td>
+																			<a href="#" className="action-icon"><EditorModeEdit /></a>
+																		</td>
+																	</tr>
+																)}
+															</When>
+															<Otherwise>
+																<tr>
+																	<td colSpan="4" className="text-center">No associated addresses found.</td>
+																</tr>
+															</Otherwise>
+														</Choose>
 													</Otherwise>
 												</Choose>
 												{/*<tr onClick={ this.handleRowClick.bind(this, 2) }>
