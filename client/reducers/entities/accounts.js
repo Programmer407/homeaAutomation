@@ -62,9 +62,21 @@ export default function accounts(state = {}, action) {
 			
 			return {...state, userAddressesList};
     }
+		
+		case ActionTypes.DELETE_USER_ADDRESS_SUCCESS: {
+			const {payload} = action;
+			const {userAddressesList} = payload;
+      if (!payload) {
+        throw new Error(`Can't execute ${ ActionTypes.DELETE_USER_ADDRESS_SUCCESS }. {payload} isn't available in action`)
+      }
+			
+			return {...state, userAddressesList};
+    }
 
     default: {
       return state
     }
   }
 }
+
+
