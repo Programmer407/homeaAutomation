@@ -187,7 +187,7 @@ class MyAddresses extends React.Component {
 															<td>
 																<NicknameDialog ref="dialog" handleModalOnSubmit={handleModalOnSubmit}/>								
 																<a href="#" onClick={ onRefreshAddressClick.bind(this, userAddressesListItem.id) } className="action-icon"><ActionCached /></a>
-																<a href="#" onClick={ this.triggerDialogModal.bind(this, {id: userAddressesListItem.id, address: userAddressesListItem.address, nickname: userAddressesListItem.nickName }) } className="action-icon"><EditorModeEdit /></a>
+																<a href="#" onClick={ this.triggerDialogModal.bind(this, {id: userAddressesListItem.id, address: userAddressesListItem.address, oldNickname: userAddressesListItem.nickName }) } className="action-icon"><EditorModeEdit /></a>
 																<a href="#" onClick={ onDeleteAddressClick.bind(this, userAddressesListItem.id) } className="action-icon"><ActionDelete /></a>
 															</td>
 														</tr>	

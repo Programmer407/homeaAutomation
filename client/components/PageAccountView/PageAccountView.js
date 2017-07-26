@@ -67,11 +67,11 @@ class PageAccountView extends React.Component {
 
 	handleModalOnSubmit = (value) => {
 		const { id, oldNickname } = value
-		let { nickname } = value
-		if( !nickname || !nickname.trim() === '' ) {
-			nickname = oldNickname
+		let { newNickname } = value
+		if( !newNickname || !newNickname.trim() === '' ) {
+			newNickname = oldNickname
 		}
-		this.props.dispatch(updateUserAddress(id, nickname))
+		this.props.dispatch(updateUserAddress(id, newNickname))
 	}
 
 

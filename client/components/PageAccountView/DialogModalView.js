@@ -8,7 +8,7 @@ import TextField from 'material-ui/TextField';
 export default class NicknameDialog extends React.Component {
   state = {
     open: false,
-		nicknameValue: ''
+		newNickname: ''
   };
 
 	constructor(props) {
@@ -16,25 +16,25 @@ export default class NicknameDialog extends React.Component {
 	}
 
   handleOpen = (params) => {
-		const {id, address, nickname} = params
+		const {id, address, oldNickname} = params
     this.setState({
 			id: id,
 			open: true,
 			address: address,
-			nickname: nickname
+			oldNickname: oldNickname
 		});
   };
 
   handleClose = () => {
     this.setState({
 			open: false,
-			nicknameValue: ''
+			newNickname: ''
 		});
   };
 
 	onTextChange = (event) => {
 		this.setState({
-			nicknameValue: event.target.value
+			newNickname: event.target.value
 		})
 	}
 
@@ -43,9 +43,8 @@ export default class NicknameDialog extends React.Component {
       <FlatButton
         label="Submit"
         primary
-        keyboardFocused
         onTouchTap={ this.handleClose }
-				onClick={ this.props.handleModalOnSubmit.bind(this, {id: this.state.id, nickname: this.state.nicknameValue, oldNickname: this.state.nickname}) }
+				onClick={ this.props.handleModalOnSubmit.bind(this, {id: this.state.id, newNickname: this.state.newNickname, oldNickname: this.state.oldNickname}) }
       />
     ];
 
@@ -57,11 +56,12 @@ export default class NicknameDialog extends React.Component {
 				open={ this.state.open }
 				onRequestClose={ this.handleClose }>
 
-				<TextField 
-					hintText={this.state.nickname}
+				<TextField
+					hintText={this.state.oldNickname}
 					onChange={ this.onTextChange }
-					value={ this.state.nicknameValue }
-					fullWidth />
+					value={ this.state.newNickname }
+					fullWidth
+					autoFocus />
 			</Dialog>
     );
   }
