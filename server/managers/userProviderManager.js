@@ -3,13 +3,24 @@ import UserProvider from '../models/UserProvider';
 import User from '../models/User';
 import Provider from '../models/Provider';
 import UserWallet from '../models/UserWallet';
+import Transaction from '../models/Transaction';
 
 export const findAllUserProviderList = (id:number):Object =>
   UserProvider.findAll(Object.assign({
-    include: [{
+    include: [
+      {
         model: User,
         where: { id }
-    }, {model: Provider}, { model: UserWallet, as: 'UserWallets' }]
+      }, 
+      {
+        model: Provider
+      }, 
+      { 
+        model: UserWallet, 
+        as: 'UserWallets',
+        include: [{model: Transaction, as: 'Transactions'}] 
+      }
+    ]
   }))
   .then(obj => {
     return obj

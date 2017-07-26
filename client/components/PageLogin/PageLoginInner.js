@@ -7,6 +7,7 @@ import DocumentTitle from 'react-document-title';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import CircularProgress from 'material-ui/CircularProgress';
 import QueueAnim from 'rc-queue-anim';
 
 // src
@@ -15,7 +16,8 @@ import { renderTextField } from '../../utils';
 import { renderCheckbox } from '../../utils';
 
 const PageLoginInner = (props) => {
-  const { onSubmit, renderSubmitButton, renderMessage } = props;
+  //console.log('props from inner is : ' + JSON.stringify(props))
+  const { onSubmit, renderSubmitButton, renderMessage, isLoadingLogin } = props;
 
   return (
     <div className="page-login">
@@ -43,6 +45,9 @@ const PageLoginInner = (props) => {
                       </div>
                     </fieldset>
 										<div className="card-action no-border text-right">
+                      <If condition={isLoadingLogin}>
+                        <CircularProgress size={15} thickness={2} />
+                      </If>
 											{
 												renderSubmitButton({
 													label: 'Login',
