@@ -88,6 +88,14 @@ $logo-color: #B2EBF2;
 	}
 
 	@media (min-width: 320px) and (max-width: 767px) {
+		.menu-divider {
+			background-color: $active-link-color;
+			margin-top: 20px;
+			margin-bottom: 20px;
+			overflow: hidden;
+		}
+
+
 		.navbar-nav {
 			flex-direction: column !important;
 
@@ -95,6 +103,7 @@ $logo-color: #B2EBF2;
 				padding: 15px 15px;
 			}
 		}
+
 
 		.navbar-collapse.in {
 			overflow-x: hidden;
@@ -124,8 +133,8 @@ $logo-color: #B2EBF2;
 
 		.menu-divider {
 			background-color: $active-link-color;
-			margin-top: 0px;
-			margin-bottom: 0px;
+			margin-top: 20px;
+			margin-bottom: 20px;
 			overflow: hidden;
 		}
 
