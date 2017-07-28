@@ -94,7 +94,7 @@ article.article {
 	.box {
 		.box-header {
 			padding-top: 30px;
-			font-size: 1.7em;
+			font-size: 1.6em;
 			font-weight: 400;
 			color: $heading-color;
 		}
@@ -114,6 +114,10 @@ article.article {
 
 	.mono-text {
 		font-family: 'Roboto Mono';
+	}
+
+	.btn-space {
+		margin-top: 20px;
 	}
 }
 

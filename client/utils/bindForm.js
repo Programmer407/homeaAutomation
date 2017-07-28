@@ -105,22 +105,24 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
       const { submitting } = this.props
 
       return (
-        /*
-        <RaisedButton
-          label={submitting ? labelWhenSubmitting : label}
-          secondary
-          onClick={this.handleSubmit}
-          disabled={submitting}/>
-        */
-        
-        <FlatButton
+      	<FlatButton
 					type="submit"
           label={submitting ? labelWhenSubmitting : label}
-          secondary
           onClick={this.handleSubmit}
-          disabled={submitting}/>
-        
-        // <Link to="#/" onClick={this.handleSubmit} className="color-primary">{submitting ? labelWhenSubmitting : label}</Link>
+          disabled={submitting}
+					primary/>       
+      )
+    }
+		renderRaisedSubmitButton = ({label, labelWhenSubmitting}) => {
+      const { submitting, pristine } = this.props
+
+      return (
+        <RaisedButton
+					type="submit"
+          label={submitting || !pristine ? labelWhenSubmitting : label}
+          onClick={this.handleSubmit}
+          disabled={submitting}
+					primary/>
       )
     }
     renderMessage = (msg) => {
@@ -145,6 +147,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
           {...this.props}
           {...this.state}
           onSubmit={this.handleSubmit}
+					renderRaisedSubmitButton={this.renderRaisedSubmitButton}
           renderSubmitButton={this.renderSubmitButton}
           renderMessage={this.renderMessage}/>
       )

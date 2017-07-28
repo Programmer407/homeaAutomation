@@ -6,6 +6,44 @@ import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
 import { providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet, refreshUserProviders, getUserAddressesList, addUserAddresses, refreshUserAddresses, deleteUserAddress, updateUserAddress } from "../../actions/entities/accounts"
 import PageLoading from '../PageLoading';
+import { reduxForm, reset } from 'redux-form'
+import { bindForm } from '../../utils'
+
+
+const fields = ['newAddresses']
+
+const validate = values => {
+	console.log('VALUES FROM VALIDATE: ', values)
+  let errors = {}
+  let hasErrors = false
+  if (!values.newAddresses || !values.newAddresses.trim() === '') {
+    errors.newAddresses = 'Provide at least one address.'
+    hasErrors = true
+  } else {
+		if (values.newAddresses.length > 40) {
+      errors.newAddresses = 'No address is that large. Try again?';
+      hasErrors = true;
+    }
+	}
+  return hasErrors && errors;
+}
+
+
+@reduxForm({
+	form: 'newAddressesForm',
+	fields,
+	validate,
+	touchOnBlur: false
+})
+@bindForm({
+	onSubmit: (values, dispatch, props) => {
+		console.log('VALUES FROM VALIDATE: ', values)
+		const { newAddresses } = values
+		return dispatch(addUserAddresses(newAddresses)).then(action => {
+			dispatch(reset('newAddressesForm'))
+		})
+	}
+})
 
 
 class PageAccountView extends React.Component {
@@ -14,56 +52,69 @@ class PageAccountView extends React.Component {
 		this.state = {
 			check: 1,
 			newAddressesValue: '',
-      selectedProvider: Object.assign({}, this.props.selectedProvider)
+      selectedProvider: 0
     };
   }
 
+	/* CONNECT TO WALLET OR EXCHANGE PROVIDER */
   connectProvider = (event) => {
 		event.preventDefault();
-		return this.props.dispatch(accountconnectUrl(this.state.selectedProvider))
-      .then(action => {
-        const { error, payload } = action
-        if ( !error ) {
-          var url = payload.redirecturl
-          window.location = url
+		const selectedProvider = this.state.selectedProvider;
+		if (selectedProvider !== 0) {
+			return this.props.dispatch(accountconnectUrl(selectedProvider))
+				.then(action => {
+					const { error, payload } = action
+					if ( !error ) {
+						var url = payload.redirecturl
+						window.location = url
+						return action
+					}
+				})
+				.catch(error => { 
+					console.log('error : ' + error)
+				})
+		}
+  }
+  
+	/* UPDATE PROVIDER SELECTION FROM LIST */
+  updateProviderSelection = (event, index, value) => {
+    return this.setState({selectedProvider: value});
+  }
+
+	/* DELETE USER WALLETS */
+	deleteUserWallet = (value) => {
+		this.props.dispatch(deleteWallet(value))
+	}
+
+	/* REFRESH USER WALLETS */
+	refreshUserWallets = (value) => {
+		this.props.dispatch(refreshUserProviders(value))
+		.then(action => {
+				const { error, payload } = action
+				if ( !error && payload.redirecturl ) {
+					var url = payload.redirecturl
+					window.location = url
           return action
         }
       })
       .catch(error => { 
         console.log('error : ' + error)
       })
-  }
-  
-  updateProviderSelection = (event, index, value) => {
-    return this.setState({selectedProvider: value});
-  }
-
-	deleteUserWallet = (value) => {
-		this.props.dispatch(deleteWallet(value))
 	}
 
-	refreshUserWallets = (value) => {
-		this.props.dispatch(refreshUserProviders(value))
-	}
+	
 
-	/* ADD BTC ADDRESSES */
-	addNewAddresses = () => {
-		this.props.dispatch(addUserAddresses(this.state.newAddressesValue))
-	}
 
+	/* REFRESH BTC ADDRESSES */
 	onRefreshAddressClick = (value) => {
 		this.props.dispatch(refreshUserAddresses(value))
 	}
 
+	/* DELETE BTC ADDRESS */
 	onDeleteAddressClick = (value) => {
 		this.props.dispatch(deleteUserAddress(value))
 	}
 
-	updateAddressesValue = (event) => {
-    this.setState({
-			newAddressesValue: event.target.value
-		});
-  }
 
 	handleModalOnSubmit = (value) => {
 		const { id, oldNickname } = value
@@ -197,8 +248,8 @@ class PageAccountView extends React.Component {
 
 /* redux connect() and related functions */
 function mapStateToProps(state, ownProps) {
-	let selectedProvider = {};
-	let newAddressesValue = {};
+	let selectedProvider = 0
+	let newAddressesValue = {}
 	const isRefreshUserAddressList = state.entities.accounts.refreshUserAddressList
 	const isRefreshUserWalletList = state.entities.accounts.refreshUserWalletList
 	
