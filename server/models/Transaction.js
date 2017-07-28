@@ -32,6 +32,6 @@ Transaction.belongsTo(UserWallet);
 Transaction.belongsTo(UserAddress);
 Transaction.belongsTo(User);
 UserWallet.hasMany(Transaction, {as: 'Transactions'})
-UserAddress.hasMany(Transaction, {as: 'UserAddresses'})
+UserAddress.hasMany(Transaction, {as: 'AddressTransactions'})
 
 export default Transaction

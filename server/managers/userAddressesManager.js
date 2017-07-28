@@ -1,13 +1,19 @@
 // libs
 import User from '../models/User';
 import UserAddress from '../models/UserAddress';
+import Transaction from '../models/Transaction';
 
 export const findAllUserAddresses = (id:number):Object =>
   UserAddress.findAll(Object.assign({
-    include: [{
+    include: [
+      {
         model: User,
         where: { id }
-    }]
+      },
+      {
+        model: Transaction, as: 'AddressTransactions'
+      }
+    ]
   }))
   .then(obj => {
     return obj

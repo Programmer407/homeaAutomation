@@ -30,7 +30,10 @@ export const findUserProviderByID = (id:number):Object =>
   UserProvider.findOne(Object.assign({
     where: {
       id
-    }
+    },
+    include: {
+        model: Provider
+      }
   }))
   .then(obj => {
     return obj
