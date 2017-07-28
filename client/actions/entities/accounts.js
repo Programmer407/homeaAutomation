@@ -47,7 +47,7 @@ export const COINBASE_CODE_CONNECT_SUCCESS = 'COINBASE_CODE_CONNECT_SUCCESS'
 export const COINBASE_CODE_CONNECT_FAILURE = 'COINBASE_CODE_CONNECT_FAILURE'
 
 export function authenticateCoinBaseApi(code, grant_type, client_id, client_secret) {
-  let redirect_uri = 'http://localhost/account/coinbase/callback'
+  let redirect_uri = 'http://localhost:3000/account/coinbase/callback'
   //let redirect_uri = 'http://ec2-52-53-128-32.us-west-1.compute.amazonaws.com/account/coinbase/callback'
   return {
     [CALL_API]: {
@@ -158,7 +158,7 @@ export const REFRESH_USERPROVIDERS = 'REFRESH_USERPROVIDERS'
 export const REFRESH_USERPROVIDERS_SUCCESS = 'REFRESH_USERPROVIDERS_SUCCESS'
 export const REFRESH_USERPROVIDERS_FAILURE = 'REFRESH_USERPROVIDERS_FAILURE'
 
-export function refreshUserProviders() {
+export function refreshUserProviders(userProviderId) {
   return {
     [CALL_API]: {
       types: [
@@ -166,8 +166,10 @@ export function refreshUserProviders() {
         REFRESH_USERPROVIDERS_SUCCESS,
         REFRESH_USERPROVIDERS_FAILURE
       ],
-      endpoint: `/api/accounts/refresh-userproviders`
-    }
+      endpoint: `/api/accounts/refresh-userproviders`,
+      method: 'POST'
+    },
+    payload: {userProviderId}
   }
 }
 

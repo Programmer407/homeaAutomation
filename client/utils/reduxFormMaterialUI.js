@@ -37,6 +37,23 @@ export const renderTextField = ({ input, label, autoComplete, innerRef, meta: { 
   />
 )
 
+export const renderTextArea = ({ input, label, rows, rowsMax, multiLine, autoComplete, innerRef,  meta: { touched, error }, ...custom }) => (
+  <TextField
+    floatingLabelText={label}
+    fullWidth
+		multiLine
+		rows={rows}
+		rowsMax={rowsMax}
+    errorText={touched && error}
+    ref={innerRef}
+    autoComplete={autoComplete}
+    hintStyle={{fontSize: 12}}
+    {...input}
+    {...custom}
+  />
+)
+
+
 export const renderCheckbox = ({ input, label, padding }) => (
   <Checkbox label={label}
     checked={input.value ? true : false}
