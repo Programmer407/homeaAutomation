@@ -63,10 +63,6 @@ export default class MySnackbar extends React.Component {
 	};
 
 	render() {
-		// this.showSnackbar()
-		// const { message, autoHideDuration } = this.props
-
-		// console.log('---> infoSnackbar state: ', this.state)	
 		return (
 			<Snackbar
 			

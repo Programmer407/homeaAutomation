@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import PageSystemViewInner from "./PageSystemViewInner"
 
 // src
-import { logoutWhenIdle, infoSnackbar } from '../../utils'
+import { logoutWhenIdle } from '../../utils'
 
 @logoutWhenIdle()
 class PageSystemView extends React.Component {

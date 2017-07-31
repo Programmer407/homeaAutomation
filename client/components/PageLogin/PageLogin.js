@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import PageLoginInner from './PageLoginInner'
 import PageLoading from '../PageLoading';
 import {login, confirmRegistration, resendActivation} from '../../actions/entities/users'
-import { bindForm, infoSnackbar } from '../../utils'
+import { bindForm } from '../../utils'
 
 const fields = ['email', 'password', 'rememberMe']
 
@@ -32,7 +32,6 @@ const validate = values => {
   return hasErrors && errors;
 }
 
-@infoSnackbar()
 @reduxForm({
   form: 'loginForm',
   fields,

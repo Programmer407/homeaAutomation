@@ -8,8 +8,6 @@ import IdleTimer from 'react-idle-timer'
 
 // src
 import { logout } from '../actions'
-import { infoSnackbar } from './'
-
 
 export default options => WrappedComponent => {
 	return @connect() class LogoutWhenIdle extends React.Component {
