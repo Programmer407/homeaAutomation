@@ -2,6 +2,7 @@
 import User from '../models/User';
 import UserAddress from '../models/UserAddress';
 import Transaction from '../models/Transaction';
+import AssociatedAddress from '../models/AssociatedAddress';
 
 export const findAllUserAddresses = (id:number):Object =>
   UserAddress.findAll(Object.assign({
@@ -11,7 +12,11 @@ export const findAllUserAddresses = (id:number):Object =>
         where: { id }
       },
       {
-        model: Transaction, as: 'AddressTransactions'
+        model: Transaction, 
+        as: 'AddressTransactions', 
+          include: {
+            model: AssociatedAddress
+          }
       }
     ]
   }))
