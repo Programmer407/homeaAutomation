@@ -7,13 +7,15 @@ export default function users(state = {}, action) {
     return {...state, isLoading: true}
   }
   case ActionTypes.USER_LOGIN_SUCCESS: {
-    if (!action.payload) {
+		const {payload} = action;
+		const {user} = payload;
+		if (!payload) {
       throw new Error(`Can't execute ${ ActionTypes.USER_LOGIN_SUCCESS }. {payload} isn't available in action`)
     }
 
-    const { payload: { user } } = action
-
-    return mergeNewEntities(state, [user], ENTITY_STATUS_DATA_AVAILABLE)
+		return {...state, user, isLoading: false}
+    /* const { payload: { user } } = action
+    return mergeNewEntities(state, [user], ENTITY_STATUS_DATA_AVAILABLE) */
   }
   case ActionTypes.USER_LOGIN_FAILURE: {
     return {...state, isLoading: false}

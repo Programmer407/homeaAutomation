@@ -3,7 +3,11 @@ import React from "react"
 import { connect } from "react-redux"
 import PageSystemViewInner from "./PageSystemViewInner"
 
-export default class PageSystemView extends React.Component {
+// src
+import { logoutWhenIdle, infoSnackbar } from '../../utils'
+
+@logoutWhenIdle()
+class PageSystemView extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
@@ -13,3 +17,5 @@ export default class PageSystemView extends React.Component {
     return <PageSystemViewInner {...this.props} />
   }
 }
+
+export default PageSystemView

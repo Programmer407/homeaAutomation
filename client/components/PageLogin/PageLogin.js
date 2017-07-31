@@ -5,10 +5,12 @@ import {push} from 'react-router-redux'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
 import { connect } from 'react-redux'
+
+// src 
 import PageLoginInner from './PageLoginInner'
 import PageLoading from '../PageLoading';
 import {login, confirmRegistration, resendActivation} from '../../actions/entities/users'
-import { bindForm } from '../../utils'
+import { bindForm, infoSnackbar } from '../../utils'
 
 const fields = ['email', 'password', 'rememberMe']
 
@@ -30,6 +32,7 @@ const validate = values => {
   return hasErrors && errors;
 }
 
+@infoSnackbar()
 @reduxForm({
   form: 'loginForm',
   fields,
@@ -51,12 +54,15 @@ const validate = values => {
     }) 
   }
 })
-
-
 class PageLogin extends React.Component {
   state = {
     check : 1
   }
+
+	renderSnackbarWithMessage = (message) => {
+		this.props.showSnackbar()
+		this.props.renderSnackbar({ message: message, autoHideDuration: 5000 })
+	}
 
   componentWillMount() {
     const { dispatch } = this.props
@@ -106,7 +112,8 @@ class PageLogin extends React.Component {
     if (this.state.check == 1) {
       return <PageLoading {...this.props}/>
     } else if(this.state.check == 2) {
-      return <PageLoginInner {...this.props}/>
+      return <PageLoginInner {...this.props}
+															renderSnackbarWithMessage={this.renderSnackbarWithMessage}/>
     } else {
       return <div>
             <h1>Bad Request!</h1>

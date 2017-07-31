@@ -4,7 +4,6 @@ import { Field } from 'redux-form';
 import { Link } from 'react-router-dom';
 import Paper from 'material-ui/Paper';
 import DocumentTitle from 'react-document-title';
-
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -17,9 +16,11 @@ import { renderCheckbox } from '../../utils';
 
 const PageLoginInner = (props) => {
   //console.log('props from inner is : ' + JSON.stringify(props))
-  const { onSubmit, renderSubmitButton, renderMessage, isLoadingLogin } = props;
+  const { onSubmit, renderSubmitButton, renderMessage, isLoadingLogin, renderSnackbar, message, errorMessage, renderSnackbarWithMessage } = props;
+	console.log('---> message: ', message)
+	console.log('---> errorMessage: ', errorMessage)
 
-  return (
+	return (
     <div className="page-login">
       <div className="main-body">
         <DocumentTitle title="Login - Wisdom"/>
@@ -30,9 +31,9 @@ const PageLoginInner = (props) => {
                 <div className="card-content">
                   <section className="logo text-center">
                     <h1><a href="#/">Wisdom</a></h1>
-                    {
+                    {/* {
                       renderMessage(props.message)
-                    }
+                    } */}
                   </section>
                   <form className="form-horizontal" onSubmit={onSubmit}>
                     <fieldset>
@@ -67,6 +68,13 @@ const PageLoginInner = (props) => {
           </div>
         </QueueAnim>
       </div>
+				{
+					//renderMessage(message)
+					
+					//renderMessage(message)
+				}
+			{/* <If condition={message}>
+			</If>  */}
     </div>
 /*
     <div className={`${styles.root} row`}>

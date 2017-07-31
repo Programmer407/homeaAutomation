@@ -37,14 +37,14 @@ export const renderTextField = ({ input, label, autoComplete, innerRef, meta: { 
   />
 )
 
-export const renderTextArea = ({ input, label, rows, rowsMax, multiLine, autoComplete, innerRef,  meta: { touched, error }, ...custom }) => (
+export const renderTextArea = ({ input, label, rows, rowsMax, multiLine, autoComplete, innerRef,  meta: { touched, error, submitting }, ...custom }) => (
   <TextField
     floatingLabelText={label}
     fullWidth
 		multiLine
 		rows={rows}
 		rowsMax={rowsMax}
-    errorText={touched && error}
+    errorText={submitting && error}
     ref={innerRef}
     autoComplete={autoComplete}
     hintStyle={{fontSize: 12}}

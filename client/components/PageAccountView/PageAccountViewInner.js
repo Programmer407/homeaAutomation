@@ -13,6 +13,7 @@ const PageAccountViewInner = (props) => {
 			<DocumentTitle title="Accounts" />
       <QueueAnim type="bottom" className="ui-animate">
         <div key="1"><MyAccounts {...props} /></div>
+				<div className="divider"/>
         <div key="2"><MyAddresses {...props} /></div>
       </QueueAnim>
     </section>

@@ -13,6 +13,7 @@ import IconButton from 'material-ui/IconButton'
 const MyAccountsViewInner = (props) => {
 	const { onSelectionSubmit, onSelectionChange, onDeleteClick, onRefreshClick, selectedProvider, providerList, userProviderList,
 		isRefreshUserWalletList, handleRowClick, selectedKey, selectedWallet } = props
+	const { Transactions: selectedWalletTransactions, walletName: selectedWalletName } = selectedWallet
 	const cyan500 = 'rgba(0, 188, 212, 0.6)'
 
 	return (
@@ -92,17 +93,19 @@ const MyAccountsViewInner = (props) => {
 						<div>
 							<div className="box-header box-header-primary">
 								<Choose>
-									<When condition={selectedWallet}>
-										{'Associated Addresses of ' + selectedWallet.walletName}
+									<When condition={ selectedWallet }>
+										{ 'Associated Addresses of ' + selectedWalletName }
 									</When>
 									<Otherwise>
-										{'Associated Addresses'}
+										{ 'Associated Addresses' }
 									</Otherwise>
 								</Choose>
 							</div>
 							<div className="box-body">
 								<p>These addresses were found in the transaction histories of your connected wallets.</p>
-								<AssociatedAddressesView {...props}/>
+								<AssociatedAddressesView 
+									isRefreshing={ isRefreshUserWalletList }
+									relatedTransactions={ selectedWalletTransactions } />
 							</div>
 						</div>
 					</div>

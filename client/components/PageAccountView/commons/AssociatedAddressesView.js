@@ -1,10 +1,11 @@
 import React, {PropTypes} from "react";
 import CircularProgress from 'material-ui/CircularProgress';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-
+import IconButton from 'material-ui/IconButton'
 
 const AssociatedAddressesView = (props) => {
-	const { selectedWallet, isRefreshUserWalletList } = props;
+	const { relatedTransactions, isRefreshing } = props;
+	const cyan500 = 'rgba(0, 188, 212, 0.6)'
 
 	return (
 		<div className="box box-default table-box table-responsive mdl-shadow--2dp">
@@ -19,7 +20,7 @@ const AssociatedAddressesView = (props) => {
 				</thead>
 				<tbody className="tbl-body">
 					<Choose>
-						<When condition={ isRefreshUserWalletList }>
+						<When condition={ isRefreshing }>
 							<tr>
 								<td colSpan="4" className="text-center">
 									<CircularProgress size={30} thickness={3} />
@@ -28,16 +29,27 @@ const AssociatedAddressesView = (props) => {
 						</When>
 						<Otherwise>
 							<Choose>
-								<When condition={ selectedWallet && selectedWallet.Transactions &&  selectedWallet.Transactions.length > 0}>
-									{selectedWallet.Transactions.map(transaction =>
-										<tr key={transaction.id}>
-											<td className="mdl-data-table__cell--non-numeric">Sample Nickname</td>
-											<td className="mdl-data-table__cell--non-numeric">{transaction.destination}</td>
-											<td>{transaction.amount} {transaction.asset}</td>
-											<td>
-												<a href="#" className="action-icon"><EditorModeEdit /></a>
-											</td>
-										</tr>
+								<When condition={ relatedTransactions && relatedTransactions.length > 0}>
+									{
+										relatedTransactions.map(transaction => {
+											const { id, amount, asset, destination } = transaction
+
+											return (
+												<tr key={ id }>
+													<td className="mdl-data-table__cell--non-numeric">Sample Nickname</td>
+													<td className="mdl-data-table__cell--non-numeric">{ destination }</td>
+													<td>{ amount } { asset }</td>
+													<td>
+														{/*<IconButton onClick={ triggerDialogModal.bind(this, {id, address, oldNickname: nickname }) }>
+															<EditorModeEdit color={cyan500}/> 
+														</IconButton>*/}
+														<IconButton>
+															<EditorModeEdit color={cyan500}/> 
+														</IconButton>
+													</td>
+												</tr>
+											)
+										}
 									)}
 								</When>
 								<Otherwise>
