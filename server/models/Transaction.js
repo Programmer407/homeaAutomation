@@ -6,15 +6,18 @@ import UserWallet from './UserWallet';
 import UserAddress from './UserAddress';
 import User from './User';
 import TransactionImportType from './TransactionImportType';
+import AssociatedAddress from './AssociatedAddress';
 
 const Transaction = sequelize.define(
   "transactions",
   {
+    trxId: { type: Sequelize.INTEGER, field: "trx_id" },
     destination: { type: Sequelize.STRING(128), field: "destination" },
     note: { type: Sequelize.STRING(128), field: "note" },
     amount: { type: Sequelize.STRING(128), field: "amount" },
     asset: { type: Sequelize.STRING(128), field: "asset" },
-    value: { type: Sequelize.STRING(128), field: "value" }
+    value: { type: Sequelize.STRING(128), field: "value" },
+    transactionDate: { type: Sequelize.STRING(128), field: "transaction_date" }
   },
   {
     // don't add the timestamp attributes (updatedAt, createdAt)
@@ -31,6 +34,7 @@ Transaction.belongsTo(TransactionImportType);
 Transaction.belongsTo(UserWallet);
 Transaction.belongsTo(UserAddress);
 Transaction.belongsTo(User);
+Transaction.belongsTo(AssociatedAddress)
 UserWallet.hasMany(Transaction, {as: 'Transactions'})
 UserAddress.hasMany(Transaction, {as: 'AddressTransactions'})
 

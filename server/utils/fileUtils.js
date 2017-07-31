@@ -12,7 +12,7 @@ const uploadOnS3 = (filePath, mimeType) => {
   
   const promise = q.defer()
   const extension = path.extname(filePath)
-  const s3bucket = new AWS.S3({params: {Bucket: 'giving-at-work'}})
+  const s3bucket = new AWS.S3({params: {Bucket: 'wisdom'}})
   const key = uuid.v4() + uuid.v4() + extension
   
   const params = {Key: key, ContentType: mimeType, Body: fs.createReadStream(filePath)}

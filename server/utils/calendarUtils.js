@@ -49,30 +49,3 @@ export default {
   returnIcsFile: returnIcsFile
 };
 
-/*import google from 'googleapis';
-import moment from 'moment';
-var googleCalendar = google.calendar('v3');
-const insertEventInGoogleCalendar = (auth, callback) => {
-  var event = {
-    'summary': 'Charity Event',
-    'gadget.title': 'This is title',
-    'location': '800 Howard St., San Francisco, CA 94103',
-    'description': 'Helping those who are in need',
-    'start': {
-      'dateTime': moment(),
-      'timeZone': 'America/Los_Angeles',
-    },
-    'end': {
-      'dateTime': moment().add(5, 'h'),
-      'timeZone': 'America/Los_Angeles',
-    }
-  };
-
-  googleCalendar.events.insert({
-    auth: auth,
-    calendarId: 'primary',
-    resource: event
-  },function(err, response){
-    callback(err, response);
-  });
-};*/

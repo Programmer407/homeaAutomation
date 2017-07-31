@@ -4,17 +4,15 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {push} from 'react-router-redux'
 import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
-import { providerInfo, accountconnectUrl, insertUserProvider, userProviderWallets, authenticateCoinBaseApi, getAllProviders, userProvidersList, deleteWallet, refreshUserProviders, getUserAddressesList, addUserAddresses, refreshUserAddresses, deleteUserAddress, updateUserAddress } from "../../actions/entities/accounts"
+import { providerCallback, myAccountData, accountconnectUrl, deleteWallet, refreshUserProviders, addUserAddresses, refreshUserAddresses, deleteUserAddress, updateUserAddress } from "../../actions/entities/accounts"
 import PageLoading from '../PageLoading';
 import { reduxForm, reset } from 'redux-form'
-import { bindForm } from '../../utils'
-
+import { bindForm, logoutWhenIdle } from '../../utils'
 
 const fields = ['newAddresses']
 
 const validate = values => {
-	console.log('VALUES FROM VALIDATE: ', values)
-  let errors = {}
+	let errors = {}
   let hasErrors = false
   if (!values.newAddresses || !values.newAddresses.trim() === '') {
     errors.newAddresses = 'Provide at least one address.'
@@ -28,13 +26,14 @@ const validate = values => {
   return hasErrors && errors;
 }
 
-
+@logoutWhenIdle()
 @reduxForm({
 	form: 'newAddressesForm',
 	fields,
 	validate,
 	touchOnBlur: false
 })
+
 @bindForm({
 	onSubmit: (values, dispatch, props) => {
 		console.log('VALUES FROM VALIDATE: ', values)
@@ -44,7 +43,6 @@ const validate = values => {
 		})
 	}
 })
-
 
 class PageAccountView extends React.Component {
   constructor(props) {
@@ -70,15 +68,12 @@ class PageAccountView extends React.Component {
 						return action
 					}
 				})
-				.catch(error => { 
-					console.log('error : ' + error)
-				})
 		}
   }
   
 	/* UPDATE PROVIDER SELECTION FROM LIST */
   updateProviderSelection = (event, index, value) => {
-    return this.setState({selectedProvider: value});
+    this.setState({selectedProvider: value});
   }
 
 	/* DELETE USER WALLETS */
@@ -97,13 +92,7 @@ class PageAccountView extends React.Component {
           return action
         }
       })
-      .catch(error => { 
-        console.log('error : ' + error)
-      })
 	}
-
-	
-
 
 	/* REFRESH BTC ADDRESSES */
 	onRefreshAddressClick = (value) => {
@@ -115,7 +104,6 @@ class PageAccountView extends React.Component {
 		this.props.dispatch(deleteUserAddress(value))
 	}
 
-
 	handleModalOnSubmit = (value) => {
 		const { id, oldNickname } = value
 		let { newNickname } = value
@@ -125,106 +113,44 @@ class PageAccountView extends React.Component {
 		this.props.dispatch(updateUserAddress(id, newNickname))
 	}
 
-
-  componentWillMount() {
+  componentDidMount() {
     const { dispatch } = this.props
-      
-    //console.log('componentWillMount this.props is : ' + JSON.stringify(this.props))
-    
     let providerName = this.props.match.params.providername
-    //console.log('componentWillMount providerName is : ' + providerName)
     if (providerName) {
-      dispatch(providerInfo(providerName))
+			let paramsString = this.props.location.search
+			let tokenCode = paramsString.substring(paramsString.indexOf('=')+1)
+			dispatch(providerCallback(providerName, tokenCode))
         .then(action => {
-          const { error, payload } = action
+          const { error } = action
           if ( !error ) {
-            let providerObj = payload.providerObj
-            if (providerObj.id == 1) {
-              let paramsString = this.props.location.search
-              console.log('paramsString is : ' + paramsString)
-              if (paramsString) {
-                let tokenCode = paramsString.substring(paramsString.indexOf('=')+1)
-                console.log('tokenCode is : ' + tokenCode)
-                dispatch(authenticateCoinBaseApi(tokenCode, providerObj.grantType, providerObj.clientId, providerObj.clientSecret))
-                  .then(action => {
-                    const { error, payload } = action
-                    if ( !error ) {
-                      console.log('Not errors')
-                      console.log('payload is : ' + JSON.stringify(payload))
-                      dispatch(insertUserProvider(payload.access_token, payload.refresh_token, providerObj.id))
-                        .then(action => {
-                          const { error, payload } = action
-                          if ( !error ) {
-                            console.log('Not errors 2')
-                            dispatch(userProviderWallets(payload.userProvider.id))
-                              .then(action => {
-                                const { error, payload } = action
-                                if ( !error ) {
-                                  console.log('Not errors 3')
-																	dispatch(getAllProviders())
-																		.then(action => {
-																			const { error, payload } = action
-																			if ( !error ) {
-																				console.log('not errors')
-																				dispatch(userProvidersList())
-																					.then(action => {
-																						const { error, payload } = action
-																						if ( !error ) {
-																							dispatch(getUserAddressesList())
-																								.then(action => {
-																									const { error, payload } = action
-																									if ( !error ) {
-																										this.setState({
-																											check : 2
-																										});
-																									}	
-																							});
-																						}	
-																				});
-																			}
-																		});
-                                }
-                              })
-                          }
-                        })
-                    }
-                  })
-              }
-            }
-          }
-        })
-    } else {
-			dispatch(getAllProviders())
-				.then(action => {
-					const { error, payload } = action
-					if ( !error ) {
-						console.log('not errors')
-						dispatch(userProvidersList())
+						dispatch(myAccountData())
 							.then(action => {
-								const { error, payload } = action
+								const { error } = action
 								if ( !error ) {
-									dispatch(getUserAddressesList())
-										.then(action => {
-											const { error, payload } = action
-											if ( !error ) {
-												this.setState({
-													check : 2
-												});
-											}	
+									this.setState({
+										check : 2
 									});
-								}	
+								}
+							});
+					}
+				})
+		} else {
+			dispatch(myAccountData())
+				.then(action => {
+					const { error } = action
+					if ( !error ) {
+						this.setState({
+							check : 2
 						});
 					}
 				});
 		}
-  }
+	}
 
-  
   render() {
     if (this.state.check == 1) {
 			return <PageLoading {...this.props}/>
 		} else if(this.state.check == 2) {
-			
 			return (
 				<div>
 					<PageAccountViewInner 

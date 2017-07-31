@@ -3,40 +3,16 @@ import { mergeNewEntities, ENTITY_STATUS_DATA_AVAILABLE } from '../../utils'
 
 export default function accounts(state = {}, action) {
   switch (action.type) {
-    case ActionTypes.MYACCOUNT_LIST_SUCCESS: {
-      if (!action.payload) {
-        throw new Error(`Can't execute ${ ActionTypes.MYACCOUNT_LIST_SUCCESS }. {payload} isn't available in action`)
-      }
-      const { payload: { user } } = action
-      return mergeNewEntities(state, [user], ENTITY_STATUS_DATA_AVAILABLE)
-    }
-
-		case ActionTypes.GET_ALL_PROVIDERS_SUCCESS: {
-			const {payload} = action;
-			const {providerList} = payload;
+/*****************************************myAccountData*****************************************************************/ 
+    case ActionTypes.MYACCOUNT_DATA_SUCCESS: {
+      const {payload} = action;
+      const {providerList, userProviderList, userAddressesList} = payload;
       if (!payload) {
         throw new Error(`Can't execute ${ ActionTypes.GET_ALL_PROVIDERS_SUCCESS }. {payload} isn't available in action`)
       }
-			return {...state, providerList};
+			return {...state, providerList, userProviderList, userAddressesList};
     }
 
-		case ActionTypes.USERPROVIDER_LIST_SUCCESS: {
-			const {payload} = action;
-			const {userProviderList} = payload;
-      if (!payload) {
-        throw new Error(`Can't execute ${ ActionTypes.USERPROVIDER_LIST_SUCCESS }. {payload} isn't available in action`)
-      }
-			return {...state, userProviderList};
-    }
-
-		case ActionTypes.USERADDRESSES_LIST_SUCCESS: {
-			const {payload} = action;
-			const {userAddressesList} = payload;
-      if (!payload) {
-        throw new Error(`Can't execute ${ ActionTypes.USERPROVIDER_LIST_SUCCESS }. {payload} isn't available in action`)
-      }
-			return {...state, userAddressesList};
-    }
 /*****************************************deleteWallet*****************************************************************/ 
 		case ActionTypes.DELETE_WALLET: {
 			return {...state, refreshUserWalletList: true}
@@ -60,11 +36,26 @@ export default function accounts(state = {}, action) {
 			const {payload} = action;
 			const {userProviderList} = payload;
       if (!payload) {
-        throw new Error(`Can't execute ${ ActionTypes.DELETE_WALLET_SUCCESS }. {payload} isn't available in action`)
+        throw new Error(`Can't execute ${ ActionTypes.REFRESH_USERPROVIDERS_SUCCESS }. {payload} isn't available in action`)
       }
 			return {...state, userProviderList, refreshUserWalletList: false};
     }
 		case ActionTypes.REFRESH_USERPROVIDERS_FAILURE: {
+			return {...state, refreshUserWalletList: false}
+    }
+/*****************************************updateAssociatedWalletAdd*****************************************************************/ 
+		case ActionTypes.UPDATE_ASSOCIATED_WALLETADD: {
+			return {...state, refreshUserWalletList: true}
+    }
+    case ActionTypes.UPDATE_ASSOCIATED_WALLETADD_SUCCESS: {
+			const {payload} = action;
+			const {userProviderList} = payload;
+      if (!payload) {
+        throw new Error(`Can't execute ${ ActionTypes.UPDATE_ASSOCIATED_WALLETADD_SUCCESS }. {payload} isn't available in action`)
+      }
+			return {...state, userProviderList, refreshUserWalletList: false};
+    }
+		case ActionTypes.UPDATE_ASSOCIATED_WALLETADD_FAILURE: {
 			return {...state, refreshUserWalletList: false}
     }
 /*****************************************addUserAddresses*****************************************************************/ 
@@ -125,6 +116,21 @@ export default function accounts(state = {}, action) {
 			return {...state, userAddressesList, refreshUserAddressList: false};
     }
     case ActionTypes.UPDATE_USER_ADDRESS_FAILURE: {
+			return {...state, refreshUserAddressList: false}
+    }
+/**************************************updateAssociatedMyAdd********************************************************************/     
+		case ActionTypes.UPDATE_ASSOCIATED_MYADD: {
+			return {...state, refreshUserAddressList: true}
+    }
+    case ActionTypes.UPDATE_ASSOCIATED_MYADD_SUCCESS: {
+			const {payload} = action;
+			const {userAddressesList} = payload;
+      if (!payload) {
+        throw new Error(`Can't execute ${ ActionTypes.UPDATE_ASSOCIATED_MYADD_SUCCESS }. {payload} isn't available in action`)
+      }
+			return {...state, userAddressesList, refreshUserAddressList: false};
+    }
+    case ActionTypes.UPDATE_ASSOCIATED_MYADD_FAILURE: {
 			return {...state, refreshUserAddressList: false}
     }
 /**************************************default********************************************************************/     
