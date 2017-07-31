@@ -109,10 +109,10 @@ const HeaderInner = (props) => {
 	return (
 		<Choose>
 			<When condition={ user }>
-				<PrivateHeader user={ user } onToggle expanded fluid onSelect pullRight eventKey />
+				<PrivateHeader user={ user } />
 			</When>
 			<Otherwise>
-				<PublicHeader onToggle expanded fluid onSelect pullRight eventKey/>
+				<PublicHeader />
 			</Otherwise>
 		</Choose>
 	);
