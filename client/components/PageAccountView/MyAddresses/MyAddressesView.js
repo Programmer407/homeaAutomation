@@ -5,7 +5,6 @@ import { connect } from "react-redux"
 import findIndex from 'lodash/findIndex'
 
 //src
-import NicknameDialog from '../commons/DialogModalView'
 import MyAddressesViewInner from './MyAddressesViewInner'
 
 class MyAddresses extends React.Component {
@@ -20,27 +19,20 @@ class MyAddresses extends React.Component {
 	}
 
 	handleRowClick = (value) => {
-		console.log('selectedVAL: ', value)
 		this.setState({
 			selectedKey: value,
 			selectedAddress: this.props.userAddressesList[findIndex(this.props.userAddressesList, {id: value})]
 		})
-		console.log('selectedKey: ', this.state.selectedKey, this.state.selectedAddress)
-	}
-
-	triggerDialogModal = (params) => {
-		this.refs.dialog.handleOpen(params);
 	}
 
 	render() {
 		return(
 			<div>
-				<NicknameDialog ref="dialog" handleModalOnSubmit={this.props.handleModalOnSubmit}/>								
 				<MyAddressesViewInner 
 					{...this.props}
 					{...this.state}
 					handleRowClick={ this.handleRowClick }
-					triggerDialogModal={this.triggerDialogModal} />
+				/>
 			</div>
 		)
 	}

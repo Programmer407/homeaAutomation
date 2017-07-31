@@ -12,9 +12,9 @@ const PageAccountViewInner = (props) => {
     <section className="container-fluid chapter">
 			<DocumentTitle title="Accounts" />
       <QueueAnim type="bottom" className="ui-animate">
-        <div key="1"><MyAccounts {...props} /></div>
+				<div key="1"><MyAccounts {...props} /></div>  
 				<div className="divider"/>
-        <div key="2"><MyAddresses {...props} /></div>
+				<div key="2"><MyAddresses {...props} /></div>  
       </QueueAnim>
     </section>
   )
@@ -26,7 +26,6 @@ PageAccountViewInner.propTypes={
 	userAddressesList: PropTypes.array,
 	onSelectionChange: React.PropTypes.func.isRequired,
 	onSelectionSubmit: React.PropTypes.func.isRequired,
-	// updateAddressesValue: React.PropTypes.func.isRequired,
 	onRefreshAddressClick: React.PropTypes.func.isRequired,
 	onDeleteAddressClick: React.PropTypes.func.isRequired
 };

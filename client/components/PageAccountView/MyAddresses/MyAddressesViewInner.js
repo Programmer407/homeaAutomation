@@ -15,7 +15,7 @@ import AssociatedAddressesView from '../commons/AssociatedAddressesView'
 
 
 const MyAddressesViewInner = (props) => {
-	const { userAddressesList, onAddAddressesClick, onRefreshAddressClick, onDeleteAddressClick, handleModalOnSubmit, triggerDialogModal, isRefreshUserAddressList, onSubmit, renderRaisedSubmitButton, renderMessage, handleRowClick, selectedKey, selectedAddress } = props
+	const { userAddressesList, onAddAddressesClick, onRefreshAddressClick, onDeleteAddressClick, handleAddressNicknameChange, triggerDialogModal, isRefreshUserAddressList, onSubmit, renderRaisedSubmitButton, renderMessage, handleRowClick, selectedKey, selectedAddress } = props
 	const { nickName: selectedAddressNickname, AddressTransactions: selectedAddressTransactions } = selectedAddress
 	const cyan500 = 'rgba(0,188,212,0.6)'
 
@@ -66,7 +66,7 @@ const MyAddressesViewInner = (props) => {
 																					<ActionCached color={cyan500}/> 
 																				</IconButton>
 
-																				<IconButton onClick={ triggerDialogModal.bind(this, {id, address, oldNickname: nickname }) }>
+																				<IconButton onClick={ triggerDialogModal.bind(this, {id, address, oldNickname: nickname, type: 'address' }) }>
 																					<EditorModeEdit color={cyan500}/> 
 																				</IconButton>
 																				
@@ -107,7 +107,9 @@ const MyAddressesViewInner = (props) => {
 								<p>These addresses were found in the transaction histories of the addresses you manually added.</p>
 								<AssociatedAddressesView
 									isRefreshing={ isRefreshUserAddressList }
-									relatedTransactions={ selectedAddressTransactions } />
+									relatedTransactions={ selectedAddressTransactions }
+									triggerDialogModal={ triggerDialogModal }
+									type={ 'addressAssocs' }/>
 							</div>
 						</div>
 					</div>
@@ -128,7 +130,6 @@ const MyAddressesViewInner = (props) => {
 										})
 									}
 								</div>
-								{/*<RaisedButton label="Add Addresses" onClick={ onAddAddressesClick } primary />*/}
 							</form>
 						</div>
 					</div>

@@ -16,12 +16,13 @@ export default class NicknameDialog extends React.Component {
 	}
 
   handleOpen = (params) => {
-		const {id, address, oldNickname} = params
+		const {id, address, oldNickname, type} = params
     this.setState({
-			id: id,
+			id,
 			open: true,
-			address: address,
-			oldNickname: oldNickname
+			address,
+			oldNickname,
+			type
 		});
   };
 
@@ -38,20 +39,58 @@ export default class NicknameDialog extends React.Component {
 		})
 	}
 
+	chooseAction = () => {
+		const { type } = this.state
+
+		if (type == 'address') 
+			return 0
+		else if (type == 'addressAssocs')
+			return 1
+		else
+			return 2
+	}
+
   render() {
 		const actions = [
       <FlatButton
         label="Submit"
         primary
         onTouchTap={ this.handleClose }
-				onClick={ this.props.handleModalOnSubmit.bind(this, {id: this.state.id, newNickname: this.state.newNickname, oldNickname: this.state.oldNickname}) }
-      />
+				onClick={ this.props.handleAddressNicknameChange.bind(this, {
+					id: this.state.id, 
+					newNickname: this.state.newNickname, 
+					oldNickname: this.state.oldNickname
+					}
+				)}
+      />, 
+      <FlatButton
+        label="Submit"
+        primary
+        onTouchTap={ this.handleClose }
+				onClick={ this.props.handleAssocAddressNicknameChange.bind(this, {
+					id: this.state.id, 
+					newNickname: this.state.newNickname, 
+					oldNickname: this.state.oldNickname
+					}
+				)}
+      />, 
+      <FlatButton
+        label="Submit"
+        primary
+        onTouchTap={ this.handleClose }
+				onClick={ this.props.handleWalletAssocAddressNicknameChange.bind(this, {
+					id: this.state.id,
+					newNickname: this.state.newNickname,
+					oldNickname: this.state.oldNickname
+					}
+				)}
+      /> 
     ];
 
     return (
 			<Dialog
 				title={'Enter nickname for ' + this.state.address}	
-				actions={ actions }
+				actions={ actions[this.chooseAction()] }
 				modal={ false }
 				open={ this.state.open }
 				onRequestClose={ this.handleClose }>

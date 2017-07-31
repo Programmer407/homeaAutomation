@@ -3,8 +3,9 @@ import QueueAnim from 'rc-queue-anim';
 import { connect } from "react-redux"
 import DocumentTitle from "react-document-title";
 import findIndex from 'lodash/findIndex'
-import MyAccountsViewInner from './MyAccountsViewInner'
 
+// src
+import MyAccountsViewInner from './MyAccountsViewInner'
 
 class MyAccounts extends React.Component {
 	constructor(props) {
@@ -26,11 +27,13 @@ class MyAccounts extends React.Component {
 
 	render() {
 		return (
-			<MyAccountsViewInner
-				handleRowClick={ this.handleRowClick }
-				{...this.props}
-				{...this.state}
-			/>
+			<div>
+				<MyAccountsViewInner
+					{...this.props}
+					{...this.state}
+					handleRowClick={ this.handleRowClick }
+				/>
+			</div>
 		)
 	}
 }

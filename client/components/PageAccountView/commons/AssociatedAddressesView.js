@@ -4,7 +4,7 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import IconButton from 'material-ui/IconButton'
 
 const AssociatedAddressesView = (props) => {
-	const { relatedTransactions, isRefreshing } = props;
+	const { relatedTransactions, isRefreshing, triggerDialogModal, type } = props;
 	const cyan500 = 'rgba(0, 188, 212, 0.6)'
 
 	return (
@@ -14,7 +14,7 @@ const AssociatedAddressesView = (props) => {
 					<tr>
 						<th className="mdl-data-table__cell--non-numeric">Nickname</th>
 						<th className="mdl-data-table__cell--non-numeric">Address</th>
-						<th>Balance</th>
+						{/* <th>Balance</th> */}
 						<th></th>
 					</tr>
 				</thead>
@@ -32,18 +32,15 @@ const AssociatedAddressesView = (props) => {
 								<When condition={ relatedTransactions && relatedTransactions.length > 0}>
 									{
 										relatedTransactions.map(transaction => {
-											const { id, amount, asset, destination } = transaction
+											const { id, address, nickName } = transaction.associatedaddress
 
 											return (
 												<tr key={ id }>
-													<td className="mdl-data-table__cell--non-numeric">Sample Nickname</td>
-													<td className="mdl-data-table__cell--non-numeric">{ destination }</td>
-													<td>{ amount } { asset }</td>
+													<td className="mdl-data-table__cell--non-numeric">{ nickName }</td>
+													<td className="mdl-data-table__cell--non-numeric">{ address }</td>
+													{/* <td>{ amount } { asset }</td> */}
 													<td>
-														{/*<IconButton onClick={ triggerDialogModal.bind(this, {id, address, oldNickname: nickname }) }>
-															<EditorModeEdit color={cyan500}/> 
-														</IconButton>*/}
-														<IconButton>
+														<IconButton onClick={ triggerDialogModal.bind(this, { id, address, oldNickname: nickName, type }) }>
 															<EditorModeEdit color={cyan500}/> 
 														</IconButton>
 													</td>

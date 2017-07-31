@@ -4,9 +4,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {push} from 'react-router-redux'
 import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
-import { providerCallback, myAccountData, accountconnectUrl, deleteWallet, refreshUserProviders, addUserAddresses, refreshUserAddresses, deleteUserAddress, updateUserAddress } from "../../actions/entities/accounts"
+import { providerCallback, myAccountData, accountconnectUrl, deleteWallet, refreshUserProviders, addUserAddresses, refreshUserAddresses, deleteUserAddress, updateUserAddress, updateAssociatedMyAdd, updateAssociatedWalletAdd } from "../../actions/entities/accounts"
 import PageLoading from '../PageLoading';
 import { reduxForm, reset } from 'redux-form'
+
+// src
+import NicknameDialog from './commons/DialogModalView'
 import { bindForm, logoutWhenIdle } from '../../utils'
 
 const fields = ['newAddresses']
@@ -104,7 +107,8 @@ class PageAccountView extends React.Component {
 		this.props.dispatch(deleteUserAddress(value))
 	}
 
-	handleModalOnSubmit = (value) => {
+	/* EDIT ADDRESS NICKNAME, NOT ASSOCIATED ADDRESS NICKNAME */
+	handleAddressNicknameChange = (value) => {
 		const { id, oldNickname } = value
 		let { newNickname } = value
 		if( !newNickname || !newNickname.trim() === '' ) {
@@ -112,6 +116,28 @@ class PageAccountView extends React.Component {
 		}
 		this.props.dispatch(updateUserAddress(id, newNickname))
 	}
+	
+	/* EDIT ASSOCIATED ADDRESS NICKNAME, NOT MY ADDRESS NICKNAME */
+	handleAssocAddressNicknameChange = (value) => {
+		const { id, oldNickname } = value
+		let { newNickname } = value
+		if( !newNickname || !newNickname.trim() === '' ) {
+			newNickname = oldNickname
+		}
+		this.props.dispatch(updateAssociatedMyAdd(id, newNickname))
+	}
+	
+	/* EDIT ASSOCIATED ADDRESS OF WALLET NICKNAME */
+	handleWalletAssocAddressNicknameChange = (value) => {
+		const { id, oldNickname } = value
+		let { newNickname } = value
+		if( !newNickname || !newNickname.trim() === '' ) {
+			newNickname = oldNickname
+		}
+		this.props.dispatch(updateAssociatedWalletAdd(id, newNickname))
+	}
+
+
 
   componentDidMount() {
     const { dispatch } = this.props
@@ -147,22 +173,34 @@ class PageAccountView extends React.Component {
 		}
 	}
 
+	triggerDialogModal = (params) => {
+		this.refs.dialog.handleOpen(params);
+	}
+
   render() {
     if (this.state.check == 1) {
 			return <PageLoading {...this.props}/>
 		} else if(this.state.check == 2) {
 			return (
 				<div>
+					<NicknameDialog 
+						ref="dialog"
+						handleAddressNicknameChange={ this.handleAddressNicknameChange }
+						handleAssocAddressNicknameChange={ this.handleAssocAddressNicknameChange }
+						handleWalletAssocAddressNicknameChange={ this.handleWalletAssocAddressNicknameChange }
+					/>	
 					<PageAccountViewInner 
 						onSelectionChange={ this.updateProviderSelection }
 						onDeleteClick={this.deleteUserWallet}
 						onRefreshClick={this.refreshUserWallets}
 						onSelectionSubmit={ this.connectProvider }
-						onAddAddressesClick={ this.addNewAddresses }
 						updateAddressesValue={ this.updateAddressesValue }
 						onRefreshAddressClick={ this.onRefreshAddressClick }
 						onDeleteAddressClick={ this.onDeleteAddressClick }
-						handleModalOnSubmit={this.handleModalOnSubmit}
+						handleAddressNicknameChange={this.handleAddressNicknameChange}
+						handleAssocAddressNicknameChange={this.handleAssocAddressNicknameChange}
+						handleWalletAssocAddressNicknameChange={this.handleWalletAssocAddressNicknameChange}
+						triggerDialogModal={ this.triggerDialogModal }
 						{...this.props}
 						{...this.state}
 					/>
