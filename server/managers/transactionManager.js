@@ -10,3 +10,19 @@ export const findTransactionsById = (id:number):Object =>
   .then(obj => {
     return obj
   })
+
+export const findTransactionByTrxId = (trxId:number):Object =>
+  Transaction.findOne(Object.assign({
+    where: {
+      trxId
+    }
+  }))
+  .then(obj => {
+    return obj
+  })
+
+export const updateTransaction = (transactionObj): Promise<any> =>
+  transactionObj.save()
+  .then(obj => {
+    return obj
+  })

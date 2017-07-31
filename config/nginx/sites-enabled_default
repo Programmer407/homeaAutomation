@@ -1,7 +1,7 @@
 server {
     listen 80;
 
-    server_name givingat.work;
+    server_name wisdom.com;
 
     location / {
         proxy_pass http://localhost:3000;
