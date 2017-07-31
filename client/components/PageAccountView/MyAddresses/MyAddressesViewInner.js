@@ -17,8 +17,6 @@ import AssociatedAddressesView from '../commons/AssociatedAddressesView'
 const MyAddressesViewInner = (props) => {
 	const { userAddressesList, onAddAddressesClick, onRefreshAddressClick, onDeleteAddressClick, handleModalOnSubmit, triggerDialogModal, isRefreshUserAddressList, onSubmit, renderRaisedSubmitButton, renderMessage, handleRowClick, selectedKey, selectedAddress } = props
 	const { nickName: selectedAddressNickname, AddressTransactions: selectedAddressTransactions } = selectedAddress
-	console.log('userAddressesList: ', userAddressesList)
-
 	const cyan500 = 'rgba(0,188,212,0.6)'
 
 	return (

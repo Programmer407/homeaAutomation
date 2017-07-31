@@ -119,7 +119,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
       return (
         <RaisedButton
 					type="submit"
-          label={submitting || !pristine ? labelWhenSubmitting : label}
+          label={submitting ? labelWhenSubmitting : label}
           onClick={this.handleSubmit}
           disabled={submitting}
 					primary/>

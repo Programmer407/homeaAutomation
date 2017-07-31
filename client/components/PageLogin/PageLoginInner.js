@@ -31,9 +31,9 @@ const PageLoginInner = (props) => {
                 <div className="card-content">
                   <section className="logo text-center">
                     <h1><a href="#/">Wisdom</a></h1>
-                    {/* {
-                      renderMessage(props.message)
-                    } */}
+                    {
+											renderMessage(props.message)
+										} 
                   </section>
                   <form className="form-horizontal" onSubmit={onSubmit}>
                     <fieldset>
@@ -68,13 +68,6 @@ const PageLoginInner = (props) => {
           </div>
         </QueueAnim>
       </div>
-				{
-					//renderMessage(message)
-					
-					//renderMessage(message)
-				}
-			{/* <If condition={message}>
-			</If>  */}
     </div>
 /*
     <div className={`${styles.root} row`}>
