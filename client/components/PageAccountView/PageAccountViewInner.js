@@ -12,9 +12,11 @@ const PageAccountViewInner = (props) => {
     <section className="container-fluid chapter">
 			<DocumentTitle title="Accounts" />
       <QueueAnim type="bottom" className="ui-animate">
-				<div key="1"><MyAccounts {...props} /></div>  
-				<div className="divider"/>
-				<div key="2"><MyAddresses {...props} /></div>  
+				<article className="article">
+					<div key="1"><MyAccounts {...props} /></div>  
+					<div className="divider"/>
+					<div key="2"><MyAddresses {...props} /></div>  
+				</article>
       </QueueAnim>
     </section>
   )

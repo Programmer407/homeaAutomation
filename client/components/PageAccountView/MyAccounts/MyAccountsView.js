@@ -18,6 +18,17 @@ class MyAccounts extends React.Component {
 		}
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if (nextProps != this.props) {
+			if (nextProps.userProviderList && nextProps.userProviderList[0] && nextProps.userProviderList[0].UserWallets.length > 0) {
+				this.state = {
+					selectedKey: nextProps.userProviderList[0].UserWallets[0].id,
+					selectedWallet: nextProps.userProviderList[0].UserWallets[0]
+				}
+			}
+		}
+	}
+
 	handleRowClick = (value) => {
 		this.setState({
 			selectedKey: value,

@@ -17,7 +17,7 @@ const MyAccountsViewInner = (props) => {
 	const cyan500 = 'rgba(0, 188, 212, 0.6)'
 
 	return (
-		<article className="article">
+		<div>
 			<h2 className="article-title">Wallets</h2>
 			<div className="row">
 				<div className="col-lg-8 ">
@@ -138,7 +138,7 @@ const MyAccountsViewInner = (props) => {
 					</div>
 				</div>
 			</div>
-		</article>
+		</div>
 	)
 }
 

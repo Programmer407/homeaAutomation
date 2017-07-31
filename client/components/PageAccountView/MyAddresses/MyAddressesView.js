@@ -17,6 +17,17 @@ class MyAddresses extends React.Component {
 			}
 		}
 	}
+	
+	componentWillReceiveProps(nextProps) {
+		if (nextProps != this.props) {
+			if (nextProps.userAddressesList && nextProps.userAddressesList[0].id) {
+				this.state = {
+					selectedKey: nextProps.userAddressesList[0].id,
+					selectedAddress: nextProps.userAddressesList[0]
+				}
+			}
+		}
+	}
 
 	handleRowClick = (value) => {
 		this.setState({

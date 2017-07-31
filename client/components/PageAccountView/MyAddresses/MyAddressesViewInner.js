@@ -20,7 +20,7 @@ const MyAddressesViewInner = (props) => {
 	const cyan500 = 'rgba(0,188,212,0.6)'
 
 	return (
-		<article className="article">
+		<div className="border-top">
 			<h2 className="article-title">Addresses</h2>
 			
 			<div className="row">
@@ -135,7 +135,7 @@ const MyAddressesViewInner = (props) => {
 					</div>
 				</div>
 			</div>
-		</article>
+		</div>
 	)
 }
 
