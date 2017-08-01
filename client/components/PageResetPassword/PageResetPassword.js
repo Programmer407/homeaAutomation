@@ -57,7 +57,7 @@ export default class PageResetPassword extends React.Component {
     check : 1
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { dispatch } = this.props
 
     let token = this.props.match.params.usertoken
