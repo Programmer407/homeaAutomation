@@ -32,20 +32,22 @@ const AssociatedAddressesView = (props) => {
 								<When condition={ relatedTransactions && relatedTransactions.length > 0}>
 									{
 										relatedTransactions.map(transaction => {
-											const { id, address, nickName } = transaction.associatedaddress
+											if( transaction.associatedaddress ) {
+												const { id, address, nickName } = transaction.associatedaddress
 
-											return (
-												<tr key={ id }>
-													<td className="mdl-data-table__cell--non-numeric">{ nickName }</td>
-													<td className="mdl-data-table__cell--non-numeric">{ address }</td>
-													{/* <td>{ amount } { asset }</td> */}
-													<td>
-														<IconButton onClick={ triggerDialogModal.bind(this, { id, address, oldNickname: nickName, type }) }>
-															<EditorModeEdit color={cyan500}/> 
-														</IconButton>
-													</td>
-												</tr>
-											)
+												return (
+													<tr key={ id }>
+														<td className="mdl-data-table__cell--non-numeric">{ nickName }</td>
+														<td className="mdl-data-table__cell--non-numeric">{ address }</td>
+														{/* <td>{ amount } { asset }</td> */}
+														<td>
+															<IconButton onClick={ triggerDialogModal.bind(this, { id, address, oldNickname: nickName, type }) }>
+																<EditorModeEdit color={cyan500}/> 
+															</IconButton>
+														</td>
+													</tr>
+												)
+											}
 										}
 									)}
 								</When>

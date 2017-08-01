@@ -8,6 +8,5 @@ export const findRoleById = (id): Promise<any> =>
     }
   }))
   .then(obj => {
-    console.log('obj : ' + obj)
     return obj
   })
