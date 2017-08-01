@@ -1,1 +1,1 @@
-export default from './MySnackbar.js';
+export default from './MySnackbar';
