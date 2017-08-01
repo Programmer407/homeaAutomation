@@ -8,6 +8,5 @@ export const findTimeZoneById = (id): Promise<any> =>
     }
   }))
   .then(obj => {
-    console.log('obj : ' + obj)
     return obj
   })

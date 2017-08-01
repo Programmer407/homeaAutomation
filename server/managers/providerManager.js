@@ -14,7 +14,6 @@ export const findProviderByID = (id:number):Object =>
 export const findAllProviderList = (): Promise<any> =>
   Provider.findAll()
   .then(obj => {
-    console.log('obj : ' + obj)
     return obj
   })
 
