@@ -16,7 +16,7 @@ import { renderCheckbox } from '../../utils';
 
 const PageLoginInner = (props) => {
   //console.log('props from inner is : ' + JSON.stringify(props))
-  const { onSubmit, renderSubmitButton, renderMessage, isLoadingLogin, renderSnackbar, message, errorMessage, renderSnackbarWithMessage } = props;
+  const { onSubmit, renderSubmitButton, renderMessage, isLoadingLogin, message, errorMessage } = props;
 	console.log('---> message: ', message)
 	console.log('---> errorMessage: ', errorMessage)
 
