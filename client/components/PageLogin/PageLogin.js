@@ -63,7 +63,7 @@ class PageLogin extends React.Component {
 		this.props.renderSnackbar({ message: message, autoHideDuration: 5000 })
 	}
 
-  componentWillMount() {
+  componentDidMount() {
     const { dispatch } = this.props
     
     let token = this.props.match.params.usertoken
