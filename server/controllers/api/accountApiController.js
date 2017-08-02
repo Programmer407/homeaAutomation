@@ -350,16 +350,16 @@ router.post('/api/accounts/refresh-userproviders', (req, res) => {
                                                                             userWallet.walletType = acct.type
                                                                             userWallet.balance = acct.balance.amount
                                                                             userWallet.currency = acct.currency.code
-                                                                            callback(null, userWallet);
+                                                                            callback(null, userWallet, acct);
                                                                         } else {
                                                                             userWallet = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code})
                                                                             userWallet.setUserprovider(userProviderObj, {save: false})
-                                                                            callback(null, userWallet);
+                                                                            callback(null, userWallet, acct);
                                                                         }
                                                                     })
                                                             }
                                                         ],
-                                                        function(err, userWallet) {
+                                                        function(err, userWallet, acct) {
                                                             updateUserWallet(userWallet)
                                                                 .then(updatedUserWallet => {
                                                                     //if (i == accounts.length-1){
@@ -372,6 +372,28 @@ router.post('/api/accounts/refresh-userproviders', (req, res) => {
                                                                         console.log('else called.')
                                                                         nextCallback();
                                                                     }
+                                                                    /*acct.getTransactions({}, function(err2, txs) {
+                                                                        if (err2) {
+                                                                            console.log('err2 : ' + err2)
+                                                                        } else {
+                                                                            //console.log('transactions are : ' + txs);
+                                                                            async.eachOfSeries(txs, function(trans, key1, transCallback) {
+                                                                                console.log('Each Transaction : ' + trans)
+                                                                                if (key1 == txs.length) {
+                                                                                    if (key == accounts.length-1){
+                                                                                        console.log('if called.')
+                                                                                        callback(null, 'some parameter');
+                                                                                    } else {
+                                                                                        console.log('else called.')
+                                                                                        nextCallback();
+                                                                                    }
+                                                                                } else {
+                                                                                    transCallback()
+                                                                                }
+                                                                            })
+                                                                            
+                                                                        }
+                                                                    });*/
                                                                 })
                                                         })
                                                     })
@@ -404,7 +426,6 @@ router.post('/api/accounts/refresh-userproviders', (req, res) => {
                     async.waterfall([
                         function(callback) {
                             async.eachOfSeries(accounts, function(acct, key, nextCallback) {
-                            //accounts.forEach(function(acct, i) {
                                 async.waterfall([
                                     function(callback) {
                                         findUserWalletByWalletId(acct.id)
@@ -414,16 +435,16 @@ router.post('/api/accounts/refresh-userproviders', (req, res) => {
                                                     userWallet.walletType = acct.type
                                                     userWallet.balance = acct.balance.amount
                                                     userWallet.currency = acct.currency.code
-                                                    callback(null, userWallet);
+                                                    callback(null, userWallet, acct);
                                                 } else {
                                                     userWallet = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code})
                                                     userWallet.setUserprovider(userProviderObj, {save: false})
-                                                    callback(null, userWallet);
+                                                    callback(null, userWallet, acct);
                                                 }
                                             })
                                     }
                                 ],
-                                function(err, userWallet) {
+                                function(err, userWallet, acct) {
                                     updateUserWallet(userWallet)
                                         .then(updatedUserWallet => {
                                             //if (i == accounts.length-1){
@@ -436,6 +457,29 @@ router.post('/api/accounts/refresh-userproviders', (req, res) => {
                                                 console.log('else called.')
                                                 nextCallback();
                                             }
+                                            /*acct.getTransactions({}, function(err2, txs) {
+                                                if (err2) {
+                                                    console.log('err2 : ' + err2)
+                                                } else {
+                                                    //console.log('transactions are : ' + txs);
+                                                    async.eachOfSeries(txs, function(trans, key1, transCallback) {
+                                                        console.log('Each Transaction : ' + trans)
+                                                        if (key1 == txs.length-1) {
+                                                            console.log('outer if called.')
+                                                            if (key == accounts.length-1){
+                                                                console.log('if called.')
+                                                                callback(null, 'some parameter');
+                                                            } else {
+                                                                console.log('else called.')
+                                                                nextCallback();
+                                                            }
+                                                        } else {
+                                                            console.log('outer else called.')
+                                                            transCallback()
+                                                        }
+                                                    })
+                                                }
+                                            });*/
                                         })
                                 })
                             })
