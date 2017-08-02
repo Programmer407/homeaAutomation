@@ -20,7 +20,7 @@ class MyAddresses extends React.Component {
 		}
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
+	componentWillReceiveProps(nextProps) {
 		if (!isNil(this.state)) {
 			const { selectedKey, selectedAddress } = this.state;
 			const { userAddressesList } = nextProps

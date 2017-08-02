@@ -43,7 +43,7 @@ const validate = values => {
   return hasErrors && errors;
 }
 
-@logoutWhenIdle()
+// @logoutWhenIdle()
 @reduxForm({
 	form: 'newAddressesForm',
 	fields,

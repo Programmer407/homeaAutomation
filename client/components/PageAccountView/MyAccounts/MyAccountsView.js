@@ -20,7 +20,7 @@ class MyAccounts extends React.Component {
 		}
 	}
 
-	shouldComponentUpdate(nextProps, nextState) {
+	componentWillReceiveProps(nextProps) {
 		if (!isNil(this.state)) {
 			const { selectedKey, selectedWallet } = this.state;
 			const { userProviderList } = nextProps
@@ -45,6 +45,7 @@ class MyAccounts extends React.Component {
 				return true;
 			}
 		}
+		return true
 	}
 
 	handleRowClick = (value) => {

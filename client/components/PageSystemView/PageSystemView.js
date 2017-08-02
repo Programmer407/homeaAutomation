@@ -8,7 +8,7 @@ import PageSystemViewInner from "./PageSystemViewInner"
 import { logoutWhenIdle } from '../../utils'
 
 @reduxForm()
-@logoutWhenIdle()
+// @logoutWhenIdle()
 class PageSystemView extends React.Component {
   constructor(props) {
     super(props)
