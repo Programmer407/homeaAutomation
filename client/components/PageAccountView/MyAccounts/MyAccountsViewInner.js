@@ -1,3 +1,4 @@
+// libs
 import React from 'react';
 import CircularProgress from 'material-ui/CircularProgress'
 import ActionCached from 'material-ui/svg-icons/action/cached'
@@ -6,9 +7,12 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
-import AssociatedAddressesView from '../commons/AssociatedAddressesView'
 import IconButton from 'material-ui/IconButton'
+import moment from 'moment'
+import isUndefined from 'lodash/isUndefined'
 
+// src
+import AssociatedAddressesView from '../commons/AssociatedAddressesView'
 
 const MyAccountsViewInner = (props) => {
 	const { onSelectionSubmit, onSelectionChange, onDeleteClick, onRefreshClick, selectedProvider, providerList, userProviderList,
@@ -32,7 +36,7 @@ const MyAccountsViewInner = (props) => {
 											<tr>
 												<th className="mdl-data-table__cell--non-numeric">Wallet</th>
 												<th className="mdl-data-table__cell--non-numeric">Provider</th>
-												<th>Balance</th>
+												<th className="mdl-data-table__cell--non-numeric">Balance</th>
 												<th></th>
 											</tr>
 										</thead>
@@ -51,7 +55,7 @@ const MyAccountsViewInner = (props) => {
 															{
 																userProviderList.map(userProviderListItem =>
 																userProviderListItem.UserWallets.map(userWallet => {
-																	const { id, walletId, walletName, balance, currency } = userWallet
+																	const { id, walletId, walletName, balance, currency, updated_at } = userWallet
 																	const { id: userProviderId, provider } = userProviderListItem
 
 																	return(
@@ -61,7 +65,10 @@ const MyAccountsViewInner = (props) => {
 																				<span className="secondary-text">{ walletId }</span>
 																			</td>
 																			<td className="mdl-data-table__cell--non-numeric">{ provider.displayName }</td>
-																			<td>{ balance } { currency }</td>
+																			<td className="mdl-data-table__cell--non-numeric">
+																				{ balance } { currency } <br/>
+																				<span className="secondary-text">{ moment(updated_at).fromNow() }</span>
+																			</td>
 																			<td>
 																					<IconButton onClick={ onRefreshClick.bind(this, userProviderId) }>
 																						<ActionCached color={cyan500}/> 
@@ -93,11 +100,11 @@ const MyAccountsViewInner = (props) => {
 						<div>
 							<div className="box-header box-header-primary">
 								<Choose>
-									<When condition={ selectedWallet }>
-										{ 'Associated Addresses of ' + selectedWalletName }
+									<When condition={ isUndefined(selectedWalletName) }>
+										{ 'Associated Addresses' }
 									</When>
 									<Otherwise>
-										{ 'Associated Addresses' }
+										{ 'Associated Addresses of ' + selectedWalletName }
 									</Otherwise>
 								</Choose>
 							</div>

@@ -44,7 +44,7 @@ export const renderTextArea = ({ input, label, rows, rowsMax, multiLine, autoCom
 		multiLine
 		rows={rows}
 		rowsMax={rowsMax}
-    errorText={submitting && error}
+    errorText={touched && error}
     ref={innerRef}
     autoComplete={autoComplete}
     hintStyle={{fontSize: 12}}

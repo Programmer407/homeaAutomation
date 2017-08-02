@@ -6,7 +6,9 @@ import { connect } from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
 import { providerCallback, myAccountData, accountconnectUrl, deleteWallet, refreshUserProviders, addUserAddresses, refreshUserAddresses, deleteUserAddress, updateUserAddress, updateAssociatedMyAdd, updateAssociatedWalletAdd } from "../../actions/entities/accounts"
 import PageLoading from '../PageLoading';
-import { reduxForm, reset } from 'redux-form'
+import { reduxForm } from 'redux-form'
+import split from 'lodash/split'
+import uniq from 'lodash/uniq'
 
 // src
 import NicknameDialog from './commons/DialogModalView'
@@ -16,16 +18,28 @@ const fields = ['newAddresses']
 
 const validate = values => {
 	let errors = {}
-  let hasErrors = false
-  if (!values.newAddresses || !values.newAddresses.trim() === '') {
-    errors.newAddresses = 'Provide at least one address.'
-    hasErrors = true
-  } else {
-		if (values.newAddresses.length > 40) {
-      errors.newAddresses = 'No address is that large. Try again?';
-      hasErrors = true;
-    }
+	let hasErrors = false
+	const { newAddresses } = values
+	const newAddressesArr = split(newAddresses, '\n')
+	const uniqAddressesArr = uniq(newAddressesArr)
+	
+	if (!newAddresses || !newAddresses.trim() === '') {
+		errors.newAddresses = 'Provide at least one address.'
+		hasErrors = true
 	}
+
+	if (newAddressesArr.length != uniqAddressesArr.length) {
+		errors.newAddresses = 'Provide distinct addresses.'
+		hasErrors = true
+	}
+
+	newAddressesArr.map(newAddress => {
+		if (newAddress.length > 50) {
+			errors.newAddresses = 'No address is that large. Try again?';
+			hasErrors = true;
+		}
+	})
+
   return hasErrors && errors;
 }
 
@@ -39,17 +53,18 @@ const validate = values => {
 
 @bindForm({
 	onSubmit: (values, dispatch, props) => {
-		console.log('VALUES FROM VALIDATE: ', values)
-		const { newAddresses } = values
-		return dispatch(addUserAddresses(newAddresses)).then(action => {
-			dispatch(reset('newAddressesForm'))
+		const newAddressesArr = split(values.newAddresses, '\n')
+
+		return dispatch(addUserAddresses(newAddressesArr)).then(() => {
+			dispatch(props.reset('newAddressesForm'))
+			dispatch(props.untouch('newAddressesForm', ...fields))
 		})
 	}
 })
 
 class PageAccountView extends React.Component {
   constructor(props) {
-    super(props);
+		super(props);
 		this.state = {
 			check: 1,
 			newAddressesValue: '',

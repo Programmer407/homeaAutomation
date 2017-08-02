@@ -74,7 +74,7 @@ const PrivateHeader = React.createClass ({
 								className="my-navbar collapse-early">
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="some url">Wisdom</Link>
+              <Link to="/">Wisdom</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
