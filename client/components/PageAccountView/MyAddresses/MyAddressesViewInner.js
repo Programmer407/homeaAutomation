@@ -8,11 +8,10 @@ import NicknameDialog from '../commons/DialogModalView'
 import { Field } from 'redux-form'
 import { renderTextArea } from '../../../utils'
 import IconButton from 'material-ui/IconButton'
+import moment from 'moment'
 
 //src
 import AssociatedAddressesView from '../commons/AssociatedAddressesView'
-
-
 
 const MyAddressesViewInner = (props) => {
 	const { userAddressesList, onAddAddressesClick, onRefreshAddressClick, onDeleteAddressClick, handleAddressNicknameChange, triggerDialogModal, isRefreshUserAddressList, onSubmit, renderRaisedSubmitButton, renderMessage, handleRowClick, selectedKey, selectedAddress } = props
@@ -36,7 +35,7 @@ const MyAddressesViewInner = (props) => {
 											<tr>
 												<th className="mdl-data-table__cell--non-numeric">Nickname</th>
 												<th className="mdl-data-table__cell--non-numeric">Address</th>
-												<th>Balance</th>
+												<th className="mdl-data-table__cell--non-numeric">Balance</th>
 												<th></th>
 											</tr>
 										</thead>
@@ -54,13 +53,18 @@ const MyAddressesViewInner = (props) => {
 														<When condition={ userAddressesList && userAddressesList.length > 0 }>
 															{
 																userAddressesList.map(userAddressesListItem => {
-																	const {id, address, nickName: nickname, currency, balance} = userAddressesListItem
+																	const {id, address, nickName: nickname, currency, balance, updated_at} = userAddressesListItem
+																	{/* const diff = moment(updated_at).fromNow()
+																	debugger */}
 
 																	return (
 																		<tr key={ id } onClick={ handleRowClick.bind(this, id) }>
 																			<td className="mdl-data-table__cell--non-numeric">{nickname}</td>
 																			<td className="mdl-data-table__cell--non-numeric">{address}</td>
-																			<td>{balance} {currency}</td>
+																			<td className="mdl-data-table__cell--non-numeric">
+																				{balance} {currency} <br/>
+																				<span className="secondary-text">{ moment(updated_at).fromNow() }</span>
+																			</td>
 																			<td>
 																				<IconButton onClick={ onRefreshAddressClick.bind(this, id) }>
 																					<ActionCached color={cyan500}/> 

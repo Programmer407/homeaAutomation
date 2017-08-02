@@ -28,4 +28,15 @@
 .info-snackbar {
 	margin-bottom: 20px;
 	bottom: 0px !important;
-} 
+}
+
+article.article {
+	.right-align {
+		align-self: center;
+		text-align: right;
+
+		.icon-btn {
+			top: 6px;
+		}
+	}
+}
