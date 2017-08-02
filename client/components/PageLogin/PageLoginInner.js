@@ -15,10 +15,9 @@ import { renderTextField } from '../../utils';
 import { renderCheckbox } from '../../utils';
 
 const PageLoginInner = (props) => {
-  //console.log('props from inner is : ' + JSON.stringify(props))
   const { onSubmit, renderSubmitButton, renderMessage, isLoadingLogin, message, errorMessage } = props;
-	console.log('---> message: ', message)
-	console.log('---> errorMessage: ', errorMessage)
+	//console.log('---> message: ', message)
+	//console.log('---> errorMessage: ', errorMessage)
 
 	return (
     <div className="page-login">
@@ -31,9 +30,11 @@ const PageLoginInner = (props) => {
                 <div className="card-content">
                   <section className="logo text-center">
                     <h1><a href="#/">Wisdom</a></h1>
+                    <If condition={props.message !== 'true' && props.message !== 'false'}>
                     {
-											renderMessage(props.message)
-										} 
+                      renderMessage(props.message)
+                    }
+                    </If>
                   </section>
                   <form className="form-horizontal" onSubmit={onSubmit}>
                     <fieldset>
@@ -69,34 +70,6 @@ const PageLoginInner = (props) => {
         </QueueAnim>
       </div>
     </div>
-/*
-    <div className={`${styles.root} row`}>
-      <div className="col-lg-6 col-lg-offset-3">
-        <DocumentTitle title="Login - Sauron"/>
-        <Paper>
-          <form className={styles.root} onSubmit={onSubmit}>
-            <h2 className="dialog-heading" style={{textAlign: 'center'}}>Sign in</h2>
-            {
-              renderMessage()
-            }
-            <Field name="email" label="Email" component={renderTextField} autoFocus/>
-            <Field name="password" label="Password" component={renderTextField} type="password"/>
-            <div className={styles.btnSubmitContainer}>
-              {
-                  renderSubmitButton({
-                      label: 'Login',
-                      labelWhenSubmitting: 'Logging in ...'
-                  })
-              }
-            </div>
-            <div className={styles.instructionsContainer}>
-            </div>
-            <input type="submit" style={{display: 'none'}}/>
-          </form>
-        </Paper>
-      </div>
-    </div>
-    */
   )
 }
 

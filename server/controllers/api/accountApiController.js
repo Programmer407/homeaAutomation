@@ -8,7 +8,7 @@ import blockexplorer from 'blockchain.info/blockexplorer'
 import WAValidator from 'wallet-address-validator';
 
 // src
-import { ensureAnonymity, caughtError } from '../../utils'
+import { ensureAnonymity, caughtError, bindEntityApiRoutes, ensureAuthorization } from '../../utils'
 import UserProvider from './../../models/UserProvider'
 import UserWallet from './../../models/UserWallet'
 import UserAddress from './../../models/UserAddress'
@@ -25,39 +25,16 @@ import { findAssociatedAddById, findAssociatedAddByAdd, updateAssociatedAdd } fr
 
 const router = express.Router()
 
-router.get('/api/accounts/my-account-all-data', (req, res) => {
-    const {user} = req
-    if (user) {
-        findAllProviderList()
-            .then(providerList => {
-                findAllUserProviderList(user.id)
-                    .then(userProviderList => {
-                        findAllUserAddresses(user.id)
-                            .then(userAddressesList => {
-                                res
-                                    .status(200)
-                                    .send({
-                                        providerList, userProviderList, userAddressesList
-                                    })
-                            })
-                            .catch(error => {
-                                caughtError(res, error)
-                            })
-                    })
-                    .catch(error => {
-                        caughtError(res, error)
-                    })
-            })
-            .catch(error => {
-                caughtError(res, error)
-            })
-    } else {
-        res
-            .status(500)
-            .send({
-                message: 'Something went wrong, Please try again'
-            })
-    }
+router.get('/api/accounts/my-account-all-data', ensureAuthorization, (req, res) => {
+    const { user } = req
+
+    Promise.all([ findAllProviderList(), findAllUserProviderList(user.id), findAllUserAddresses(user.id) ])
+        .then(([providerList, userProviderList, userAddressesList]) => {
+            res.send({ providerList, userProviderList, userAddressesList })
+        })
+        .catch(error => {
+            caughtError(res, error)
+        })
 })
 
 router.post('/api/accounts/my-account-connect-url', (req, res) => {
@@ -186,7 +163,7 @@ router.post('/api/accounts/wallet-provider-callback', (req, res) => {
                                             },
                                             function(updatedUserProvider, callback) {
                                                 client.getAccounts({}, function(err, accounts) {
-                                                    accounts.forEach(function(acct, i) {
+                                                    async.eachOfSeries(accounts, function(acct, key, nextCallback) {
                                                         async.waterfall([
                                                             function(callback) {
                                                                 findUserWalletByWalletId(acct.id)
@@ -208,8 +185,12 @@ router.post('/api/accounts/wallet-provider-callback', (req, res) => {
                                                         function(err, userWallet) {
                                                             updateUserWallet(userWallet)
                                                                 .then(updatedUserWallet => {
-                                                                    if (i == accounts.length-1){
+                                                                    if (key == accounts.length-1){
+                                                                        console.log('if called.')
                                                                         callback(null, 'some parameter');
+                                                                    } else {
+                                                                        console.log('else called.')
+                                                                        nextCallback();
                                                                     }
                                                                 })
                                                         })
@@ -358,7 +339,8 @@ router.post('/api/accounts/refresh-userproviders', (req, res) => {
                                         client.getAccounts({}, function(err, accounts) {
                                             async.waterfall([
                                                 function(callback) {
-                                                    accounts.forEach(function(acct, i) {
+                                                    async.eachOfSeries(accounts, function(acct, key, nextCallback) {
+                                                    //accounts.forEach(function(acct, i) {
                                                         async.waterfall([
                                                             function(callback) {
                                                                 findUserWalletByWalletId(acct.id)
@@ -380,8 +362,15 @@ router.post('/api/accounts/refresh-userproviders', (req, res) => {
                                                         function(err, userWallet) {
                                                             updateUserWallet(userWallet)
                                                                 .then(updatedUserWallet => {
-                                                                    if (i == accounts.length-1){
+                                                                    //if (i == accounts.length-1){
+                                                                    //    callback(null, 'some parameter');
+                                                                    //}
+                                                                    if (key == accounts.length-1){
+                                                                        console.log('if called.')
                                                                         callback(null, 'some parameter');
+                                                                    } else {
+                                                                        console.log('else called.')
+                                                                        nextCallback();
                                                                     }
                                                                 })
                                                         })
@@ -414,7 +403,8 @@ router.post('/api/accounts/refresh-userproviders', (req, res) => {
                 } else {
                     async.waterfall([
                         function(callback) {
-                            accounts.forEach(function(acct, i) {
+                            async.eachOfSeries(accounts, function(acct, key, nextCallback) {
+                            //accounts.forEach(function(acct, i) {
                                 async.waterfall([
                                     function(callback) {
                                         findUserWalletByWalletId(acct.id)
@@ -436,8 +426,15 @@ router.post('/api/accounts/refresh-userproviders', (req, res) => {
                                 function(err, userWallet) {
                                     updateUserWallet(userWallet)
                                         .then(updatedUserWallet => {
-                                            if (i == accounts.length-1){
+                                            //if (i == accounts.length-1){
+                                            //    callback(null, 'some parameter');
+                                            //}
+                                            if (key == accounts.length-1){
+                                                console.log('if called.')
                                                 callback(null, 'some parameter');
+                                            } else {
+                                                console.log('else called.')
+                                                nextCallback();
                                             }
                                         })
                                 })
@@ -484,59 +481,88 @@ router.post('/api/accounts/user-addresses-insert', (req, res) => {
         })
     }
     if (user) {
-        //console.log('Address type is : ' + WAValidator.getAddressType('3CDJNfdWX8m2NwuGUV3nhXHXEeLygMXoAj'))
-        blockexplorer.getAddress(coinAddresses)
-            .then(address => {
-                //console.log('address JSON : ' + JSON.stringify(address))
-                async.waterfall([
-                    function(callback) {
-                        //console.log('function 1')
-                        findUserAddressByAddress(user.id, coinAddresses)
-                            .then(userAddress => {
-                                if (userAddress) {
-                                    userAddress.balance = address.final_balance
-                                    callback(null, userAddress);
-                                } else {
-                                    userAddress = UserAddress.build({address: coinAddresses, nickName: coinAddresses, balance: address.final_balance, currency: 'BTC'})
-                                    userAddress.setUser(user, {save: false})
-                                    callback(null, userAddress);
-                                }
-                            })
-                    },
-                    function(userAddress, callback) {
-                        //console.log('function 2')
-                        updateUserAddress(userAddress)
-                            .then(updatedUserAddress => {
-                                callback(null, updatedUserAddress);
-                            })
-                    },
-                    function(userAddress, callback) {
-                        //console.log('function 3')
-                        let index = 0;
-                        let transactionArr = address.txs;
-                        insertTransactions(transactionArr, index, callback, user, userAddress);
-                    },
-                    function(arg1, callback) {
-                        //console.log('function 5')
-                        findAllUserAddresses(user.id)
-                            .then(userAddressesList => {
-                                callback(null, userAddressesList);
-                            })
-                    }
-                ],
-                function(err, userAddressesList) {
-                    //console.log('function 6')
-                    res
-                        .status(200)
-                        .send({
-                            userAddressesList
+        var addressArray = coinAddresses.toString().split(',');
+        var validAddresses = new Array();
+        addressArray.forEach(function(address, index) {
+            if (WAValidator.validate(address)) {
+                validAddresses[index] = address
+            }
+        })
+        //console.log('validAddresses : ' + validAddresses)
+
+        if (validAddresses.length > 0) {
+            var ctr = 0;
+            async.eachSeries(validAddresses, function(coinAddress, nextCallback) {
+                //console.log('myaddress : ' + coinAddress)
+                blockexplorer.getAddress(coinAddress)
+                    .then(address => {
+                        //console.log('address JSON : ' + JSON.stringify(address))
+                        async.waterfall([
+                            function(callback) {
+                                //console.log('function 1')
+                                findUserAddressByAddress(user.id, coinAddress)
+                                    .then(userAddress => {
+                                        if (userAddress) {
+                                            userAddress.balance = address.final_balance
+                                            callback(null, userAddress);
+                                        } else {
+                                            userAddress = UserAddress.build({address: coinAddress, nickName: coinAddress, balance: address.final_balance, currency: 'BTC'})
+                                            userAddress.setUser(user, {save: false})
+                                            callback(null, userAddress);
+                                        }
+                                    })
+                            },
+                            function(userAddress, callback) {
+                                //console.log('function 2')
+                                updateUserAddress(userAddress)
+                                    .then(updatedUserAddress => {
+                                        callback(null, updatedUserAddress);
+                                    })
+                            },
+                            function(userAddress, callback) {
+                                //console.log('function 3')
+                                let transIndex = 0;
+                                let transactionArr = address.txs;
+                                //console.log('transactionArr : ' + JSON.stringify(transactionArr))
+                                insertTransactions(transactionArr, transIndex, callback, user, userAddress);
+                            }
+                        ],
+                        function(err, arg1) {
+                            //console.log('function 4')
+                            nextCallback();
                         })
+                    })
+                    .catch(error => {
+                        //console.log('error here. ' + error)
+                        caughtError(res, error)
+                    })
+            }, function(err) {
+                if( err ) {
+                    //console.log('An address failed to process');
+                    res
+                        .status(400)
+                        .send({
+                            message: 'Failed to process addresses, please try again'
+                        })
+                } else {
+                    //console.log('All addresses have been processed successfully');
+                    findAllUserAddresses(user.id)
+                        .then(userAddressesList => {
+                            res
+                                .status(200)
+                                .send({
+                                    userAddressesList
+                                })
+                        })
+                }
+            })
+        } else {
+            res
+                .status(400)
+                .send({
+                    message: 'All Invalid Addresses'
                 })
-            })
-            .catch(error => {
-                //console.log('error here. ' + error)
-                caughtError(res, error)
-            })
+        }
     }
 })
 
@@ -612,25 +638,20 @@ router.post('/api/accounts/user-address-delete', (req, res) => {
     if (user) {
         deleteUserAddressById(userAddressId)
         .then(result => {
-            if (result) {
-                findAllUserAddresses(user.id)
-                    .then(userAddressesList => {
-                        res
-                            .status(200)
-                            .send({
-                                userAddressesList
-                            })
+            findAllUserAddresses(user.id)
+                .then(userAddressesList => {
+                    res
+                        .status(200)
+                        .send({
+                            userAddressesList
                         })
-                    .catch(error => {
-                        caughtError(res, error)
                     })
-            } else {
-                res
-                .status(400)
-                .send({
-                    message: 'Something went wrong, Please try again'
+               .catch(error => {
+                    caughtError(res, error)
                 })
-            }
+        })
+        .catch(error => {
+            caughtError(res, error)
         })
     }
 })
@@ -854,7 +875,11 @@ function insertTransactions(transactionArr, index, done, userObj, userAddressObj
                                                 }
                                             })
                                     } else {
-                                        insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
+                                        transactionObj.destination = userAddressObj.address
+                                        updateTransaction(transactionObj)
+                                            .then(updatedTransaction => {
+                                                insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
+                                            })
                                     }
                                 })
                         })
@@ -898,7 +923,11 @@ function insertTransactions(transactionArr, index, done, userObj, userAddressObj
                                                 }
                                             })
                                     } else {
-                                        insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
+                                        transactionObj.destination = userAddressObj.address
+                                        updateTransaction(transactionObj)
+                                            .then(updatedTransaction => {
+                                                insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
+                                            })
                                     }
                                 })
                         })

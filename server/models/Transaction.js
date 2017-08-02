@@ -34,8 +34,8 @@ Transaction.belongsTo(TransactionImportType);
 Transaction.belongsTo(UserWallet);
 Transaction.belongsTo(UserAddress);
 Transaction.belongsTo(User);
-Transaction.belongsTo(AssociatedAddress)
-UserWallet.hasMany(Transaction, {as: 'Transactions'})
-UserAddress.hasMany(Transaction, {as: 'AddressTransactions'})
+Transaction.belongsTo(AssociatedAddress, {onDelete: 'cascade', hooks: true})
+UserWallet.hasMany(Transaction, {as: 'Transactions', onDelete: 'cascade', hooks: true})
+UserAddress.hasMany(Transaction, {as: 'AddressTransactions', onDelete: 'cascade', hooks: true})
 
 export default Transaction

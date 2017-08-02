@@ -31,12 +31,12 @@ const AssociatedAddressesView = (props) => {
 							<Choose>
 								<When condition={ relatedTransactions && relatedTransactions.length > 0}>
 									{
-										relatedTransactions.map(transaction => {
+										relatedTransactions.map((transaction, index) => {
 											if( transaction.associatedaddress ) {
 												const { id, address, nickName } = transaction.associatedaddress
-
+												
 												return (
-													<tr key={ id }>
+													<tr key={ index }>
 														<td className="mdl-data-table__cell--non-numeric">{ nickName }</td>
 														<td className="mdl-data-table__cell--non-numeric">{ address }</td>
 														{/* <td>{ amount } { asset }</td> */}
