@@ -1,5 +1,14 @@
+// libs
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
+import DatePicker from 'material-ui/DatePicker';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
+import { Field } from 'redux-form';
+
+// src
+import { renderTextField, renderTextArea, renderInlineDateField } from '../../utils';
 
 export const InfoDialog = (props) => {
 	const { title, actions, open, onDialogClose } = props;
@@ -30,7 +39,7 @@ export const FormDialog = (props) => {
 			onRequestClose={ onDialogClose }
 			autoScrollBodyContent={ true }
 		>
-			<HelpText />
+			<TransactionsForm />
 		</Dialog>
 	);
 }
@@ -73,17 +82,51 @@ const HelpText = () => {
 	)
 }
 
-const AddTransactionsForm = () => {
+const TransactionsForm = () => {
 	return (
-		<form rol="form" onSubmit={onSubmit}>
+		<form role="form">
 			<fieldset>
 				<div className="form-group">
-					<Field name="email" label="Email" component={renderTextField} autoComplete="off" />
+					<Field name="date" label="Date" component={ renderInlineDateField } />
+					<Field name="destination" label="Destination" component={renderTextField} fullWidth />
+					<div className="row">
+						<div className="col-md-6">
+							<Field name="amount" label="Amount (+/-)" component={renderTextField} fullWidth />
+						</div>
+						<div className="col-md-6">
+							<SelectField
+								fullWidth
+								floatingLabelText="Asset"
+								className="primary-select-field">
+								<MenuItem value={1} primaryText="BTC" />
+								<MenuItem value={2} primaryText="LTC" />
+								<MenuItem value={3} primaryText="ETH" />
+								<MenuItem value={4} primaryText="DOGE" />
+							</SelectField>
+						</div>
+					</div>
+					<div className="row">
+						<div className="col-md-6">
+							<Field name="amount" label="Total Value" component={renderTextField} fullWidth />
+						</div>
+						<div className="col-md-6">
+							<SelectField
+								fullWidth
+								floatingLabelText="Type"
+								className="primary-select-field">
+								<MenuItem value={1} primaryText="Donation" />
+								<MenuItem value={2} primaryText="Gift Received" />
+								<MenuItem value={3} primaryText="Gift Sent" />
+								<MenuItem value={4} primaryText="Income" />
+								<MenuItem value={5} primaryText="Purchase" />
+								<MenuItem value={6} primaryText="Sale" />
+								<MenuItem value={7} primaryText="Transfer" />
+							</SelectField>
+						</div>
+					</div>
+					<Field name="destination" label="Note" component={renderTextField} fullWidth />
 				</div>
-				<div className="form-group">
-					<Field name="password" label="Password" type="password" component={renderTextField}
-						autoComplete="off"/>
-				</div>
+				<RaisedButton type="submit" label="Add" primary />
 			</fieldset>
 		</form>
 	)

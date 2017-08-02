@@ -6,6 +6,7 @@ import MenuItem from 'material-ui/MenuItem'
 import Checkbox from 'material-ui/Checkbox'
 import RadioButtonGroup from 'material-ui/RadioButton/RadioButtonGroup'
 import SelectField from 'material-ui/SelectField'
+import DatePicker from 'material-ui/DatePicker';
 
 // src
 import { hasFeed as fnHasFeed, getFeed } from './utils'
@@ -26,12 +27,12 @@ export const renderTextFieldWithFixedLabel = ({ input, label, innerRef, meta: { 
 
 export const renderTextField = ({ input, label, autoComplete, innerRef, meta: { touched, error }, ...custom }) => (
   <TextField
-    floatingLabelText={label}
+    floatingLabelText={ label }
     fullWidth
-    errorText={touched && error}
-    ref={innerRef}
-    autoComplete={autoComplete}
-    hintStyle={{fontSize: 12}}
+    errorText={ touched && error }
+    ref={ innerRef }
+    autoComplete={ autoComplete }
+    hintStyle={ {fontSize: 12} }
     {...input}
     {...custom}
   />
@@ -52,7 +53,6 @@ export const renderTextArea = ({ input, label, rows, rowsMax, multiLine, autoCom
     {...custom}
   />
 )
-
 
 export const renderCheckbox = ({ input, label, padding }) => (
   <Checkbox label={label}
@@ -81,6 +81,15 @@ export const renderSelectField = ({ input, label, meta: { touched, error }, chil
     onChange={(event, index, value) => input.onChange(value)}
     children={children}/>
 )
+
+export const renderInlineDateField = ({ input, label, meta: { touched, error }, children }) => (
+  <DatePicker
+		floatingLabelText={label}
+		container="inline"
+	/>
+)
+
+
 
 const makeEntitySelectionField = ({ feedKey, entityKey, fetch }) => {
   class FieldEnvironmentTypes extends React.Component {

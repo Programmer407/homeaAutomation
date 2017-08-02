@@ -1,11 +1,13 @@
 // libs
 import React from "react"
 import { connect } from "react-redux"
+import {reduxForm} from 'redux-form'
 import PageSystemViewInner from "./PageSystemViewInner"
 
 // src
 import { logoutWhenIdle } from '../../utils'
 
+@reduxForm()
 @logoutWhenIdle()
 class PageSystemView extends React.Component {
   constructor(props) {

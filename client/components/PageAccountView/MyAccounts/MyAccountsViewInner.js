@@ -19,7 +19,7 @@ const MyAccountsViewInner = (props) => {
 		isRefreshUserWalletList, handleRowClick, selectedKey, selectedWallet, triggerDialogModal } = props
 	const { Transactions: selectedWalletTransactions, walletName: selectedWalletName } = selectedWallet
 	const cyan500 = 'rgba(0, 188, 212, 0.6)'
-
+		
 	return (
 		<div>
 			<h2 className="article-title">Wallets</h2>

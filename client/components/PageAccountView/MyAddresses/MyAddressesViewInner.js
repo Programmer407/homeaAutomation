@@ -9,6 +9,7 @@ import { Field } from 'redux-form'
 import { renderTextArea } from '../../../utils'
 import IconButton from 'material-ui/IconButton'
 import moment from 'moment'
+import isUndefined from 'lodash/isUndefined'
 
 //src
 import AssociatedAddressesView from '../commons/AssociatedAddressesView'
@@ -17,7 +18,7 @@ const MyAddressesViewInner = (props) => {
 	const { userAddressesList, onAddAddressesClick, onRefreshAddressClick, onDeleteAddressClick, handleAddressNicknameChange, triggerDialogModal, isRefreshUserAddressList, onSubmit, renderRaisedSubmitButton, renderMessage, handleRowClick, selectedKey, selectedAddress } = props
 	const { nickName: selectedAddressNickname, AddressTransactions: selectedAddressTransactions } = selectedAddress
 	const cyan500 = 'rgba(0,188,212,0.6)'
-
+	
 	return (
 		<div className="border-top">
 			<h2 className="article-title">Addresses</h2>
@@ -99,11 +100,11 @@ const MyAddressesViewInner = (props) => {
 						<div>
 							<div className="box-header box-header-primary">
 								<Choose>
-									<When condition={ selectedAddress }>
-										{'Associated Addresses of ' + selectedAddressNickname}
+									<When condition={ isUndefined(selectedAddressNickname) }>
+										{ 'Associated Addresses' }
 									</When>
 									<Otherwise>
-										{'Associated Addresses'}
+										{'Associated Addresses of ' + selectedAddressNickname}
 									</Otherwise>
 								</Choose>
 							</div>

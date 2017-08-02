@@ -3,8 +3,8 @@ import React, {PropTypes} from "react"
 import { reduxForm } from 'redux-form'
 import { connect } from "react-redux"
 import findIndex from 'lodash/findIndex'
-import isNull from 'lodash/isNull'
-import isUndefined from 'lodash/isUndefined'
+import isNil from 'lodash/isNil'
+import find from 'lodash/find'
 
 //src
 import MyAddressesViewInner from './MyAddressesViewInner'
@@ -19,29 +19,32 @@ class MyAddresses extends React.Component {
 			}
 		}
 	}
-	
-	 componentWillReceiveProps(nextProps) {
-		if ( !isNull(this.state) ) {
-			const { selectedKey, selectedAddress } = this.state;
-			
-			if (nextProps != this.props) {
-				if ( nextProps.userAddressesList && nextProps.userAddressesList[0] && nextProps.userAddressesList[0].id && !isUndefined(selectedKey) ) {
-					this.setState({
-						selectedKey,
-						selectedAddress: nextProps.userAddressesList[findIndex(nextProps.userAddressesList, { id: selectedKey })]
-					})
 
-					if ( isUndefined(selectedAddress) ) {
-						this.state = {
-							selectedKey: nextProps.userAddressesList[0].id,
-							selectedAddress: nextProps.userAddressesList[0]
-						}
-					}
+	shouldComponentUpdate(nextProps, nextState) {
+		if (!isNil(this.state)) {
+			const { selectedKey, selectedAddress } = this.state;
+			const { userAddressesList } = nextProps
+
+			if ( !isNil(userAddressesList) && !isNil(userAddressesList[0]) && !isNil(userAddressesList[0].id) ) {
+				if ( !isNil(selectedKey) && find(userAddressesList, {id: selectedKey}) ) {
+					this.setState({
+						selectedAddress: userAddressesList[findIndex(userAddressesList, {id: selectedKey})]
+					})
+					return true;
+				} else {
+					this.setState({
+						selectedKey: userAddressesList[0].id,
+						selectedAddress: userAddressesList[0]
+					})
+					return true;
 				}
+			} else {
+				delete this.state.selectedKey;
+				delete this.state.selectedAddress;
+				return true;
 			}
 		}
-
-	} 
+	}
 
 	handleRowClick = (value) => {
 		this.setState({

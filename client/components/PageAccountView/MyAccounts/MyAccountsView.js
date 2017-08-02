@@ -3,8 +3,7 @@ import QueueAnim from 'rc-queue-anim';
 import { connect } from "react-redux"
 import DocumentTitle from "react-document-title";
 import findIndex from 'lodash/findIndex'
-import isUndefined from 'lodash/isUndefined'
-import isNull from 'lodash/isNull'
+import isNil from 'lodash/isNil'
 import hasIn from 'lodash/hasIn'
 
 // src
@@ -21,27 +20,31 @@ class MyAccounts extends React.Component {
 		}
 	}
 
-	componentWillReceiveProps(nextProps) {
-		if ( !isNull(this.state) ) {
+	shouldComponentUpdate(nextProps, nextState) {
+		if (!isNil(this.state)) {
 			const { selectedKey, selectedWallet } = this.state;
-			
-			if (nextProps != this.props) {
-				if (  !isUndefined(selectedKey) && nextProps.userProviderList && nextProps.userProviderList[0] && nextProps.userProviderList[0].UserWallets.length > 0 ) {
-					this.state = {
-						selectedKey,
-						selectedWallet: nextProps.userProviderList[0].UserWallets[findIndex(nextProps.userProviderList[0].UserWallets, { id: selectedKey })]
-					}
+			const { userProviderList } = nextProps
+			const { UserWallets: userWallets } = userProviderList[0]
 
-					if ( isUndefined(selectedWallet) ) {
-						this.state = {
-							selectedKey: nextProps.userProviderList[0].UserWallets[0].id,
-							selectedWallet: nextProps.userProviderList[0].UserWallets[0]
-						}
-					}
+			if ( !isNil(userProviderList) && !isNil(userProviderList[0]) && !isNil(userWallets.length > 0) ) {
+				if ( !isNil(selectedKey) && find(userWallets, {id: selectedKey}) ) {
+					this.setState({
+						selectedWallet: userWallets[findIndex(userWallets, {id: selectedKey})]
+					})
+					return true;
+				} else {
+					this.setState({
+						selectedKey: userWallets[0].id,
+						selectedWallet: userWallets[0]
+					})
+					return true;
 				}
+			} else {
+				delete this.state.selectedKey;
+				delete this.state.selectedWallet;
+				return true;
 			}
 		}
-
 	}
 
 	handleRowClick = (value) => {

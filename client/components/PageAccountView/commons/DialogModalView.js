@@ -51,54 +51,42 @@ export default class NicknameDialog extends React.Component {
 	}
 
   render() {
+		const { id, address, newNickname, oldNickname } = this.state;
+		const { handleAddressNicknameChange, handleAssocAddressNicknameChange, handleWalletAssocAddressNicknameChange } = this.props;
+
 		const actions = [
       <FlatButton
         label="Submit"
         primary
         onTouchTap={ this.handleClose }
-				onClick={ this.props.handleAddressNicknameChange.bind(this, {
-					id: this.state.id, 
-					newNickname: this.state.newNickname, 
-					oldNickname: this.state.oldNickname
-					}
-				)}
+				onClick={ handleAddressNicknameChange.bind( this, { id, newNickname, oldNickname } ) }
       />, 
       <FlatButton
         label="Submit"
         primary
         onTouchTap={ this.handleClose }
-				onClick={ this.props.handleAssocAddressNicknameChange.bind(this, {
-					id: this.state.id, 
-					newNickname: this.state.newNickname, 
-					oldNickname: this.state.oldNickname
-					}
-				)}
+				onClick={ handleAssocAddressNicknameChange.bind(this, { id, newNickname, oldNickname } ) }
       />, 
       <FlatButton
         label="Submit"
         primary
         onTouchTap={ this.handleClose }
-				onClick={ this.props.handleWalletAssocAddressNicknameChange.bind(this, {
-					id: this.state.id,
-					newNickname: this.state.newNickname,
-					oldNickname: this.state.oldNickname
-					}
-				)}
+				onClick={ handleWalletAssocAddressNicknameChange.bind(this, { id, newNickname, oldNickname } ) }
       /> 
     ];
 
     return (
 			<Dialog
-				title={'Enter nickname for ' + this.state.address}	
+				title={'Enter nickname for ' + address}	
 				actions={ actions[this.chooseAction()] }
 				modal={ false }
 				open={ this.state.open }
 				onRequestClose={ this.handleClose }>
 
 				<TextField
-					hintText={this.state.oldNickname}
+					hintText={ oldNickname }
 					onChange={ this.onTextChange }
-					value={ this.state.newNickname }
+					value={ newNickname }
 					fullWidth
 					autoFocus />
 			</Dialog>

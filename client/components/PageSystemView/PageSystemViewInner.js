@@ -13,7 +13,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 // src
 import { TradingView, IncomeView, SpendingView }  from './TableViews'
-import { InfoDialog } from '../commons/CommonUI'
+import { InfoDialog, FormDialog } from '../commons/CommonUI'
 
 const PageSystemViewInner = props => {
 	const { isHelpDialogOpen, isFormDialogOpen, onHelpDialogToggle, onFormDialogToggle } = props
@@ -63,8 +63,8 @@ const PageSystemViewInner = props => {
 								open={ isHelpDialogOpen }
 								onDialogClose={ onHelpDialogToggle } />
 							
-							<InfoDialog 
-								title={ 'New Form' }
+							<FormDialog 
+								title={ 'Add Transaction' }
 								open={ isFormDialogOpen }
 								onDialogClose={ onFormDialogToggle } />
 						</div>
