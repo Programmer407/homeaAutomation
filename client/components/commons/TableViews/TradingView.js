@@ -8,7 +8,6 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import indexOf from 'lodash/indexOf'
 
 // src 
-import { HoverableRow } from './';
 import Pagination from'./Pagination'
 
 const cyan500 = 'rgba(0,188,212,0.9)';
@@ -47,7 +46,6 @@ const styles = {
   footerText: {
     float: 'right',
     paddingTop: 16,
-		// overflow: 'undefined'
   }
 	
 }
@@ -122,47 +120,3 @@ const TradingView = (props) => {
 }
 
 export default TradingView
-
-//<HoverableRow key={index} hovered={ index === hoveredRow } data={ tblData[data] }></HoverableRow>			
-
-{/* arr.map( (row, index) => {
-	return (
-		<TableRow key={index} hoverable>
-			{
-				Object.keys(tblData).map( (key, index) => 
-				<TableRowColumn key={ index } style={ styles.tblRowCol }>{ tblData[key] }</TableRowColumn>
-			)
-		}
-		</TableRow>
-	)
-}) */}
-
-/* Works */
-/* tblData.map(data => {
-	return (
-		<TableRow>
-			{
-				Object.keys(data).map( (item, index) => 
-				<TableRowColumn>{data[item]}</TableRowColumn>
-				)
-			}
-		</TableRow>
-	)
-}) */
-
-/* Works */
-/* tblData.map( (data, index) => 
-	<HoverableRow key={ index } data={ data }></HoverableRow>
-) */
-
-{/* tblData.map(data => {
-	return (
-		<TableRow>
-			{
-				Object.keys(data).map( (item, index) => 
-				<TableRowColumn>{data[item]}</TableRowColumn>
-				)
-			}
-		</TableRow>
-	)
-}) */}
