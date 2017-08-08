@@ -1,6 +1,6 @@
 // libs
 import React from 'react'
-import {reduxForm} from 'redux-form'
+import {reduxForm, change as changeFieldValue} from 'redux-form'
 import {push} from 'react-router-redux'
 import get from 'lodash/get'
 import PageRegisterInner from './PageRegisterInner'
@@ -90,7 +90,17 @@ export default class PageRegister extends React.Component {
   constructor(props) {
     super(props)
   }
+
+  handleNoSpaces = (e) => {
+    const fieldName = e.target.name;
+    const fieldValue = e.target.value;
+    if (fieldValue == ' ') {
+      this.props.dispatch(changeFieldValue('registerForm', fieldName, ''));
+      e.preventDefault();
+    }
+  }
+
   render() {
-    return <PageRegisterInner {...this.props}/>
+    return <PageRegisterInner {...this.props} onHandleNoSpaces={ this.handleNoSpaces }/>
   }
 }

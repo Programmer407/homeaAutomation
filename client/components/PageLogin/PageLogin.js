@@ -1,6 +1,6 @@
 // libs
 import React from 'react'
-import {reduxForm} from 'redux-form'
+import {reduxForm, change as changeFieldValue} from 'redux-form'
 import {push} from 'react-router-redux'
 import get from 'lodash/get'
 import isEmpty from 'lodash/isEmpty'
@@ -123,6 +123,15 @@ class PageLogin extends React.Component {
 		})
 	}
 
+  handleNoSpaces = (e) => {
+    const fieldName = e.target.name;
+    const fieldValue = e.target.value;
+    if (fieldValue == ' ') {
+      this.props.dispatch(changeFieldValue('registerForm', fieldName, ''));
+      e.preventDefault();
+    }
+  }
+
   render() {
     if (this.state.check == 1) {
       return <PageLoading {...this.props}/>
@@ -131,7 +140,8 @@ class PageLogin extends React.Component {
 					<PageLoginInner 
 						{...this.props}
 						onSnackbarOpen={ this.handleSnackbarOpen }
-						onSnackbarClose={ this.handleSnackbarClose} />
+						onSnackbarClose={ this.handleSnackbarClose}
+            onHandleNoSpaces={ this.handleNoSpaces } />
 				)} else {
       return (
 				<div>
