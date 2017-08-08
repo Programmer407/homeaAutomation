@@ -54,13 +54,14 @@ const validate = values => {
   }
 })
 class PageLogin extends React.Component {
-  state = {
-    check : 1
-  }
-
-	renderSnackbarWithMessage = (message) => {
-		this.props.showSnackbar()
-		this.props.renderSnackbar({ message: message, autoHideDuration: 5000 })
+	constructor(props) {
+    super(props)
+		this.state = {
+			check : 1,
+			isSnackbarOpen: false,
+			snackMessage: null,
+			autoHideDuration: 4000
+		}
 	}
 
   componentDidMount() {
@@ -102,22 +103,42 @@ class PageLogin extends React.Component {
         });
     }
   }
-  
-  constructor(props) {
-    super(props)
-  }
+	
+	/* HANDLER FUNCTIONS FOR SNACKBAR, MODALS */
+	handleSnackbarOpen = (params) => {
+		const { message, duration } = params
+		
+		this.setState({
+			isSnackbarOpen: true,
+			snackMessage: message,
+			autoHideDuration: duration ? duration : 4000
+		})
+	}
+
+	handleSnackbarClose = () => {
+		this.setState({
+			isSnackbarOpen: false, 
+			snackMessage: null,
+			autoHideDuration: 4000
+		})
+	}
+
   render() {
-    
     if (this.state.check == 1) {
       return <PageLoading {...this.props}/>
     } else if(this.state.check == 2) {
-      return <PageLoginInner {...this.props}
-															renderSnackbarWithMessage={this.renderSnackbarWithMessage}/>
-    } else {
-      return <div>
-            <h1>Bad Request!</h1>
-            <h3>Activate account token is invalid</h3>
-          </div>;
+				return (
+					<PageLoginInner 
+						{...this.props}
+						onSnackbarOpen={ this.handleSnackbarOpen }
+						onSnackbarClose={ this.handleSnackbarClose} />
+				)} else {
+      return (
+				<div>
+					<h1>Bad Request!</h1>
+					<h3>Activate account token is invalid</h3>
+				</div>
+			)
     }
   }
 }

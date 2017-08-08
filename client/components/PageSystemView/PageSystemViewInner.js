@@ -12,12 +12,13 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 // src
-import { TradingView, IncomeView, SpendingView }  from './TableViews'
 import { InfoDialog, FormDialog } from '../commons/CommonUI'
+import TabView from '../commons/TabView'
+
 
 const PageSystemViewInner = props => {
 	const { isHelpDialogOpen, isFormDialogOpen, onHelpDialogToggle, onFormDialogToggle } = props
-	const cyan500 = 'rgba(0,188,212,0.8)'
+	const cyan500 = 'rgba(0,188,212,0.8)';
 
 	return (
 		<div>
@@ -28,36 +29,27 @@ const PageSystemViewInner = props => {
 						<li className="breadcrumb-item active">Blank</li>
 					</ul>*/}
 					<QueueAnim type="bottom" className="ui-animate">
-						<div key="1" className="container-fluid">
+						<div key="1">
 							<article className="article">
+								
 								<div className="row">
-									<div className="col-md-6">
+									<div className="col-xs-10">
 										<h2 className="article-title article-title-primary">Transactions</h2>
 									</div>
 
-									<div className="col-md-6 right-align">
-									 	<FlatButton label="Add Transaction" onClick={ onFormDialogToggle.bind(this) } primary/> 
-										 <IconButton className="icon-btn" onClick={ onHelpDialogToggle.bind(this) }>
+									<div className="col-xs-2 text-right" style={{ alignSelf: 'center' }}>
+										 <IconButton style={{ top: '12px'}} onClick={ onHelpDialogToggle.bind(this) }>
 											<ActionHelp color={cyan500}/> 
 										</IconButton> 
 									</div>
 								</div>
-								<section className="box box-default">
-									<Tabs>
-										<Tab label="Trading" >
-											<TradingView />
-										</Tab>
-										
-										<Tab label="Income" >
-											<IncomeView />	
-										</Tab>
-										
-										<Tab label="Spending">
-											<SpendingView />
-										</Tab>
-									</Tabs>
+
+								<section className="box box-transparent">
+									<TabView {...props} />
 								</section>
+
 							</article>
+
 							<InfoDialog 
 								title={ 'Help' }
 								open={ isHelpDialogOpen }

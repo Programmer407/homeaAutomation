@@ -8,9 +8,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
 import QueueAnim from 'rc-queue-anim';
+import isNil from 'lodash/isNil';
 
 // src
 import './PageLoginInner.scss';
+import iSnackbar from '../commons/MySnackbar'
 import { renderTextField } from '../../utils';
 import { renderCheckbox } from '../../utils';
 
@@ -30,11 +32,11 @@ const PageLoginInner = (props) => {
                 <div className="card-content">
                   <section className="logo text-center">
                     <h1><a href="#/">Wisdom</a></h1>
-                    <If condition={props.message !== 'true' && props.message !== 'false'}>
+										<If condition={ !isNil(props.message) }>
                     {
                       renderMessage(props.message)
                     }
-                    </If>
+                    </If> 
                   </section>
                   <form className="form-horizontal" onSubmit={onSubmit}>
                     <fieldset>
@@ -69,6 +71,7 @@ const PageLoginInner = (props) => {
           </div>
         </QueueAnim>
       </div>
+			<iSnackbar {...props}/>
     </div>
   )
 }

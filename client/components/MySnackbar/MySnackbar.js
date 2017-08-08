@@ -13,7 +13,7 @@ export default class MySnackbar extends React.Component {
 		elapsed: React.PropTypes.number, 
 		isIdle: React.PropTypes.bool
 	}
-
+	
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -33,12 +33,11 @@ export default class MySnackbar extends React.Component {
 				this.handleIdleEnded()
 			}
 		}
-		
-	 }
+	}
 	
-	 handleIdleStarted = () => {
+	handleIdleStarted = () => {
 		const { openCount, snackbarOpen } = this.state
-
+		
 		if ( openCount < 1 && !snackbarOpen ) {
 			this.setState({
 				openCount: openCount + 1,
@@ -46,30 +45,30 @@ export default class MySnackbar extends React.Component {
 				snackbarOpen: true
 			})
 		}
-	 }
-
-	 handleIdleEnded = () => {
+	}
+	
+	handleIdleEnded = () => {
 		this.setState({
 			openCount: 0,
 			snackbarOpen: false
 		})
-	 }
-
+	}
+	
 	handleRequestClose = (e) => {
 		this.setState({
 			snackbarOpen: false
 		})
 		console.log('Event: ', e)
 	};
-
+	
 	render() {
 		return (
 			<Snackbar
 			
-				open={this.state.snackbarOpen}
-				message={this.state.message}
-				autoHideDuration={5000}
-				onRequestClose={this.handleRequestClose}
+			open={this.state.snackbarOpen}
+			message={this.state.message}
+			autoHideDuration={5000}
+			onRequestClose={this.handleRequestClose}
 			/>
 		)
 	}

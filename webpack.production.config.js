@@ -34,6 +34,9 @@ module.exports = {
     chunkFilename: '[name].[chunkhash].js'
   },
   plugins: [
+		new webpack.ProvidePlugin({
+			_: 'lodash'
+		}),
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
     new ExtractTextPlugin('[name]-[chunkhash].min.css'),
     new StatsPlugin('webpack.stats.json', {

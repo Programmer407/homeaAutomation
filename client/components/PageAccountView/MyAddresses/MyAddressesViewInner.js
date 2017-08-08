@@ -4,7 +4,6 @@ import CircularProgress from 'material-ui/CircularProgress'
 import ActionCached from 'material-ui/svg-icons/action/cached'
 import ActionDelete from 'material-ui/svg-icons/action/delete'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import NicknameDialog from '../commons/DialogModalView'
 import { Field } from 'redux-form'
 import { renderTextArea } from '../../../utils'
 import IconButton from 'material-ui/IconButton'
@@ -12,13 +11,15 @@ import moment from 'moment'
 import isUndefined from 'lodash/isUndefined'
 
 //src
-import AssociatedAddressesView from '../commons/AssociatedAddressesView'
+import NicknameDialog from '../../commons/DialogModalView';
+import AssociatedAddressesView from '../../commons/AssociatedAddressesView';
+import { NewAddressForm } from '../../commons/Forms'
 
 const MyAddressesViewInner = (props) => {
-	const { userAddressesList, onAddAddressesClick, onRefreshAddressClick, onDeleteAddressClick, handleAddressNicknameChange, triggerDialogModal, isRefreshUserAddressList, onSubmit, renderRaisedSubmitButton, renderMessage, handleRowClick, selectedKey, selectedAddress } = props
+	const { userAddressesList, onAddAddressesClick, onRefreshAddressClick, onDeleteAddressClick, handleAddressNicknameChange, onNicknameDialogOpen, isRefreshUserAddressList, onSubmit, renderRaisedSubmitButton, renderMessage, handleRowClick, selectedKey, selectedAddress } = props
 	const { nickName: selectedAddressNickname, AddressTransactions: selectedAddressTransactions } = selectedAddress
 	const cyan500 = 'rgba(0,188,212,0.6)'
-	
+
 	return (
 		<div className="border-top">
 			<h2 className="article-title">Addresses</h2>
@@ -71,7 +72,7 @@ const MyAddressesViewInner = (props) => {
 																					<ActionCached color={cyan500}/> 
 																				</IconButton>
 
-																				<IconButton onClick={ triggerDialogModal.bind(this, {id, address, oldNickname: nickname, type: 'address' }) }>
+																				<IconButton onClick={ onNicknameDialogOpen.bind(this, {id, address, oldNickname: nickname, type: 'ADDRESS_NICK' }) }>
 																					<EditorModeEdit color={cyan500}/> 
 																				</IconButton>
 																				
@@ -96,7 +97,7 @@ const MyAddressesViewInner = (props) => {
 								</div>
 							</div>
 						</div>
-
+						
 						<div>
 							<div className="box-header box-header-primary">
 								<Choose>
@@ -111,10 +112,10 @@ const MyAddressesViewInner = (props) => {
 							<div className="box-body">
 								<p>These addresses were found in the transaction histories of the addresses you manually added.</p>
 								<AssociatedAddressesView
+									{...props}
 									isRefreshing={ isRefreshUserAddressList }
 									relatedTransactions={ selectedAddressTransactions }
-									triggerDialogModal={ triggerDialogModal }
-									type={ 'addressAssocs' }/>
+									type={ 'ASSOC_ADDRESS_NICK' } /> 
 							</div>
 						</div>
 					</div>
@@ -125,21 +126,13 @@ const MyAddressesViewInner = (props) => {
 						<div className="box-header box-header-primary">Add Addresses</div>
 						<div className="box-body">
 							<p>Enter one address per line. Other addresses that are yours based on Wisdom's analysis of the blockchain will be automatically added for you.</p>
-							<form className="form-inline" role="form" onSubmit={ onSubmit }>
-								<Field name="newAddresses" label="Enter one address per line" rows={1} rowsMax={10} component={renderTextArea} fullWidth multiLine></Field>
-								<div className="btn-space">
-									{
-										renderRaisedSubmitButton({
-											label: 'Submit',
-											labelWhenSubmitting: 'Validating'
-										})
-									}
-								</div>
-							</form>
+							 <NewAddressForm {...props}/> 
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<NicknameDialog {...props} />
 		</div>
 	)
 }

@@ -6,7 +6,7 @@ import filter from 'lodash/filter'
 import isNil from 'lodash/isNil'
 
 const AssociatedAddressesView = (props) => {
-	const { relatedTransactions, isRefreshing, triggerDialogModal, type } = props;
+	const { relatedTransactions, isRefreshing, triggerDialogModal, type, onNicknameDialogOpen } = props;
 	const filteredTrx = filter(relatedTransactions, function(o) { return !isNil(o.associatedaddress); } ); 
 	const cyan500 = 'rgba(0, 188, 212, 0.6)'
 
@@ -43,7 +43,7 @@ const AssociatedAddressesView = (props) => {
 													<td className="mdl-data-table__cell--non-numeric">{ address }</td>
 													{/* <td>{ amount } { asset }</td> */}
 													<td>
-														<IconButton onClick={ triggerDialogModal.bind(this, { id, address, oldNickname: nickName, type }) }>
+														<IconButton onClick={ onNicknameDialogOpen.bind(this, { id, address, oldNickname: nickName, type }) }>
 															<EditorModeEdit color={cyan500}/> 
 														</IconButton>
 													</td>

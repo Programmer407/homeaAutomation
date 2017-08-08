@@ -31,6 +31,9 @@ module.exports = {
   },
   externals: nodeExternals(),
   plugins: [
+		new webpack.ProvidePlugin({
+			_: 'lodash'
+		}),
     new webpack.BannerPlugin({
       banner: 'require("source-map-support").install();',
       raw: true,
