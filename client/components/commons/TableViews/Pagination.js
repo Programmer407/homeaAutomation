@@ -43,25 +43,6 @@ const Pagination = props => {
 			</nav>
 		</div>
 	)
-
-  /* return(
-		<TableFooter adjustForCheckbox={false}>
-			<TableRow>
-				<TableRowColumn style={styles.footerContent}>
-					<IconButton disabled={pageOffset === 0} onClick={onPageClick.bind(this, pageOffset - pageLimit)}>
-						<FontIcon className="material-icons">chevron_left</FontIcon>
-					</IconButton>
-					<IconButton disabled={pageOffset + pageLimit >= totalRecords} onClick={onPageClick.bind(this, pageOffset + pageLimit)}>
-						<FontIcon className="material-icons">chevron_right</FontIcon>
-					</IconButton>
-				</TableRowColumn>
-				<TableRowColumn style={styles.footerText}>
-					<p>{Math.min((pageOffset + 1), totalRecords) + '-' + Math.min((pageOffset + pageLimit), totalRecords) + ' of ' + totalRecords}</p>
-				</TableRowColumn>
-			</TableRow>
-		</TableFooter>
-
-	) */
 }
 
 export default Pagination
