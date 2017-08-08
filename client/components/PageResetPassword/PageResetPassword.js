@@ -17,7 +17,11 @@ const validate = values => {
   if (!values.password || !values.password.trim() === '') {
     errors.password = 'Missing password field';
     hasErrors = true;
-  }
+  } else if(values.password.length < 6) {
+    errors.password = "Password should have at least 6 characters"
+    hasErrors = true;
+	}
+	
   if (!values.confirmPassword || !values.confirmPassword.trim() === '') {
     if (values.password) {
       errors.confirmPassword = 'Re-type password';
@@ -27,7 +31,8 @@ const validate = values => {
       hasErrors = true;
     }
   }
-  if(values.password && values.confirmPassword) {
+	
+	if(values.password && values.confirmPassword) {
     if(values.password != values.confirmPassword) {
       errors.confirmPassword = 'These passwords don\'t match. Try again?';
       hasErrors = true;

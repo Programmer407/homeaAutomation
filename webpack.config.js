@@ -23,7 +23,10 @@ module.exports = {
     publicPath: '/'
   },
   plugins: [
-    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+		new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
+		new webpack.ProvidePlugin({
+			_: 'lodash'
+		}),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({

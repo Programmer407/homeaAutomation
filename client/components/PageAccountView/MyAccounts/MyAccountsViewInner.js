@@ -10,13 +10,16 @@ import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton'
 import moment from 'moment'
 import isUndefined from 'lodash/isUndefined'
+import { Field } from 'redux-form'
 
 // src
-import AssociatedAddressesView from '../commons/AssociatedAddressesView'
+import { renderSelectField } from '../../../utils'
+import AssociatedAddressesView from '../../commons/AssociatedAddressesView'
+import { ProviderForm } from '../../commons/Forms'
 
 const MyAccountsViewInner = (props) => {
 	const { onSelectionSubmit, onSelectionChange, onDeleteClick, onRefreshClick, selectedProvider, providerList, userProviderList,
-		isRefreshUserWalletList, handleRowClick, selectedKey, selectedWallet, triggerDialogModal } = props
+		isRefreshUserWalletList, handleRowClick, selectedKey, selectedWallet, renderRaisedSubmitButton, onSubmit } = props
 	const { Transactions: selectedWalletTransactions, walletName: selectedWalletName } = selectedWallet
 	const cyan500 = 'rgba(0, 188, 212, 0.6)'
 		
@@ -96,7 +99,7 @@ const MyAccountsViewInner = (props) => {
 								</div>
 							</div>
 						</div>
-
+						
 						<div>
 							<div className="box-header box-header-primary">
 								<Choose>
@@ -110,11 +113,11 @@ const MyAccountsViewInner = (props) => {
 							</div>
 							<div className="box-body">
 								<p>These addresses were found in the transaction histories of your connected wallets.</p>
-								<AssociatedAddressesView 
+								<AssociatedAddressesView
+									{...props}
 									isRefreshing={ isRefreshUserWalletList }
 									relatedTransactions={ selectedWalletTransactions }
-									triggerDialogModal={ triggerDialogModal }
-									type={ 'walletAssocs' } />
+									type={ 'WALLET_ASSOC_ADDRESS_NICK' } />
 							</div>
 						</div>
 					</div>
@@ -125,22 +128,7 @@ const MyAccountsViewInner = (props) => {
 						<div className="box-header box-header-primary">Add Account</div>
 						<div className="box-body">
 							<p>Connect to an online account by selecting a service provider from the dropdown.</p>
-							<form role="form">
-								<div className="form-group">
-									<SelectField
-										fullWidth
-										className="primary-select-field"
-										onChange={ onSelectionChange }
-										value={ selectedProvider }>
-										<MenuItem value={0} primaryText="Select a provider..." />
-										{providerList.map(provider => 
-											<MenuItem key={ provider.id } value={ provider.id } primaryText={ provider.displayName } />
-										)}
-									</SelectField>
-								</div>
-								<RaisedButton label="Connect" onClick={ onSelectionSubmit } primary />
-								<div className="divider" />
-							</form>
+							<ProviderForm {...props} />
 						</div>
 					</div>
 				</div>
@@ -150,3 +138,18 @@ const MyAccountsViewInner = (props) => {
 }
 
 export default MyAccountsViewInner
+
+{/* <div className="form-group">
+	<SelectField
+		fullWidth
+		className="primary-select-field"
+		onChange={ onSelectionChange }
+		value={ selectedProvider }>
+		<MenuItem value={0} primaryText="Select a provider..." />
+		{providerList.map(provider => 
+			<MenuItem key={ provider.id } value={ provider.id } primaryText={ provider.displayName } />
+		)}
+	</SelectField>
+</div>
+<RaisedButton label="Connect" onClick={ onSelectionSubmit } primary />
+<div className="divider" /> */}

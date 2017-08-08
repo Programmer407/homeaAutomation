@@ -1,0 +1,83 @@
+table {
+	border: 0px;
+
+	thead {
+		background-color: #E6E6E6;
+
+		tr > th {
+			font-size: 16px;
+			color: #555;
+			font-weight: 500;
+			border-bottom: 1px solid #CCC;
+		}
+	}
+
+	tbody {
+		tr {
+			td {
+				font-size: 14px;
+				border-bottom: 1px solid #DDD;
+
+				.secondary-text {
+					font-size: 0.9em;
+					color: #777;
+				}
+
+				a {
+					margin-left: 10px;
+					svg > path {
+						fill: rgba(0, 188, 212, 0.6);
+					}
+				}
+			}
+
+			tr {
+				td {
+					padding: 0px;
+
+					.no-padding {
+						div {
+							padding: 0px !important;
+
+							div {
+								padding: 0px !important;
+
+								div {
+									display: block !important;
+								}
+							}
+						}
+
+						td {
+							border: 0px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+/* div.root {
+	padding: 20px 0px;
+
+	thead.tblHdr {
+		border-bottom: #CCC;
+
+		th.tblHdrCol {
+			color: #555;
+			font-size: 16px;
+			font-weight: 500;
+		}
+	}
+} */
+

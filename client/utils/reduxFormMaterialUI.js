@@ -25,14 +25,14 @@ export const renderTextFieldWithFixedLabel = ({ input, label, innerRef, meta: { 
   />
 )
 
-export const renderTextField = ({ input, label, autoComplete, innerRef, meta: { touched, error }, ...custom }) => (
+export const renderTextField = ({ input, label, value, autoComplete, innerRef, meta: { touched, error }, ...custom }) => (
   <TextField
     floatingLabelText={ label }
     fullWidth
     errorText={ touched && error }
     ref={ innerRef }
     autoComplete={ autoComplete }
-    hintStyle={ {fontSize: 12} }
+    hintStyle={ {fontSize: 14} }
     {...input}
     {...custom}
   />
@@ -74,7 +74,7 @@ export const renderRadioGroup = ({ input, label, ...rest }) => (
 export const renderSelectField = ({ input, label, meta: { touched, error }, children }) => (
   <SelectField
     floatingLabelText={label}
-    floatingLabelFixed
+    floatingLabelFixed={false}
     fullWidth
     errorText={touched && error}
     {...input}
@@ -88,8 +88,6 @@ export const renderInlineDateField = ({ input, label, meta: { touched, error }, 
 		container="inline"
 	/>
 )
-
-
 
 const makeEntitySelectionField = ({ feedKey, entityKey, fetch }) => {
   class FieldEnvironmentTypes extends React.Component {

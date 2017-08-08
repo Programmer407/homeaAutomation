@@ -3,6 +3,7 @@ import QueueAnim from 'rc-queue-anim';
 import { connect } from "react-redux"
 import DocumentTitle from "react-document-title";
 import findIndex from 'lodash/findIndex'
+import find from 'lodash/find'
 import isNil from 'lodash/isNil'
 import hasIn from 'lodash/hasIn'
 
@@ -11,11 +12,14 @@ import MyAccountsViewInner from './MyAccountsViewInner'
 
 class MyAccounts extends React.Component {
 	constructor(props) {
+		const { userProviderList } = props
+		const { UserWallets: userWallets } = userProviderList[0]
+
 		super(props)
-		if (props.userProviderList && props.userProviderList[0] && props.userProviderList[0].UserWallets.length > 0) {
+		if (userProviderList && userProviderList[0] && userWallets.length > 0) {
 			this.state = {
-				selectedKey: props.userProviderList[0].UserWallets[0].id,
-				selectedWallet: props.userProviderList[0].UserWallets[0]
+				selectedKey: userWallets[0].id,
+				selectedWallet: userWallets[0]
 			}
 		}
 	}
@@ -26,13 +30,17 @@ class MyAccounts extends React.Component {
 			const { userProviderList } = nextProps
 			const { UserWallets: userWallets } = userProviderList[0]
 
-			if ( !isNil(userProviderList) && !isNil(userProviderList[0]) && !isNil(userWallets.length > 0) ) {
-				if ( !isNil(selectedKey) && find(userWallets, {id: selectedKey}) ) {
+			if ( !isNil(userProviderList) && !isNil(userProviderList[0]) && userWallets.length > 0 ) {
+				const isWalletFound = find(userWallets, function(w) { return w.id === selectedKey; });
+				
+				if ( !isNil(selectedKey) && !isNil(isWalletFound) ) {
+					//debugger
 					this.setState({
 						selectedWallet: userWallets[findIndex(userWallets, {id: selectedKey})]
 					})
 					return true;
 				} else {
+					//debugger
 					this.setState({
 						selectedKey: userWallets[0].id,
 						selectedWallet: userWallets[0]
@@ -40,6 +48,11 @@ class MyAccounts extends React.Component {
 					return true;
 				}
 			} else {
+				//debugger
+				/* this.setState({
+					selectedKey: null,
+					selectedWallet: null
+				}) */
 				delete this.state.selectedKey;
 				delete this.state.selectedWallet;
 				return true;
@@ -49,10 +62,14 @@ class MyAccounts extends React.Component {
 	}
 
 	handleRowClick = (value) => {
+		const { userProviderList } = this.props
+		const { UserWallets: userWallets } = userProviderList[0]
+
 		this.setState({
 			selectedKey: value,
-			selectedWallet: this.props.userProviderList[0].UserWallets[findIndex(this.props.userProviderList[0].UserWallets, { id: value })]
+			selectedWallet: userWallets[findIndex(userWallets, { id: value })]
 		})
+		console.log('---> STATE:', this.state.selectedKey, this.state.selectedWallet)
 	}
 
 	render() {

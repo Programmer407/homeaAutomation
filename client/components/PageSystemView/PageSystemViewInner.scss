@@ -39,4 +39,24 @@ article.article {
 			top: 6px;
 		}
 	}
+
+	.page-item.active .page-link {
+		background-color: #00BCD4;
+		border-color: #00ACC1;
+	}
+
+	.pagination>li>a, .pagination>li>span {
+		color: #0097A7;
+	}
+
+	div.paginationNav {
+		nav {
+			float: right;
+		}
+
+		span.pageCountText {
+			float: left;
+			padding-top: 28px;
+		}
+	}
 }

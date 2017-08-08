@@ -6,6 +6,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Field } from 'redux-form';
+import Checkbox from 'material-ui/Checkbox';
 
 // src
 import { renderTextField, renderTextArea, renderInlineDateField } from '../../utils';
