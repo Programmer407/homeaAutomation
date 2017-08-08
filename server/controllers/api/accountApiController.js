@@ -938,27 +938,27 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 		rejectRequest('Missing required arguments', res)
 		return;
 	}
-	console.log('coinAddresses : ' + coinAddresses)
+	//console.log('coinAddresses : ' + coinAddresses)
 	var addressArray = coinAddresses.toString().split(',');
-	console.log('addressArray : ' + addressArray)
+	//console.log('addressArray : ' + addressArray)
 	var validAddresses = new Array();
 	addressArray.forEach(function(address, index) {
-		console.log('address : ' + address)
+		//console.log('address : ' + address)
 		if (WAValidator.validate(address)) {
 			validAddresses[index] = address
 		}
 	})
-	validAddresses[0] = '0x4961aC1d43B6249bc998D611F33d42B54E31712E'
-	console.log('validAddresses : ' + validAddresses)
+	//validAddresses[0] = '0x4961aC1d43B6249bc998D611F33d42B54E31712E'
+	//console.log('validAddresses : ' + validAddresses)
 	if (validAddresses.length > 0) {
 		async.eachSeries(validAddresses, function(coinAddress, nextCallback) {
-			console.log('111111111')
+			//console.log('111111111')
 			blockexplorer.getAddress(coinAddress)
 				.then(address => {
-					console.log('2222222')
+					//console.log('2222222')
 					async.waterfall([
 						function(callback) {
-							console.log('333333333')
+							//console.log('333333333')
 							findUserAddressByAddress(user.id, coinAddress)
 								.then(userAddress => {
 									if (userAddress) {
