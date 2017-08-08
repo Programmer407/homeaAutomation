@@ -1,0 +1,1 @@
+ALTER TABLE transactions MODIFY COLUMN trx_id varchar(255) default null;

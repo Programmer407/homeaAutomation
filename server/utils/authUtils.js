@@ -61,3 +61,9 @@ export const authorizePath = (req, res, next) => {
 }
 
 export const ensureAuthorization = authorizePath
+
+export const rejectRequest = (message, res) => res
+  .status(400)
+  .send({
+    message
+  })

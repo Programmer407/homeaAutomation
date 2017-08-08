@@ -4,7 +4,7 @@ import crypto from 'crypto';
 
 // src
 import { encrypt, decrypt } from '../../utils/encryptionUtils'
-import { ensureAnonymity, caughtError } from '../../utils'
+import { ensureAnonymity, rejectRequest, caughtError } from '../../utils'
 import { findUserByRegistrationToken, isActiveUser, findUserByToken, insertUser, updateUser, findUserByID, findUserByEmail, findUserByEmailAndPassword } from '../../managers/userManager'
 import { findRoleById } from '../../managers/roleManager'
 import { findUserAccountTypeById } from '../../managers/userAccountTypeManager'
@@ -18,24 +18,15 @@ const router = express.Router()
 // requires email and password
 router.post('/api/login', ensureAnonymity, (req, res) => {
   const { body } = req
-
   if ( !body ) {
-    res
-      .status(400)
-      .send({
-        message: 'Missing request body'
-      })
+    rejectRequest('Missing request body', res)
+    return;
   }
 
-  //const { email, password, rememberMe } = body
   const { email, password } = body
-
   if ( !email || !password ) {
-    res
-      .status(400)
-      .send({
-        message: 'Missing required arguments'
-      })
+    rejectRequest('Missing required arguments', res)
+    return;
   }
   
   findUserByEmail(email)
@@ -94,24 +85,17 @@ router.get('/api/logout', (req, res) => {
 
 router.post('/api/users/create', ensureAnonymity, (req, res) => {
   const { body } = req
-
   if ( !body ) {
-    return res
-      .status(400)
-      .send({
-        message: 'Missing request body'
-      })
+    rejectRequest('Missing request body', res)
+    return;
   }
 
   const { firstName, lastName, email, password } = body
-
   if ( !firstName || !lastName || !email || !password ) {
-    return res
-      .status(400)
-      .send({
-        message: 'Missing requied arguments'
-      })
+    rejectRequest('Missing required arguments', res)
+    return;
   }
+
   findUserByEmail(email)
     .then(user => {
       if (user) {
@@ -190,23 +174,15 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
 
 router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
   const { body } = req
-
   if ( !body ) {
-    res
-      .status(400)
-      .send({
-        message: 'Missing request body'
-      })
+    rejectRequest('Missing request body', res)
+    return;
   }
 
   const { email } = body
-
   if ( !email ) {
-    res
-      .status(400)
-      .send({
-        message: 'Missing required arguments'
-      })
+    rejectRequest('Missing required arguments', res)
+    return;
   }
 
   findUserByEmail(email)
@@ -259,24 +235,17 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
 
 router.post('/api/users/search-user-token', (req, res) => {
   const { body } = req
-
   if ( !body ) {
-    return res
-      .status(400)
-      .send({
-        message: 'Missing request body'
-      })
+    rejectRequest('Missing request body', res)
+    return;
   }
 
   const { tokenString } = body
-
   if ( !tokenString ) {
-    return res
-      .status(400)
-      .send({
-        message: 'Missing requied arguments'
-      })
+    rejectRequest('Missing required arguments', res)
+    return;
   }
+
   findUserByToken(tokenString)
     .then(user => {
       if (user) {
@@ -300,30 +269,20 @@ router.post('/api/users/search-user-token', (req, res) => {
 
 router.post('/api/users/reset-password', (req, res) => {
   const { body } = req
-
   if ( !body ) {
-    return res
-      .status(400)
-      .send({
-        message: 'Missing request body'
-      })
+    rejectRequest('Missing request body', res)
+    return;
   }
 
   const { token, password, confirmPassword } = body
-
   if ( !token || !password || !confirmPassword ) {
-    return res
-      .status(400)
-      .send({
-        message: 'Missing requied arguments'
-      })
+    rejectRequest('Missing required arguments', res)
+    return;
   } else if (password !== confirmPassword) {
-    return res
-      .status(400)
-      .send({
-        message: 'Password and Confirm Password does not match.'
-      })
+    rejectRequest('Password and Confirm Password does not match', res)
+    return;
   }
+
   findUserByToken(token)
     .then(user => {
       if (user) {
@@ -357,24 +316,17 @@ router.post('/api/users/reset-password', (req, res) => {
 
 router.post('/api/users/verify-account', (req, res) => {
   const { body } = req
-
   if ( !body ) {
-    return res
-      .status(400)
-      .send({
-        message: 'Missing request body'
-      })
+    rejectRequest('Missing request body', res)
+    return;
   }
 
   const { token } = body
-
   if ( !token ) {
-    return res
-      .status(400)
-      .send({
-        message: 'Missing requied arguments'
-      })
+    rejectRequest('Missing required arguments', res)
+    return;
   }
+
   findUserByRegistrationToken(token)
     .then(user => {
       if (user) {
@@ -409,24 +361,17 @@ router.post('/api/users/verify-account', (req, res) => {
 
 router.post('/api/users/resend-activation', (req, res) => {
   const { body } = req
-
   if ( !body ) {
-    return res
-      .status(400)
-      .send({
-        message: 'Missing request body'
-      })
+    rejectRequest('Missing request body', res)
+    return;
   }
 
   const { userId } = body
-
   if ( !userId ) {
-    return res
-      .status(400)
-      .send({
-        message: 'Missing requied arguments'
-      })
+    rejectRequest('Missing required arguments', res)
+    return;
   }
+
   findUserByID(userId)
     .then(user => {
       if (user) {

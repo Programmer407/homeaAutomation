@@ -6,8 +6,8 @@ import User from './User';
 const UserAddress = sequelize.define(
   "useraddresses",
   {
-    address: { type: Sequelize.STRING(128), field: "address" },
-    nickName: { type: Sequelize.STRING(128), field: "nick_name" },
+    address: { type: Sequelize.STRING(255), field: "address" },
+    nickName: { type: Sequelize.STRING(255), field: "nick_name" },
     balance: { type: Sequelize.STRING(128), field: "balance" },
     currency: { type: Sequelize.STRING(128), field: "currency" }
   },

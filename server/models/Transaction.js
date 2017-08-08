@@ -11,7 +11,7 @@ import AssociatedAddress from './AssociatedAddress';
 const Transaction = sequelize.define(
   "transactions",
   {
-    trxId: { type: Sequelize.INTEGER, field: "trx_id" },
+    trxId: { type: Sequelize.STRING(128), field: "trx_id" },
     destination: { type: Sequelize.STRING(128), field: "destination" },
     note: { type: Sequelize.STRING(128), field: "note" },
     amount: { type: Sequelize.STRING(128), field: "amount" },
