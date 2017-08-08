@@ -7,8 +7,6 @@ import coinBaseService from '../../services/CoinBaseService'
 import blockexplorer from 'blockchain.info/blockexplorer'
 import WAValidator from 'wallet-address-validator';
 import isNil from 'lodash/isNil'
-import bitcore from 'bitcore'
-//var bitcoreAddress = new bitcore.Address();
 
 // src
 import { ensureAnonymity, caughtError, bindEntityApiRoutes, ensureAuthorization, rejectRequest } from '../../utils'
