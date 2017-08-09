@@ -27,7 +27,7 @@ import { findAssociatedAddById, findAssociatedAddByAdd, updateAssociatedAdd } fr
 const router = express.Router()
 
 router.get('/api/accounts/my-account-all-data', ensureAuthorization, (req, res) => {
-  /*const { user } = req
+  const { user } = req
 
   Promise.all([ findAllProviderList(), findAllUserProviderList(user.id), findAllUserAddresses(user.id) ])
   	.then(([providerList, userProviderList, userAddressesList]) => {
@@ -35,8 +35,8 @@ router.get('/api/accounts/my-account-all-data', ensureAuthorization, (req, res) 
     })
     .catch(error => {
     	caughtError(res, error)
-		})*/
-		const {user} = req
+		})
+		/*const {user} = req
     if (user) {
         findAllProviderList()
             .then(providerList => {
@@ -67,7 +67,7 @@ router.get('/api/accounts/my-account-all-data', ensureAuthorization, (req, res) 
             .send({
                 message: 'Something went wrong, Please try again'
             })
-    }
+    }*/
 })
 
 router.post('/api/accounts/my-account-connect-url', ensureAuthorization, (req, res) => {
