@@ -35,7 +35,39 @@ router.get('/api/accounts/my-account-all-data', ensureAuthorization, (req, res) 
     })
     .catch(error => {
     	caughtError(res, error)
-    })
+		})
+		/*const {user} = req
+    if (user) {
+        findAllProviderList()
+            .then(providerList => {
+                findAllUserProviderList(user.id)
+                    .then(userProviderList => {
+                        findAllUserAddresses(user.id)
+                            .then(userAddressesList => {
+                                res
+                                    .status(200)
+                                    .send({
+                                        providerList, userProviderList, userAddressesList
+                                    })
+                            })
+                            .catch(error => {
+                                caughtError(res, error)
+                            })
+                    })
+                    .catch(error => {
+                        caughtError(res, error)
+                    })
+            })
+            .catch(error => {
+                caughtError(res, error)
+            })
+    } else {
+        res
+            .status(500)
+            .send({
+                message: 'Something went wrong, Please try again'
+            })
+    }*/
 })
 
 router.post('/api/accounts/my-account-connect-url', ensureAuthorization, (req, res) => {
