@@ -1,16 +1,13 @@
 // libs
 import React from 'react';
-import PropTypes from 'prop-types';
 import Tabs, { Tab } from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
-import ActionHelp from 'material-ui/svg-icons/action/help';
-import IconButton from 'material-ui/IconButton';
 import ActionDelete from 'material-ui/svg-icons/action/delete'
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 
 // src
-import styles from './TabViewInner.scss'
+import './TabView.scss'
 import { TradingView, IncomeView } from '../'
 
 const cyan500 = 'rgba(0,188,212,0.8)';
@@ -47,7 +44,7 @@ const activeBtnStyle = {
 	transition: '1s'
 }
 
-const Operations = (props) => {
+const Operations = () => {
   return (
 		<span>
 			<FlatButton label="Delete" labelPosition="after" icon={<ActionDelete />} hoverColor={'rgba(0,188,212,0.1)'} primary />
@@ -55,8 +52,8 @@ const Operations = (props) => {
   );
 }
 
-const TabViewInner = (props) => {
-  const { tabIndex, onTabChange, onFormDialogToggle, tblData, rowSelected } = props;
+const TabView = (props) => {
+  const { tabIndex, onTabChange, onFormDialogToggle, rowSelected } = props;
   const tabLbls = [ 'Trading', 'Income', 'Spending' ]
   
   return (
@@ -69,7 +66,7 @@ const TabViewInner = (props) => {
 					inkBarStyle={ inkBarStyles }>
           {
             tabLbls.map( (lbl, index) =>
-							<Tab buttonStyle={ (tabIndex === index) ? activeBtnStyle : btnStyle } value={ index } label={ lbl } />
+							<Tab key={ index } buttonStyle={ (tabIndex === index) ? activeBtnStyle : btnStyle } value={ index } label={ lbl } />
             )
           }
 				</Tabs>
@@ -98,4 +95,4 @@ const TabViewInner = (props) => {
   );
 }
 
-export default TabViewInner
+export default TabView

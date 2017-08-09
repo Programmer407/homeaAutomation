@@ -9,17 +9,13 @@ import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton'
 import moment from 'moment'
-//import isUndefined from 'lodash/isUndefined'
-import { Field } from 'redux-form'
 
 // src
-import { renderSelectField } from '../../../utils'
 import AssociatedAddressesView from '../../commons/AssociatedAddressesView'
 import { ProviderForm } from '../../commons/Forms'
 
 const MyAccountsViewInner = (props) => {
-	const { onSelectionSubmit, onSelectionChange, onDeleteClick, onRefreshClick, selectedProvider, providerList, userProviderList,
-		isRefreshUserWalletList, handleRowClick, selectedKey, selectedWallet, renderRaisedSubmitButton, onSubmit } = props
+	const { onDeleteClick, onRefreshClick, userProviderList, isRefreshUserWalletList, handleRowClick, selectedWallet } = props
 	const { Transactions: selectedWalletTransactions, walletName: selectedWalletName } = selectedWallet
 	const cyan500 = 'rgba(0, 188, 212, 0.6)'
 		

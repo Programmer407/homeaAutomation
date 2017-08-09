@@ -1,71 +1,68 @@
 import React, {PropTypes} from "react";
-import QueueAnim from 'rc-queue-anim';
 import { connect } from "react-redux"
-import DocumentTitle from "react-document-title";
 
 // src
 import MyAccountsViewInner from './MyAccountsViewInner'
 
 class MyAccounts extends React.Component {
 	constructor(props) {
-		const { userProviderList } = props
-		const { UserWallets: userWallets } = userProviderList[0]
-
 		super(props)
-		if (userProviderList && userProviderList[0] && userWallets.length > 0) {
-			this.state = {
-				selectedKey: userWallets[0].id,
-				selectedWallet: userWallets[0]
+		const { userProviderList } = props
+		
+		if (!_.isNil(userProviderList) && !_.isNil(userProviderList[0])) {
+			const { UserWallets: userWallets } = userProviderList[0]
+
+			if (userWallets && userWallets.length > 0) {
+				this.state = {
+					selectedKey: userWallets[0].id,
+					selectedWallet: userWallets[0]
+				}
 			}
 		}
 	}
 
 	componentWillReceiveProps(nextProps) {
 		if (!_.isNil(this.state)) {
-			const { selectedKey, selectedWallet } = this.state;
+			let userWallets = []
+			const { selectedKey } = this.state
 			const { userProviderList } = nextProps
-			const { UserWallets: userWallets } = userProviderList[0]
+			
+			userWallets = _.flatten(userProviderList.map(userProviderListItem => {
+				return _.concat(userWallets, userProviderListItem.UserWallets)
+			}))
 
 			if ( !_.isNil(userProviderList) && !_.isNil(userProviderList[0]) && userWallets.length > 0 ) {
-				const isWalletFound = _.find(userWallets, function(w) { return w.id === selectedKey; });
+				const isWalletFound = _.find(userWallets, function(w) { return w.id === selectedKey })
 				
 				if ( !_.isNil(selectedKey) && !_.isNil(isWalletFound) ) {
-					//debugger
 					this.setState({
 						selectedWallet: userWallets[_.findIndex(userWallets, {id: selectedKey})]
 					})
-					return true;
 				} else {
-					//debugger
 					this.setState({
 						selectedKey: userWallets[0].id,
 						selectedWallet: userWallets[0]
 					})
-					return true;
 				}
 			} else {
-				//debugger
-				/* this.setState({
-					selectedKey: null,
-					selectedWallet: null
-				}) */
-				delete this.state.selectedKey;
-				delete this.state.selectedWallet;
-				return true;
+				delete this.state.selectedKey
+				delete this.state.selectedWallet
 			}
 		}
-		return true
 	}
 
 	handleRowClick = (value) => {
+		let userWallets = []
 		const { userProviderList } = this.props
-		const { UserWallets: userWallets } = userProviderList[0]
+		
+		userWallets = _.flatten(userProviderList.map(userProviderListItem => {
+			return _.concat(userWallets, userProviderListItem.UserWallets)
+		}))
 
 		this.setState({
 			selectedKey: value,
 			selectedWallet: userWallets[_.findIndex(userWallets, { id: value })]
 		})
-		//console.log('---> STATE:', this.state.selectedKey, this.state.selectedWallet)
 	}
 
 	render() {
@@ -82,8 +79,8 @@ class MyAccounts extends React.Component {
 }
 
 function mapStateToProps(state, ownProps) {
-	let selectedKey = 0
-	let selectedWallet = {}
+	const selectedKey = 0
+	const selectedWallet = {}
 
 	return {
 		selectedKey,
@@ -91,11 +88,11 @@ function mapStateToProps(state, ownProps) {
 	}
 }
 
-MyAccounts.propTypes={
+MyAccounts.propTypes = {
   providerList: PropTypes.array,
 	userProviderList: PropTypes.array,
 	onSelectionChange: React.PropTypes.func.isRequired,
 	onSelectionSubmit: React.PropTypes.func.isRequired,
-};
+}
 
-export default connect(mapStateToProps)(MyAccounts);
+export default connect(mapStateToProps)(MyAccounts)
