@@ -69,7 +69,7 @@ class PageLogin extends React.Component {
     setTimeout(() => {
       this.props.dispatch(changeFieldValue('loginForm', 'password', ' '));
       this.props.dispatch(changeFieldValue('loginForm', 'password', ''));
-    }, 200)
+    }, 50)
 
     const { dispatch } = this.props
     

@@ -5,6 +5,10 @@ import classnames from 'classnames';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import styles from './HeaderInner.scss';
+import Spinner from 'react-spinner-material';
+import DocumentTitle from 'react-document-title';
+import QueueAnim from 'rc-queue-anim';
+
 
 const PublicHeader = React.createClass ({
   getInitialState () {
@@ -46,6 +50,29 @@ const PublicHeader = React.createClass ({
 						</Nav>
           </Navbar.Collapse>
         </Navbar>
+      </div>
+    )
+  }
+});
+
+const LogoutInProgress = React.createClass ({
+  render() {
+    return (
+      <div className="page-login">
+        <div className="main-body">
+          <DocumentTitle title="Wisdom"/>
+          <QueueAnim type="bottom" className="ui-animate">
+            <div key="1">
+              <div className="text-center">
+                <Spinner width={100}
+                  height={120}
+                  spinnerColor={"#333"}
+                  spinnerWidth={2}
+                  show={true} />
+              </div>
+            </div>
+          </QueueAnim>
+        </div>
       </div>
     )
   }
@@ -102,18 +129,24 @@ const PrivateHeader = React.createClass ({
   }
 });
 
-
 const HeaderInner = (props) => {
-	const { onToggle, expanded, fluid, onSelect, pullRight, eventKey, bsClass, bsStyle, user } = props;
+	const { onToggle, expanded, fluid, onSelect, pullRight, eventKey, bsClass, bsStyle, user, isLogoutLoading } = props;
 
 	return (
-		<Choose>
-			<When condition={ user }>
-				<PrivateHeader user={ user } />
-			</When>
+    <Choose>
+			<When condition={ isLogoutLoading }>
+        <LogoutInProgress  />
+      </When>
 			<Otherwise>
-				<PublicHeader />
-			</Otherwise>
+        <Choose>
+          <When condition={ user }>
+            <PrivateHeader user={ user } />
+          </When>
+          <Otherwise>
+            <PublicHeader />
+          </Otherwise>
+        </Choose>
+    </Otherwise>
 		</Choose>
 	);
 }

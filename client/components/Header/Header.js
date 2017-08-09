@@ -8,8 +8,9 @@ import HeaderInner from './HeaderInner';
 import { getCurrentUser } from '../../utils';
 
 const mapStateToProps = (state, ownProps) => {
+	const isLogoutLoading = state.entities.users.isLogoutLoading
 	const user = getCurrentUser(state);
-	return { user };
+	return { user, isLogoutLoading };
 }
 
 @connect(mapStateToProps)

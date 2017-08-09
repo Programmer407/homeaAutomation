@@ -17,11 +17,14 @@ export default function users(state = {}, action) {
   case ActionTypes.USER_LOGIN_FAILURE: {
     return {...state, isLoading: false}
   }
+  case ActionTypes.USER_LOGOUT: {
+    return {...state, isLoading: false, isLogoutLoading: true}
+  }
   case ActionTypes.USER_LOGOUT_SUCCESS: {
-    return {...state, isLoading: false}
+    return {...state, isLoading: false, isLogoutLoading: false}
   }
   case ActionTypes.USER_LOGOUT_FAILURE: {
-    return {...state, isLoading: false}
+    return {...state, isLoading: false, isLogoutLoading: false}
   }
   /*case ActionTypes.USER_REGISTER_SUCCESS: {
     if (!action.payload) {

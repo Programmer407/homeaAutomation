@@ -36,38 +36,6 @@ router.get('/api/accounts/my-account-all-data', ensureAuthorization, (req, res) 
     .catch(error => {
     	caughtError(res, error)
 		})
-		/*const {user} = req
-    if (user) {
-        findAllProviderList()
-            .then(providerList => {
-                findAllUserProviderList(user.id)
-                    .then(userProviderList => {
-                        findAllUserAddresses(user.id)
-                            .then(userAddressesList => {
-                                res
-                                    .status(200)
-                                    .send({
-                                        providerList, userProviderList, userAddressesList
-                                    })
-                            })
-                            .catch(error => {
-                                caughtError(res, error)
-                            })
-                    })
-                    .catch(error => {
-                        caughtError(res, error)
-                    })
-            })
-            .catch(error => {
-                caughtError(res, error)
-            })
-    } else {
-        res
-            .status(500)
-            .send({
-                message: 'Something went wrong, Please try again'
-            })
-    }*/
 })
 
 router.post('/api/accounts/my-account-connect-url', ensureAuthorization, (req, res) => {
@@ -185,16 +153,16 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																		function(callback) {
 																			findUserWalletByWalletId(acct.id)
 																				.then(userWallet => {
+																					var currentDate = new Date();
 																					if (userWallet) {
 																						userWallet.walletName = acct.name
 																						userWallet.walletType = acct.type
 																						userWallet.balance = acct.balance.amount
 																						userWallet.currency = acct.currency.code
-																						var currentDate = new Date();
 																						userWallet.updatedWalletAt = currentDate
 																						callback(null, userWallet);
 																					} else {
-																						userWallet = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code})
+																						userWallet = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code, updatedWalletAt: currentDate})
 																						userWallet.setUserprovider(updatedUserProvider, {save: false})
 																						callback(null, userWallet);
 																					}
@@ -407,8 +375,12 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 									}
 								})                                
 							} else {
-								console.log('there is an error.')
-								caughtError(res, error)
+								res
+									.status(200)
+									.send({
+										message: 'Something went wrong, Please try again'
+									})
+								return;
 							}
 						})
 					}
@@ -522,16 +494,16 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 															function(callback) {
 																findUserWalletByWalletId(acct.id)
 																	.then(userWallet => {
+																		var currentDate = new Date();
 																		if (userWallet) {
 																			userWallet.walletName = acct.name
 																			userWallet.walletType = acct.type
 																			userWallet.balance = acct.balance.amount
 																			userWallet.currency = acct.currency.code
-																			var currentDate = new Date();
 																			userWallet.updatedWalletAt = currentDate
 																			callback(null, userWallet, acct);
 																		} else {
-																			userWallet = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code})
+																			userWallet = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code, updatedWalletAt: currentDate})
 																			userWallet.setUserprovider(userProviderObj, {save: false})
 																			callback(null, userWallet, acct);
 																		}
@@ -758,16 +730,16 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 									function(callback) {
 										findUserWalletByWalletId(acct.id)
 											.then(userWallet => {
+												var currentDate = new Date();
 												if (userWallet) {
 													userWallet.walletName = acct.name
 													userWallet.walletType = acct.type
 													userWallet.balance = acct.balance.amount
 													userWallet.currency = acct.currency.code
-													var currentDate = new Date();
 													userWallet.updatedWalletAt = currentDate
 													callback(null, userWallet, acct);
 												} else {
-													userWallet = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code})
+													userWallet = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code, updatedWalletAt: currentDate})
 													userWallet.setUserprovider(userProviderObj, {save: false})
 													callback(null, userWallet, acct);
 												}
