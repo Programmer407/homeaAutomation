@@ -2,8 +2,7 @@
 import React from 'react'
 import {reduxForm, change as changeFieldValue} from 'redux-form'
 import {push} from 'react-router-redux'
-import get from 'lodash/get'
-import isEmpty from 'lodash/isEmpty'
+//import get from 'lodash/get'
 import { connect } from 'react-redux'
 
 // src 
@@ -46,7 +45,7 @@ const validate = values => {
     .then(action => {
       const { error, payload } = action
       if ( !error ) {
-        const linkNext = get(payload, 'user.linkHome', '/')
+        const linkNext = _.get(payload, 'user.linkHome', '/')
         dispatch(push(linkNext))
       }
       return action
@@ -57,14 +56,21 @@ class PageLogin extends React.Component {
 	constructor(props) {
     super(props)
 		this.state = {
-			check : 1,
+      check : 1
+			/*check : 1,
 			isSnackbarOpen: false,
 			snackMessage: null,
-			autoHideDuration: 4000
+			autoHideDuration: 4000*/
 		}
 	}
 
   componentDidMount() {
+
+    setTimeout(() => {
+      this.props.dispatch(changeFieldValue('loginForm', 'password', ' '));
+      this.props.dispatch(changeFieldValue('loginForm', 'password', ''));
+    }, 200)
+
     const { dispatch } = this.props
     
     let token = this.props.match.params.usertoken
@@ -105,7 +111,7 @@ class PageLogin extends React.Component {
   }
 	
 	/* HANDLER FUNCTIONS FOR SNACKBAR, MODALS */
-	handleSnackbarOpen = (params) => {
+	/*handleSnackbarOpen = (params) => {
 		const { message, duration } = params
 		
 		this.setState({
@@ -121,7 +127,7 @@ class PageLogin extends React.Component {
 			snackMessage: null,
 			autoHideDuration: 4000
 		})
-	}
+	}*/
 
   handleNoSpaces = (e) => {
     const fieldName = e.target.name;
@@ -139,8 +145,8 @@ class PageLogin extends React.Component {
 				return (
 					<PageLoginInner 
 						{...this.props}
-						onSnackbarOpen={ this.handleSnackbarOpen }
-						onSnackbarClose={ this.handleSnackbarClose}
+						//onSnackbarOpen={ this.handleSnackbarOpen }
+						//onSnackbarClose={ this.handleSnackbarClose}
             onHandleNoSpaces={ this.handleNoSpaces } />
 				)} else {
       return (

@@ -9,7 +9,7 @@ import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton'
 import moment from 'moment'
-import isUndefined from 'lodash/isUndefined'
+//import isUndefined from 'lodash/isUndefined'
 import { Field } from 'redux-form'
 
 // src
@@ -58,7 +58,7 @@ const MyAccountsViewInner = (props) => {
 															{
 																userProviderList.map(userProviderListItem =>
 																userProviderListItem.UserWallets.map(userWallet => {
-																	const { id, walletId, walletName, balance, currency, updated_at } = userWallet
+																	const { id, walletId, walletName, balance, currency, updatedWalletAt } = userWallet
 																	const { id: userProviderId, provider } = userProviderListItem
 
 																	return(
@@ -70,7 +70,7 @@ const MyAccountsViewInner = (props) => {
 																			<td className="mdl-data-table__cell--non-numeric">{ provider.displayName }</td>
 																			<td className="mdl-data-table__cell--non-numeric">
 																				{ balance } { currency } <br/>
-																				<span className="secondary-text">{ moment(updated_at).fromNow() }</span>
+																				<span className="secondary-text">{ moment(updatedWalletAt).fromNow() }</span>
 																			</td>
 																			<td>
 																					<IconButton onClick={ onRefreshClick.bind(this, userProviderId) }>
@@ -103,7 +103,7 @@ const MyAccountsViewInner = (props) => {
 						<div>
 							<div className="box-header box-header-primary">
 								<Choose>
-									<When condition={ isUndefined(selectedWalletName) }>
+									<When condition={ _.isNil(selectedWalletName) }>
 										{ 'Associated Addresses' }
 									</When>
 									<Otherwise>

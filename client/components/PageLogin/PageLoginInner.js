@@ -12,7 +12,7 @@ import QueueAnim from 'rc-queue-anim';
 
 // src
 import './PageLoginInner.scss';
-import iSnackbar from '../commons/MySnackbar'
+//import iSnackbar from '../commons/MySnackbar'
 import { renderTextField } from '../../utils';
 import { renderCheckbox } from '../../utils';
 
@@ -71,7 +71,7 @@ const PageLoginInner = (props) => {
           </div>
         </QueueAnim>
       </div>
-			<iSnackbar {...props}/>
+			{/*<iSnackbar {...props}/>*/}
     </div>
   )
 }

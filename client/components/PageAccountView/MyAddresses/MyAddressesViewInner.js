@@ -8,7 +8,6 @@ import { Field } from 'redux-form'
 import { renderTextArea } from '../../../utils'
 import IconButton from 'material-ui/IconButton'
 import moment from 'moment'
-import isUndefined from 'lodash/isUndefined'
 
 //src
 import NicknameDialog from '../../commons/DialogModalView';
@@ -101,7 +100,7 @@ const MyAddressesViewInner = (props) => {
 						<div>
 							<div className="box-header box-header-primary">
 								<Choose>
-									<When condition={ isUndefined(selectedAddressNickname) }>
+									<When condition={ _.isNil(selectedAddressNickname) }>
 										{ 'Associated Addresses' }
 									</When>
 									<Otherwise>
@@ -122,14 +121,9 @@ const MyAddressesViewInner = (props) => {
 				</div>
 
 				<div className="col-lg-4">
-					<div className="box box-default">
-						<div className="box-header box-header-primary">Add Addresses</div>
-						<div className="box-body">
-							<p>Enter one address per line. Other addresses that are yours based on Wisdom's analysis of the blockchain will be automatically added for you.</p>
-							 <NewAddressForm {...props}/> 
-						</div>
-					</div>
+					<NewAddressForm {...props}/> 
 				</div>
+				
 			</div>
 
 			<NicknameDialog {...props} />

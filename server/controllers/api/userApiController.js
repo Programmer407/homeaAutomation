@@ -53,20 +53,18 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
               }
             })
         } else {
-          //caughtError(res, error)
           res
+            .status(404)
+            .send({
+              message: 'Invalid username or password'
+            })
+        }
+      } else {
+        res
           .status(404)
           .send({
             message: 'Invalid username or password'
           })
-        }
-      } else {
-        //caughtError(res, error)
-        res
-        .status(404)
-        .send({
-          message: 'Invalid username or password'
-        })
       }
     })
     .catch(error => {

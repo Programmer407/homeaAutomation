@@ -6,20 +6,29 @@ import { Field } from 'redux-form'
 import { renderTextArea } from '../../../../utils'
 
 const NewAddressFormInner = props => {
-	const { onSubmit, renderRaisedSubmitButton } = props
+	const { onSubmit, renderRaisedSubmitButton, renderMessage } = props
 
 	return (
-		<form role="form" onSubmit={ onSubmit }>
-			<Field name="newAddresses" label="Enter one address per line" rows={1} rowsMax={10} component={ renderTextArea } fullWidth multiLine></Field>
-			<div className="btn-space">
+		<div className="box box-default">
+			<div className="box-header box-header-primary">Add Addresses</div>
+			<div className="box-body">
+				<p>Enter one address per line. Other addresses that are yours based on Wisdom's analysis of the blockchain will be automatically added for you.</p>
 				{
-					renderRaisedSubmitButton({
-						label: 'Submit',
-						labelWhenSubmitting: 'Validating'
-					})
+					renderMessage(props.message)
 				}
+				<form role="form" onSubmit={ onSubmit }>
+					<Field name="newAddresses" label="Enter one address per line" rows={1} rowsMax={10} component={ renderTextArea } fullWidth multiLine></Field>
+					<div className="btn-space">
+						{
+							renderRaisedSubmitButton({
+								label: 'Submit',
+								labelWhenSubmitting: 'Validating'
+							})
+						}
+					</div>
+				</form>
 			</div>
-		</form>
+		</div>
 	)
 }
 

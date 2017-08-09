@@ -1,13 +1,13 @@
 // libs
 import React, { Component } from 'react'
 import { reduxForm } from 'redux-form'
-import isNil from 'lodash/isNil'
-import split from 'lodash/split'
-import uniq from 'lodash/uniq'
+//import isNil from 'lodash/isNil'
+//import split from 'lodash/split'
+//import uniq from 'lodash/uniq'
 
 // src
 import { bindForm } from '../../../../utils'
-import { addUserAddresses } from "../../../../actions/entities/accounts"
+import { addUserAddresses } from '../../../../actions/entities/accounts'
 import NewAddressFormInner from './NewAddressFormInner'
 
 const fields = [ 'newAddresses' ]
@@ -18,9 +18,9 @@ const validate = values => {
 	let hasErrors = false
 	const { newAddresses } = values
 	
-	if ( !isNil(newAddresses) ) {
-		const newAddressesArr = split(newAddresses, '\n')
-		const uniqAddressesArr = uniq(newAddressesArr)
+	if ( !_.isNil(newAddresses) ) {
+		const newAddressesArr = _.split(newAddresses, '\n')
+		const uniqAddressesArr = _.uniq(newAddressesArr)
 		
 		if ( !newAddresses || !newAddresses.trim() === '' ) {
 			errors.newAddresses = 'Provide at least one address.'
@@ -54,13 +54,15 @@ const validate = values => {
 	onSubmit: (values, dispatch, props) => {
 		const { newAddresses } = values
 
-		if ( !isNil(newAddresses) ) {
-			const newAddressesArr = split(values.newAddresses, '\n')
+		if ( !_.isNil(newAddresses) ) {
+			const newAddressesArr = _.split(values.newAddresses, '\n')
 
-			return dispatch(addUserAddresses(newAddressesArr)).then(() => {
-				dispatch(props.reset('newAddressForm'))
-				dispatch(props.untouch('newAddressForm', ...fields))
-			})
+			return dispatch(addUserAddresses(newAddressesArr))
+				.then(action => {
+					dispatch(props.reset('newAddressForm'))
+					dispatch(props.untouch('newAddressForm', ...fields))
+					return action
+				})
 		}
 	}
 })
