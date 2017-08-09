@@ -65,7 +65,7 @@ class MyAccounts extends React.Component {
 			selectedKey: value,
 			selectedWallet: userWallets[_.findIndex(userWallets, { id: value })]
 		})
-		console.log('---> STATE:', this.state.selectedKey, this.state.selectedWallet)
+		//console.log('---> STATE:', this.state.selectedKey, this.state.selectedWallet)
 	}
 
 	render() {

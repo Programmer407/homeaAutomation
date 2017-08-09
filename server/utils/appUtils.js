@@ -39,7 +39,7 @@ export const stringEndsWith = (str, suffix) => {
 }
 
 export const getPort = () => {
-  return isProduction() ? 80 : 80
+  return isProduction() ? 3000 : 3000
 }
 
 export const setupSessionStore = (app) => {

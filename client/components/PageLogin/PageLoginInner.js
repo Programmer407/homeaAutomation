@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
 import QueueAnim from 'rc-queue-anim';
-import isNil from 'lodash/isNil';
+//import isNil from 'lodash/isNil';
 
 // src
 import './PageLoginInner.scss';
@@ -17,7 +17,7 @@ import { renderTextField } from '../../utils';
 import { renderCheckbox } from '../../utils';
 
 const PageLoginInner = (props) => {
-  const { onSubmit, renderSubmitButton, renderMessage, isLoadingLogin, message, errorMessage } = props;
+  const { onSubmit, renderSubmitButton, renderMessage, isLoadingLogin, message, errorMessage, onHandleNoSpaces } = props;
 	//console.log('---> message: ', message)
 	//console.log('---> errorMessage: ', errorMessage)
 
@@ -32,7 +32,7 @@ const PageLoginInner = (props) => {
                 <div className="card-content">
                   <section className="logo text-center">
                     <h1><a href="#/">Wisdom</a></h1>
-										<If condition={ !isNil(props.message) }>
+										<If condition={ !_.isNil(props.message) }>
                     {
                       renderMessage(props.message)
                     }
@@ -41,7 +41,7 @@ const PageLoginInner = (props) => {
                   <form className="form-horizontal" onSubmit={onSubmit}>
                     <fieldset>
                       <div className="form-group">
-                        <Field name="email" label="Email" component={renderTextField} autoComplete="off" />
+                        <Field name="email" label="Email" component={renderTextField} autoComplete="off" onChange={onHandleNoSpaces.bind(this)} />
                       </div>
                       <div className="form-group">
                         <Field name="password" label="Password" type="password" component={renderTextField}

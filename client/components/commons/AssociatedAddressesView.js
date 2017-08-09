@@ -7,7 +7,8 @@ import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 
 const AssociatedAddressesView = (props) => {
 	const { relatedTransactions, isRefreshing, triggerDialogModal, type, onNicknameDialogOpen } = props;
-	const filteredTrx = _.filter(relatedTransactions, function(o) { return !_.isNil(o.associatedaddress); } ); 
+	const filteredTrx1 = _.filter(relatedTransactions, function(o) { return !_.isNil(o.associatedaddress); } ); 
+	const filteredTrx = _.uniqBy(filteredTrx1, 'associatedaddress.address' ); 
 	const cyan500 = 'rgba(0, 188, 212, 0.6)'
 
 	return (

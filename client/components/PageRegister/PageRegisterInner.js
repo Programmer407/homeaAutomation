@@ -4,7 +4,6 @@ import { Field } from 'redux-form';
 import { Link } from 'react-router-dom';
 import Paper from 'material-ui/Paper';
 import DocumentTitle from 'react-document-title';
-
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import QueueAnim from 'rc-queue-anim';
@@ -14,7 +13,7 @@ import './PageRegisterInner.scss';
 import { renderTextField } from '../../utils'
 
 const PageRegisterInner = props => {
-  const { onSubmit, renderSubmitButton, renderMessage } = props;
+  const { onSubmit, renderSubmitButton, renderMessage, onHandleNoSpaces } = props;
 
   return (
     <div className="page-login">
@@ -36,13 +35,13 @@ const PageRegisterInner = props => {
                   <form className="form-horizontal">
                     <fieldset>
                       <div className="form-group">
-                        <Field name="firstName" label="First Name" autoComplete="off" component={renderTextField}/>
+                        <Field name="firstName" label="First Name" autoComplete="off" component={renderTextField} onChange={onHandleNoSpaces.bind(this)} />
                       </div>
                       <div className="form-group">
-                        <Field name="lastName" label="Last Name" autoComplete="off" component={renderTextField} />
+                        <Field name="lastName" label="Last Name" autoComplete="off" component={renderTextField} onChange={onHandleNoSpaces.bind(this)} />
                       </div>
                       <div className="form-group">
-                        <Field name="email" label="Email" autoComplete="off" component={renderTextField} />
+                        <Field name="email" label="Email" autoComplete="off" component={renderTextField} onChange={onHandleNoSpaces.bind(this)} />
                       </div>
                       <div className="form-group">
                         <Field name="password" label="Password" type="password" autoComplete="off" component={renderTextField} />

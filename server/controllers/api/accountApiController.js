@@ -599,7 +599,7 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																								findTransactionTypeById(2)
 																									.then(transactionTypeObj => {
 																										let transType = 2
-																										if (trans.type == 'exchange_withdrawal' || trans.type == 'fiat_withdrawal' || trans.type == 'buy' || (trans.type == 'send' && isNil(trans.to) && isNil(trans.to.address))) {
+																										if (trans.type == 'exchange_withdrawal' || trans.type == 'fiat_withdrawal' || trans.type == 'buy' || (trans.type == 'send' && isNil(trans.to))) {
 																											transType = 3
 																										}
 																										findTransactionTypeById(transType)
