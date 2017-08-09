@@ -1,23 +1,24 @@
 // libs
 import React from 'react'
-import CircularProgress from 'material-ui/CircularProgress'
+import moment from 'moment'
+import { Field } from 'redux-form'
+import { renderTextArea } from '../../../utils'
+import { CircularProgress, IconButton, RefreshIndicator } from 'material-ui'
+
+// src
+import { NewAddressForm } from '../../commons/Forms'
+import NicknameDialog from '../../commons/DialogModalView';
+import AssociatedAddressesView from '../../commons/AssociatedAddressesView';
+
+// assets
 import ActionCached from 'material-ui/svg-icons/action/cached'
 import ActionDelete from 'material-ui/svg-icons/action/delete'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import { Field } from 'redux-form'
-import { renderTextArea } from '../../../utils'
-import IconButton from 'material-ui/IconButton'
-import moment from 'moment'
-
-//src
-import NicknameDialog from '../../commons/DialogModalView';
-import AssociatedAddressesView from '../../commons/AssociatedAddressesView';
-import { NewAddressForm } from '../../commons/Forms'
+import { cyan300 } from 'material-ui/styles/colors'
 
 const MyAddressesViewInner = (props) => {
-	const { userAddressesList, onAddAddressesClick, onRefreshAddressClick, onDeleteAddressClick, handleAddressNicknameChange, onNicknameDialogOpen, isRefreshUserAddressList, onSubmit, renderRaisedSubmitButton, renderMessage, handleRowClick, selectedKey, selectedAddress } = props
+	const { selectedKey, handleRowClick, selectedAddress, userAddressesList, onDeleteAddressClick, onNicknameDialogOpen, onRefreshAddressClick, isRefreshUserAddressList, isDeleteUserAddressList, isUpdateUserAddressList, actionOnThisAddress } = props
 	const { nickName: selectedAddressNickname, AddressTransactions: selectedAddressTransactions } = selectedAddress
-	const cyan500 = 'rgba(0,188,212,0.6)'
 
 	return (
 		<div className="border-top">
@@ -41,7 +42,7 @@ const MyAddressesViewInner = (props) => {
 											</tr>
 										</thead>
 										<tbody className="tbl-body">
-											<Choose>
+											{/* <Choose>
 												<When condition={ isRefreshUserAddressList }>
 													<tr>
 														<td colSpan="4" className="text-center">
@@ -50,45 +51,55 @@ const MyAddressesViewInner = (props) => {
 													</tr>
 												</When>
 												<Otherwise>
-													<Choose>
-														<When condition={ userAddressesList && userAddressesList.length > 0 }>
-															{
-																userAddressesList.map(userAddressesListItem => {
-																	const {id, address, nickName: nickname, currency, balance, updated_at} = userAddressesListItem
-																	{/* const diff = moment(updated_at).fromNow()
-																	debugger */}
+												</Otherwise>
+											</Choose> */}
+											<Choose>
+												<When condition={ userAddressesList && userAddressesList.length > 0 }>
+													{
+														userAddressesList.map(userAddressesListItem => {
+															const {id, address, nickName: nickname, currency, balance, updated_at} = userAddressesListItem
 
-																	return (
-																		<tr key={ id } onClick={ handleRowClick.bind(this, id) }>
-																			<td className="mdl-data-table__cell--non-numeric">{nickname}</td>
-																			<td className="mdl-data-table__cell--non-numeric">{address}</td>
-																			<td className="mdl-data-table__cell--non-numeric">
-																				{balance} {currency} <br/>
-																				<span className="secondary-text">{ moment(updated_at).fromNow() }</span>
-																			</td>
-																			<td>
-																				<IconButton onClick={ onRefreshAddressClick.bind(this, id) }>
-																					<ActionCached color={cyan500}/> 
-																				</IconButton>
+															return (
+																<tr key={ id } onClick={ handleRowClick.bind(this, id) }>
+																	<td className="mdl-data-table__cell--non-numeric">{nickname}</td>
+																	<td className="mdl-data-table__cell--non-numeric">{address}</td>
+																	<td className="mdl-data-table__cell--non-numeric">
+																		{balance} {currency} <br/>
+																		<span className="secondary-text">{ moment(updated_at).fromNow() }</span>
+																	</td>
+																	<td>
+																		<IconButton 
+																			onClick={ onRefreshAddressClick.bind(this, id) } 
+																			disabled={ isRefreshUserAddressList || isUpdateUserAddressList || isDeleteUserAddressList }>
+																			{
+																				(isRefreshUserAddressList && actionOnThisAddress == id) ? <RefreshIndicator status="loading" top={12} left={12} size={25}/> : <ActionCached color={cyan300}/>
+																			}
+																		</IconButton>
 
-																				<IconButton onClick={ onNicknameDialogOpen.bind(this, {id, address, oldNickname: nickname, type: 'ADDRESS_NICK' }) }>
-																					<EditorModeEdit color={cyan500}/> 
-																				</IconButton>
-																				
-																				<IconButton onClick={ onDeleteAddressClick.bind(this, id) }>
-																					<ActionDelete color={cyan500}/> 
-																				</IconButton>
-																			</td>
-																		</tr>
-																)}
-															)}
-														</When>
-														<Otherwise>
-															<tr>
-																<td colSpan="4" className="text-center">BTC addresses you add manually will show up here.</td>
-															</tr>
-														</Otherwise>
-													</Choose>
+																		<IconButton 
+																			onClick={ onNicknameDialogOpen.bind(this, {id, address, oldNickname: nickname, type: 'ADDRESS_NICK' }) } 
+																			disabled={ isRefreshUserAddressList || isUpdateUserAddressList || isDeleteUserAddressList }>
+																			{
+																				(isUpdateUserAddressList && actionOnThisAddress == id) ? <RefreshIndicator status="loading" top={12} left={12} size={25}/> : <EditorModeEdit color={cyan300}/> 
+																			}
+																		</IconButton>
+																		
+																		<IconButton 
+																			onClick={ onDeleteAddressClick.bind(this, id) } 
+																			disabled={ isRefreshUserAddressList || isUpdateUserAddressList || isDeleteUserAddressList }>
+																			{
+																				(isDeleteUserAddressList && actionOnThisAddress == id) ? <RefreshIndicator status="loading" top={12} left={12} size={25}/> : <ActionDelete color={cyan300}/> 
+																			}
+																		</IconButton>
+																	</td>
+																</tr>
+														)}
+													)}
+												</When>
+												<Otherwise>
+													<tr>
+														<td colSpan="4" className="text-center">BTC addresses you add manually will show up here.</td>
+													</tr>
 												</Otherwise>
 											</Choose>
 										</tbody>
@@ -113,6 +124,7 @@ const MyAddressesViewInner = (props) => {
 								<AssociatedAddressesView
 									{...props}
 									isRefreshing={ isRefreshUserAddressList }
+									isDeleting={ isDeleteUserAddressList }
 									relatedTransactions={ selectedAddressTransactions }
 									type={ 'ASSOC_ADDRESS_NICK' } /> 
 							</div>

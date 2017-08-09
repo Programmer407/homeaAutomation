@@ -41,7 +41,7 @@ const activeBtnStyle = {
   fontSize: 18,
   minWidth: 140,
   height: '54px',
-	transition: '1s'
+	transition: '0.5s'
 }
 
 const Operations = () => {

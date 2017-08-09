@@ -6,7 +6,7 @@ import { IconButton, CircularProgress } from 'material-ui'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
 
 const AssociatedAddressesView = (props) => {
-	const { relatedTransactions, isRefreshing, triggerDialogModal, type, onNicknameDialogOpen } = props;
+	const { relatedTransactions, isRefreshing, isDeleting, triggerDialogModal, type, onNicknameDialogOpen } = props;
 	const filteredTrx1 = _.filter(relatedTransactions, function(o) { return !_.isNil(o.associatedaddress); } ); 
 	const filteredTrx = _.uniqBy(filteredTrx1, 'associatedaddress.address' ); 
 	const cyan500 = 'rgba(0, 188, 212, 0.6)'
@@ -25,7 +25,7 @@ const AssociatedAddressesView = (props) => {
 				</thead>
 				<tbody className="tbl-body">
 					<Choose>
-						<When condition={ isRefreshing }>
+						<When condition={ isRefreshing || isDeleting }>
 							<tr>
 								<td colSpan="4" className="text-center">
 									<CircularProgress size={30} thickness={3} />

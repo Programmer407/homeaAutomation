@@ -15,7 +15,7 @@ export default function accounts(state = {}, action) {
 
 /*****************************************deleteWallet*****************************************************************/ 
 		case ActionTypes.DELETE_WALLET: {
-			return {...state, refreshUserWalletList: true}
+			return {...state, deleteUserWalletList: true}
     }
     case ActionTypes.DELETE_WALLET_SUCCESS: {
 			const {payload} = action;
@@ -23,10 +23,10 @@ export default function accounts(state = {}, action) {
       if (!payload) {
         throw new Error(`Can't execute ${ ActionTypes.DELETE_WALLET_SUCCESS }. {payload} isn't available in action`)
       }
-			return {...state, userProviderList, refreshUserWalletList: false};
+			return {...state, userProviderList, deleteUserWalletList: false};
     }
 		case ActionTypes.DELETE_WALLET_FAILURE: {
-			return {...state, refreshUserWalletList: false}
+			return {...state, deleteUserWalletList: false}
     }
 /*****************************************refreshUserProviders*****************************************************************/ 
 		case ActionTypes.REFRESH_USERPROVIDERS: {
@@ -60,7 +60,7 @@ export default function accounts(state = {}, action) {
     }
 /*****************************************addUserAddresses*****************************************************************/ 
 		case ActionTypes.ADD_USER_ADDRESSES: {
-			return {...state, refreshUserAddressList: true}
+			return {...state, addUserAddressList: true}
     }
     case ActionTypes.ADD_USER_ADDRESSES_SUCCESS: {
 			const {payload} = action;
@@ -68,10 +68,10 @@ export default function accounts(state = {}, action) {
       if (!payload) {
         throw new Error(`Can't execute ${ ActionTypes.ADD_USER_ADDRESSES_SUCCESS }. {payload} isn't available in action`)
       }
-			return {...state, userAddressesList, refreshUserAddressList: false};
+			return {...state, userAddressesList, addUserAddressList: false};
     }
 		case ActionTypes.ADD_USER_ADDRESSES_FAILURE: {
-			return {...state, refreshUserAddressList: false}
+			return {...state, addUserAddressList: false}
     }
 /****************************************refreshUserAddresses******************************************************************/    
     case ActionTypes.REFRESH_USER_ADDRESSES: {
@@ -90,7 +90,7 @@ export default function accounts(state = {}, action) {
     }
 /**************************************deleteUserAddress********************************************************************/     
 		case ActionTypes.DELETE_USER_ADDRESS: {
-			return {...state, refreshUserAddressList: true}
+			return {...state, deleteUserAddressList: true}
     }
     case ActionTypes.DELETE_USER_ADDRESS_SUCCESS: {
 			const {payload} = action;
@@ -98,14 +98,14 @@ export default function accounts(state = {}, action) {
       if (!payload) {
         throw new Error(`Can't execute ${ ActionTypes.DELETE_USER_ADDRESS_SUCCESS }. {payload} isn't available in action`)
       }
-			return {...state, userAddressesList, refreshUserAddressList: false};
+			return {...state, userAddressesList, deleteUserAddressList: false};
     }
     case ActionTypes.DELETE_USER_ADDRESS_FAILURE: {
-			return {...state, refreshUserAddressList: false}
+			return {...state, deleteUserAddressList: false}
     }
 /**************************************updateUserAddress********************************************************************/     
 		case ActionTypes.UPDATE_USER_ADDRESS: {
-			return {...state, refreshUserAddressList: true}
+			return {...state, updateUserAddressList: true}
     }
     case ActionTypes.UPDATE_USER_ADDRESS_SUCCESS: {
 			const {payload} = action;
@@ -113,10 +113,10 @@ export default function accounts(state = {}, action) {
       if (!payload) {
         throw new Error(`Can't execute ${ ActionTypes.UPDATE_USER_ADDRESS_SUCCESS }. {payload} isn't available in action`)
       }
-			return {...state, userAddressesList, refreshUserAddressList: false};
+			return {...state, userAddressesList, updateUserAddressList: false};
     }
     case ActionTypes.UPDATE_USER_ADDRESS_FAILURE: {
-			return {...state, refreshUserAddressList: false}
+			return {...state, updateUserAddressList: false}
     }
 /**************************************updateAssociatedMyAdd********************************************************************/     
 		case ActionTypes.UPDATE_ASSOCIATED_MYADD: {

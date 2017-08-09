@@ -23,6 +23,8 @@ $heading-color: #444;
 }
 
 article.article {
+	margin-bottom: 100px;
+
 	h2.article-title {
 		color: $heading-color;
 		font-size: 34px;
@@ -110,10 +112,6 @@ article.article {
 				align-self: center;
 			}
 		}
-
-		// .primary-select-field {
-		// 	max-width: 100%;
-		// }
 	}
 
 	.mono-text {
@@ -124,135 +122,3 @@ article.article {
 		margin-top: 10px;
 	}
 }
-
-
-/*.article > .box {
-	padding-top: 20px;
-}
-
-.box > .box-header-primary {
-	font-size: 1.5em;
-	color: #444;
-	font-weight: 300;
-	padding-top: 25px;
-}
-
-.float-right-primary {
-	float: right;
-	padding-left: 15px;
-	color: #FFF !important;
-}
-
-.float-left-primary {
-	float: left;
-}
-
-.tbl-heading {
-	font-size: 1.3rem;
-	font-weight: 400;
-	color: #ECEFF1;
-}
-
-.tbl-header-primary {
-	background-color: #333c44;	
-}
-
-.tbl-header-primary > tr > th {
-	padding-top: 12px;
-}
-
-.icon-color-tbl-header > i{
-	color: #CFD8DC;
-}
-
-.icon-color-dark > i{
-	color: #37474F;
-}
-
-h6.text-muted {
-	font-size: 0.85rem;
-	margin: 2px 0px;
-}
-
-.mdl-data-table__cell--non-numeric > .row-text {
-	font-size: 1.1rem;
-}
-
-.action-header {
-	font-size: 1.5rem;
-	font-weight: 300;
-}
-
-.select-field-primary {
-	width: 90% !important;
-	overflow: hidden;
-	margin-bottom: 10px;
-}
-
-.submit-btn-primary > button {
-	position: absolute;
-	bottom: 0;
-	right: 0px;
-	min-width: 95px !important;
-	max-width: 135px !important;
-	// background-color: #37474F !important;
-}
-
-.sub-section-header {
-	overflow: hidden;
-	// margin-top: 40px;
-}
-
-.action-icon {
-	margin-left: 12px;
-}
-
-.text-area-primary {
-	width: 100% !important;
-	margin-top: -26px !important;
-}
-
-// div >.article .article-title {
-// 	margin: 48px 0 30px;
-// 	border-top: 1px solid rgba(0,0,0,.117647);
-// 	border-top-width: 1px;
-// 	border-top-style: solid;
-// 	border-top-color: rgba(0, 0, 0, 0.118);
-// 	padding-top: 80px;
-// }
-
-.tbl-header > tr > th {
-	font-size: 1.3em !important;
-}
-
-.tbl-body > tr > td {
-	font-size: 1.1em !important;
-}*/
-
-
-
-
-/*ORIG SASS*/
-
-/*.root {
-  
-}
-
-.actionContainer {
-  text-align: right;
-
-  & > * {
-    margin: 2rem;
-  }
-}
-
-.divider-pipe {
-  color: #999;
-  padding-left: 8px;
-}
-
-.divider-pipe:after {
-  content: "|";
-  padding-right: 8px;
-}
-*/
