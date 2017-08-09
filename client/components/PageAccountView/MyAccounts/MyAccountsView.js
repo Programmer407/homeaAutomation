@@ -2,10 +2,6 @@ import React, {PropTypes} from "react";
 import QueueAnim from 'rc-queue-anim';
 import { connect } from "react-redux"
 import DocumentTitle from "react-document-title";
-import findIndex from 'lodash/findIndex'
-import find from 'lodash/find'
-import isNil from 'lodash/isNil'
-import hasIn from 'lodash/hasIn'
 
 // src
 import MyAccountsViewInner from './MyAccountsViewInner'
@@ -25,18 +21,18 @@ class MyAccounts extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (!isNil(this.state)) {
+		if (!_.isNil(this.state)) {
 			const { selectedKey, selectedWallet } = this.state;
 			const { userProviderList } = nextProps
 			const { UserWallets: userWallets } = userProviderList[0]
 
-			if ( !isNil(userProviderList) && !isNil(userProviderList[0]) && userWallets.length > 0 ) {
-				const isWalletFound = find(userWallets, function(w) { return w.id === selectedKey; });
+			if ( !_.isNil(userProviderList) && !_.isNil(userProviderList[0]) && userWallets.length > 0 ) {
+				const isWalletFound = _.find(userWallets, function(w) { return w.id === selectedKey; });
 				
-				if ( !isNil(selectedKey) && !isNil(isWalletFound) ) {
+				if ( !_.isNil(selectedKey) && !_.isNil(isWalletFound) ) {
 					//debugger
 					this.setState({
-						selectedWallet: userWallets[findIndex(userWallets, {id: selectedKey})]
+						selectedWallet: userWallets[_.findIndex(userWallets, {id: selectedKey})]
 					})
 					return true;
 				} else {
@@ -67,7 +63,7 @@ class MyAccounts extends React.Component {
 
 		this.setState({
 			selectedKey: value,
-			selectedWallet: userWallets[findIndex(userWallets, { id: value })]
+			selectedWallet: userWallets[_.findIndex(userWallets, { id: value })]
 		})
 		console.log('---> STATE:', this.state.selectedKey, this.state.selectedWallet)
 	}

@@ -2,7 +2,6 @@
 import React from 'react'
 import {reduxForm} from 'redux-form'
 import {push} from 'react-router-redux'
-import get from 'lodash/get'
 
 // src
 import PageForgotPasswordInner from './PageForgotPasswordInner'

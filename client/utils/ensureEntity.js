@@ -3,8 +3,6 @@
 // libs
 import React from 'react'
 import { connect } from 'react-redux'
-import get from 'lodash/get'
-import isEqual from 'lodash/isEqual'
 
 // src
 import {
@@ -40,7 +38,7 @@ export default (options:{
 }) => (WrappedComponent:Object) => {
     const {
         entityKey, fetchEntity, fetchAll, feedKey, skip = false,
-        id: fnGetId = (props) => get(props, 'match.params.id')
+        id: fnGetId = (props) => _.get(props, 'match.params.id')
     } = options
 
     if ( skip ) return WrappedComponent

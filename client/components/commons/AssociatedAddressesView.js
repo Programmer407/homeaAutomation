@@ -1,13 +1,13 @@
+// libs
 import React, {PropTypes} from "react";
-import CircularProgress from 'material-ui/CircularProgress';
+import { IconButton, CircularProgress } from 'material-ui'
+
+// assets
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import IconButton from 'material-ui/IconButton'
-import filter from 'lodash/filter'
-import isNil from 'lodash/isNil'
 
 const AssociatedAddressesView = (props) => {
 	const { relatedTransactions, isRefreshing, triggerDialogModal, type, onNicknameDialogOpen } = props;
-	const filteredTrx = filter(relatedTransactions, function(o) { return !isNil(o.associatedaddress); } ); 
+	const filteredTrx = _.filter(relatedTransactions, function(o) { return !_.isNil(o.associatedaddress); } ); 
 	const cyan500 = 'rgba(0, 188, 212, 0.6)'
 
 	return (

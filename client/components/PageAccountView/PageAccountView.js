@@ -19,9 +19,6 @@ import {
 } from "../../actions/entities/accounts"
 import PageLoading from '../PageLoading';
 import {reduxForm} from 'redux-form'
-import split from 'lodash/split'
-import uniq from 'lodash/uniq'
-import isNil from 'lodash/isNil'
 
 // src
 import {bindForm, logoutWhenIdle} from '../../utils'

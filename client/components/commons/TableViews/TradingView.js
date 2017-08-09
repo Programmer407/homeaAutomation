@@ -1,122 +1,94 @@
 // libs
 import React from 'react'
-import Checkbox from 'material-ui/Checkbox'
-import IconButton from 'material-ui/IconButton'
+import { IconButton, Checkbox, FlatButton, RaisedButton, FontIcon } from 'material-ui'
+
+// src
+import { Pagination } from './'
+import { Selection } from '../'
+
+// assets
 import ActionDelete from 'material-ui/svg-icons/action/delete'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, TableFooter, FontIcon} from 'material-ui'
-import indexOf from 'lodash/indexOf'
-
-// src 
-import Pagination from'./Pagination'
-
-const cyan500 = 'rgba(0,188,212,0.9)';
-
-const styles = {
-	root: {
-		padding: '20px 0px'
-	},
-	
-	tblHdr: {
-		borderBottom: '1px solid #000',
-		backgroundColor: '#E6E6E6'	
-	},
-	
-	tblHdrCol: {
-		color: '#555',
-		fontSize: '16px',
-		fontWeight: '500'
-	},
-	
-	tblRowCol: {
-		fontSize: '14px',
-		height: '50px',
-	},
-
-	LastTblRowCol: {
-		fontSize: '14px',
-		height: '50px',
-		
-	},
-
-	footerContent: {
-    float: 'right'
-	},
-	
-  footerText: {
-    float: 'right',
-    paddingTop: 16,
-  }
-	
-}
+import { cyan200, cyan500 } from 'material-ui/styles/colors';
 
 const tblCols = {
-	date: 'Date',
-	source: 'Source',
-	action: 'Action',
-	coin: 'Coin',
-	volume: 'Volume',
-	price: 'Price',
-	fee: 'Fees',
-	cost: 'Cost',
-	operations: ''
+  checkbox: '',
+  date: 'Date',
+  source: 'Source',
+  action: 'Action',
+  volume: 'Volume',
+  price: 'Price',
+  fee: 'Fees',
+  cost: 'Cost',
+  operations: ''
 }
 
-const Operations = (props) => {
-	return (
-		<span>
-			<IconButton>
-				<EditorModeEdit color={cyan500}/>
-			</IconButton>
+const Operations = props => {
+  return (
+	  <span>
+		  <IconButton className="actionIcon">
+			  <EditorModeEdit color={cyan200} hoverColor={cyan500}/>
+		  </IconButton>
 
-			<IconButton>
-				<ActionDelete color={cyan500}/> 
-			</IconButton>
-		</span>
-	);
+		  <IconButton className="actionIcon">
+			  <ActionDelete color={cyan200} hoverColor={cyan500}/>
+		  </IconButton>
+	  </span>
+  );
 }
 
 const TradingView = (props) => {
-	const { onRowHover, onRowHoverExit, onRowSelection, onCellClick, hoveredRow, selectedRows, tblData, pageOffset, pageLimit, totalRecords, onPageClick } = props;
-	
-	return (
-		<div style={ styles.root }>
-		<Table selectable multiSelectable onRowHover={ onRowHover } onRowHoverExit={ onRowHoverExit } onRowSelection={ onRowSelection } onCellClick={ onCellClick }>
-			<TableHeader displaySelectAll enableSelectAll style={ styles.tblHdr }>
-				<TableRow>
-				{
-					Object.keys(tblCols).map(key => 
-						<TableHeaderColumn key={ tblCols[key] } style={ styles.tblHdrCol }>{ tblCols[key] }</TableHeaderColumn>
-					) 
-				}
-				</TableRow>
-			</TableHeader>
-			
-			<TableBody showRowHover deselectOnClickaway={ false }>
-			{
-				tblData.map( (data, index) => {
-					return (
-						<TableRow selected={ data.selected }>
-							<TableRowColumn style={ styles.tblRowCol }>{data.date}</TableRowColumn>
-							<TableRowColumn style={ styles.tblRowCol }>{data.source}</TableRowColumn>
-							<TableRowColumn style={ styles.tblRowCol }>{data.action}</TableRowColumn>
-							<TableRowColumn style={ styles.tblRowCol }>{data.coin}</TableRowColumn>
-							<TableRowColumn style={ styles.tblRowCol }>{data.volume}</TableRowColumn>
-							<TableRowColumn style={ styles.tblRowCol }>{data.price}</TableRowColumn>
-							<TableRowColumn style={ styles.tblRowCol }>{data.fee}</TableRowColumn>
-							<TableRowColumn style={ styles.tblRowCol }>{data.cost}</TableRowColumn>
-							<TableRowColumn style={ styles.lastTblRowCol }>{ (index === hoveredRow) ? <Operations /> : '' }</TableRowColumn>
-						</TableRow>
-					)
-				}) 
-			}
-		</TableBody>
-		<TableFooter adjustForCheckbox={false}>
-			<Pagination {...props}/>
-		</TableFooter>
-	</Table>
-	</div>
-)
+  const { tblData, onRowHover, onRowHoverExit, hoveredRow } = props;
+
+  return (
+		<div className="box box-default table-box table-responsive mdl-shadow--2dp">
+			<table className="mdl-data-table">
+				<thead className="tbl-header">
+					<tr>
+						<th className="mdl-data-table__cell--non-numeric">{ <Selection type={'HEADER'} {...props}/> }</th>
+						<th className="mdl-data-table__cell--non-numeric">{ tblCols.date }</th>
+						<th className="mdl-data-table__cell--non-numeric">{ tblCols.source }</th>
+						<th className="mdl-data-table__cell--non-numeric">{ tblCols.action }</th>
+						<th className="mdl-data-table__cell--non-numeric">{ tblCols.volume } { tblCols.coin }</th>
+						<th>{ tblCols.price }</th>
+						<th>{ tblCols.fee }</th>
+						<th>{ tblCols.cost }</th>
+						<th className="mdl-data-table__cell--non-numeric">{ tblCols.operations }</th>
+					</tr>
+				</thead>
+				<tbody className="tbl-body">
+					{
+						tblData.map((rowData, index) => {
+							return (
+								<tr 
+									key={ rowData.id }
+									onMouseEnter={ onRowHover }
+									onMouseLeave={ onRowHoverExit }
+									className="fixedHeightRow">
+										<td className="mdl-data-table__cell--non-numeric">{ <Selection index={ rowData.id } type={'ROW'} {...props} /> }</td>
+										<td className="mdl-data-table__cell--non-numeric">{ rowData.date }</td>
+										<td className="mdl-data-table__cell--non-numeric">{ rowData.source }</td>
+										<td className="mdl-data-table__cell--non-numeric">{ rowData.action }</td>
+										<td className="mdl-data-table__cell--non-numeric">{ rowData.volume } { rowData.coin }</td>
+										<td>{ rowData.price }</td>
+										<td>{ rowData.fee }</td>
+										<td>{ rowData.cost }</td>
+										<td className="mdl-data-table__cell--non-numeric text-center fixedWidthCol">{ (hoveredRow === index) ? <Operations /> : '' }</td>
+								</tr>
+							)
+						})
+					}
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colSpan="10">
+							<Pagination {...props} />
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	)
 }
 
 export default TradingView
