@@ -2,8 +2,6 @@
 import React from 'react'
 import {reduxForm} from 'redux-form'
 import {push} from 'react-router-redux'
-import get from 'lodash/get'
-import isEmpty from 'lodash/isEmpty'
 import PageResetPasswordInner from './PageResetPasswordInner'
 import PageLoading from '../PageLoading';
 import {resetPassword, isValidResetToken} from '../../actions/entities/users'
@@ -70,7 +68,7 @@ export default class PageResetPassword extends React.Component {
     .then(action => {
       const { error, payload } = action
       if ( !error ) {
-        const tokenMessage = get(payload, 'message', '');
+        const tokenMessage = _.get(payload, 'message', '');
         if (tokenMessage == 'true') {
           this.setState({
             check : 2

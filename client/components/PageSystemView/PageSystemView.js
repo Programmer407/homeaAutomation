@@ -7,8 +7,6 @@ import PageSystemViewInner from "./PageSystemViewInner"
 // src
 import { logoutWhenIdle } from '../../utils'
 
-const allRows = [0,1,2,3,4]
-
 @reduxForm({
 	form: 'AddTrxForm'
 })
@@ -20,14 +18,16 @@ class PageSystemView extends React.Component {
 			isHelpDialogOpen: false,
 			isFormDialogOpen: false, 
 			hoveredRow: null,
-			thisRow: null,
 			selectedRows: [],
+			allSelected: false,
+	    rowSelected: false,
 			pageOffset: 0,
 			pageLimit: 15,
 			totalRecords: 2000,
+	    tabIndex: 0,
 			tblData: [
 				{
-					id: 0,
+					id: 10,
 					date: '03-Aug-2017',
 					source: 'Coinbase',
 					action: 'BUY',
@@ -39,7 +39,7 @@ class PageSystemView extends React.Component {
 					operations: '',
 					selected: false
 				}, {
-					id: 1,
+					id: 11,
 					date: '03-Aug-2017',
 					source: 'Coinbase',
 					action: 'BUY',
@@ -51,7 +51,7 @@ class PageSystemView extends React.Component {
 					operations: '',
 					selected: false
 				}, {
-					id: 2,
+					id: 12,
 					date: '03-Aug-2017',
 					source: 'Coinbase',
 					action: 'BUY',
@@ -63,7 +63,7 @@ class PageSystemView extends React.Component {
 					operations: '',
 					selected: false
 				}, {
-					id: 3,
+					id: 13,
 					date: '03-Aug-2017',
 					source: 'Coinbase',
 					action: 'BUY',
@@ -75,7 +75,7 @@ class PageSystemView extends React.Component {
 					operations: '',
 					selected: false
 				}, {
-					id: 4,
+					id: 14,
 					date: '03-Aug-2017',
 					source: 'Coinbase',
 					action: 'BUY',
@@ -107,40 +107,71 @@ class PageSystemView extends React.Component {
 		})
 	}
 
-	handleCellClick = (rowNumber, columnId) => {
-		/* May use this in future */
+	handleHeadCheckboxClick = () => {
+		let newSelectedRows = []
+		let allSelected = false
+		let rowSelected = false
+		const { tblData, selectedRows } = this.state
+
+		if (_.keys(tblData).length === selectedRows.length) {
+			newSelectedRows = []
+			allSelected = false
+		} else {
+			const dataIds = Object.keys(tblData).map(data => { return tblData[data].id })
+			newSelectedRows = _.concat(newSelectedRows, dataIds)
+			allSelected = true
+		}
+		
+		rowSelected = (newSelectedRows.length > 0) ? true : false
+		
+		this.setState({
+			allSelected,
+			rowSelected,
+			selectedRows: newSelectedRows
+		})
 	}
 
+	handleCheckboxClick = (checkedRow) => {
+		let allSelected = false
+		let rowSelected = false
+		let newSelectedRows = []
+		const { selectedRows, tblData } = this.state
+		const keyCount = _.keys(tblData).length
+
+		if (_.indexOf(selectedRows, checkedRow) !== -1) {
+			newSelectedRows = _.pull(selectedRows, checkedRow)
+		} else {
+			newSelectedRows = _.concat(selectedRows, checkedRow)
+		}
+
+		allSelected = (keyCount === newSelectedRows.length) ? true : false
+		rowSelected = (newSelectedRows.length > 0) ? true : false
+		
+		this.setState({
+			allSelected,
+			rowSelected,
+			selectedRows: newSelectedRows
+		})
+	}
+	
 	handleRowHover = (hoveredRow) => {
-		this.setState({ hoveredRow });
+		this.setState({ hoveredRow: hoveredRow.currentTarget.rowIndex - 1 });
 	}
 	
 	handleRowHoverExit = () => {
 		this.setState({ hoveredRow: null });
 	}
-
-	handleRowSelection = (rows) => {
-		let newTblData = []
-		const { tblData } = this.state
-
-		if (rows === 'all' || rows.length === 0) {
-			newTblData = tblData.map(dat => {
-				dat.selected = (rows === 'all')
-				return dat
-			})
-		} else {
-			newTblData = tblData.map((dat, index) => {
-				dat.selected = _.includes(rows, index)
-				return dat
-			})
-		}
+	
+	// handlePageClick = (val) => {
+	// 	console.log('---> Pagination:', val)
+	// }
+	
+	handleTabChange = (tabIndex) => {
 		this.setState({
-			tblData: newTblData
+			tabIndex,
+			selectedRows: [],
+			allSelected: false
 		})
-	}
-
-	handlePageClick = (val) => {
-		console.log('---> Pagination:', val)
 	}
 
   render() {
@@ -152,9 +183,10 @@ class PageSystemView extends React.Component {
 				onFormDialogToggle={ this.handleFormDialogToggle }
 				onRowHover={ this.handleRowHover }
 				onRowHoverExit={ this.handleRowHoverExit }
-				onRowSelection={ this.handleRowSelection }
-				onCellClick={ this.handleCellClick }
+				onCheckboxClick={ this.handleCheckboxClick }
+				onHeadCheckboxClick={ this.handleHeadCheckboxClick }
 				onPageClick={ this.handlePageClick }
+				onTabChange={ this.handleTabChange }
 			/>
 		)
   }

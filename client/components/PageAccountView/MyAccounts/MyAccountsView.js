@@ -2,10 +2,6 @@ import React, {PropTypes} from "react";
 import QueueAnim from 'rc-queue-anim';
 import { connect } from "react-redux"
 import DocumentTitle from "react-document-title";
-//import findIndex from 'lodash/findIndex'
-//import find from 'lodash/find'
-//import isNil from 'lodash/isNil'
-//import hasIn from 'lodash/hasIn'
 
 // src
 import MyAccountsViewInner from './MyAccountsViewInner'

@@ -1,7 +1,6 @@
 // libs
 import React, { Component } from 'react'
 import { reduxForm } from 'redux-form'
-import isNil from 'lodash/isNil'
 
 // src
 import { bindForm } from '../../../../utils'
@@ -21,7 +20,7 @@ const validate = values => {
 	let hasErrors = false
 	const { newNickname, oldNickname } = values
 	
-	if ( !isNil(newNickname) ) {
+	if ( !_.isNil(newNickname) ) {
 		if ( !newNickname || !newNickname.trim() === '' ) {
 			errors.newNickname = 'Provide a nickname.'
 			hasErrors = true
@@ -52,7 +51,7 @@ const validate = values => {
 	onSubmit: (values, dispatch, props) => {
 		const { addressId, newNickname, nicknameType } = values
 
-		if ( !isNil(newNickname) ) {
+		if ( !_.isNil(newNickname) ) {
 			switch (nicknameType) {
 				case NICK_EDIT_TYPES.ADDRESS_NICK:
 					return dispatch(updateUserAddress(addressId, newNickname))

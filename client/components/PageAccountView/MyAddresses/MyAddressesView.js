@@ -2,9 +2,6 @@
 import React, {PropTypes} from "react"
 import { reduxForm } from 'redux-form'
 import { connect } from "react-redux"
-import findIndex from 'lodash/findIndex'
-import isNil from 'lodash/isNil'
-import find from 'lodash/find'
 
 //src
 import MyAddressesViewInner from './MyAddressesViewInner'
@@ -21,14 +18,14 @@ class MyAddresses extends React.Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (!isNil(this.state)) {
+		if (!_.isNil(this.state)) {
 			const { selectedKey, selectedAddress } = this.state;
 			const { userAddressesList } = nextProps
 
-			if ( !isNil(userAddressesList) && !isNil(userAddressesList[0]) && !isNil(userAddressesList[0].id) ) {
-				if ( !isNil(selectedKey) && find(userAddressesList, {id: selectedKey}) ) {
+			if ( !_.isNil(userAddressesList) && !_.isNil(userAddressesList[0]) && !_.isNil(userAddressesList[0].id) ) {
+				if ( !_.isNil(selectedKey) && _.find(userAddressesList, {id: selectedKey}) ) {
 					this.setState({
-						selectedAddress: userAddressesList[findIndex(userAddressesList, {id: selectedKey})]
+						selectedAddress: userAddressesList[_.findIndex(userAddressesList, {id: selectedKey})]
 					})
 					return true;
 				} else {
@@ -49,7 +46,7 @@ class MyAddresses extends React.Component {
 	handleRowClick = (value) => {
 		this.setState({
 			selectedKey: value,
-			selectedAddress: this.props.userAddressesList[findIndex(this.props.userAddressesList, {id: value})]
+			selectedAddress: this.props.userAddressesList[_.findIndex(this.props.userAddressesList, {id: value})]
 		})
 	}
 

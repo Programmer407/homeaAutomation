@@ -1,12 +1,11 @@
 /* @flow */
 
 // libs
-import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
-import get from 'lodash/get'
-import has from 'lodash/has';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import RaisedButton from 'material-ui/RaisedButton'
+import FlatButton from 'material-ui/FlatButton'
+import { Link } from 'react-router-dom'
+
 // src
 import { ENTITY_STATUS_DATA_AVAILABLE } from './utils'
 
@@ -34,19 +33,19 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
       this.handleSubmit = handleSubmit(this.wrapSubmit( onSubmit ))
     }
     componentDidMount() {
-        const hasEntity = has(this.props, 'entity')
+        const hasEntity = _.has(this.props, 'entity')
         
         if ( hasEntity ) {
-            const entity = get(this.props, 'entity')
-            const status = get(this.props, 'entity.__status__')
+            const entity = _.get(this.props, 'entity')
+            const status = _.get(this.props, 'entity.__status__')
 
             this.handleChangeEntityStatus(entity, status)
         }
     }
     componentWillReceiveProps(nextProps) {
-        const hasEntity = has(this.props, 'entity')
-        const status = get(this.props, 'entity.__status__')
-        const nextStatus = get(nextProps, 'entity.__status__')
+        const hasEntity = _.has(this.props, 'entity')
+        const status = _.get(this.props, 'entity.__status__')
+        const nextStatus = _.get(nextProps, 'entity.__status__')
 
         // debugger;
 
@@ -57,7 +56,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
     /**
      * Will only be called when two conditions are met:
      * 1. Form is being used for updating an entity
-     * 2. __status__ of that entity has changed
+     * 2. __status__ of that entity _.has changed
      * 
      */
     handleChangeEntityStatus = (entity, status) => {    

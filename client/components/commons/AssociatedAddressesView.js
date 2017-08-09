@@ -1,10 +1,9 @@
+// libs
 import React, {PropTypes} from "react";
-import CircularProgress from 'material-ui/CircularProgress';
+import { IconButton, CircularProgress } from 'material-ui'
+
+// assets
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import IconButton from 'material-ui/IconButton'
-//import filter from 'lodash/filter'
-//import isNil from 'lodash/isNil'
-//import uniqBy from 'lodash/uniqBy'
 
 const AssociatedAddressesView = (props) => {
 	const { relatedTransactions, isRefreshing, triggerDialogModal, type, onNicknameDialogOpen } = props;

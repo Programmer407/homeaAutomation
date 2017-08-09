@@ -1,7 +1,6 @@
 // libs
 import React, { Component } from 'react'
 import { reduxForm } from 'redux-form'
-import isNil from 'lodash/isNil'
 
 // src
 import { bindForm } from '../../../../utils'
@@ -16,7 +15,7 @@ const validate = values => {
 	let hasErrors = false
 	const { selectedProvider } = values
 	
-	if ( !isNil(selectedProvider) ) {
+	if ( !_.isNil(selectedProvider) ) {
 		if ( selectedProvider === 0 ) {
 			errors.selectedProvider	= "Select a valid provider from the list."
 			hasErrors = true
@@ -37,7 +36,7 @@ const validate = values => {
 	onSubmit: (values, dispatch, props) => {
 		const { selectedProvider } = values
 
-		if ( !isNil(selectedProvider) ) {
+		if ( !_.isNil(selectedProvider) ) {
 			return dispatch(accountconnectUrl( selectedProvider ))
 				.then(action => {
 					const { error, payload } = action

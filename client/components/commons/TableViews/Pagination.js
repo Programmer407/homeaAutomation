@@ -1,21 +1,7 @@
-import React from 'react'
-import {TableFooter, TableRow, TableRowColumn, FontIcon, IconButton} from 'material-ui'
-
-const styles = {
-  footerContent: {
-    float: 'right'
-	},
-	
-  footerText: {
-    float: 'right',
-    paddingTop: 16,
-		height: 16,
-		color: '#000'
-  }
-}
+import React from "react";
 
 const Pagination = props => {
-	const { pageOffset, pageLimit, totalRecords, onPageClick } = props
+	const { pageOffset, pageLimit, totalRecords } = props
 
 	return (
 		<div className="paginationNav">
@@ -24,8 +10,8 @@ const Pagination = props => {
 			</span>
 			<nav>
 				<ul className="pagination" >
-					<li class="page-item">
-						<a class="page-link " href="#" aria-label="Previous">
+					<li className="page-item">
+						<a className="page-link " href="#" aria-label="Previous">
 							<span aria-hidden="true">&laquo;</span>
 						</a>
 					</li>
@@ -34,8 +20,8 @@ const Pagination = props => {
 						<a className="page-link" href="#">2 <span className="sr-only">(current)</span></a>
 					</li>
 					<li className="page-item"><a className="page-link" href="#">3</a></li>
-					<li class="page-item">
-						<a class="page-link" href="#" aria-label="Next">
+					<li className="page-item">
+						<a className="page-link" href="#" aria-label="Next">
 							<span aria-hidden="true">&raquo;</span>
 						</a>
 					</li>
@@ -46,7 +32,6 @@ const Pagination = props => {
 }
 
 export default Pagination
-
 
 // import React from 'react';
 // import {TableFooter as TF, TableRow, TableRowColumn, FontIcon, IconButton} from 'material-ui';

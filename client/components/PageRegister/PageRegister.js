@@ -2,7 +2,6 @@
 import React from 'react'
 import {reduxForm, change as changeFieldValue} from 'redux-form'
 import {push} from 'react-router-redux'
-import get from 'lodash/get'
 import PageRegisterInner from './PageRegisterInner'
 import {register} from '../../actions/entities/users'
 import { bindForm } from '../../utils'
