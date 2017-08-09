@@ -23,7 +23,9 @@ class MyAddresses extends React.Component {
 			const { userAddressesList } = nextProps
 
 			if ( !_.isNil(userAddressesList) && !_.isNil(userAddressesList[0]) && !_.isNil(userAddressesList[0].id) ) {
-				if ( !_.isNil(selectedKey) && _.find(userAddressesList, {id: selectedKey}) ) {
+				const isAddressFound = _.find(userAddressesList, {id: selectedKey})
+
+				if ( !_.isNil(selectedKey) && !_.isNil(isAddressFound) ) {
 					this.setState({
 						selectedAddress: userAddressesList[_.findIndex(userAddressesList, {id: selectedKey})]
 					})
@@ -40,7 +42,16 @@ class MyAddresses extends React.Component {
 				delete this.state.selectedAddress;
 				return true;
 			}
-		}
+		} /* else {
+			const { userAddressesList } = nextProps
+
+			if (userAddressesList && userAddressesList[0] && userAddressesList[0].id) {
+				this.state = {
+					selectedKey: userAddressesList[0].id,
+					selectedAddress: userAddressesList[0]
+				}
+			}
+		} */
 	}
 
 	handleRowClick = (value) => {

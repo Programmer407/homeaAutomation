@@ -1,21 +1,19 @@
 // libs
-import React from 'react';
-import CircularProgress from 'material-ui/CircularProgress'
-import ActionCached from 'material-ui/svg-icons/action/cached'
-import ActionDelete from 'material-ui/svg-icons/action/delete'
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
-import IconButton from 'material-ui/IconButton'
+import React from 'react'
 import moment from 'moment'
+import { CircularProgress, SelectField, MenuItem, RaisedButton, IconButton, RefreshIndicator } from 'material-ui'
 
 // src
 import AssociatedAddressesView from '../../commons/AssociatedAddressesView'
 import { ProviderForm } from '../../commons/Forms'
 
+// assets
+import ActionCached from 'material-ui/svg-icons/action/cached'
+import ActionDelete from 'material-ui/svg-icons/action/delete'
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
+
 const MyAccountsViewInner = (props) => {
-	const { onDeleteClick, onRefreshClick, userProviderList, isRefreshUserWalletList, handleRowClick, selectedWallet } = props
+	const { onDeleteClick, onRefreshClick, userProviderList, isAddUserWalletList, isRefreshUserWalletList, isDeleteUserWalletList, handleRowClick, selectedWallet, selectedKey, actionOnThisWallet } = props
 	const { Transactions: selectedWalletTransactions, walletName: selectedWalletName } = selectedWallet
 	const cyan500 = 'rgba(0, 188, 212, 0.6)'
 		
@@ -40,8 +38,8 @@ const MyAccountsViewInner = (props) => {
 											</tr>
 										</thead>
 										<tbody className="tbl-body">
-											<Choose>
-												<When condition={ isRefreshUserWalletList }>
+											 <Choose>
+												<When condition={ isAddUserWalletList }>
 													<tr>
 														<td colSpan="4" className="text-center">
 															<CircularProgress size={30} thickness={3} />
@@ -69,12 +67,20 @@ const MyAccountsViewInner = (props) => {
 																				<span className="secondary-text">{ moment(updatedWalletAt).fromNow() }</span>
 																			</td>
 																			<td>
-																					<IconButton onClick={ onRefreshClick.bind(this, userProviderId) }>
-																						<ActionCached color={cyan500}/> 
+																					<IconButton 
+																					onClick={ onRefreshClick.bind(this, userProviderId) }
+																					disabled={ isRefreshUserWalletList || isDeleteUserWalletList }>
+																						{
+																							(isRefreshUserWalletList && actionOnThisWallet == userProviderId) ? <RefreshIndicator status="loading" top={12} left={12} size={25}/> : <ActionCached color={cyan500}/>
+																						}  
 																					</IconButton>
 																					
-																					<IconButton onClick={ onDeleteClick.bind(this, id) }>
-																						<ActionDelete color={cyan500}/> 
+																					<IconButton 
+																					onClick={ onDeleteClick.bind(this, id) }
+																					disabled={ isRefreshUserWalletList || isDeleteUserWalletList }>
+																						{
+																							(isDeleteUserWalletList && actionOnThisWallet == id) ? <RefreshIndicator status="loading" top={12} left={12} size={25}/> : <ActionDelete color={cyan500}/> 
+																						}  
 																					</IconButton>
 																				</td>
 																		</tr>
@@ -89,7 +95,7 @@ const MyAccountsViewInner = (props) => {
 														</Otherwise>
 													</Choose>
 												</Otherwise>
-											</Choose>
+											</Choose> 
 										</tbody>
 									</table>
 								</div>
@@ -112,6 +118,7 @@ const MyAccountsViewInner = (props) => {
 								<AssociatedAddressesView
 									{...props}
 									isRefreshing={ isRefreshUserWalletList }
+									isDeleting={ isDeleteUserWalletList }
 									relatedTransactions={ selectedWalletTransactions }
 									type={ 'WALLET_ASSOC_ADDRESS_NICK' } />
 							</div>

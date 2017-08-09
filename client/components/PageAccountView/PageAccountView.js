@@ -35,7 +35,9 @@ class PageAccountView extends React.Component {
 			nicknameType: null,
 			isSnackbarOpen: false,
 			snackMessage: null,
-			autoHideDuration: 4000
+			autoHideDuration: 4000,
+			actionOnThisAddress: null,
+			actionOnThisWallet: null,
 		};
 	}
   
@@ -63,31 +65,47 @@ class PageAccountView extends React.Component {
   
   /* DELETE USER WALLETS */
 	deleteUserWallet = (value) => {
-		this.props.dispatch(deleteWallet(value))
+		this.setState({
+			actionOnThisWallet: value
+		}, function() {
+			this.props.dispatch(deleteWallet(value))
+		})
 	}
   
   /* REFRESH USER WALLETS */
 	refreshUserWallets = (value) => {
-		this.props.dispatch(refreshUserProviders(value))
-			.then(action => {
-				const {error, payload} = action
-				
-				if (!error && payload.redirecturl) {
-					var url = payload.redirecturl
-					window.location = url
-					return action
-				}
-			})
+		this.setState({
+			actionOnThisWallet: value
+		}, function() {
+				this.props.dispatch(refreshUserProviders(value))
+					.then(action => {
+						const {error, payload} = action
+						
+						if (!error && payload.redirecturl) {
+							var url = payload.redirecturl
+							window.location = url
+							return action
+						}
+					})
+		})
 	}
   
   /* REFRESH BTC ADDRESSES */
 	onRefreshAddressClick = (value) => {
-		this.props.dispatch(refreshUserAddresses(value))
+		this.setState({
+			actionOnThisAddress: value
+		}, function() {
+			this.props.dispatch(refreshUserAddresses(value))
+		})
 	}
   
   /* DELETE BTC ADDRESS */
 	onDeleteAddressClick = (value) => {
-		this.props.dispatch(deleteUserAddress(value))
+		this.setState({
+			actionOnThisAddress: value
+		}, function() {
+			this.props.dispatch(deleteUserAddress(value))
+		})
 	}
 	
 	componentDidMount() {
@@ -96,21 +114,33 @@ class PageAccountView extends React.Component {
 		if (providerName) {
 			let paramsString = this.props.location.search
 			let tokenCode = paramsString.substring(paramsString.indexOf('=') + 1)
-			dispatch(providerCallback(providerName, tokenCode))
-				.then(action => {
-					const {error} = action
-					if (!error) {
-						dispatch(myAccountData())
-							.then(action => {
-								const {error} = action
-								if (!error) {
-									this.setState({
-										check: 2
-									});
-								}
+			if (tokenCode) {
+				dispatch(providerCallback(providerName, tokenCode))
+					.then(action => {
+						const {error} = action
+						if (!error) {
+							dispatch(myAccountData())
+								.then(action => {
+									const {error} = action
+									if (!error) {
+										this.setState({
+											check: 2
+										});
+									}
+								});
+						}
+					})
+			} else {
+				dispatch(myAccountData())
+					.then(action => {
+						const {error} = action
+						if (!error) {
+							this.setState({
+								check: 2
 							});
-					}
-				})
+						}
+					});	
+			}
 		} else {
 			dispatch(myAccountData())
 				.then(action => {
@@ -198,14 +228,22 @@ function mapStateToProps(state, ownProps) {
 	const userProviderList = state.entities.accounts.userProviderList
 	const userAddressesList = state.entities.accounts.userAddressesList
 	const isRefreshUserWalletList = state.entities.accounts.refreshUserWalletList
+	const isDeleteUserWalletList = state.entities.accounts.deleteUserWalletList
+	const isAddUserAddressList = state.entities.accounts.addUserAddressList
 	const isRefreshUserAddressList = state.entities.accounts.refreshUserAddressList
+	const isDeleteUserAddressList = state.entities.accounts.deleteUserAddressList
+	const isUpdateUserAddressList = state.entities.accounts.updateUserAddressList
 	
 	return {
 		providerList,
 		userProviderList,
 		userAddressesList,
 		isRefreshUserWalletList,
-		isRefreshUserAddressList
+		isDeleteUserWalletList,
+		isAddUserAddressList,
+		isRefreshUserAddressList,
+		isDeleteUserAddressList,
+		isUpdateUserAddressList
 	};
 }
 
