@@ -2,13 +2,13 @@
 import React from 'react'
 import {reduxForm, change as changeFieldValue} from 'redux-form'
 import {push} from 'react-router-redux'
-//import get from 'lodash/get'
 import { connect } from 'react-redux'
 
 // src 
 import PageLoginInner from './PageLoginInner'
 import PageLoading from '../PageLoading';
 import {login, confirmRegistration, resendActivation} from '../../actions/entities/users'
+import {resetErrorMessages} from '../../actions'
 import { bindForm } from '../../utils'
 
 const fields = ['email', 'password', 'rememberMe']
@@ -45,8 +45,8 @@ const validate = values => {
     .then(action => {
       const { error, payload } = action
       if ( !error ) {
-        const linkNext = _.get(payload, 'user.linkHome', '/')
-        dispatch(push(linkNext))
+        //const linkNext = _.get(payload, 'user.linkHome', '/')
+        dispatch(push('/system'))
       }
       return action
     }) 
@@ -109,7 +109,11 @@ class PageLogin extends React.Component {
         });
     }
   }
-	
+  
+  componentWillUnmount() {
+    const { dispatch } = this.props
+    dispatch(resetErrorMessages())
+  }
 	/* HANDLER FUNCTIONS FOR SNACKBAR, MODALS */
 	/*handleSnackbarOpen = (params) => {
 		const { message, duration } = params

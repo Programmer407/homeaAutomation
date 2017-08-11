@@ -11,3 +11,10 @@ export function setLogoLink(link) {
         payload: link
     }
 }
+
+export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
+export function resetErrorMessages() {
+    return {
+        type: RESET_ERROR_MESSAGE
+    }
+}

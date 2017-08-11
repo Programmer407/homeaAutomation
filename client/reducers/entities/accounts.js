@@ -1,5 +1,4 @@
 import * as ActionTypes from '../../actions'
-import { mergeNewEntities, ENTITY_STATUS_DATA_AVAILABLE } from '../../utils'
 
 export default function accounts(state = {}, action) {
   switch (action.type) {

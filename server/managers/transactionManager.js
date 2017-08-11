@@ -1,7 +1,26 @@
 // libs
 import Transaction from '../models/Transaction';
+import User from '../models/User';
+import TransactionType from '../models/TransactionType';
 
-export const findTransactionsById = (id:number):Object =>
+export const findTransactionsByUserId = (id, typeName):Object =>
+  Transaction.findAll(Object.assign({
+    include: [
+      {
+        model: User,
+        where: { id }
+      },
+      {
+        model: TransactionType,
+        where: { typeName }
+      }
+    ]
+  }))
+  .then(obj => {
+    return obj
+  })
+
+export const findTransactionById = (id):Object =>
   Transaction.findOne(Object.assign({
     where: {
       id
@@ -11,7 +30,7 @@ export const findTransactionsById = (id:number):Object =>
     return obj
   })
 
-export const findTransactionByTrxId = (trxId:number):Object =>
+export const findTransactionByTrxId = (trxId):Object =>
   Transaction.findOne(Object.assign({
     where: {
       trxId
@@ -26,3 +45,12 @@ export const updateTransaction = (transactionObj): Promise<any> =>
   .then(obj => {
     return obj
   })
+
+export const deleteTransactionById = (transactionId:number):Object =>
+  Transaction.findById(transactionId)
+  .then((object) => {
+    if(null == object)
+      return;
+    
+    return object.destroy({ force: true });
+  });

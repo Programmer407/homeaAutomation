@@ -70,6 +70,7 @@ if ( process.env.UNIVERSAL_RENDERING === 'false' ) {
 [
   'api/userApiController',
   'api/accountApiController',
+  'api/transactionApiController',
   'defaultController'
 ].forEach(name => app.use(require(`./controllers/${name}`)))
 

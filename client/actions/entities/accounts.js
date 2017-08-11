@@ -1,5 +1,4 @@
 // libs
-import { push } from 'react-router-redux'
 
 // src
 import { CALL_API } from '../../middleware/api'

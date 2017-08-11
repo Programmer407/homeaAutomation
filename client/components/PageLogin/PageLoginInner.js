@@ -8,7 +8,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
 import QueueAnim from 'rc-queue-anim';
-//import isNil from 'lodash/isNil';
 
 // src
 import './PageLoginInner.scss';
@@ -17,10 +16,8 @@ import { renderTextField } from '../../utils';
 import { renderCheckbox } from '../../utils';
 
 const PageLoginInner = (props) => {
-  const { onSubmit, renderSubmitButton, renderMessage, isLoadingLogin, message, errorMessage, onHandleNoSpaces } = props;
-	//console.log('---> message: ', message)
-	//console.log('---> errorMessage: ', errorMessage)
-
+  const { onSubmit, renderSubmitButton, renderMessage, isLoadingLogin, message, onHandleNoSpaces } = props;
+	
 	return (
     <div className="page-login">
       <div className="main-body">
@@ -32,9 +29,9 @@ const PageLoginInner = (props) => {
                 <div className="card-content">
                   <section className="logo text-center">
                     <h1><a href="#/">Wisdom</a></h1>
-										<If condition={ !_.isNil(props.message) }>
+										<If condition={ !_.isNil(message) }>
                     {
-                      renderMessage(props.message)
+                      renderMessage(message)
                     }
                     </If> 
                   </section>

@@ -609,13 +609,12 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																								transactionObj = Transaction.build({trxId: trans.id, destination: trans.details.title + ' ' + trans.details.subtitle, transactionDate: moment_date, amount:trans.amount.amount, asset: trans.amount.currency, value: trans.native_amount.amount})
 																								transactionObj.setUser(user, {save: false})
 																								transactionObj.setUserwallet(updatedUserWallet, {save: false})
-																								findTransactionTypeById(2)
+																								let transType = 2
+																								if (trans.type == 'exchange_withdrawal' || trans.type == 'fiat_withdrawal' || trans.type == 'buy' || (trans.type == 'send' && isNil(trans.to))) {
+																									transType = 3
+																								}
+																								findTransactionTypeById(transType)
 																									.then(transactionTypeObj => {
-																										let transType = 2
-																										if (trans.type == 'exchange_withdrawal' || trans.type == 'fiat_withdrawal' || trans.type == 'buy' || (trans.type == 'send' && isNil(trans.to))) {
-																											transType = 3
-																										}
-																										findTransactionTypeById(transType)
 																										transactionObj.setTransactiontype(transactionTypeObj, {save: false})
 																										findTrxImportTypeById(1)
 																											.then(trxImportTypeObj => {
@@ -1008,6 +1007,7 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 						function(userAddress, callback) {
 							let transIndex = 0;
 							let transactionArr = address.txs;
+							console.log('transactionArr : ' + JSON.stringify(transactionArr))
 							insertTransactions(transactionArr, transIndex, callback, user, userAddress);
 						}
 					],
@@ -1270,29 +1270,41 @@ function insertTransactions(transactionArr, index, done, userObj, userAddressObj
   	done(null, 'some params')
   } else {
   	let transaction = transactionArr[index]
-    //console.log('trxId : ' + transaction.tx_index)
     findTransactionByTrxId(transaction.tx_index)
     	.then(transactionObj => {
       	//console.log('inside promise************************')
         var utcSeconds = transaction.time;
         var trx_date = new Date(utcSeconds*1000); // The 0 there is the key, which sets the date to the epoch
         var moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
+				
+				let transaction_Input_Arr = transaction.inputs;
+				let transType = 2
+				transaction_Input_Arr.forEach(function(trx_input, j) {
+					if (trx_input.prev_out.addr != userAddressObj.address) {
+						transType = 3
+					}
+				})
+
+				let transaction_Out_Arr = transaction.out;
+				let myAssociateAdd = ''
+				let transAmount = '';
+				transaction_Out_Arr.forEach(function(trx_out, j) {
+					if (trx_out.addr != userAddressObj.address) {
+						myAssociateAdd = trx_out.addr
+					} else if (trx_out.addr == userAddressObj.address && transType == 3) {
+						transAmount = trx_out.value
+					}
+				})
+                  
         if (transactionObj) {
-        	transactionObj.destination = 'some address1'
-          transactionObj.transactionDate = moment_date
-          findTransactionTypeById(1)
+        	transactionObj.transactionDate = moment_date
+					transactionObj.amount = transAmount
+					findTransactionTypeById(transType)
           	.then(transactionTypeObj => {
             	transactionObj.setTransactiontype(transactionTypeObj, {save: false})
               findTrxImportTypeById(2)
                 .then(trxImportTypeObj => {
                 	transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})                  
-                  let transaction_Out_Arr = transaction.out;
-                  let myAssociateAdd = ''
-                  transaction_Out_Arr.forEach(function(trx_out, j) {
-										if (trx_out.addr != userAddressObj.address) {
-											myAssociateAdd = trx_out.addr
-										}
-                  })
                   if (myAssociateAdd) {
                   	findAssociatedAddByAdd(myAssociateAdd)
                     	.then(associatedAddObj => {
@@ -1324,22 +1336,15 @@ function insertTransactions(transactionArr, index, done, userObj, userAddressObj
                 })
             })
         } else {
-        	transactionObj = Transaction.build({trxId: transaction.tx_index, destination: 'some address', transactionDate: moment_date})
+        	transactionObj = Transaction.build({trxId: transaction.tx_index, transactionDate: moment_date, amount: transAmount})
           transactionObj.setUser(userObj, {save: false})
           transactionObj.setUseraddress(userAddressObj, {save: false})
-          findTransactionTypeById(1)
+          findTransactionTypeById(transType)
           	.then(transactionTypeObj => {
             	transactionObj.setTransactiontype(transactionTypeObj, {save: false})
               findTrxImportTypeById(2)
               	.then(trxImportTypeObj => {
                 	transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})                                    
-                  let transaction_Out_Arr = transaction.out;
-                  let myAssociateAdd = ''
-                  transaction_Out_Arr.forEach(function(trx_out, j) {
-                  	if (trx_out.addr != userAddressObj.address) {
-                    	myAssociateAdd = trx_out.addr
-                    }
-                  })
                   if (myAssociateAdd) {
                   	findAssociatedAddByAdd(myAssociateAdd)
                     	.then(associatedAddObj => {
