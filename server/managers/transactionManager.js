@@ -2,6 +2,10 @@
 import Transaction from '../models/Transaction';
 import User from '../models/User';
 import TransactionType from '../models/TransactionType';
+import AssociatedAddress from '../models/AssociatedAddress';
+import UserAddress from '../models/UserAddress';
+import UserWallet from '../models/UserWallet';
+import TransactionImportType from '../models/TransactionImportType';
 
 export const findTransactionsByUserId = (id, typeName):Object =>
   Transaction.findAll(Object.assign({
@@ -13,7 +17,11 @@ export const findTransactionsByUserId = (id, typeName):Object =>
       {
         model: TransactionType,
         where: { typeName }
-      }
+      },
+      {model: AssociatedAddress},
+      {model: UserAddress},
+      {model: UserWallet},
+      {model: TransactionImportType}
     ]
   }))
   .then(obj => {
