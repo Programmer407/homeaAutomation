@@ -8,7 +8,7 @@ div.navSpan {
 
 	.actionBtn {
 		float: right;
-		margin: 9px;
+		margin: 9px 24px;
 	}
 
 	.selectiveActionBtn {
@@ -70,6 +70,9 @@ div.box-default {
 }
 
 .show {
+	float: right;
+	padding: 0px;
+	margin: 0px;
 	visibility: visible;
 }
 

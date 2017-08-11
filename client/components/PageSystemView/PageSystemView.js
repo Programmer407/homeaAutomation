@@ -17,6 +17,8 @@ class PageSystemView extends React.Component {
     this.state = {
 			isHelpDialogOpen: false,
 			isFormDialogOpen: false, 
+			isUploadDialogOpen: false,
+			isActionTypeDialogOpen: false,
 			hoveredRow: null,
 			selectedRows: [],
 			allSelected: false,
@@ -24,7 +26,8 @@ class PageSystemView extends React.Component {
 			pageOffset: 0,
 			pageLimit: 15,
 			totalRecords: 2000,
-	    tabIndex: 0,
+			tabIndex: 0,
+			isSearchDatesChecked: false,
 			tblData: [
 				{
 					id: 10,
@@ -106,6 +109,22 @@ class PageSystemView extends React.Component {
 			isFormDialogOpen: !isFormDialogOpen
 		})
 	}
+	
+	handleUploadDialogToggle = () => {
+		const { isUploadDialogOpen } = this.state
+
+		this.setState({
+			isUploadDialogOpen: !isUploadDialogOpen
+		})
+	}
+	
+	handleActionTypeDialogToggle = () => {
+		const { isActionTypeDialogOpen } = this.state
+
+		this.setState({
+			isActionTypeDialogOpen: !isActionTypeDialogOpen
+		})
+	}
 
 	handleHeadCheckboxClick = () => {
 		let newSelectedRows = []
@@ -170,7 +189,16 @@ class PageSystemView extends React.Component {
 		this.setState({
 			tabIndex,
 			selectedRows: [],
-			allSelected: false
+			allSelected: false,
+			rowSelected: false
+		})
+	}
+
+	handleDatesCheckboxClick = () => {
+		const { isSearchDatesChecked } = this.state
+
+		this.setState({
+			isSearchDatesChecked: !isSearchDatesChecked
 		})
 	}
 
@@ -181,12 +209,15 @@ class PageSystemView extends React.Component {
 				{...this.state}
 				onHelpDialogToggle={ this.handleHelpDialogToggle }
 				onFormDialogToggle={ this.handleFormDialogToggle }
+				onUploadDialogToggle={ this.handleUploadDialogToggle }
+				onActionTypeDialogToggle={ this.handleActionTypeDialogToggle }
 				onRowHover={ this.handleRowHover }
 				onRowHoverExit={ this.handleRowHoverExit }
 				onCheckboxClick={ this.handleCheckboxClick }
 				onHeadCheckboxClick={ this.handleHeadCheckboxClick }
 				onPageClick={ this.handlePageClick }
 				onTabChange={ this.handleTabChange }
+				onDatesCheckboxClick={ this.handleDatesCheckboxClick }
 			/>
 		)
   }
