@@ -178,7 +178,7 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																						caughtError(res, transactionsErr)
 																					} else {
 																						//console.log('no error in fetch transactions : ' + txs)
-																						if (!txs && txs.length > 0) {
+																						if (txs && txs.length > 0) {
 																							//console.log('there are transactions')
 																							async.eachOfSeries(txs, function(trans, key1, transCallback) {
 																							findTransactionByTrxId(trans.id)
@@ -517,7 +517,7 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																		if (transactionsErr) {
 																			caughtError(res, transactionsErr)
 																		} else {
-																			if (!txs && txs.length > 0) {
+																			if (txs && txs.length > 0) {
 																				async.eachOfSeries(txs, function(trans, key1, transCallback) {
 																				findTransactionByTrxId(trans.id)
 																					.then(transactionObj => {
@@ -752,7 +752,7 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 												if (transactionErr) {
 													caughtError(res, transactionErr)
 												} else {
-													if (!txs && txs.length > 0) {
+													if (txs && txs.length > 0) {
 														async.eachOfSeries(txs, function(trans, key1, transCallback) {
 															findTransactionByTrxId(trans.id)
 																.then(transactionObj => {
