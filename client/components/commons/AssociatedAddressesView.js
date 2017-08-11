@@ -17,7 +17,6 @@ const AssociatedAddressesView = (props) => {
 				<thead className="tbl-header">
 					<tr>
 						<th className="mdl-data-table__cell--non-numeric">Nickname</th>
-						<th className="mdl-data-table__cell--non-numeric">Nickname</th>
 						<th className="mdl-data-table__cell--non-numeric">Address</th>
 						{/* <th>Balance</th> */}
 						<th></th>

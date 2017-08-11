@@ -1,23 +1,23 @@
 .root {
-  
+	
 }
 
 .actionContainer {
-  text-align: right;
-
-  & > * {
-    margin: 2rem;
-  }
+	text-align: right;
+	
+	& > * {
+		margin: 2rem;
+	}
 }
 
 .divider-pipe {
-  color: #999;
-  padding-left: 8px;
+	color: #999;
+	padding-left: 8px;
 }
 
 .divider-pipe:after {
-  content: "|";
-  padding-right: 8px;
+	content: "|";
+	padding-right: 8px;
 }
 
 .article-title-primary {
@@ -34,26 +34,42 @@ article.article {
 	.right-align {
 		align-self: center;
 		text-align: right;
-
+		
 		.icon-btn {
 			top: 6px;
 		}
 	}
-
+	
+	.filter-bar-btn {
+		float: right;
+		top: 6px;
+	}
+	
+	.float-left {
+		float: left;
+	}
+	
+	// .section-title {
+	// 	h2 {
+	// 		float: left;
+	// 	}
+		
+	// }
+	
 	.page-item.active .page-link {
 		background-color: #00BCD4;
 		border-color: #00ACC1;
 	}
-
+	
 	.pagination>li>a, .pagination>li>span {
 		color: #0097A7;
 	}
-
+	
 	div.paginationNav {
 		nav {
 			float: right;
 		}
-
+		
 		span.pageCountText {
 			float: left;
 			padding-top: 28px;

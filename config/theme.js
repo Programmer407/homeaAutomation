@@ -14,8 +14,8 @@ export default {
   textTransform: 'none',
   palette: {
     // Changed colors @muhammadkasim
-    primary1Color: '#00BCD4',
-    primary2Color: colors.orangeA400,
+    primary1Color: colors.cyan500,
+    primary2Color: colors.cyan600,
     primary3Color: colors.lightBlack,
     accent1Color: 'rgb(0, 123, 255)',
     accent2Color: colors.grey100,
@@ -25,6 +25,6 @@ export default {
     canvasColor: colors.white,
     borderColor: colors.grey300,
     disabledColor: fade(colors.darkBlack, 0.3),
-    pickerHeaderColor: colors.orangeA200
+    pickerHeaderColor: colors.cyan600
   }
 }

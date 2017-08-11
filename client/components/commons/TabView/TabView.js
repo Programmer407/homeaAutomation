@@ -1,10 +1,8 @@
 // libs
 import React from 'react';
-import Tabs, { Tab } from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
 import ActionDelete from 'material-ui/svg-icons/action/delete'
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
+import { SelectField, FlatButton, RaisedButton, Tab, Tabs, MenuItem } from 'material-ui';
 
 // src
 import './TabView.scss'
@@ -44,10 +42,17 @@ const activeBtnStyle = {
 	transition: '0.5s'
 }
 
-const Operations = () => {
+const Operations = props => {
+	const { selected, onActionTypeDialogToggle } = props
+
   return (
 		<span>
-			<FlatButton label="Delete" labelPosition="after" icon={<ActionDelete />} hoverColor={'rgba(0,188,212,0.1)'} primary />
+			<span className={ selected ? 'selectiveActionBtn' : 'hide' }>
+				<FlatButton label="Delete" labelPosition="after" icon={<ActionDelete />} hoverColor={'rgba(0,188,212,0.1)'} primary />
+			</span>
+			<span className={ selected ? 'selectiveActionBtn' : 'hide' }>
+				<FlatButton label="Set Transaction Type" onClick={ onActionTypeDialogToggle } hoverColor={'rgba(0,188,212,0.1)'} primary />
+			</span>
 		</span>
   );
 }
@@ -71,7 +76,7 @@ const TabView = (props) => {
           }
 				</Tabs>
 				<RaisedButton className="actionBtn" label="Add Transaction" onClick={ onFormDialogToggle } primary/>
-				<span className={ rowSelected ? 'selectiveActionBtn' : 'hide' }>{ <Operations /> }</span>
+				<span>{ <Operations  selected={ rowSelected } {...props}/> }</span>
 			</div>
 			
 			<div className="box box-default">
@@ -94,5 +99,7 @@ const TabView = (props) => {
 		</div>
   );
 }
+
+
 
 export default TabView

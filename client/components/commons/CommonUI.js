@@ -1,10 +1,12 @@
 // libs
 import React from 'react'
-import { Dialog } from 'material-ui'
-import { Checkbox } from 'material-ui'
+import { Link } from 'react-router-dom'
+
+import { Dialog, Checkbox, AutoComplete, RaisedButton, RadioButton, RadioButtonGroup } from 'material-ui'
+import { Field } from 'redux-form'
 
 // src
-import { AddTransactionForm, NicknameForm } from './Forms'
+import { AddTransactionForm, NicknameForm, FilterBarForm } from './Forms'
 
 export const FormDialog = (props) => {
 	const { title, actions, open, onDialogClose } = props;
@@ -50,6 +52,97 @@ const NicknameDialog = props => {
 		</Dialog>
 	);
 }
+
+export const UploadDialog = (props) => {
+	const { title, actions, open, onDialogClose } = props;
+
+	return (
+		<Dialog
+			title={ title }
+			actions={ actions }
+			modal={false}
+			open={ open }
+			onRequestClose={ onDialogClose }
+			autoScrollBodyContent={ true }>
+				<div>
+					<p>Read about supported formats <Link to="#">here</Link>.</p>
+					<label className="custom-file">
+						<input type="file" id="file" className="custom-file-input" />
+						<span className="custom-file-control"></span>
+					</label>
+
+
+					{/* <input type="file" style={{ display: 'none' }} /> */}
+					
+					{/* <RaisedButton
+						primary
+						containerElement='label'
+						label='Upload .csv'>
+							<input type="file" style={{ display: 'none' }} />
+					</RaisedButton> */}
+				</div>			
+		</Dialog>
+	);
+}
+
+export const ActionTypeDialog = (props) => {
+	const { title, actions, open, onDialogClose } = props;
+
+	return (
+		<Dialog
+			title={ title }
+			actions={ actions }
+			modal={false}
+			open={ open }
+			onRequestClose={ onDialogClose }
+			autoScrollBodyContent={ true }>
+				<div>
+					<RadioButtonGroup name="actionType" defaultSelected="not_light">
+						<RadioButton
+							labelStyle={{  fontWeight: 400 }}
+							value="DONATION"
+							label="Donation" />
+						<RadioButton
+							labelStyle={{  fontWeight: 400 }}
+							value="GIFT_RECEIVED"
+							label="Gift Received" />
+						<RadioButton
+							labelStyle={{  fontWeight: 400 }}
+							value="GIFT_SENT"
+							label="Gift Sent" />
+						<RadioButton
+							labelStyle={{  fontWeight: 400 }}
+							value="INCOME"
+							label="Income" />
+						<RadioButton
+							labelStyle={{  fontWeight: 400 }}
+							value="PURCHASE"
+							label="Purchase" />
+						<RadioButton
+							labelStyle={{  fontWeight: 400 }}
+							value="SALE"
+							label="Sale" />
+						<RadioButton
+							labelStyle={{  fontWeight: 400 }}
+							value="TRANSFER"
+							label="Transfer" />
+					</RadioButtonGroup>
+					<br/>
+					<RaisedButton label="Submit" primary/>
+				</div>
+		</Dialog>
+	);
+}
+
+
+{/* <MenuItem value={1} primaryText="Donation" />
+<MenuItem value={2} primaryText="Gift Received" />
+<MenuItem value={3} primaryText="Gift Sent" />
+<MenuItem value={4} primaryText="Income" />
+<MenuItem value={5} primaryText="Purchase" />
+<MenuItem value={6} primaryText="Sale" />
+<MenuItem value={7} primaryText="Transfer" /> */}
+
 
 export const Selection = props => {
 	const { onCheckboxClick, onHeadCheckboxClick, index, type, selectedRows, allSelected } = props

@@ -1,12 +1,7 @@
 // libs
 import React from 'react'
 import { connect } from 'react-redux'
-import TextField from 'material-ui/TextField'
-import MenuItem from 'material-ui/MenuItem'
-import Checkbox from 'material-ui/Checkbox'
-import RadioButtonGroup from 'material-ui/RadioButton/RadioButtonGroup'
-import SelectField from 'material-ui/SelectField'
-import DatePicker from 'material-ui/DatePicker';
+import { DatePicker, SelectField, RadioButtonGroup, Checkbox, MenuItem, TextField, AutoComplete } from 'material-ui';
 
 // src
 
@@ -48,8 +43,19 @@ export const renderTextArea = ({ input, label, rows, rowsMax, multiLine, autoCom
     autoComplete={autoComplete}
     hintStyle={{fontSize: 12}}
     {...input}
-    {...custom}
-  />
+    {...custom} />
+)
+
+export const renderAutocomplete = ({ input, label, dataSource, innerRef,  meta: { touched, error, submitting }, ...custom }) => (
+  <AutoComplete
+		fullWidth
+		hintText={ label }
+		dataSource={ dataSource }
+		hintStyle={{fontSize: 14}}
+    ref={innerRef}
+		filter={AutoComplete.caseInsensitiveFilter} 
+		{...input}
+		{...custom} />
 )
 
 export const renderCheckbox = ({ input, label, padding }) => (
@@ -80,9 +86,12 @@ export const renderSelectField = ({ input, label, meta: { touched, error }, chil
     children={children}/>
 )
 
-export const renderInlineDateField = ({ input, label, meta: { touched, error }, children }) => (
+export const renderInlineDateField = ({ input, label, style, meta: { touched, error }, ...custom }) => (
   <DatePicker
-		floatingLabelText={label}
-		container="inline"
+		fullWidth
+		hintText={ label }
+		hintStyle={{ fontSize: 14 }} 
+		autoOk 
+		//defaultDate={this.state.minDate}
 	/>
 )
