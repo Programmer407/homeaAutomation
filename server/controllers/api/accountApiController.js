@@ -3,12 +3,13 @@ import express from 'express'
 import async from 'async';
 import moment from 'moment';
 var request = require('request');
-import coinBaseService from '../../services/CoinBaseService'
 import blockexplorer from 'blockchain.info/blockexplorer'
 import WAValidator from 'wallet-address-validator';
 import isNil from 'lodash/isNil'
 
 // src
+import { getCoinBaseRedirectURL } from '../../utils/coinBaseUtils'
+import { isValidAddress } from '../../utils/addressUtils'
 import { ensureAnonymity, caughtError, bindEntityApiRoutes, ensureAuthorization, rejectRequest } from '../../utils'
 import UserProvider from './../../models/UserProvider'
 import UserWallet from './../../models/UserWallet'
@@ -55,7 +56,7 @@ router.post('/api/accounts/my-account-connect-url', ensureAuthorization, (req, r
   	.then(providerObj => {
     	if (providerObj) {
       	if (providerId == 1) {
-        	let redirectURL = coinBaseService.getCoinBaseRedirectURL(providerObj, req)
+        	let redirectURL = getCoinBaseRedirectURL(providerObj, req)
           res
           	.status(200)
             .send({
@@ -450,7 +451,7 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 				if (err) {
 					console.log('err : ' + err)
 					if (err == 'RevokedToken: The access token was revoked') {
-						let redirectURL = coinBaseService.getCoinBaseRedirectURL(userProviderObj.provider, req)
+						let redirectURL = getCoinBaseRedirectURL(userProviderObj.provider, req)
 							return res
 								.status(200)
 								.send({
@@ -963,7 +964,7 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 	const { coinAddresses } = body
 	if ( !coinAddresses ) {
 		rejectRequest('Missing required arguments', res)
-		return;
+		return
 	}
 	//console.log('coinAddresses : ' + coinAddresses)
 	var addressArray = coinAddresses.toString().split(',');
@@ -975,6 +976,16 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 			validAddresses[index] = address
 		}
 	})
+
+	/*var addressArray = coinAddresses.toString().split(',')
+	console.log('addressArray : ' + addressArray)
+	var validAddresses = new Array()
+	async.eachOfSeries(addressArray, function(address, key1, addressCallback) {
+		console.log('address : ' + address)
+		if (isValidAddress(address))
+			validAddresses[index] = address
+	})*/
+	console.log('after validation')
 	//validAddresses[0] = '0x4961aC1d43B6249bc998D611F33d42B54E31712E'
 	//console.log('validAddresses : ' + validAddresses)
 	if (validAddresses.length > 0) {
@@ -1007,7 +1018,7 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 						function(userAddress, callback) {
 							let transIndex = 0;
 							let transactionArr = address.txs;
-							console.log('transactionArr : ' + JSON.stringify(transactionArr))
+							//console.log('transactionArr : ' + JSON.stringify(transactionArr))
 							insertTransactions(transactionArr, transIndex, callback, user, userAddress);
 						}
 					],

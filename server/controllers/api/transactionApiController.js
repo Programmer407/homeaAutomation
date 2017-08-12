@@ -19,18 +19,24 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
     return;
   }
 
-  const { transType } = body
-  if ( !transType ) {
+  const { listingParameters } = body
+  if ( !listingParameters ) {
   	rejectRequest('Missing required arguments', res)
   	return;
   }
 
-  findTransactionsByUserId(user.id, transType)
+  let trxType = 'Sale'
+  if (listingParameters.trxType) {
+    trxType = listingParameters.trxType
+  }
+
+  findTransactionsByUserId(user.id, trxType)
   	.then(transactionList => {
     	res
       	.status(200)
         .send({
-        	transactionList
+          transactionList,
+          trxType
         })
     })
     .catch(error => {
@@ -43,85 +49,86 @@ router.post('/api/transactions/insert-transaction', ensureAuthorization, (req, r
   const { body, user } = req
   if ( !body ) {
   	rejectRequest('Missing request body', res)
-    return;
+    return
   }
 
-  const { transactionDate, destination, note, amount, asset, value, transactionTypeId } = body
-  if ( !transactionDate || !destination || !note || !amount || !asset || !value || !transactionTypeId ) {
+  const { trxData } = body
+  if ( !trxData ) {
   	rejectRequest('Missing required arguments', res)
-  	return;
+  	return
   }
 
-  var trx_date = new Date(transactionDate);
+  const { transactionDate, destination, note, amount, asset, value, transactionTypeId } = trxData
+  var trx_date = new Date(transactionDate)
   var moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
 
   const transactionObj = Transaction.build({destination: destination, transactionDate: moment_date, amount: amount, asset: asset, value: value})
   transactionObj.setUser(user, {save: false})
   findTransactionTypeById(transactionTypeId)
-    .then(transactionTypeObj => {
-      transactionObj.setTransactiontype(transactionTypeObj, {save: false})
-      findTrxImportTypeById(4)
-        .then(trxImportTypeObj => {
-          transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})
-          if (WAValidator.validate(destination)) {
-            findAssociatedAddByAdd(destination)
-              .then(associatedAddObj => {
-                if (associatedAddObj) {
-                  transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
-                  updateTransaction(transactionObj)
-                    .then(updatedTransaction => {
-                      findTransactionsByUserId(user.id, transType)
-                        .then(transactionList => {
-                          res
-                            .status(200)
-                            .send({
-                              transactionList
-                            })
-                        })
-                        .catch(error => {
-                          caughtError(res, error)
-                        })
-                    })
-                } else {
-                  associatedAddObj = AssociatedAddress.build({address: destination, nickName: destination})
-                  updateAssociatedAdd(associatedAddObj)
-                    .then(updatedAssociatedAdd => {
-                      transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
-                      updateTransaction(transactionObj)
-                        .then(updatedTransaction => {
-                          findTransactionsByUserId(user.id, transType)
-                            .then(transactionList => {
-                              res
-                                .status(200)
-                                .send({
-                                  transactionList
-                                })
-                            })
-                            .catch(error => {
-                              caughtError(res, error)
-                            })
-                        })
-                    })
-                }
-              })
-          } else {
+  .then(transactionTypeObj => {
+    transactionObj.setTransactiontype(transactionTypeObj, {save: false})
+    findTrxImportTypeById(4)
+    .then(trxImportTypeObj => {
+      transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})
+      if (WAValidator.validate(destination)) {
+        findAssociatedAddByAdd(destination)
+        .then(associatedAddObj => {
+          if (associatedAddObj) {
+            transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
             updateTransaction(transactionObj)
-              .then(updatedTransaction => {
-                findTransactionsByUserId(user.id, transType)
-                  .then(transactionList => {
-                    res
-                      .status(200)
-                      .send({
-                        transactionList
-                      })
-                  })
-                  .catch(error => {
-                    caughtError(res, error)
+            .then(updatedTransaction => {
+              findTransactionsByUserId(user.id, transactionTypeObj.typeName)
+              .then(transactionList => {
+                res
+                  .status(200)
+                  .send({
+                    transactionList
                   })
               })
+              .catch(error => {
+                caughtError(res, error)
+              })
+            })
+          } else {
+            associatedAddObj = AssociatedAddress.build({address: destination, nickName: destination})
+            updateAssociatedAdd(associatedAddObj)
+            .then(updatedAssociatedAdd => {
+              transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
+              updateTransaction(transactionObj)
+              .then(updatedTransaction => {
+                findTransactionsByUserId(user.id, transactionTypeObj.typeName)
+                .then(transactionList => {
+                  res
+                    .status(200)
+                    .send({
+                      transactionList
+                    })
+                })
+                .catch(error => {
+                  caughtError(res, error)
+                })
+              })
+            })
           }
         })
+      } else {
+        updateTransaction(transactionObj)
+        .then(updatedTransaction => {
+          findTransactionsByUserId(user.id, transType)
+          .then(transactionList => {
+            res
+              .status(200)
+              .send({
+                transactionList
+              })
+          })
+          .catch(error => {
+            caughtError(res, error)
+          })
+        })
+      }
     })
+  })
 })
 
 router.post('/api/transactions/update-transaction', ensureAuthorization, (req, res) => {
@@ -132,7 +139,13 @@ router.post('/api/transactions/update-transaction', ensureAuthorization, (req, r
     return;
   }
 
-  const { transactionId, transactionDate, destination, note, amount, asset, value, transactionTypeId } = body
+  const { trxData } = body
+  if ( !trxData ) {
+  	rejectRequest('Missing required arguments', res)
+  	return
+  }
+
+  const { transactionId, transactionDate, destination, note, amount, asset, value, transactionTypeId } = trxData
   if ( !transactionId || !transactionDate || !destination || !note || !amount || !asset || !value || !transactionTypeId ) {
   	rejectRequest('Missing required arguments', res)
   	return;insert
@@ -159,7 +172,7 @@ router.post('/api/transactions/update-transaction', ensureAuthorization, (req, r
                   transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
                   updateTransaction(transactionObj)
                     .then(updatedTransaction => {
-                      findTransactionsByUserId(user.id, transType)
+                      findTransactionsByUserId(user.id, transactionTypeObj.typeName)
                         .then(transactionList => {
                           res
                             .status(200)
@@ -178,7 +191,7 @@ router.post('/api/transactions/update-transaction', ensureAuthorization, (req, r
                       transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
                       updateTransaction(transactionObj)
                         .then(updatedTransaction => {
-                          findTransactionsByUserId(user.id, transType)
+                          findTransactionsByUserId(user.id, transactionTypeObj.typeName)
                             .then(transactionList => {
                               res
                                 .status(200)
