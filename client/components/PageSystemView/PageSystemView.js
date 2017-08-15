@@ -289,6 +289,7 @@ class PageSystemView extends React.Component {
 				return _.pick(trx, [
 					'transactionDate',
 					'asset',
+					'userwallet',
 					'useraddress.nickName',
 					'destination',
 					'transactionimporttype',

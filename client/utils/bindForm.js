@@ -4,7 +4,6 @@
 import React from 'react'
 import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
-import { Link } from 'react-router-dom'
 
 // src
 import { ENTITY_STATUS_DATA_AVAILABLE } from './utils'
@@ -22,9 +21,9 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
 
   return class BoundForm extends React.Component {
 
-    handleSubmit: Function;
+    handleSubmit: Function
     
-    state = getDefaultState();
+    state = getDefaultState()
 
     constructor(props) {
       super(props)
@@ -47,7 +46,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
         const status = _.get(this.props, 'entity.__status__')
         const nextStatus = _.get(nextProps, 'entity.__status__')
 
-        // debugger;
+        // debugger
 
         if ( hasEntity && status !== nextStatus ) {
             this.handleChangeEntityStatus(nextProps.entity, nextStatus)
@@ -81,7 +80,6 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
             const {error, payload} = action
 
             if (error) {
-              
               this.setState({
                 error: true,
                 errorMessage: payload.message
@@ -89,7 +87,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
 
               throw new Error(`An error occurred while submitting the form: ${payload.message}`)
             } else {
-              //console.log('action is : ' + JSON.stringify(action))
+              // console.log('action is : ' + JSON.stringify(action))
               this.setState({
                 error: false,
                 errorMessage: payload.message
@@ -113,7 +111,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
       )
     }
 		renderRaisedSubmitButton = ({label, labelWhenSubmitting}) => {
-      const { submitting, pristine } = this.props
+      const { submitting } = this.props
 
       return (
         <RaisedButton
@@ -125,7 +123,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
       )
     }
     renderMessage = (msg) => {
-      //console.log('msg : ' + msg)
+      // console.log('msg : ' + msg)
       const { error, errorMessage } = this.state
 
       if (error) {
@@ -138,7 +136,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
         return <span></span>
       }
       
-      //return error ? <div style={{color: '#EF5350', fontSize: '12pt'}} dangerouslySetInnerHTML={{__html: errorMessage}}></div> : !error && errorMessage !== '' ? <div style={{color: '#4F8A10', fontSize: '12pt'}} dangerouslySetInnerHTML={{__html: errorMessage}}></div> : <span></span>
+      // return error ? <div style={{color: '#EF5350', fontSize: '12pt'}} dangerouslySetInnerHTML={{__html: errorMessage}}></div> : !error && errorMessage !== '' ? <div style={{color: '#4F8A10', fontSize: '12pt'}} dangerouslySetInnerHTML={{__html: errorMessage}}></div> : <span></span>
     }
     render() {
       return (

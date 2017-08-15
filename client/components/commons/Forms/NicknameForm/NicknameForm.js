@@ -1,6 +1,6 @@
 // libs
 import React, { Component } from 'react'
-import { reduxForm } from 'redux-form'
+import { reduxForm, change as changeFieldValue } from 'redux-form'
 
 // src
 import { bindForm } from '../../../../utils'
@@ -26,7 +26,7 @@ const validate = values => {
 			hasErrors = true
 		}
 		
-		if ( newNickname.length > 25 ) {
+		if ( newNickname.length > 40 ) {
 			errors.newNickname = 'Keep it under 25 characters.'
 			hasErrors = true
 		}
@@ -101,8 +101,17 @@ class NicknameForm extends Component {
 		change('nicknameType', nicknameType)
 	}
 
+	handleNoSpaces = (e) => {
+    const fieldName = e.target.name
+    const fieldValue = e.target.value
+    if (fieldValue === ' ') {
+      this.props.dispatch(changeFieldValue('registerForm', fieldName, ''))
+      e.preventDefault()
+    }
+  }
+
 	render() {
-		return <NicknameFormInner {...this.props}/>
+		return <NicknameFormInner {...this.props} onHandleNoSpaces={ this.handleNoSpaces } />
 	}
 }
 

@@ -1,22 +1,18 @@
 // libs
-import React from 'react';
-import { Field } from 'redux-form';
-import { Link } from 'react-router-dom';
-import Paper from 'material-ui/Paper';
-import DocumentTitle from 'react-document-title';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import CircularProgress from 'material-ui/CircularProgress';
-import QueueAnim from 'rc-queue-anim';
+import React from 'react'
+import { Field } from 'redux-form'
+import { Link } from 'react-router-dom'
+import DocumentTitle from 'react-document-title'
+import CircularProgress from 'material-ui/CircularProgress'
+import QueueAnim from 'rc-queue-anim'
 
 // src
-import './PageLoginInner.scss';
-//import iSnackbar from '../commons/MySnackbar'
-import { renderTextField } from '../../utils';
-import { renderCheckbox } from '../../utils';
+import './PageLoginInner.scss'
+// import iSnackbar from '../commons/MySnackbar'
+import { renderTextField } from '../../utils'
 
 const PageLoginInner = (props) => {
-  const { onSubmit, renderSubmitButton, renderMessage, isLoadingLogin, message, onHandleNoSpaces } = props;
+  const { onSubmit, renderSubmitButton, renderMessage, isLoadingLogin, message, onHandleNoSpaces } = props
 	
 	return (
     <div className="page-login">
@@ -68,7 +64,7 @@ const PageLoginInner = (props) => {
           </div>
         </QueueAnim>
       </div>
-			{/*<iSnackbar {...props}/>*/}
+			{ /* <iSnackbar {...props}/> */ }
     </div>
   )
 }

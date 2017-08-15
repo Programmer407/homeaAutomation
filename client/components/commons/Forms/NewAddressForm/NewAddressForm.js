@@ -1,6 +1,6 @@
 // libs
 import React, { Component } from 'react'
-import { reduxForm } from 'redux-form'
+import { reduxForm, change as changeFieldValue } from 'redux-form'
 
 // src
 import { bindForm } from '../../../../utils'
@@ -30,7 +30,7 @@ const validate = values => {
 		}
 
 		newAddressesArr.map( newAddress => {
-			if (newAddress.length > 50) {
+			if (newAddress.length > 40) {
 				errors.newAddresses = 'No address is that large. Try again?'
 				hasErrors = true
 			}
@@ -68,8 +68,17 @@ class NewAddressForm extends Component {
 		super(props)
 	}
 
+	handleNoSpaces = (e) => {
+    const fieldName = e.target.name
+    const fieldValue = e.target.value
+    if (fieldValue === ' ') {
+      this.props.dispatch(changeFieldValue('newAddressForm', fieldName, ''))
+      e.preventDefault()
+    }
+  }
+
 	render() {
-		return <NewAddressFormInner {...this.props}/>
+		return <NewAddressFormInner {...this.props} onHandleNoSpaces={ this.handleNoSpaces } />
 	}
 }
 

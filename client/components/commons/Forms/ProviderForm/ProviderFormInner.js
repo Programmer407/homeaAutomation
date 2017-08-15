@@ -1,7 +1,6 @@
 // libs
-import React from 'react';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import React from 'react'
+import MenuItem from 'material-ui/MenuItem'
 import { Field } from 'redux-form'
 
 // src
@@ -14,7 +13,7 @@ const ProviderFormInner = props => {
 		<form onSubmit={ onSubmit }>
 			<Field name="selectedProvider" label="Provider" component={ renderSelectField }>
 				<MenuItem key={ 0 } value={ 0 } primaryText={ 'Select a provider...' } selected/>
-				{providerList.map( (provider, index) => 
+				{providerList.map( (provider) => 
 					<MenuItem key={ provider.id } value={ provider.id } primaryText={ provider.displayName } />
 				)}
 			</Field>
