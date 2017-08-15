@@ -1,7 +1,6 @@
 // libs
 import React from 'react'
-import { connect } from 'react-redux'
-import { DatePicker, SelectField, RadioButtonGroup, Checkbox, MenuItem, TextField, AutoComplete } from 'material-ui';
+import { DatePicker, SelectField, RadioButtonGroup, Checkbox, TextField, AutoComplete } from 'material-ui'
 
 // src
 
@@ -18,9 +17,10 @@ export const renderTextFieldWithFixedLabel = ({ input, label, innerRef, meta: { 
   />
 )
 
-export const renderTextField = ({ input, label, value, autoComplete, innerRef, meta: { touched, error }, ...custom }) => (
+export const renderTextField = ({ input, label, autoComplete, innerRef, meta: { touched, error }, ...custom }) => (
   <TextField
     floatingLabelText={ label }
+		floatingLabelStyle={{ fontWeight: 400 }}
     fullWidth
     errorText={ touched && error }
     ref={ innerRef }
@@ -31,9 +31,10 @@ export const renderTextField = ({ input, label, value, autoComplete, innerRef, m
   />
 )
 
-export const renderTextArea = ({ input, label, rows, rowsMax, multiLine, autoComplete, innerRef,  meta: { touched, error, submitting }, ...custom }) => (
+export const renderTextArea = ({ input, label, rows, rowsMax, autoComplete, innerRef,  meta: { touched, error, submitting }, ...custom }) => (
   <TextField
     floatingLabelText={label}
+		floatingLabelStyle={{ fontWeight: 400 }}
     fullWidth
 		multiLine
 		rows={rows}
@@ -48,10 +49,12 @@ export const renderTextArea = ({ input, label, rows, rowsMax, multiLine, autoCom
 
 export const renderAutocomplete = ({ input, label, dataSource, innerRef,  meta: { touched, error, submitting }, ...custom }) => (
   <AutoComplete
+		underlineShow={false}
+		inputStyle={{ border: '1px solid #C9C9C9', borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomLeftRadius: 4, borderBottomRightRadius: 4, paddingLeft: 15 }}
 		fullWidth
 		hintText={ label }
 		dataSource={ dataSource }
-		hintStyle={{fontSize: 14}}
+		hintStyle={{fontSize: 16, paddingLeft: 15}}
     ref={innerRef}
 		filter={AutoComplete.caseInsensitiveFilter} 
 		{...input}
@@ -77,7 +80,10 @@ export const renderRadioGroup = ({ input, label, ...rest }) => (
 
 export const renderSelectField = ({ input, label, meta: { touched, error }, children }) => (
   <SelectField
+		selectedMenuItemStyle={{ color: '#00ACC1' }}
     floatingLabelText={label}
+		floatingLabelStyle={{ fontWeight: 400 }}
+		hintStyle={{ fontSize: 14 }} 
     floatingLabelFixed={false}
     fullWidth
     errorText={touched && error}
@@ -86,12 +92,28 @@ export const renderSelectField = ({ input, label, meta: { touched, error }, chil
     children={children}/>
 )
 
-export const renderInlineDateField = ({ input, label, style, meta: { touched, error }, ...custom }) => (
-  <DatePicker
+export const renderDatePicker = ({ input, label, meta: { touched, error } }) => (
+	<DatePicker
+		autoOk
 		fullWidth
+		floatingLabelText={ label }
+		floatingLabelStyle={{ fontWeight: 400 }}
+		errorText = {touched && error} 
+		{...input}
+		value = {input.value !== '' ? new Date(input.value) : null}
+		onChange = {(event, value) => {console.log(value); input.onChange(value)}} />
+)
+
+export const renderStyledDatePicker = ({ input, label, meta: { touched, error } }) => (
+	<DatePicker
+		autoOk
+		fullWidth
+		underlineShow={ false }
+		style={{ border: '1px solid #C9C9C9', borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomLeftRadius: 4, borderBottomRightRadius: 4, paddingLeft: 15 }}
+		textFieldStyle={{ maxHeight: 46 }}
 		hintText={ label }
-		hintStyle={{ fontSize: 14 }} 
-		autoOk 
-		//defaultDate={this.state.minDate}
-	/>
+		errorText = {touched && error} 
+		{...input}
+		value = {input.value !== '' ? new Date(input.value) : null}
+		onChange = {(event, value) => {console.log(value); input.onChange(value)}} />
 )

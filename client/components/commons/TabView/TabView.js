@@ -2,13 +2,11 @@
 import React from 'react';
 import SwipeableViews from 'react-swipeable-views';
 import ActionDelete from 'material-ui/svg-icons/action/delete'
-import { SelectField, FlatButton, RaisedButton, Tab, Tabs, MenuItem } from 'material-ui';
+import { FlatButton, RaisedButton, Tab, Tabs } from 'material-ui';
 
 // src
 import './TabView.scss'
-import { TradingView, IncomeView } from '../'
-
-const cyan500 = 'rgba(0,188,212,0.8)';
+import { TradingView, IncomeView, SpendingView } from '../'
 
 const tabContainerStyles = {
   maxWidth: '500px',
@@ -58,7 +56,7 @@ const Operations = props => {
 }
 
 const TabView = (props) => {
-  const { tabIndex, onTabChange, onFormDialogToggle, rowSelected } = props;
+  const { tabIndex, onTabChange, onFormDialogOpen, rowSelected } = props;
   const tabLbls = [ 'Trading', 'Income', 'Spending' ]
   
   return (
@@ -75,7 +73,7 @@ const TabView = (props) => {
             )
           }
 				</Tabs>
-				<RaisedButton className="actionBtn" label="Add Transaction" onClick={ onFormDialogToggle } primary/>
+				<RaisedButton className="actionBtn" label="Add Transaction" onClick={ onFormDialogOpen } primary/>
 				<span>{ <Operations  selected={ rowSelected } {...props}/> }</span>
 			</div>
 			
@@ -91,7 +89,7 @@ const TabView = (props) => {
 							<IncomeView {...props} />
 						</div>
 						<div className="slide">
-							3. Swipe to see the next slide.
+							<SpendingView {...props} />
 						</div>
 					</SwipeableViews>
 				</div>
@@ -99,7 +97,5 @@ const TabView = (props) => {
 		</div>
   );
 }
-
-
 
 export default TabView

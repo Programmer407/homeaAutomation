@@ -2,30 +2,27 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { Dialog, Checkbox, AutoComplete, RaisedButton, RadioButton, RadioButtonGroup } from 'material-ui'
-import { Field } from 'redux-form'
+import { Dialog, Checkbox, RaisedButton, RadioButton, RadioButtonGroup } from 'material-ui'
 
 // src
-import { AddTransactionForm, NicknameForm, FilterBarForm } from './Forms'
+import { AddTransactionForm, NicknameForm } from './Forms'
 
 export const FormDialog = (props) => {
-	const { title, actions, open, onDialogClose } = props;
+	const { title, open } = props
 
 	return (
 		<Dialog
 			title={ title }
-			actions={ actions }
 			modal={false}
 			open={ open }
-			onRequestClose={ onDialogClose }
-			autoScrollBodyContent={ true }>
+			autoScrollBodyContent>
 				<AddTransactionForm {...props} />
 		</Dialog>
-	);
+	)
 }
 
 export const InfoDialog = (props) => {
-	const { title, actions, open, onDialogClose } = props;
+	const { title, actions, open, onDialogClose } = props
 
 	return (
 		<Dialog
@@ -34,10 +31,10 @@ export const InfoDialog = (props) => {
 			modal={false}
 			open={ open }
 			onRequestClose={ onDialogClose }
-			autoScrollBodyContent={ true }>
+			autoScrollBodyContent>
 				<HelpText />
 		</Dialog>
-	);
+	)
 }
 
 const NicknameDialog = props => {
@@ -50,11 +47,11 @@ const NicknameDialog = props => {
 			onRequestClose={ onNicknameDialogClose }>
 				<NicknameForm {...props}/> 
 		</Dialog>
-	);
+	)
 }
 
 export const UploadDialog = (props) => {
-	const { title, actions, open, onDialogClose } = props;
+	const { title, actions, open, onDialogClose } = props
 
 	return (
 		<Dialog
@@ -63,30 +60,20 @@ export const UploadDialog = (props) => {
 			modal={false}
 			open={ open }
 			onRequestClose={ onDialogClose }
-			autoScrollBodyContent={ true }>
+			autoScrollBodyContent>
 				<div>
 					<p>Read about supported formats <Link to="#">here</Link>.</p>
 					<label className="custom-file">
 						<input type="file" id="file" className="custom-file-input" />
 						<span className="custom-file-control"></span>
 					</label>
-
-
-					{/* <input type="file" style={{ display: 'none' }} /> */}
-					
-					{/* <RaisedButton
-						primary
-						containerElement='label'
-						label='Upload .csv'>
-							<input type="file" style={{ display: 'none' }} />
-					</RaisedButton> */}
 				</div>			
 		</Dialog>
-	);
+	)
 }
 
 export const ActionTypeDialog = (props) => {
-	const { title, actions, open, onDialogClose } = props;
+	const { title, actions, open, onDialogClose } = props
 
 	return (
 		<Dialog
@@ -95,7 +82,7 @@ export const ActionTypeDialog = (props) => {
 			modal={false}
 			open={ open }
 			onRequestClose={ onDialogClose }
-			autoScrollBodyContent={ true }>
+			autoScrollBodyContent>
 				<div>
 					<RadioButtonGroup name="actionType" defaultSelected="not_light">
 						<RadioButton
@@ -131,18 +118,8 @@ export const ActionTypeDialog = (props) => {
 					<RaisedButton label="Submit" primary/>
 				</div>
 		</Dialog>
-	);
+	)
 }
-
-
-{/* <MenuItem value={1} primaryText="Donation" />
-<MenuItem value={2} primaryText="Gift Received" />
-<MenuItem value={3} primaryText="Gift Sent" />
-<MenuItem value={4} primaryText="Income" />
-<MenuItem value={5} primaryText="Purchase" />
-<MenuItem value={6} primaryText="Sale" />
-<MenuItem value={7} primaryText="Transfer" /> */}
-
 
 export const Selection = props => {
 	const { onCheckboxClick, onHeadCheckboxClick, index, type, selectedRows, allSelected } = props
@@ -165,7 +142,7 @@ export const Selection = props => {
 const title = (text, boldText) => {
 	return (
 		<p>{ text } <b style={{ fontWeight: '500' }}>{ boldText }</b></p>
-	);
+	)
 }
 
 
