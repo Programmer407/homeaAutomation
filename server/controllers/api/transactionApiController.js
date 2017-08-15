@@ -215,7 +215,7 @@ router.post('/api/transactions/delete-transaction', ensureAuthorization, (req, r
   }
 
   const { transactionId, transType } = body
-  if ( !transactionId, !transType ) {
+  if ( !transactionId || !transType ) {
   	rejectRequest('Missing required arguments', res)
   	return
   }
