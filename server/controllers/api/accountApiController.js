@@ -39,7 +39,7 @@ router.get('/api/accounts/my-account-all-data', ensureAuthorization, (req, res) 
 })
 
 router.post('/api/accounts/my-account-connect-url', ensureAuthorization, (req, res) => {
-  const { body, user } = req
+  const { body } = req
   if ( !body ) {
   	rejectRequest('Missing request body', res)
     return
@@ -87,14 +87,14 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 		if (providerObj) {
 			if (providerObj.id === 1) {
 				if (tokenCode) {
-					let redirectURL = req.protocol + '://' + req.get('host') + providerObj.redirectUrl1
-					let headers = {
+					const redirectURL = req.protocol + '://' + req.get('host') + providerObj.redirectUrl1
+					const headers = {
 						'User-Agent': 'Super Agent/0.0.1',
 						'Content-Type': 'application/json'
 					}
 
 					// Configure the request
-					let options = {
+					const options = {
 						url: 'https://api.coinbase.com/oauth/token',
 						method: 'POST',
 						headers: headers,
@@ -108,13 +108,13 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 					// Start the request
 					request(options, function(error, response, responseBody) {
 						if (!error && response.statusCode === 200) {
-							//console.log('no errors')
-							let access_token_string = responseBody.substring(responseBody.indexOf('access_token')+15, responseBody.indexOf(',')-1)
-							let refresh_token_string = responseBody.substring(responseBody.indexOf('refresh_token')+16)
-							refresh_token_string = refresh_token_string.substring(0, refresh_token_string.indexOf(',')-1)
+							// console.log('no errors')
+							const access_token_string = responseBody.substring(responseBody.indexOf('access_token') + 15, responseBody.indexOf(',') - 1)
+							let refresh_token_string = responseBody.substring(responseBody.indexOf('refresh_token') + 16)
+							refresh_token_string = refresh_token_string.substring(0, refresh_token_string.indexOf(',') - 1)
 							
-							let Client = require('coinbase').Client
-							let client = new Client({'accessToken': access_token_string, 'refreshToken': refresh_token_string})
+							const Client = require('coinbase').Client
+							const client = new Client({'accessToken': access_token_string, 'refreshToken': refresh_token_string})
 							client.getCurrentUser(function(err, accountUser) {
 								if (err && !accountUser) 
 									caughtError(res, err)
@@ -148,7 +148,7 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 														function(callback) {
 															findUserWalletByWalletId(acct.id)
 															.then(userWallet => {
-																let currentDate = new Date()
+																const currentDate = new Date()
 																if (userWallet) {
 																	userWallet.walletName = acct.name
 																	userWallet.walletType = acct.type
@@ -175,8 +175,8 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																		async.eachOfSeries(txs, function(trans, key1, transCallback) {
 																		findTransactionByTrxId(trans.id)
 																			.then(transactionObj => {
-																				let trx_date = new Date(trans.created_at) // The 0 there is the key, which sets the date to the epoch
-																				let moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
+																				const trx_date = new Date(trans.created_at) // The 0 there is the key, which sets the date to the epoch
+																				const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
 																				if (transactionObj) {
 																					if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
 																						transactionObj.destination = trans.details.title + ' ' + trans.details.subtitle
@@ -194,15 +194,15 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																							findTrxImportTypeById(1)
 																							.then(trxImportTypeObj => {
 																								transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})
-																								if (trans.type == 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
+																								if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
 																									findAssociatedAddByAdd(trans.to.address)
 																									.then(associatedAddObj => {
 																										if (associatedAddObj) {
 																											transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
 																												updateTransaction(transactionObj)
 																												.then(updatedTransaction => {
-																													if (key1 === txs.length-1) {
-																														if (key === accounts.length-1)
+																													if (key1 === txs.length - 1) {
+																														if (key === accounts.length - 1)
 																																callback(null, 'some parameter')
 																														else
 																																nextCallback()
@@ -216,8 +216,8 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																												transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
 																												updateTransaction(transactionObj)
 																												.then(updatedTransaction => {
-																													if (key1 === txs.length-1) {
-																														if (key === accounts.length-1)
+																													if (key1 === txs.length - 1) {
+																														if (key === accounts.length - 1)
 																															callback(null, 'some parameter')
 																														else
 																															nextCallback()
@@ -230,8 +230,8 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																								} else {
 																									updateTransaction(transactionObj)
 																									.then(updatedTransaction => {
-																										if (key1 === txs.length-1) {
-																											if (key === accounts.length-1)
+																										if (key1 === txs.length - 1) {
+																											if (key === accounts.length - 1)
 																												callback(null, 'some parameter')
 																											else
 																												nextCallback()
@@ -242,8 +242,8 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																							})
 																						})
 																					} else {
-																						if (key1 === txs.length-1) {
-																							if (key === accounts.length-1)
+																						if (key1 === txs.length - 1) {
+																							if (key === accounts.length - 1)
 																								callback(null, 'some parameter')
 																							else
 																								nextCallback()
@@ -273,8 +273,8 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																											transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
 																											updateTransaction(transactionObj)
 																											.then(updatedTransaction => {
-																												if (key1 === txs.length-1) {
-																													if (key === accounts.length-1)
+																												if (key1 === txs.length - 1) {
+																													if (key === accounts.length - 1)
 																														callback(null, 'some parameter')
 																													else
 																														nextCallback()
@@ -288,8 +288,8 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																												transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
 																												updateTransaction(transactionObj)
 																												.then(updatedTransaction => {
-																													if (key1 === txs.length-1) {
-																														if (key === accounts.length-1)
+																													if (key1 === txs.length - 1) {
+																														if (key === accounts.length - 1)
 																															callback(null, 'some parameter')
 																														else
 																															nextCallback()
@@ -302,8 +302,8 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																								} else {
 																									updateTransaction(transactionObj)
 																									.then(updatedTransaction => {
-																										if (key1 === txs.length-1) {
-																											if (key === accounts.length-1)
+																										if (key1 === txs.length - 1) {
+																											if (key === accounts.length - 1)
 																													callback(null, 'some parameter')
 																											else
 																													nextCallback()
@@ -314,8 +314,8 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																							})
 																						})
 																					} else {
-																						if (key1 === txs.length-1) {
-																							if (key === accounts.length-1)
+																						if (key1 === txs.length - 1) {
+																							if (key === accounts.length - 1)
 																								callback(null, 'some parameter')
 																							else
 																								nextCallback()
@@ -326,7 +326,7 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																			})
 																		})
 																	} else {
-																		if (key === accounts.length-1)
+																		if (key === accounts.length - 1)
 																			callback(null, 'some parameter')
 																		else
 																			nextCallback()
@@ -412,13 +412,13 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 	
 	findUserProviderByID(userProviderId)
 	.then(userProviderObj => {
-		var Client = require('coinbase').Client
-		var client = new Client({'accessToken': userProviderObj.accessToken, 'refreshToken': userProviderObj.refreshToken})
+		const Client = require('coinbase').Client
+		let client = new Client({'accessToken': userProviderObj.accessToken, 'refreshToken': userProviderObj.refreshToken})
 		client.getAccounts({}, function(err, accounts) {
 			if (err) {
 				console.log('err : ' + err)
 				if (err === 'RevokedToken: The access token was revoked') {
-					let redirectURL = getCoinBaseRedirectURL(userProviderObj.provider, req)
+					const redirectURL = getCoinBaseRedirectURL(userProviderObj.provider, req)
 					return res
 						.status(200)
 						.send({
@@ -426,12 +426,12 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 						})
 				} else {
 					// Configure the request
-					var headers = {
+					const headers = {
 							'User-Agent': 'Super Agent/0.0.1',
 							'Content-Type': 'application/json'
 					}
 
-					var options = {
+					const options = {
 							url: 'https://api.coinbase.com/oauth/token',
 							method: 'POST',
 							headers: headers,
@@ -444,9 +444,9 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 					// Start the request
 					request(options, function (error, response, responseBody) {
 						if (!error && response.statusCode === 200) {
-							let access_token_string = responseBody.substring(responseBody.indexOf('access_token')+15, responseBody.indexOf(',')-1)
-							let refresh_token_string = responseBody.substring(responseBody.indexOf('refresh_token')+16)
-							refresh_token_string = refresh_token_string.substring(0, refresh_token_string.indexOf(',')-1)
+							const access_token_string = responseBody.substring(responseBody.indexOf('access_token') + 15, responseBody.indexOf(',') - 1)
+							let refresh_token_string = responseBody.substring(responseBody.indexOf('refresh_token') + 16)
+							refresh_token_string = refresh_token_string.substring(0, refresh_token_string.indexOf(',') - 1)
 							
 							userProviderObj.accessToken = access_token_string
 							userProviderObj.refreshToken = refresh_token_string
@@ -462,7 +462,7 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 													function(callback) {
 														findUserWalletByWalletId(acct.id)
 														.then(userWallet => {
-															let currentDate = new Date()
+															const currentDate = new Date()
 															if (userWallet) {
 																userWallet.walletName = acct.name
 																userWallet.walletType = acct.type
@@ -489,8 +489,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																		async.eachOfSeries(txs, function(trans, key1, transCallback) {
 																		findTransactionByTrxId(trans.id)
 																			.then(transactionObj => {
-																				let trx_date = new Date(trans.created_at) // The 0 there is the key, which sets the date to the epoch
-																				let moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
+																				const trx_date = new Date(trans.created_at) // The 0 there is the key, which sets the date to the epoch
+																				const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
 																				if (transactionObj) {
 																					if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
 																						transactionObj.destination = trans.details.title + ' ' + trans.details.subtitle
@@ -515,8 +515,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																											transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
 																												updateTransaction(transactionObj)
 																												.then(updatedTransaction => {
-																													if (key1 === txs.length-1) {
-																														if (key === accounts.length-1)
+																													if (key1 === txs.length - 1) {
+																														if (key === accounts.length - 1)
 																															callback(null, 'some parameter')
 																														else
 																															nextCallback()
@@ -530,8 +530,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																												transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
 																												updateTransaction(transactionObj)
 																												.then(updatedTransaction => {
-																													if (key1 === txs.length-1) {
-																														if (key === accounts.length-1)
+																													if (key1 === txs.length - 1) {
+																														if (key === accounts.length - 1)
 																															callback(null, 'some parameter')
 																														else
 																															nextCallback()
@@ -544,8 +544,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																								} else {
 																									updateTransaction(transactionObj)
 																									.then(updatedTransaction => {
-																										if (key1 === txs.length-1) {
-																											if (key === accounts.length-1)
+																										if (key1 === txs.length - 1) {
+																											if (key === accounts.length - 1)
 																												callback(null, 'some parameter')
 																											else
 																												nextCallback()
@@ -556,8 +556,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																							})
 																						})
 																					} else {
-																						if (key1 === txs.length-1) {
-																							if (key === accounts.length-1)
+																						if (key1 === txs.length - 1) {
+																							if (key === accounts.length - 1)
 																								callback(null, 'some parameter')
 																							else
 																								nextCallback()
@@ -565,7 +565,7 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																							transCallback()
 																					}
 																				} else {
-																					if (trans.type == 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
+																					if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
 																						transactionObj = Transaction.build({trxId: trans.id, destination: trans.details.title + ' ' + trans.details.subtitle, transactionDate: moment_date, amount: trans.amount.amount, asset: trans.amount.currency, value: trans.native_amount.amount})
 																						transactionObj.setUser(user, {save: false})
 																						transactionObj.setUserwallet(updatedUserWallet, {save: false})
@@ -587,8 +587,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																											transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
 																											updateTransaction(transactionObj)
 																											.then(updatedTransaction => {
-																												if (key1 === txs.length-1) {
-																													if (key === accounts.length-1)
+																												if (key1 === txs.length - 1) {
+																													if (key === accounts.length - 1)
 																														callback(null, 'some parameter')
 																													else
 																														nextCallback()
@@ -602,8 +602,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																												transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
 																												updateTransaction(transactionObj)
 																												.then(updatedTransaction => {
-																													if (key1 === txs.length-1) {
-																														if (key === accounts.length-1)
+																													if (key1 === txs.length - 1) {
+																														if (key === accounts.length - 1)
 																															callback(null, 'some parameter')
 																														else
 																															nextCallback()
@@ -616,8 +616,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																								} else {
 																									updateTransaction(transactionObj)
 																									.then(updatedTransaction => {
-																										if (key1 === txs.length-1) {
-																											if (key === accounts.length-1)
+																										if (key1 === txs.length - 1) {
+																											if (key === accounts.length - 1)
 																												callback(null, 'some parameter')
 																											else
 																												nextCallback()
@@ -628,8 +628,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																							})
 																						})
 																					} else {
-																						if (key1 === txs.length-1) {
-																							if (key === accounts.length-1)
+																						if (key1 === txs.length - 1) {
+																							if (key === accounts.length - 1)
 																								callback(null, 'some parameter')
 																							else
 																								nextCallback()
@@ -640,7 +640,7 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																			})
 																		})
 																	} else {
-																		if (key === accounts.length-1)
+																		if (key === accounts.length - 1)
 																			callback(null, 'some parameter')
 																		else
 																			nextCallback()
@@ -705,8 +705,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 												async.eachOfSeries(txs, function(trans, key1, transCallback) {
 													findTransactionByTrxId(trans.id)
 													.then(transactionObj => {
-														let trx_date = new Date(trans.created_at) // The 0 there is the key, which sets the date to the epoch
-														let moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
+														const trx_date = new Date(trans.created_at) // The 0 there is the key, which sets the date to the epoch
+														const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
 														if (transactionObj) {
 															if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
 																transactionObj.destination = trans.details.title + ' ' + trans.details.subtitle
@@ -731,8 +731,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																					transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
 																					updateTransaction(transactionObj)
 																					.then(updatedTransaction => {
-																						if (key1 === txs.length-1) {
-																							if (key === accounts.length-1)
+																						if (key1 === txs.length - 1) {
+																							if (key === accounts.length - 1)
 																								callback(null, 'some parameter')
 																							else
 																								nextCallback()
@@ -746,8 +746,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																						transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
 																						updateTransaction(transactionObj)
 																						.then(updatedTransaction => {
-																							if (key1 === txs.length-1) {
-																								if (key === accounts.length-1)
+																							if (key1 === txs.length - 1) {
+																								if (key === accounts.length - 1)
 																									callback(null, 'some parameter')
 																								else
 																									nextCallback()
@@ -760,8 +760,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																		} else {
 																			updateTransaction(transactionObj)
 																			.then(updatedTransaction => {
-																				if (key1 === txs.length-1) {
-																					if (key === accounts.length-1)
+																				if (key1 === txs.length - 1) {
+																					if (key === accounts.length - 1)
 																						callback(null, 'some parameter')
 																					else
 																						nextCallback()
@@ -772,8 +772,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																	})
 																})
 															} else {
-																if (key1 === txs.length-1) {
-																	if (key === accounts.length-1)
+																if (key1 === txs.length - 1) {
+																	if (key === accounts.length - 1)
 																		callback(null, 'some parameter')
 																	else
 																		nextCallback()
@@ -801,8 +801,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																					transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
 																					updateTransaction(transactionObj)
 																					.then(updatedTransaction => {
-																						if (key1 === txs.length-1) {
-																							if (key === accounts.length-1)
+																						if (key1 === txs.length - 1) {
+																							if (key === accounts.length - 1)
 																								callback(null, 'some parameter')
 																							else
 																								nextCallback()
@@ -816,8 +816,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																						transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
 																						updateTransaction(transactionObj)
 																						.then(updatedTransaction => {
-																							if (key1 === txs.length-1) {
-																								if (key === accounts.length-1)
+																							if (key1 === txs.length - 1) {
+																								if (key === accounts.length - 1)
 																									callback(null, 'some parameter')
 																								else
 																									nextCallback()
@@ -830,8 +830,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																		} else {
 																			updateTransaction(transactionObj)
 																			.then(updatedTransaction => {
-																				if (key1 === txs.length-1) {
-																					if (key === accounts.length-1)
+																				if (key1 === txs.length - 1) {
+																					if (key === accounts.length - 1)
 																						callback(null, 'some parameter')
 																					else
 																						nextCallback()
@@ -842,8 +842,8 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 																	})
 																})
 															} else {
-																if (key1 === txs.length-1) {
-																	if (key === accounts.length-1)
+																if (key1 === txs.length - 1) {
+																	if (key === accounts.length - 1)
 																		callback(null, 'some parameter')
 																	else
 																		nextCallback()
@@ -854,7 +854,7 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 													})
 												})
 											} else {
-												if (key === accounts.length-1)
+												if (key === accounts.length - 1)
 													callback(null, 'some parameter')
 												else
 													nextCallback()
@@ -897,19 +897,15 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 		return
 	}
 	
-	let addressArray = coinAddresses.toString().split(',')
-	let inValidAddresses = new Array();
-	// console.log('addressArray : ' + addressArray)
+	const addressArray = coinAddresses.toString().split(',')
+	const inValidAddresses = new Array()
+	
 	async.eachOfSeries(addressArray, function(coinAddress, index, nextAddCallback) {
-		console.log('eachOfSeries address : ' + coinAddress)
-		// const addressObj = addressInfo(coinAddress)
 		addressInfo(coinAddress)
 		.then(addressObj => {
-			console.log('addressObj : ' + JSON.stringify(addressObj))
 			if (addressObj.isValid) {
 				async.waterfall([
 					function(callback) {
-						console.log('333333333')
 						findUserAddressByAddress(user.id, coinAddress)
 							.then(userAddress => {
 								if (userAddress) {
@@ -923,47 +919,38 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 							})
 					},
 					function(userAddress, callback) {
-						console.log('44444444444')
 						updateUserAddress(userAddress)
 							.then(updatedUserAddress => {
 								callback(null, updatedUserAddress)
 							})
 					},
 					function(userAddress, callback) {
-						console.log('5555555555555')
-						if (addressObj.addressType == 'BTC') {
-							console.log('its btc')
+						if (addressObj.addressType === 'BTC') {
 							blockexplorer.getAddress(coinAddress)
 							.then(address => {
-								let transIndex = 0
-								let transactionArr = address.txs
-								//console.log('transactionArr : ' + JSON.stringify(transactionArr))
+								const transIndex = 0
+								const transactionArr = address.txs
 								insertTransactions(transactionArr, transIndex, callback, user, userAddress)
 							})
 						} else {
-							console.log('its not btc')
 							callback(null, 'some params')
 						}
 					}
 				],
 				function(err, arg1) {
-					console.log('666666666')
 					nextAddCallback()
 				})
 			} else {
-				console.log('7777777777')
 				inValidAddresses.push(coinAddress)
 				nextAddCallback()
 			}
 		})
 	}, function(err) {
-		if( err ) {
+		if ( err ) {
 			rejectRequest('Failed to process addresses, please try again', res)
 			return
 		} else {
-			console.log('888888888')
 			if (addressArray.length === inValidAddresses.length) {
-				console.log('999999999999')
 				findAllUserAddresses(user.id)
 				.then(userAddressesList => {
 					res
@@ -975,7 +962,6 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 				})
 				return
 			} else {
-				console.log('000000000000')
 				findAllUserAddresses(user.id)
 				.then(userAddressesList => {
 					res
@@ -987,73 +973,6 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 			}
 		}
 	})
-
-	/* console.log('after validation')
-
-	//validAddresses[0] = '0x4961aC1d43B6249bc998D611F33d42B54E31712E'
-	//console.log('validAddresses : ' + validAddresses)
-	if (validAddresses.length > 0) {
-		async.eachSeries(validAddresses, function(coinAddress, nextCallback) {
-			//console.log('111111111')
-			blockexplorer.getAddress(coinAddress)
-				.then(address => {
-					//console.log('2222222')
-					async.waterfall([
-						function(callback) {
-							//console.log('333333333')
-							findUserAddressByAddress(user.id, coinAddress)
-								.then(userAddress => {
-									if (userAddress) {
-										userAddress.balance = address.final_balance
-										callback(null, userAddress)
-									} else {
-										userAddress = UserAddress.build({address: coinAddress, nickName: coinAddress, balance: address.final_balance, currency: 'BTC'})
-										userAddress.setUser(user, {save: false})
-										callback(null, userAddress)
-									}
-								})
-						},
-						function(userAddress, callback) {
-							updateUserAddress(userAddress)
-								.then(updatedUserAddress => {
-									callback(null, updatedUserAddress)
-								})
-						},
-						function(userAddress, callback) {
-							let transIndex = 0
-							let transactionArr = address.txs
-							//console.log('transactionArr : ' + JSON.stringify(transactionArr))
-							insertTransactions(transactionArr, transIndex, callback, user, userAddress)
-						}
-					],
-					function(err, arg1) {
-						nextCallback()
-					})
-				})
-				.catch(error => {
-					//console.log('error here')
-					//console.log('error : ' + error)
-					caughtError(res, error)
-				})
-		}, function(err) {
-			if( err ) {
-				rejectRequest('Failed to process addresses, please try again', res)
-				return
-			} else {
-				findAllUserAddresses(user.id)
-					.then(userAddressesList => {
-						res
-							.status(200)
-							.send({
-									userAddressesList
-							})
-					})
-			}
-		})
-	} else {
-		rejectRequest('Invalid Addresses', res)
-		return
-	}*/
 })
 
 router.post('/api/accounts/user-addresses-refresh', ensureAuthorization, (req, res) => {
@@ -1073,7 +992,7 @@ router.post('/api/accounts/user-addresses-refresh', ensureAuthorization, (req, r
 		function(callback) {
 			findUserAddressById(userAddressId)
 			.then(userAddress => {
-				blockexplorer.getAddress(userAddress.address)
+				addressInfo(userAddress.address)
 				.then(address => {
 					userAddress.balance = address.final_balance
 					callback(null, userAddress, address)
@@ -1090,9 +1009,16 @@ router.post('/api/accounts/user-addresses-refresh', ensureAuthorization, (req, r
 			)
 		},
 		function(userAddress, address, callback) {
-			let transIndex = 0
-			let transactionArr = address.txs
-			insertTransactions(transactionArr, transIndex, callback, user, userAddress)
+			if (address.addressType === 'BTC') {
+				blockexplorer.getAddress(userAddress.address)
+				.then(addressObj => {
+					const transIndex = 0
+					const transactionArr = addressObj.txs
+					insertTransactions(transactionArr, transIndex, callback, user, userAddress)
+				})
+			} else {
+				callback(null, 'some params')
+			}
 		}
 	],
 	function(err, arg1) {
@@ -1239,18 +1165,18 @@ router.post('/api/accounts/associated-walletaddress-update', ensureAuthorization
 })
 
 function insertTransactions(transactionArr, index, done, userObj, userAddressObj) {
-  if (index == transactionArr.length){
+  if (index === transactionArr.length) {
   	done(null, 'some params')
   } else {
-  	let transaction = transactionArr[index]
+  	const transaction = transactionArr[index]
     findTransactionByTrxId(transaction.tx_index)
     	.then(transactionObj => {
-      	//console.log('inside promise************************')
-        var utcSeconds = transaction.time
-        var trx_date = new Date(utcSeconds*1000) // The 0 there is the key, which sets the date to the epoch
-        var moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
+      	// console.log('inside promise************************')
+        const utcSeconds = transaction.time
+        const trx_date = new Date(utcSeconds * 1000) // The 0 there is the key, which sets the date to the epoch
+        const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
 				
-				let transaction_Input_Arr = transaction.inputs
+				const transaction_Input_Arr = transaction.inputs
 				let transType = 2
 				transaction_Input_Arr.forEach(function(trx_input, j) {
 					if (trx_input.prev_out.addr != userAddressObj.address) {
@@ -1258,13 +1184,13 @@ function insertTransactions(transactionArr, index, done, userObj, userAddressObj
 					}
 				})
 
-				let transaction_Out_Arr = transaction.out
+				const transaction_Out_Arr = transaction.out
 				let myAssociateAdd = ''
 				let transAmount = ''
 				transaction_Out_Arr.forEach(function(trx_out, j) {
 					if (trx_out.addr != userAddressObj.address) {
 						myAssociateAdd = trx_out.addr
-					} else if (trx_out.addr == userAddressObj.address && transType == 3) {
+					} else if (trx_out.addr === userAddressObj.address && transType === 3) {
 						transAmount = trx_out.value
 					}
 				})

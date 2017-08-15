@@ -57,10 +57,10 @@ router.post('/api/transactions/insert-transaction', ensureAuthorization, (req, r
   }
 
   const { transactionDate, destination, note, amount, asset, value, transactionTypeId } = trxData
-  var trx_date = new Date(transactionDate)
-  var moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
+  const trx_date = new Date(transactionDate)
+  const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
 
-  const transactionObj = Transaction.build({destination: destination, transactionDate: moment_date, amount: amount, asset: asset, value: value})
+  const transactionObj = Transaction.build({destination: destination, note: note, transactionDate: moment_date, amount: amount, asset: asset, value: value})
   transactionObj.setUser(user, {save: false})
   findTransactionTypeById(transactionTypeId)
   .then(transactionTypeObj => {
@@ -144,8 +144,8 @@ router.post('/api/transactions/update-transaction', ensureAuthorization, (req, r
   .then(transactionObj => {
     transactionObj.destination = destination
 
-    var trx_date = new Date(transactionDate)
-    var moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
+    const trx_date = new Date(transactionDate)
+    const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
     transactionObj.transactionDate = moment_date
 
     transactionObj.amount = amount
@@ -192,7 +192,7 @@ router.post('/api/transactions/update-transaction', ensureAuthorization, (req, r
       } else {
         updateTransaction(transactionObj)
         .then(updatedTransaction => {
-          findTransactionsByUserId(user.id, transType)
+          findTransactionsByUserId(user.id, transactionTypeObj.typeName)
           .then(transactionList => {
             res
               .status(200)
