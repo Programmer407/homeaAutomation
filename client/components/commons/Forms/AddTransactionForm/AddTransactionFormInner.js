@@ -12,6 +12,7 @@ const AddTransactionFormInner = props => {
 	return (
 		<form role="form">
 			<div className="form-group">
+				<Field name="transactionId" component="input" type="hidden" />
 				<Field name="transactionDate" label="Date" component={ renderDatePicker } fullWidth autoFocus/>
 				<Field name="destination" label="Destination" autoComplete="off" component={ renderTextField } fullWidth />
 				<div className="row">
@@ -20,10 +21,10 @@ const AddTransactionFormInner = props => {
 					</div>
 					<div className="col-md-6">
 						<Field name="asset" label="Asset" component={ renderSelectField } fullWidth>
-							<MenuItem value={1} primaryText="BTC" />
-							<MenuItem value={2} primaryText="LTC" />
-							<MenuItem value={3} primaryText="ETH" />
-							<MenuItem value={4} primaryText="DOGE" />
+							<MenuItem value={'BTC'} primaryText="BTC" />
+							<MenuItem value={'LTC'} primaryText="LTC" />
+							<MenuItem value={'ETH'} primaryText="ETH" />
+							<MenuItem value={'DOGE'} primaryText="DOGE" />
 						</Field>
 					</div>
 				</div>
@@ -32,7 +33,7 @@ const AddTransactionFormInner = props => {
 						<Field name="value" label="Total Value" autoComplete="off" component={renderTextField} type="number" fullWidth />
 					</div>
 					<div className="col-md-6">
-						<Field name="type" label="Type" component={ renderSelectField } fullWidth>
+						<Field name="transactionTypeId" label="Type" component={ renderSelectField } fullWidth>
 							<MenuItem value={1} primaryText="Income" />
 							<MenuItem value={2} primaryText="Sale" />
 							<MenuItem value={3} primaryText="Purchase" />

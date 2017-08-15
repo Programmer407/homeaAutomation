@@ -4,15 +4,15 @@ import { reduxForm } from 'redux-form'
 
 // src
 import { bindForm } from '../../../../utils'
-import { insertTransaction } from "../../../../actions/entities/transactions"
+import { insertTransaction, updateTransaction } from "../../../../actions/entities/transactions"
 import AddTransactionFormInner from './AddTransactionFormInner'
 
-const fields = [ 'transactionDate', 'destination', 'amount', 'asset', 'value', 'type', 'note' ]
+const fields = [ 'transactionDate', 'destination', 'amount', 'asset', 'value', 'transactionTypeId', 'note' ]
 
 const validate = values => {
 	const errors = {}
 	let hasErrors = false
-	const { transactionDate, destination, amount, asset, value, note, type } = values
+	const { transactionDate, destination, amount, asset, value, note, transactionTypeId } = values
 	
 	if ( !transactionDate) {
 		errors.transactionDate = 'Missing date field.'
@@ -39,8 +39,8 @@ const validate = values => {
 		hasErrors = true
 	}
 
-	if ( !type ) {
-		errors.type = 'Select a valid type from the list.'
+	if ( !transactionTypeId ) {
+		errors.transactionTypeId = 'Select a valid type from the list.'
 		hasErrors = true
 	} 
 
@@ -59,12 +59,34 @@ const validate = values => {
 })
 @bindForm({
 	onSubmit: (values, dispatch, props) => {
+		if ( !_.isNil(values.transactionId)) {
+			return dispatch(updateTransaction(values))
+		}
 		return dispatch(insertTransaction(values))
 	}
 })
 class AddTransactionForm extends Component {
 	constructor(props) {
 		super(props)
+		console.log('---> PROPS FROM ADDTRXFORM:', props)
+	}
+
+	componentDidMount() {
+		const { trxId, modifiedTrxs, change } = this.props
+
+		if ( !_.isNil(trxId)) {
+			const currentTrx = _.find(modifiedTrxs, function(trx) { return trx.id === trxId })
+			const { transactionDate, destination, amount, asset, value, transactiontype, note } = currentTrx
+			change('transactionId', trxId)
+			change('note', note)
+			change('asset', asset)
+			change('value', value)
+			change('amount', amount)
+			change('destination', destination)
+			change('transactionDate', transactionDate)
+			change('transactionTypeId', transactiontype.id)
+			console.log('---> currentTrx', currentTrx)
+		}
 	}
 
 	render() {

@@ -40,3 +40,41 @@ export function insertTransaction(trxData) {
     payload: {trxData}
   }
 }
+
+export const DELETE_TRANSACTION = 'DELETE_TRANSACTION'
+export const DELETE_TRANSACTION_SUCCESS = 'DELETE_TRANSACTION_SUCCESS'
+export const DELETE_TRANSACTION_FAILURE = 'DELETE_TRANSACTION_FAILURE'
+
+export function deleteTransaction(transactionId, transType) {
+  return {
+    [CALL_API]: {
+      types: [
+        DELETE_TRANSACTION,
+        DELETE_TRANSACTION_SUCCESS,
+        DELETE_TRANSACTION_FAILURE
+      ],
+      endpoint: `/api/transactions/delete-transaction`,
+      method: 'POST'
+    },
+    payload: {transactionId, transType}
+  }
+}
+
+export const UPDATE_TRANSACTION = 'UPDATE_TRANSACTION'
+export const UPDATE_TRANSACTION_SUCCESS = 'UPDATE_TRANSACTION_SUCCESS'
+export const UPDATE_TRANSACTION_FAILURE = 'UPDATE_TRANSACTION_FAILURE'
+
+export function updateTransaction(trxData) {
+  return {
+    [CALL_API]: {
+      types: [
+        UPDATE_TRANSACTION,
+        UPDATE_TRANSACTION_SUCCESS,
+        UPDATE_TRANSACTION_FAILURE
+      ],
+      endpoint: `/api/transactions/update-transaction`,
+      method: 'POST'
+    },
+    payload: {trxData}
+  }
+}
