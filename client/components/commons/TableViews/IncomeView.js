@@ -1,16 +1,12 @@
 // libs
 import React from 'react'
-import { IconButton, CircularProgress } from 'material-ui'
+import { CircularProgress, RefreshIndicator } from 'material-ui'
+import moment from 'moment'
 
 // src
 import { Pagination } from './'
 import { Selection } from '../'
-
-// assets
-import ActionDelete from 'material-ui/svg-icons/action/delete'
-import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import { cyan200, cyan500 } from 'material-ui/styles/colors'
-
+import { Operations } from '../../commons'
 
 const tblCols = {
 	checkbox: '',
@@ -23,20 +19,6 @@ const tblCols = {
 	fee: 'Fees',
 	cost: 'Cost',
 	operations: ''
-}
-
-const Operations = props => {
-	return (
-		<span>
-			<IconButton className="actionIcon">
-				<EditorModeEdit color={cyan200} hoverColor={cyan500}/>
-			</IconButton>
-
-			<IconButton className="actionIcon">
-				<ActionDelete color={cyan200} hoverColor={cyan500}/>
-			</IconButton>
-		</span>
-	)
 }
 
 const IncomeView = (props) => {
@@ -79,13 +61,27 @@ const IncomeView = (props) => {
 														onMouseLeave={ onRowHoverExit }
 														className="fixedHeightRow">
 															<td className="mdl-data-table__cell--non-numeric">{ <Selection index={ trx.id } type={'ROW'} {...props} /> }</td>
-															<td className="mdl-data-table__cell--non-numeric">{ trx.transactionDate }</td>
+															<td className="mdl-data-table__cell--non-numeric">{ moment(trx.transactionDate).format('ll') }</td>
 															<td className="mdl-data-table__cell--non-numeric">{ !_.isNil(trx.destination) ? trx.destination : trx.associatedaddress.nickName }</td>
-															<td className="mdl-data-table__cell--non-numeric">{ trx.amount } { trx.useraddress.currency }</td>
+															<td className="mdl-data-table__cell--non-numeric">{ trx.amount } { trx.asset }</td>
 															<td>{ 1700.54 }</td>
 															<td className="mdl-data-table__cell--non-numeric">{ trx.transactiontype.typeName }</td>
-															<td className="mdl-data-table__cell--non-numeric">{ trx.useraddress.nickName }</td>
-															<td className="mdl-data-table__cell--non-numeric text-center fixedWidthCol">{ (hoveredRow === index) ? <Operations /> : '' }</td>
+															<Choose>
+																<When condition={ trx.transactionimporttype.id === 4 || trx.transactionimporttype.id === 3 }>
+																	<td className="mdl-data-table__cell--non-numeric">{ trx.transactionimporttype.importTypeName }</td>
+																</When>
+																<Otherwise>
+																	<Choose>
+																		<When condition={ trx.transactionimporttype.id === 1 }>
+																			<td className="mdl-data-table__cell--non-numeric">{ trx.userwallet.walletName }</td>
+																		</When>
+																		<Otherwise>
+																			<td className="mdl-data-table__cell--non-numeric">{ trx.useraddress.nickName }</td>
+																		</Otherwise>
+																	</Choose>
+																</Otherwise>
+															</Choose>
+															<td className="mdl-data-table__cell--non-numeric text-center fixedWidthCol">{ (hoveredRow === index) ? <Operations index id={ trx.id } type={trx.transactiontype.typeName} {...props} /> : '' }</td>
 													</tr>
 												)
 											})

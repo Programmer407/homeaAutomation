@@ -6,7 +6,7 @@ import PageSystemViewInner from "./PageSystemViewInner"
 
 // src
 import { logoutWhenIdle } from '../../utils'
-import { transactionsData } from "../../actions/entities/transactions"
+import { transactionsData, deleteTransaction } from "../../actions/entities/transactions"
 
 @reduxForm({
 	form: 'AddTrxForm'
@@ -16,6 +16,7 @@ class PageSystemView extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+			trxId: null,
 			isHelpDialogOpen: false,
 			isFormDialogOpen: false, 
 			isUploadDialogOpen: false,
@@ -99,12 +100,22 @@ class PageSystemView extends React.Component {
 		}
   }
 	
-	/* GET DATA METHODS */
+	/* DATA ACTIONS */
 	getTransactionData = (parameters) => {
 		const { dispatch } = this.props
 		
 		dispatch(transactionsData(parameters))
-		console.log('---> I WAS DISPATCHED')
+	}
+
+	deleteTransaction = (parameters) => {
+		const { dispatch } = this.props
+		const { id, type } = parameters
+		
+		this.setState({
+			trxId: id
+		}, function() {
+			dispatch(deleteTransaction(id, type))
+		})
 	}
 
 	/* EVENT HANDLERS */
@@ -118,12 +129,14 @@ class PageSystemView extends React.Component {
 	
 	handleFormDialogOpen = () => {
 		this.setState({
+			trxId: null,
 			isFormDialogOpen: true,
 		})
 	}
 	
 	handleFormDialogClose = () => {
 		this.setState({
+			trxId: null,
 			isFormDialogOpen: false,
 		})
 	}
@@ -245,6 +258,15 @@ class PageSystemView extends React.Component {
 		})
 	}
 
+	handleEditTrxClick = (params) => {
+		const { id } = params
+
+		this.setState({
+			trxId: id,
+			isFormDialogOpen: true
+		})
+	}
+
 	/* LIFECYCLE METHODS */
 	componentDidMount() {
 		const { dispatch } = this.props
@@ -255,15 +277,18 @@ class PageSystemView extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		let modifiedTrxs = []
 		const { transactionList } = nextProps
-		console.log('transactionList:', nextProps)
+		console.log('---> TRX LIST', transactionList)
 
 		if (!_.isNil(transactionList)) {
 			modifiedTrxs = transactionList.map(trx => {
 				return _.pick(trx, [
 					'transactionDate',
+					'asset',
 					'useraddress.nickName',
 					'destination',
+					'transactionimporttype',
 					'associatedaddress.nickName',
+					'transactiontype.id',
 					'transactiontype.typeName',
 					'amount',
 					'useraddress.currency',
@@ -283,6 +308,8 @@ class PageSystemView extends React.Component {
 			<PageSystemViewInner
 				{...this.props}
 				{...this.state}
+				onDeleteClick={ this.deleteTransaction }
+				onEditClick={ this.handleEditTrxClick }
 				onHelpDialogToggle={ this.handleHelpDialogToggle }
 				onFormDialogOpen={ this.handleFormDialogOpen }
 				onFormDialogClose={ this.handleFormDialogClose }
@@ -294,7 +321,6 @@ class PageSystemView extends React.Component {
 				onHeadCheckboxClick={ this.handleHeadCheckboxClick }
 				onPageClick={ this.handlePageClick }
 				onTabChange={ this.handleTabChange }
-				onDatesCheckboxClick={ this.handleDatesCheckboxClick }
 			/>
 		)
   }
@@ -304,10 +330,14 @@ class PageSystemView extends React.Component {
 function mapStateToProps(state, ownProps) {
 	const transactionList = state.entities.transactions.transactionList
 	const isRefreshTransactionList = state.entities.transactions.refreshTransactionList
+	const isDeletingTrxListItem = state.entities.transactions.deleteTransactionList
+	const isUpdatingTrxListItem = state.entities.transactions.updateTransactionList
 		
 	return {
 		transactionList,
-		isRefreshTransactionList
+		isRefreshTransactionList,
+		isDeletingTrxListItem,
+		isUpdatingTrxListItem
 	}
 }
 

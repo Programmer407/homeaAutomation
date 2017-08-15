@@ -34,6 +34,38 @@ export default function accounts(state = {}, action) {
 		case ActionTypes.INSERT_TRANSACTION_FAILURE: {
 			return {...state, refreshTransactionList: false}
 		}
+		
+		/** *************************************** DELETE TRANSACTION *****************************************************************/ 
+		case ActionTypes.DELETE_TRANSACTION: {
+			return {...state, deleteTransactionList: true}
+		}
+		case ActionTypes.DELETE_TRANSACTION_SUCCESS: {
+			const {payload} = action
+			const {transactionList} = payload
+			if (!payload) {
+				throw new Error(`Can't execute ${ ActionTypes.DELETE_TRANSACTION_SUCCESS }. {payload} isn't available in action`)
+			}
+			return {...state, transactionList, deleteTransactionList: false}
+		}
+		case ActionTypes.DELETE_TRANSACTION_FAILURE: {
+			return {...state, deleteTransactionList: false}
+		}
+		
+		/** *************************************** UPDATE TRANSACTION *****************************************************************/ 
+		case ActionTypes.UPDATE_TRANSACTION: {
+			return {...state, updateTransactionList: true}
+		}
+		case ActionTypes.UPDATE_TRANSACTION_SUCCESS: {
+			const {payload} = action
+			const {transactionList} = payload
+			if (!payload) {
+				throw new Error(`Can't execute ${ ActionTypes.UPDATE_TRANSACTION_SUCCESS }. {payload} isn't available in action`)
+			}
+			return {...state, transactionList, updateTransactionList: false}
+		}
+		case ActionTypes.UPDATE_TRANSACTION_FAILURE: {
+			return {...state, updateTransactionList: false}
+		}
 /** ************************************default********************************************************************/     
 		default: {
 			return state

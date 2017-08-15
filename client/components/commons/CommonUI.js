@@ -1,11 +1,15 @@
 // libs
 import React from 'react'
 import { Link } from 'react-router-dom'
-
-import { Dialog, Checkbox, RaisedButton, RadioButton, RadioButtonGroup } from 'material-ui'
+import { Dialog, Checkbox, RaisedButton, RadioButton, RadioButtonGroup, IconButton, RefreshIndicator } from 'material-ui'
 
 // src
 import { AddTransactionForm, NicknameForm } from './Forms'
+
+// assets
+import ActionDelete from 'material-ui/svg-icons/action/delete'
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
+import { cyan200, cyan500 } from 'material-ui/styles/colors'
 
 export const FormDialog = (props) => {
 	const { title, open } = props
@@ -138,6 +142,29 @@ export const Selection = props => {
 		)
 	}
 }
+
+export const Operations = props => {
+	const { id, type, onDeleteClick, onEditClick, isDeletingTrxListItem, isUpdatingTrxListItem, trxId } = props
+
+	return (
+		<span>
+			<IconButton 
+				className="actionIcon"
+				disabled={ isUpdatingTrxListItem }
+				onClick={ () => onEditClick({ id }) }>
+					{ (isUpdatingTrxListItem && trxId === id) ? <RefreshIndicator status="loading" top={12} left={12} size={25}/> : <EditorModeEdit color={cyan200} hoverColor={cyan500}/> }
+			</IconButton>
+
+			<IconButton 
+				className="actionIcon"
+				disabled={ isDeletingTrxListItem }
+				onClick={ () => onDeleteClick({ id, type }) }>
+				{ (isDeletingTrxListItem && trxId === id) ? <RefreshIndicator status="loading" top={12} left={12} size={25}/> : <ActionDelete color={cyan200} hoverColor={cyan500}/> }
+			</IconButton>
+		</span>
+	)
+}
+
 
 const title = (text, boldText) => {
 	return (

@@ -31,7 +31,7 @@ export const renderTextField = ({ input, label, autoComplete, innerRef, meta: { 
   />
 )
 
-export const renderTextArea = ({ input, label, rows, rowsMax, autoComplete, innerRef,  meta: { touched, error, submitting }, ...custom }) => (
+export const renderTextArea = ({ input, label, rows, rowsMax, autoComplete, innerRef,  meta: { touched, error }, ...custom }) => (
   <TextField
     floatingLabelText={label}
 		floatingLabelStyle={{ fontWeight: 400 }}
@@ -47,7 +47,7 @@ export const renderTextArea = ({ input, label, rows, rowsMax, autoComplete, inne
     {...custom} />
 )
 
-export const renderAutocomplete = ({ input, label, dataSource, innerRef,  meta: { touched, error, submitting }, ...custom }) => (
+export const renderAutocomplete = ({ input, label, dataSource, innerRef,  meta: { touched, error }, ...custom }) => (
   <AutoComplete
 		underlineShow={false}
 		inputStyle={{ border: '1px solid #C9C9C9', borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomLeftRadius: 4, borderBottomRightRadius: 4, paddingLeft: 15 }}
