@@ -31,8 +31,8 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
   findUserByEmail(email)
   .then(user => {
     if (user) {
-      let decryptedPassword = decrypt(user.password)
-      if (password == decryptedPassword) {
+      const decryptedPassword = decrypt(user.password)
+      if (password === decryptedPassword) {
         isActiveUser(user.id)
         .then(isActive => {
           if (isActive) {
@@ -98,7 +98,7 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
           message: 'Username already exist'
         })
     } else {
-      let encryptedPassword = encrypt(password)
+      const encryptedPassword = encrypt(password)
       
       // now instantiate an object
       const userObj = User.build({firstName: firstName, lastName: lastName, email: email, password: encryptedPassword})
@@ -115,18 +115,18 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
             userObj.status = 0
                   
             crypto.randomBytes(20, function(err, buf) {
-              var token = buf.toString('hex')
+              const token = buf.toString('hex')
               userObj.registerToken = token
               userObj.registerExpires = Date.now() + 86400000 // 24 hours 1 hour = 3600000
                     
               updateUser(userObj)
               .then(user => {
                 if (user) {
-                  var activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + user.registerToken
+                  const activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + user.registerToken
                   const data = {firstName: user.firstName, activationUrl: activationUrl}
                         
-                  var allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
-                  var toEmailAddress = 'majid.hussain@emumba.com'
+                  const allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
+                  let toEmailAddress = 'majid.hussain@emumba.com'
                   if (allowedEmailList.indexOf(email) > -1) {
                     toEmailAddress = email
                   }
@@ -175,16 +175,16 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
   .then(user => {
     if (user) {
       crypto.randomBytes(20, function(err, buf) {
-        var token = buf.toString('hex')
+        const token = buf.toString('hex')
         user.resetPasswordToken = token
         user.resetPasswordExpires = Date.now() + 86400000 // 24 hours 1 hour = 3600000
         updateUser(user)
         .then(user => {
-          var resetUrl = req.protocol + '://' + req.get('host') + '/resetPassword/' + user.resetPasswordToken
+          const resetUrl = req.protocol + '://' + req.get('host') + '/resetPassword/' + user.resetPasswordToken
           const data = {firstName: user.firstName, resetLink: resetUrl}
 
-          var allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
-          var toEmailAddress = 'majid.hussain@emumba.com'
+          const allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
+          let toEmailAddress = 'majid.hussain@emumba.com'
           if (allowedEmailList.indexOf(email) > -1) {
             toEmailAddress = email
           }
@@ -262,7 +262,7 @@ router.post('/api/users/reset-password', (req, res) => {
   findUserByToken(token)
   .then(user => {
     if (user) {
-      let encryptedPassword = encrypt(password)
+      const encryptedPassword = encrypt(password)
       user.password = encryptedPassword
       user.resetPasswordToken = null
       user.resetPasswordExpires = null
@@ -338,17 +338,17 @@ router.post('/api/users/resend-activation', (req, res) => {
   .then(user => {
     if (user) {
       crypto.randomBytes(20, function(err, buf) {
-        var token = buf.toString('hex')
+        const token = buf.toString('hex')
         user.registerToken = token
         user.registerExpires = Date.now() + 86400000 // 24 hours 1 hour = 3600000
         user.status = 0
         updateUser(user)
         .then(user => {
-          var activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + user.registerToken
+          const activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + user.registerToken
           const data = {firstName: user.firstName, activationUrl: activationUrl}
 
-          var allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
-          var toEmailAddress = 'majid.hussain@emumba.com'
+          const allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
+          let toEmailAddress = 'majid.hussain@emumba.com'
           if (allowedEmailList.indexOf(user.email) > -1) {
             toEmailAddress = user.email
           }
