@@ -1,6 +1,6 @@
 // libs
 import Sequelize from "sequelize"
-import sequelize from './../utils/sequelize';
+import sequelize from './../utils/sequelize'
 
 const TimeZone = sequelize.define(
   "timezone",

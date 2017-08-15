@@ -1,5 +1,5 @@
 // libs
-import TransactionType from '../models/TransactionType';
+import TransactionType from '../models/TransactionType'
 
 export const findTransactionTypeById = (id:number):Object =>
   TransactionType.findOne(Object.assign({

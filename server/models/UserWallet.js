@@ -1,7 +1,7 @@
 // libs
 import Sequelize from "sequelize"
-import sequelize from './../utils/sequelize';
-import UserProvider from './UserProvider';
+import sequelize from './../utils/sequelize'
+import UserProvider from './UserProvider'
 
 const UserWallet = sequelize.define(
   "userwallet",
@@ -23,7 +23,7 @@ const UserWallet = sequelize.define(
     underscored: true
   }
 )
-UserWallet.belongsTo(UserProvider);
+UserWallet.belongsTo(UserProvider)
 UserProvider.hasMany(UserWallet, {as: 'UserWallets'})
 
 export default UserWallet

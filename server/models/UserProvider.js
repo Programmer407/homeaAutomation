@@ -1,9 +1,8 @@
 // libs
 import Sequelize from "sequelize"
-import sequelize from './../utils/sequelize';
-import User from './User';
-import Provider from './Provider';
-//import UserWallet from './UserWallet';
+import sequelize from './../utils/sequelize'
+import User from './User'
+import Provider from './Provider'
 
 const UserProvider = sequelize.define(
   "userprovider",
@@ -22,7 +21,7 @@ const UserProvider = sequelize.define(
     underscored: true
   }
 )
-UserProvider.belongsTo(User);
-UserProvider.belongsTo(Provider);
+UserProvider.belongsTo(User)
+UserProvider.belongsTo(Provider)
 
 export default UserProvider

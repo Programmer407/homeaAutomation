@@ -1,12 +1,12 @@
 // libs
 import Sequelize from "sequelize"
-import sequelize from './../utils/sequelize';
-import TransactionType from './TransactionType';
-import UserWallet from './UserWallet';
-import UserAddress from './UserAddress';
-import User from './User';
-import TransactionImportType from './TransactionImportType';
-import AssociatedAddress from './AssociatedAddress';
+import sequelize from './../utils/sequelize'
+import TransactionType from './TransactionType'
+import UserWallet from './UserWallet'
+import UserAddress from './UserAddress'
+import User from './User'
+import TransactionImportType from './TransactionImportType'
+import AssociatedAddress from './AssociatedAddress'
 
 const Transaction = sequelize.define(
   "transactions",
@@ -29,11 +29,11 @@ const Transaction = sequelize.define(
     underscored: true
   }
 )
-Transaction.belongsTo(TransactionType);
-Transaction.belongsTo(TransactionImportType);
-Transaction.belongsTo(UserWallet);
-Transaction.belongsTo(UserAddress);
-Transaction.belongsTo(User);
+Transaction.belongsTo(TransactionType)
+Transaction.belongsTo(TransactionImportType)
+Transaction.belongsTo(UserWallet)
+Transaction.belongsTo(UserAddress)
+Transaction.belongsTo(User)
 Transaction.belongsTo(AssociatedAddress, {onDelete: 'cascade', hooks: true})
 UserWallet.hasMany(Transaction, {as: 'Transactions', onDelete: 'cascade', hooks: true})
 UserAddress.hasMany(Transaction, {as: 'AddressTransactions', onDelete: 'cascade', hooks: true})

@@ -1,9 +1,9 @@
 // libs
 import Sequelize from "sequelize"
-import sequelize from './../utils/sequelize';
-import Role from './Role';
-import UserAccountType from './UserAccountType';
-import TimeZone from './TimeZone';
+import sequelize from './../utils/sequelize'
+import Role from './Role'
+import UserAccountType from './UserAccountType'
+import TimeZone from './TimeZone'
 
 const User = sequelize.define(
   "users",
@@ -28,8 +28,8 @@ const User = sequelize.define(
     underscored: true
   }
 )
-User.belongsTo(Role);
-User.belongsTo(UserAccountType);
-User.belongsTo(TimeZone);
+User.belongsTo(Role)
+User.belongsTo(UserAccountType)
+User.belongsTo(TimeZone)
 
 export default User

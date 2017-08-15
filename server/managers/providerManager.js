@@ -1,5 +1,5 @@
 // libs
-import Provider from '../models/Provider';
+import Provider from '../models/Provider'
 
 export const findProviderByID = (id:number):Object =>
   Provider.findOne(Object.assign({

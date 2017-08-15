@@ -1,8 +1,8 @@
 // libs
-import User from '../models/User';
-import UserAddress from '../models/UserAddress';
-import Transaction from '../models/Transaction';
-import AssociatedAddress from '../models/AssociatedAddress';
+import User from '../models/User'
+import UserAddress from '../models/UserAddress'
+import Transaction from '../models/Transaction'
+import AssociatedAddress from '../models/AssociatedAddress'
 
 export const findAllUserAddresses = (id:number):Object =>
   UserAddress.findAll(Object.assign({
@@ -64,7 +64,7 @@ export const deleteUserAddressById = (userAddressId:number):Object =>
     UserAddress.findById(userAddressId)
     .then((object) => {
       if(null == object)
-        return;
+        return
       
-      return object.destroy({ force: true });
-    });
+      return object.destroy({ force: true })
+    })

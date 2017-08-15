@@ -1,5 +1,5 @@
 // libs
-import AssociatedAddress from '../models/AssociatedAddress';
+import AssociatedAddress from '../models/AssociatedAddress'
 
 export const findAssociatedAddById = (id:number):Object =>
   AssociatedAddress.findOne(Object.assign({

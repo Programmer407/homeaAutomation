@@ -1,11 +1,11 @@
 // libs
-import Transaction from '../models/Transaction';
-import User from '../models/User';
-import TransactionType from '../models/TransactionType';
-import AssociatedAddress from '../models/AssociatedAddress';
-import UserAddress from '../models/UserAddress';
-import UserWallet from '../models/UserWallet';
-import TransactionImportType from '../models/TransactionImportType';
+import Transaction from '../models/Transaction'
+import User from '../models/User'
+import TransactionType from '../models/TransactionType'
+import AssociatedAddress from '../models/AssociatedAddress'
+import UserAddress from '../models/UserAddress'
+import UserWallet from '../models/UserWallet'
+import TransactionImportType from '../models/TransactionImportType'
 
 export const findTransactionsByUserId = (id, typeName):Object =>
   Transaction.findAll(Object.assign({
@@ -58,7 +58,7 @@ export const deleteTransactionById = (transactionId:number):Object =>
   Transaction.findById(transactionId)
   .then((object) => {
     if(null == object)
-      return;
+      return
     
-    return object.destroy({ force: true });
-  });
+    return object.destroy({ force: true })
+  })

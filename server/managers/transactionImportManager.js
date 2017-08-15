@@ -1,5 +1,5 @@
 // libs
-import TransactionImportType from '../models/TransactionImportType';
+import TransactionImportType from '../models/TransactionImportType'
 
 export const findTrxImportTypeById = (id:number):Object =>
   TransactionImportType.findOne(Object.assign({

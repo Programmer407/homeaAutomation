@@ -1,5 +1,4 @@
 
-var request = require('request');
 
 export const getCoinBaseRedirectURL = (providerObj, req) => {
   let callBackUrl = req.protocol + '://' + req.get('host') + providerObj.redirectUrl1

@@ -1,10 +1,10 @@
 // libs
-import UserProvider from '../models/UserProvider';
-import User from '../models/User';
-import Provider from '../models/Provider';
-import UserWallet from '../models/UserWallet';
-import Transaction from '../models/Transaction';
-import AssociatedAddress from '../models/AssociatedAddress';
+import UserProvider from '../models/UserProvider'
+import User from '../models/User'
+import Provider from '../models/Provider'
+import UserWallet from '../models/UserWallet'
+import Transaction from '../models/Transaction'
+import AssociatedAddress from '../models/AssociatedAddress'
 
 export const findAllUserProviderList = (id:number):Object =>
   UserProvider.findAll(Object.assign({

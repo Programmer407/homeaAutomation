@@ -1,7 +1,7 @@
 // libs
 import Sequelize from "sequelize"
-import sequelize from './../utils/sequelize';
-import User from './User';
+import sequelize from './../utils/sequelize'
+import User from './User'
 
 const UserAddress = sequelize.define(
   "useraddresses",
@@ -21,6 +21,6 @@ const UserAddress = sequelize.define(
     underscored: true
   }
 )
-UserAddress.belongsTo(User);
+UserAddress.belongsTo(User)
 
 export default UserAddress

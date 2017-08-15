@@ -1,7 +1,7 @@
 // libs
 import Sequelize from "sequelize"
-import sequelize from './../utils/sequelize';
-import Transaction from './Transaction';
+import sequelize from './../utils/sequelize'
+import Transaction from './Transaction'
 
 const AssociatedAddress = sequelize.define(
   "associatedaddresses",

@@ -1,4 +1,4 @@
-import UserWallet from '../models/UserWallet';
+import UserWallet from '../models/UserWallet'
 
 export const findUserWalletByWalletId = (walletId:number):Object =>
   UserWallet.findOne(Object.assign({
@@ -26,7 +26,7 @@ export const deleteUserWalletById = (walletId:number):Object =>
     UserWallet.findById(walletId)
     .then((object) => {
       if(null == object)
-        return;
+        return
       
-      return object.destroy({ force: true });
-    });
+      return object.destroy({ force: true })
+    })

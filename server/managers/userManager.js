@@ -1,8 +1,8 @@
 // libs
-import User from '../models/User';
-import Role from '../models/Role';
-import UserAccountType from '../models/UserAccountType';
-import TimeZone from '../models/TimeZone';
+import User from '../models/User'
+import Role from '../models/Role'
+import UserAccountType from '../models/UserAccountType'
+import TimeZone from '../models/TimeZone'
 
 export const findUserByID = (id:number):Object =>
   User.findOne(Object.assign({
@@ -35,12 +35,10 @@ export const isActiveUser = (id:int): Promise<any> =>
     }
   }))
   .then(obj => {
-    if(obj) {
-      return true;
-    } else {
-      return false;
-    }
-    //return obj
+    if(obj)
+      return true
+    else
+      return false
   })
 
 export const findUserByEmail = (email:string): Promise<any> =>
