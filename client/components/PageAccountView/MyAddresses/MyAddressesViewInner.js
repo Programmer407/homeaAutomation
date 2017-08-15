@@ -6,9 +6,7 @@ import { renderTextArea } from '../../../utils'
 import { CircularProgress, IconButton, RefreshIndicator } from 'material-ui'
 
 // src
-import { NewAddressForm } from '../../commons/Forms'
-import NicknameDialog from '../../commons/DialogModalView';
-import AssociatedAddressesView from '../../commons/AssociatedAddressesView';
+import { NewAddressForm, NicknameDialog, AssociatedAddressesView } from '../../commons'
 
 // assets
 import ActionCached from 'material-ui/svg-icons/action/cached'

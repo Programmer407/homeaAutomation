@@ -1,9 +1,6 @@
 // libs
 import React, { Component } from 'react'
 import { reduxForm } from 'redux-form'
-//import isNil from 'lodash/isNil'
-//import split from 'lodash/split'
-//import uniq from 'lodash/uniq'
 
 // src
 import { bindForm } from '../../../../utils'

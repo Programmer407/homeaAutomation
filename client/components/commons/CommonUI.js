@@ -41,13 +41,13 @@ export const InfoDialog = (props) => {
 	)
 }
 
-const NicknameDialog = props => {
-	const { isNickDialogOpen, onNicknameDialogClose, address } = props
+export const NicknameDialog = props => {
+	const { isNicknameDialogOpen, onNicknameDialogClose, address } = props
 	return (
 		<Dialog
 			title={ title( 'Enter nickname for ', address ) }	
 			modal={ false }
-			open={ isNickDialogOpen }
+			open={ isNicknameDialogOpen }
 			onRequestClose={ onNicknameDialogClose }>
 				<NicknameForm {...props}/> 
 		</Dialog>

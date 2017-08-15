@@ -6,7 +6,7 @@ import PageSystemViewInner from "./PageSystemViewInner"
 
 // src
 import { logoutWhenIdle } from '../../utils'
-import { transactionsData, deleteTransaction } from "../../actions/entities/transactions"
+import { transactionsData, deleteTransaction, openFormDialog, closeFormDialog } from "../../actions"
 
 @reduxForm({
 	form: 'AddTrxForm'
@@ -17,8 +17,7 @@ class PageSystemView extends React.Component {
     super(props)
     this.state = {
 			trxId: null,
-			isHelpDialogOpen: false,
-			isFormDialogOpen: false, 
+			isHelpDialogOpen: false, 
 			isUploadDialogOpen: false,
 			isActionTypeDialogOpen: false,
 			hoveredRow: null,
@@ -128,16 +127,22 @@ class PageSystemView extends React.Component {
 	}
 	
 	handleFormDialogOpen = () => {
+		const { dispatch } = this.props
+
 		this.setState({
-			trxId: null,
-			isFormDialogOpen: true,
+			trxId: null
+		}, () => {
+			dispatch(openFormDialog())
 		})
 	}
 	
 	handleFormDialogClose = () => {
+		const { dispatch } = this.props
+
 		this.setState({
-			trxId: null,
-			isFormDialogOpen: false,
+			trxId: null
+		}, () => {
+			dispatch(closeFormDialog())
 		})
 	}
 	
@@ -245,7 +250,6 @@ class PageSystemView extends React.Component {
 				trxType
 			}
 		}, function() {
-			console.log('TYPE', this.state.listingParameters.trxType)
 			this.getTransactionData(this.state.listingParameters)
 		})
 	}
@@ -260,10 +264,12 @@ class PageSystemView extends React.Component {
 
 	handleEditTrxClick = (params) => {
 		const { id } = params
+		const { dispatch } = this.props
 
 		this.setState({
-			trxId: id,
-			isFormDialogOpen: true
+			trxId: id
+		}, () => {
+			dispatch(openFormDialog())
 		})
 	}
 
@@ -271,13 +277,12 @@ class PageSystemView extends React.Component {
 	componentDidMount() {
 		const { dispatch } = this.props
 
-		dispatch(transactionsData('Sale'))
+		dispatch(transactionsData('Purchase'))
 	}
 
 	componentWillReceiveProps(nextProps) {
 		let modifiedTrxs = []
 		const { transactionList } = nextProps
-		console.log('---> TRX LIST', transactionList)
 
 		if (!_.isNil(transactionList)) {
 			modifiedTrxs = transactionList.map(trx => {
@@ -332,12 +337,14 @@ function mapStateToProps(state, ownProps) {
 	const isRefreshTransactionList = state.entities.transactions.refreshTransactionList
 	const isDeletingTrxListItem = state.entities.transactions.deleteTransactionList
 	const isUpdatingTrxListItem = state.entities.transactions.updateTransactionList
-		
+	const isFormDialogOpen = state.entities.transactions.isFormDialogOpen
+
 	return {
 		transactionList,
 		isRefreshTransactionList,
 		isDeletingTrxListItem,
-		isUpdatingTrxListItem
+		isUpdatingTrxListItem,
+		isFormDialogOpen
 	}
 }
 

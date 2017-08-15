@@ -4,8 +4,8 @@ import { reduxForm } from 'redux-form'
 
 // src
 import { bindForm } from '../../../../utils'
-import { insertTransaction, updateTransaction } from "../../../../actions/entities/transactions"
 import AddTransactionFormInner from './AddTransactionFormInner'
+import { insertTransaction, updateTransaction, closeFormDialog } from "../../../../actions"
 
 const fields = [ 'transactionDate', 'destination', 'amount', 'asset', 'value', 'transactionTypeId', 'note' ]
 
@@ -61,14 +61,21 @@ const validate = values => {
 	onSubmit: (values, dispatch, props) => {
 		if ( !_.isNil(values.transactionId)) {
 			return dispatch(updateTransaction(values))
+				.then(action => {
+					dispatch(closeFormDialog())
+					return action
+				})
 		}
 		return dispatch(insertTransaction(values))
+			.then(action => {
+				dispatch(closeFormDialog())
+				return action
+			})
 	}
 })
 class AddTransactionForm extends Component {
 	constructor(props) {
 		super(props)
-		console.log('---> PROPS FROM ADDTRXFORM:', props)
 	}
 
 	componentDidMount() {
@@ -85,7 +92,6 @@ class AddTransactionForm extends Component {
 			change('destination', destination)
 			change('transactionDate', transactionDate)
 			change('transactionTypeId', transactiontype.id)
-			console.log('---> currentTrx', currentTrx)
 		}
 	}
 

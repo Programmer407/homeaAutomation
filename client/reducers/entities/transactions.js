@@ -66,6 +66,15 @@ export default function accounts(state = {}, action) {
 		case ActionTypes.UPDATE_TRANSACTION_FAILURE: {
 			return {...state, updateTransactionList: false}
 		}
+		
+		/** *************************************** MODAL DIALOG *****************************************************************/ 
+		case ActionTypes.CLOSE_FORM_DIALOG: {
+			return {...state, isFormDialogOpen: false}
+		}
+		
+		case ActionTypes.OPEN_FORM_DIALOG: {
+			return {...state, isFormDialogOpen: true}
+		}
 /** ************************************default********************************************************************/     
 		default: {
 			return state

@@ -10,7 +10,9 @@ import {
 	refreshUserProviders,
 	refreshUserAddresses,
 	deleteUserAddress,
-} from "../../actions/entities/accounts"
+	openNicknameDialog,
+	closeNicknameDialog
+} from "../../actions"
 import PageLoading from '../PageLoading'
 
 class PageAccountView extends React.Component {
@@ -18,7 +20,6 @@ class PageAccountView extends React.Component {
 		super(props)
 		this.state = {
 			check: 1,
-			isNickDialogOpen: false,
 			addressId: null,
 			address: null,
 			oldNickname: null,
@@ -165,23 +166,28 @@ class PageAccountView extends React.Component {
 	
 	handleNickDialogOpen = (params) => {
 		const {id, address, oldNickname, type} = params
-		
+		const { dispatch } = this.props
+
 		this.setState({
-			isNickDialogOpen: true,
 			addressId: id,
 			address,
 			oldNickname,
 			nicknameType: type
+		}, () => {
+			dispatch(openNicknameDialog())
 		})
 	}
 	
 	handleNickDialogClose = () => {
+		const { dispatch } = this.props
+
 		this.setState({
-			isNickDialogOpen: false,
 			addressId: null,
 			address: null,
 			oldNickname: null,
 			nicknameType: null
+		}, () => {
+			dispatch(closeNicknameDialog())
 		})
 	}
 	
@@ -223,6 +229,7 @@ function mapStateToProps(state, ownProps) {
 	const isRefreshUserAddressList = state.entities.accounts.refreshUserAddressList
 	const isDeleteUserAddressList = state.entities.accounts.deleteUserAddressList
 	const isUpdateUserAddressList = state.entities.accounts.updateUserAddressList
+	const isNicknameDialogOpen = state.entities.accounts.isNicknameDialogOpen
 	
 	return {
 		providerList,
@@ -233,7 +240,8 @@ function mapStateToProps(state, ownProps) {
 		isAddUserAddressList,
 		isRefreshUserAddressList,
 		isDeleteUserAddressList,
-		isUpdateUserAddressList
+		isUpdateUserAddressList,
+		isNicknameDialogOpen
 	}
 }
 

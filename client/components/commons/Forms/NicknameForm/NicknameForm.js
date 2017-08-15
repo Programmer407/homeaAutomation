@@ -4,7 +4,7 @@ import { reduxForm } from 'redux-form'
 
 // src
 import { bindForm } from '../../../../utils'
-import { updateUserAddress, updateAssociatedMyAdd, updateAssociatedWalletAdd } from "../../../../actions/entities/accounts"
+import { updateUserAddress, updateAssociatedMyAdd, updateAssociatedWalletAdd, closeNicknameDialog } from "../../../../actions"
 import NicknameFormInner from './NicknameFormInner'
 
 const fields = [ 'newNickname', 'addressId', 'oldNickname', 'nicknameType' ]
@@ -16,7 +16,7 @@ const NICK_EDIT_TYPES = {
 }
 
 const validate = values => {
-	let errors = {}
+	const errors = {}
 	let hasErrors = false
 	const { newNickname, oldNickname } = values
 	
@@ -55,18 +55,30 @@ const validate = values => {
 			switch (nicknameType) {
 				case NICK_EDIT_TYPES.ADDRESS_NICK:
 					return dispatch(updateUserAddress(addressId, newNickname))
-					break;
+						.then(action => {
+							dispatch(closeNicknameDialog())
+							return action
+						})
+					break
 				
 					case NICK_EDIT_TYPES.ASSOC_ADDRESS_NICK:
 					return dispatch(updateAssociatedMyAdd(addressId, newNickname))
-					break;
+						.then(action => {
+							dispatch(closeNicknameDialog())
+							return action
+						})
+					break
 				
 					case NICK_EDIT_TYPES.WALLET_ASSOC_ADDRESS_NICK:
 					return dispatch(updateAssociatedWalletAdd(addressId, newNickname))
-					break;
+						.then(action => {
+							dispatch(closeNicknameDialog())
+							return action
+						})
+					break
 			
 				default:
-					break;
+					break
 			}
 		}
 	}
