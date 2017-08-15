@@ -2,11 +2,9 @@
 import React from "react"
 import QueueAnim from 'rc-queue-anim';
 import DocumentTitle from "react-document-title"
-import styles from "./PageSystemViewInner.scss"
-import { Link } from "react-router-dom";
-import { FlatButton, RaisedButton, IconButton, Tab, Tabs, FontIcon } from 'material-ui'
 
 // src
+import styles from "./PageSystemViewInner.scss"
 import { TabView, InfoDialog, FormDialog, FilterToolbar, UploadDialog, ActionTypeDialog } from '../commons'
 
 // assets
@@ -14,7 +12,7 @@ import ActionHelp from 'material-ui/svg-icons/action/help'
 import { grey600 } from 'material-ui/styles/colors'
 
 const PageSystemViewInner = props => {
-	const { isHelpDialogOpen, isFormDialogOpen, onHelpDialogToggle, onFormDialogToggle, isUploadDialogOpen, onUploadDialogToggle, isActionTypeDialogOpen, onActionTypeDialogToggle, tblData } = props
+	const { isHelpDialogOpen, isFormDialogOpen, onHelpDialogToggle, onFormDialogOpen, isUploadDialogOpen, onUploadDialogToggle, isActionTypeDialogOpen, onActionTypeDialogToggle, tblData } = props
 
 	return (
 		<div>
@@ -41,9 +39,10 @@ const PageSystemViewInner = props => {
 								onDialogClose={ onHelpDialogToggle } />
 							
 							<FormDialog 
+								{...props}
 								title={ 'Add Transaction' }
 								open={ isFormDialogOpen }
-								onDialogClose={ onFormDialogToggle } />
+								onDialogClose={ onFormDialogOpen } />
 							
 							<UploadDialog 
 								title={ 'Upload CSV' }
@@ -61,4 +60,4 @@ const PageSystemViewInner = props => {
 	)
 }
 
-export default PageSystemViewInner;
+export default PageSystemViewInner

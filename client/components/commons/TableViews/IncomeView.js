@@ -1,6 +1,6 @@
 // libs
 import React from 'react'
-import { IconButton } from 'material-ui'
+import { IconButton, CircularProgress } from 'material-ui'
 
 // src
 import { Pagination } from './'
@@ -9,16 +9,17 @@ import { Selection } from '../'
 // assets
 import ActionDelete from 'material-ui/svg-icons/action/delete'
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import { cyan200, cyan500 } from 'material-ui/styles/colors';
+import { cyan200, cyan500 } from 'material-ui/styles/colors'
 
 
 const tblCols = {
 	checkbox: '',
 	date: 'Date',
-	source: 'Source',
+	source: 'Imported From',
+	destination: 'Destination',
 	action: 'Action',
 	volume: 'Volume',
-	price: 'Price',
+	value: 'Value',
 	fee: 'Fees',
 	cost: 'Cost',
 	operations: ''
@@ -35,11 +36,11 @@ const Operations = props => {
 				<ActionDelete color={cyan200} hoverColor={cyan500}/>
 			</IconButton>
 		</span>
-	);
+	)
 }
 
 const IncomeView = (props) => {
-	const { tblData, onRowHover, onRowHoverExit, onRowClick, hoveredRow } = props;
+	const { onRowHover, onRowHoverExit, hoveredRow, modifiedTrxs, isRefreshTransactionList } = props
 
 	return (
 		<div className="box box-default table-box table-responsive mdl-shadow--2dp">
@@ -48,36 +49,58 @@ const IncomeView = (props) => {
 					<tr>
 						<th className="mdl-data-table__cell--non-numeric">{ <Selection type={'HEADER'} {...props}/> }</th>
 						<th className="mdl-data-table__cell--non-numeric">{ tblCols.date }</th>
-						<th className="mdl-data-table__cell--non-numeric">{ tblCols.source }</th>
+						<th className="mdl-data-table__cell--non-numeric">{ tblCols.destination }</th>
+						<th className="mdl-data-table__cell--non-numeric">{ tblCols.volume }</th>
+						<th>{ tblCols.value }</th>
 						<th className="mdl-data-table__cell--non-numeric">{ tblCols.action }</th>
-						<th className="mdl-data-table__cell--non-numeric">{ tblCols.volume } { tblCols.coin }</th>
-						<th>{ tblCols.price }</th>
-						<th>{ tblCols.fee }</th>
-						<th>{ tblCols.cost }</th>
+						<th className="mdl-data-table__cell--non-numeric">{ tblCols.source }</th>
 						<th className="mdl-data-table__cell--non-numeric">{ tblCols.operations }</th>
 					</tr>
 				</thead>
 				<tbody className="tbl-body">
 					{
-						tblData.map((rowData, index) => {
-							return (
-								<tr
-									key={ rowData.id }
-									onMouseEnter={ onRowHover }
-									onMouseLeave={ onRowHoverExit }
-									className="fixedHeightRow">
-										<td className="mdl-data-table__cell--non-numeric">{ <Selection index={ rowData.id } type={'ROW'} {...props} /> }</td>
-										<td className="mdl-data-table__cell--non-numeric">{ rowData.date }</td>
-										<td className="mdl-data-table__cell--non-numeric">{ rowData.source }</td>
-										<td className="mdl-data-table__cell--non-numeric">{ rowData.action }</td>
-										<td className="mdl-data-table__cell--non-numeric">{ rowData.volume } { rowData.coin }</td>
-										<td>{ rowData.price }</td>
-										<td>{ rowData.fee }</td>
-										<td>{ rowData.cost }</td>
-										<td className="mdl-data-table__cell--non-numeric text-center fixedWidthCol">{ (hoveredRow === index) ? <Operations /> : '' }</td>
+						<Choose>
+							<When condition={ isRefreshTransactionList }>
+								<tr>
+									<td colSpan="8" className="text-center">
+										<CircularProgress size={30} thickness={3} />
+									</td>
 								</tr>
-							)
-						})
+							</When>
+							<Otherwise>
+								<Choose>
+									<When condition={ !_.isNil(modifiedTrxs) && modifiedTrxs.length > 0 }>
+										{
+											modifiedTrxs.map((trx, index) => {
+												return (
+													<tr
+														key={ trx.id }
+														onMouseEnter={ onRowHover }
+														onMouseLeave={ onRowHoverExit }
+														className="fixedHeightRow">
+															<td className="mdl-data-table__cell--non-numeric">{ <Selection index={ trx.id } type={'ROW'} {...props} /> }</td>
+															<td className="mdl-data-table__cell--non-numeric">{ trx.transactionDate }</td>
+															<td className="mdl-data-table__cell--non-numeric">{ !_.isNil(trx.destination) ? trx.destination : trx.associatedaddress.nickName }</td>
+															<td className="mdl-data-table__cell--non-numeric">{ trx.amount } { trx.useraddress.currency }</td>
+															<td>{ 1700.54 }</td>
+															<td className="mdl-data-table__cell--non-numeric">{ trx.transactiontype.typeName }</td>
+															<td className="mdl-data-table__cell--non-numeric">{ trx.useraddress.nickName }</td>
+															<td className="mdl-data-table__cell--non-numeric text-center fixedWidthCol">{ (hoveredRow === index) ? <Operations /> : '' }</td>
+													</tr>
+												)
+											})
+										}
+									</When>
+									<Otherwise>
+										<tr>
+											<td colSpan="8" className="text-center">
+												No transactions found.
+											</td>
+										</tr>
+									</Otherwise>
+								</Choose>
+							</Otherwise>
+						</Choose>
 					}
 				</tbody>
 				<tfoot>

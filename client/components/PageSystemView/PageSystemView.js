@@ -6,6 +6,7 @@ import PageSystemViewInner from "./PageSystemViewInner"
 
 // src
 import { logoutWhenIdle } from '../../utils'
+import { transactionsData } from "../../actions/entities/transactions"
 
 @reduxForm({
 	form: 'AddTrxForm'
@@ -27,7 +28,11 @@ class PageSystemView extends React.Component {
 			pageLimit: 15,
 			totalRecords: 2000,
 			tabIndex: 0,
+			modifiedTrxs: [],
 			isSearchDatesChecked: false,
+			listingParameters: {
+				trxType: 'Trading'
+			},
 			tblData: [
 				{
 					id: 10,
@@ -93,7 +98,16 @@ class PageSystemView extends React.Component {
 			]
 		}
   }
+	
+	/* GET DATA METHODS */
+	getTransactionData = (parameters) => {
+		const { dispatch } = this.props
+		
+		dispatch(transactionsData(parameters))
+		console.log('---> I WAS DISPATCHED')
+	}
 
+	/* EVENT HANDLERS */
 	handleHelpDialogToggle = () => {
 		const { isHelpDialogOpen } = this.state
 
@@ -102,11 +116,15 @@ class PageSystemView extends React.Component {
 		})
 	}
 	
-	handleFormDialogToggle = () => {
-		const { isFormDialogOpen } = this.state
-
+	handleFormDialogOpen = () => {
 		this.setState({
-			isFormDialogOpen: !isFormDialogOpen
+			isFormDialogOpen: true,
+		})
+	}
+	
+	handleFormDialogClose = () => {
+		this.setState({
+			isFormDialogOpen: false,
 		})
 	}
 	
@@ -174,11 +192,11 @@ class PageSystemView extends React.Component {
 	}
 	
 	handleRowHover = (hoveredRow) => {
-		this.setState({ hoveredRow: hoveredRow.currentTarget.rowIndex - 1 });
+		this.setState({ hoveredRow: hoveredRow.currentTarget.rowIndex - 1 })
 	}
 	
 	handleRowHoverExit = () => {
-		this.setState({ hoveredRow: null });
+		this.setState({ hoveredRow: null })
 	}
 	
 	// handlePageClick = (val) => {
@@ -186,11 +204,36 @@ class PageSystemView extends React.Component {
 	// }
 	
 	handleTabChange = (tabIndex) => {
+		let trxType = null
+
+		switch (tabIndex) {
+			case 0:
+				trxType = 'Trading'
+				break
+			
+			case 1:
+				trxType = 'Purchase'
+				break
+		
+			case 2:
+				trxType = 'Sale'
+				break
+	
+			default:
+				break
+		}
+		
 		this.setState({
 			tabIndex,
 			selectedRows: [],
 			allSelected: false,
-			rowSelected: false
+			rowSelected: false,
+			listingParameters: {
+				trxType
+			}
+		}, function() {
+			console.log('TYPE', this.state.listingParameters.trxType)
+			this.getTransactionData(this.state.listingParameters)
 		})
 	}
 
@@ -202,13 +245,47 @@ class PageSystemView extends React.Component {
 		})
 	}
 
+	/* LIFECYCLE METHODS */
+	componentDidMount() {
+		const { dispatch } = this.props
+
+		dispatch(transactionsData('Sale'))
+	}
+
+	componentWillReceiveProps(nextProps) {
+		let modifiedTrxs = []
+		const { transactionList } = nextProps
+		console.log('transactionList:', nextProps)
+
+		if (!_.isNil(transactionList)) {
+			modifiedTrxs = transactionList.map(trx => {
+				return _.pick(trx, [
+					'transactionDate',
+					'useraddress.nickName',
+					'destination',
+					'associatedaddress.nickName',
+					'transactiontype.typeName',
+					'amount',
+					'useraddress.currency',
+					'value',
+					'id'
+				])
+			})
+		}
+
+		this.setState({
+			modifiedTrxs
+		})
+	}
+
   render() {
 		return (
 			<PageSystemViewInner
 				{...this.props}
 				{...this.state}
 				onHelpDialogToggle={ this.handleHelpDialogToggle }
-				onFormDialogToggle={ this.handleFormDialogToggle }
+				onFormDialogOpen={ this.handleFormDialogOpen }
+				onFormDialogClose={ this.handleFormDialogClose }
 				onUploadDialogToggle={ this.handleUploadDialogToggle }
 				onActionTypeDialogToggle={ this.handleActionTypeDialogToggle }
 				onRowHover={ this.handleRowHover }
@@ -223,4 +300,15 @@ class PageSystemView extends React.Component {
   }
 }
 
-export default PageSystemView
+/* redux connect() and related functions */
+function mapStateToProps(state, ownProps) {
+	const transactionList = state.entities.transactions.transactionList
+	const isRefreshTransactionList = state.entities.transactions.refreshTransactionList
+		
+	return {
+		transactionList,
+		isRefreshTransactionList
+	}
+}
+
+export default connect(mapStateToProps)(PageSystemView)

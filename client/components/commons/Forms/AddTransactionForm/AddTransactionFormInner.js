@@ -1,63 +1,60 @@
 // libs
 import React from 'react'
 import { Field } from 'redux-form'
-import { SelectField, MenuItem, RaisedButton } from 'material-ui'
+import { MenuItem, FlatButton } from 'material-ui'
 
 // src
-import { renderTextField, renderTextArea, renderInlineDateField } from '../../../../utils'
+import { renderTextField, renderTextArea, renderSelectField, renderDatePicker } from '../../../../utils'
 
-const AddTransactionFormInner = () => {
-	
+const AddTransactionFormInner = props => {
+	const { renderRaisedSubmitButton, onFormDialogClose } = props
+
 	return (
 		<form role="form">
-			<fieldset>
-				<div className="form-group">
-					<Field name="date" label="Date" component={ renderInlineDateField } />
-					<Field name="destination" label="Destination" component={ renderTextField } fullWidth />
-					<div className="row">
-						<div className="col-md-6">
-							<Field name="amount" label="Amount (+/-)" component={ renderTextField } fullWidth />
-						</div>
-						<div className="col-md-6">
-							<SelectField
-								fullWidth
-								floatingLabelText="Asset"
-								className="primary-select-field">
-								<MenuItem value={1} primaryText="BTC" />
-								<MenuItem value={2} primaryText="LTC" />
-								<MenuItem value={3} primaryText="ETH" />
-								<MenuItem value={4} primaryText="DOGE" />
-							</SelectField>
-						</div>
+			<div className="form-group">
+				<Field name="transactionDate" label="Date" component={ renderDatePicker } fullWidth autoFocus/>
+				<Field name="destination" label="Destination" autoComplete="off" component={ renderTextField } fullWidth />
+				<div className="row">
+					<div className="col-md-6">
+						<Field name="amount" label="Amount (+/-)" autoComplete="off" component={ renderTextField } type="number" fullWidth />
 					</div>
-					<div className="row">
-						<div className="col-md-6">
-							<Field name="amount" label="Total Value" component={renderTextField} fullWidth />
-						</div>
-						<div className="col-md-6">
-							<SelectField
-								fullWidth
-								floatingLabelText="Type"
-								className="primary-select-field">
-								<MenuItem value={1} primaryText="Donation" />
-								<MenuItem value={2} primaryText="Gift Received" />
-								<MenuItem value={3} primaryText="Gift Sent" />
-								<MenuItem value={4} primaryText="Income" />
-								<MenuItem value={5} primaryText="Purchase" />
-								<MenuItem value={6} primaryText="Sale" />
-								<MenuItem value={7} primaryText="Transfer" />
-							</SelectField>
-						</div>
+					<div className="col-md-6">
+						<Field name="asset" label="Asset" component={ renderSelectField } fullWidth>
+							<MenuItem value={1} primaryText="BTC" />
+							<MenuItem value={2} primaryText="LTC" />
+							<MenuItem value={3} primaryText="ETH" />
+							<MenuItem value={4} primaryText="DOGE" />
+						</Field>
 					</div>
-					<Field name="destination" label="Note" component={renderTextArea} fullWidth />
 				</div>
-				<RaisedButton type="submit" label="Add" primary />
-			</fieldset>
+				<div className="row">
+					<div className="col-md-6">
+						<Field name="value" label="Total Value" autoComplete="off" component={renderTextField} type="number" fullWidth />
+					</div>
+					<div className="col-md-6">
+						<Field name="type" label="Type" component={ renderSelectField } fullWidth>
+							<MenuItem value={1} primaryText="Income" />
+							<MenuItem value={2} primaryText="Sale" />
+							<MenuItem value={3} primaryText="Purchase" />
+							<MenuItem value={4} primaryText="Transfer" />
+						</Field>
+					</div>
+				</div>
+				<Field name="note" label="Note" autoComplete="off" component={renderTextArea} fullWidth />
+			</div>
+			<div className="text-right" style={{ marginTop: 40 }}>
+				<FlatButton label="Cancel" onTouchTap={ onFormDialogClose } style={{ marginRight: 8 }} primary/>
+				{
+					renderRaisedSubmitButton({
+						label: 'Submit',
+						labelWhenSubmitting: 'Submitting'
+					})
+				}
+			</div>
 		</form>
-	);
+	)
 }
 
 export default AddTransactionFormInner
-
 
 

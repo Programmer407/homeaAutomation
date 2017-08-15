@@ -1,7 +1,5 @@
 // libs
 import React from "react"
-import RaisedButton from 'material-ui/RaisedButton';
-import {push} from 'react-router-redux'
 import {connect} from "react-redux"
 import PageAccountViewInner from "./PageAccountViewInner"
 import {
@@ -10,22 +8,14 @@ import {
 	accountconnectUrl,
 	deleteWallet,
 	refreshUserProviders,
-	addUserAddresses,
 	refreshUserAddresses,
 	deleteUserAddress,
-	updateUserAddress,
-	updateAssociatedMyAdd,
-	updateAssociatedWalletAdd
 } from "../../actions/entities/accounts"
-import PageLoading from '../PageLoading';
-import {reduxForm} from 'redux-form'
-
-// src
-import {bindForm, logoutWhenIdle} from '../../utils'
+import PageLoading from '../PageLoading'
 
 class PageAccountView extends React.Component {
 	constructor(props) {
-		super(props);
+		super(props)
 		this.state = {
 			check: 1,
 			isNickDialogOpen: false,
@@ -38,19 +28,19 @@ class PageAccountView extends React.Component {
 			autoHideDuration: 4000,
 			actionOnThisAddress: null,
 			actionOnThisWallet: null,
-		};
+		}
 	}
   
   /* CONNECT TO WALLET OR EXCHANGE PROVIDER */
 	connectProvider = (event) => {
-		event.preventDefault();
-		const selectedProvider = this.state.selectedProvider;
+		event.preventDefault()
+		const selectedProvider = this.state.selectedProvider
 		if (selectedProvider !== 0) {
 			return this.props.dispatch(accountconnectUrl(selectedProvider))
 				.then(action => {
 					const {error, payload} = action
 					if (!error) {
-						var url = payload.redirecturl
+						let url = payload.redirecturl
 						window.location = url
 						return action
 					}
@@ -82,7 +72,7 @@ class PageAccountView extends React.Component {
 						const {error, payload} = action
 						
 						if (!error && payload.redirecturl) {
-							var url = payload.redirecturl
+							let url = payload.redirecturl
 							window.location = url
 							return action
 						}
@@ -110,10 +100,10 @@ class PageAccountView extends React.Component {
 	
 	componentDidMount() {
 		const {dispatch} = this.props
-		let providerName = this.props.match.params.providername
+		const providerName = this.props.match.params.providername
 		if (providerName) {
-			let paramsString = this.props.location.search
-			let tokenCode = paramsString.substring(paramsString.indexOf('=') + 1)
+			const paramsString = this.props.location.search
+			const tokenCode = paramsString.substring(paramsString.indexOf('=') + 1)
 			if (tokenCode) {
 				dispatch(providerCallback(providerName, tokenCode))
 					.then(action => {
@@ -125,9 +115,9 @@ class PageAccountView extends React.Component {
 									if (!error) {
 										this.setState({
 											check: 2
-										});
+										})
 									}
-								});
+								})
 						}
 					})
 			} else {
@@ -137,9 +127,9 @@ class PageAccountView extends React.Component {
 						if (!error) {
 							this.setState({
 								check: 2
-							});
+							})
 						}
-					});	
+					})	
 			}
 		} else {
 			dispatch(myAccountData())
@@ -148,9 +138,9 @@ class PageAccountView extends React.Component {
 					if (!error) {
 						this.setState({
 							check: 2
-						});
+						})
 					}
-				});
+				})
 		}
 	}
   
@@ -174,7 +164,7 @@ class PageAccountView extends React.Component {
 	}
 	
 	handleNickDialogOpen = (params) => {
-		const {id, address, oldNickname, type} = params;
+		const {id, address, oldNickname, type} = params
 		
 		this.setState({
 			isNickDialogOpen: true,
@@ -182,7 +172,7 @@ class PageAccountView extends React.Component {
 			address,
 			oldNickname,
 			nicknameType: type
-		});
+		})
 	}
 	
 	handleNickDialogClose = () => {
@@ -192,13 +182,13 @@ class PageAccountView extends React.Component {
 			address: null,
 			oldNickname: null,
 			nicknameType: null
-		});
+		})
 	}
 	
 	render() {
-		if (this.state.check == 1) {
+		if (this.state.check === 1) {
 			return <PageLoading {...this.props}/>
-		} else if (this.state.check == 2) {
+		} else if (this.state.check === 2) {
 			return (
         <div>
           <PageAccountViewInner
@@ -244,7 +234,7 @@ function mapStateToProps(state, ownProps) {
 		isRefreshUserAddressList,
 		isDeleteUserAddressList,
 		isUpdateUserAddressList
-	};
+	}
 }
 
-export default connect(mapStateToProps)(PageAccountView);
+export default connect(mapStateToProps)(PageAccountView)
