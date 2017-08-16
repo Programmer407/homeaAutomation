@@ -42,13 +42,12 @@ export const InfoDialog = (props) => {
 }
 
 export const NicknameDialog = props => {
-	const { isNicknameDialogOpen, onNicknameDialogClose, address } = props
+	const { isNicknameDialogOpen, address } = props
 	return (
 		<Dialog
 			title={ title( 'Enter nickname for ', address ) }	
 			modal={ false }
-			open={ isNicknameDialogOpen }
-			onRequestClose={ onNicknameDialogClose }>
+			open={ isNicknameDialogOpen }>
 				<NicknameForm {...props}/> 
 		</Dialog>
 	)
@@ -165,6 +164,11 @@ export const Operations = props => {
 	)
 }
 
+export const ResetBtn = props => {
+	return (
+		<p onClick={ props.onStartDatePickerDismiss }>Reset</p>
+	)
+}
 
 const title = (text, boldText) => {
 	return (

@@ -180,7 +180,7 @@ class PageAccountView extends React.Component {
 	
 	handleNickDialogClose = () => {
 		const { dispatch } = this.props
-
+		
 		this.setState({
 			addressId: null,
 			address: null,
