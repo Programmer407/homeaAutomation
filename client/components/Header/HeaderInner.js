@@ -33,7 +33,7 @@ const PublicHeader = React.createClass ({
 								className="my-navbar">
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="some url">Wisdom</Link>
+              <Link to="/login">Wisdom</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
