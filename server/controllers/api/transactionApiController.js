@@ -7,7 +7,7 @@ import async from 'async'
 // src
 import Transaction from './../../models/Transaction'
 import { ensureAuthorization, rejectRequest } from '../../utils'
-import { findTransactionsByUserId, deleteTransactionById, updateTransaction, findTransactionById } from '../../managers/transactionManager'
+import { findTransactionsByUserId, findTransactionsBySearchText, deleteTransactionById, updateTransaction, findTransactionById } from '../../managers/transactionManager'
 import { findTransactionTypeById } from '../../managers/transactionTypeManager'
 import { findTrxImportTypeById } from '../../managers/transactionImportManager'
 import { findAssociatedAddByAdd, updateAssociatedAdd } from '../../managers/associatedAddressManager'
@@ -32,15 +32,31 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
   if (listingParameters.trxType)
     trxType = listingParameters.trxType
 
-  findTransactionsByUserId(user.id, trxType)
-  .then(transactionList => {
-    res
-      .status(200)
-      .send({
-        transactionList,
-        trxType
-      })
-  })
+  let searchParam = ''
+  if (listingParameters.queryString)
+    searchParam = listingParameters.queryString
+
+  if (searchParam) {
+    findTransactionsBySearchText(user.id, trxType)
+    .then(transactionList => {
+      res
+        .status(200)
+        .send({
+          transactionList,
+          trxType
+        })
+    })
+  } else {
+    findTransactionsByUserId(user.id, trxType)
+    .then(transactionList => {
+      res
+        .status(200)
+        .send({
+          transactionList,
+          trxType
+        })
+    })
+  }
 })
 
 router.post('/api/transactions/insert-transaction', ensureAuthorization, (req, res) => {
@@ -215,14 +231,18 @@ router.post('/api/transactions/delete-transaction', ensureAuthorization, (req, r
     return
   }
 
-  const { transactionId, transType } = body
-  if ( !transactionId || !transType ) {
+  const { transactionIds, listingParameters } = body
+  if ( !transactionIds || !listingParameters ) {
   	rejectRequest('Missing required arguments', res)
   	return
   }
 
-  async.eachOfSeries(addressArray, function(coinAddress, index, nextAddCallback) {
-    deleteTransactionById(transactionId)
+  let trxType = 'Sale'
+  if (listingParameters.trxType)
+    trxType = listingParameters.trxType
+
+  async.eachOfSeries(transactionIds, function(trxId, index, nextAddCallback) {
+    deleteTransactionById(trxId)
     .then(result => {
       nextAddCallback()
     })
@@ -231,7 +251,54 @@ router.post('/api/transactions/delete-transaction', ensureAuthorization, (req, r
       rejectRequest('Failed to process addresses, please try again', res)
       return
     } else {
-      findTransactionsByUserId(user.id, transType)
+      findTransactionsByUserId(user.id, trxType)
+      .then(transactionList => {
+        res
+          .status(200)
+          .send({
+            transactionList
+          })
+      })
+    }
+  })
+})
+
+router.post('/api/transactions/update-transactions-type', ensureAuthorization, (req, res) => {
+  console.log('/api/transactions/update-transactions-type')
+  const { body, user } = req
+  if ( !body ) {
+  	rejectRequest('Missing request body', res)
+    return
+  }
+
+  const { transactionIds, selectedTrxTypeId, listingParameters } = body
+  if ( !transactionIds || !selectedTrxTypeId || !listingParameters ) {
+  	rejectRequest('Missing required arguments', res)
+  	return
+  }
+
+  let trxType = 'Sale'
+  if (listingParameters.trxType)
+    trxType = listingParameters.trxType
+
+  async.eachOfSeries(transactionIds, function(trxId, index, nextAddCallback) {
+    findTransactionById(trxId)
+    .then(transactionObj => {
+      findTransactionTypeById(selectedTrxTypeId)
+      .then(transactionTypeObj => {
+        transactionObj.setTransactiontype(transactionTypeObj, {save: false})
+        updateTransaction(transactionObj)
+        .then(updatedTransaction => {
+          nextAddCallback()
+        })
+      })
+    })
+  }, function(err) {
+    if ( err ) {
+      rejectRequest('Failed to process addresses, please try again', res)
+      return
+    } else {
+      findTransactionsByUserId(user.id, trxType)
       .then(transactionList => {
         res
           .status(200)

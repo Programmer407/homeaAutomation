@@ -27,7 +27,7 @@ const validate = values => {
 		}
 		
 		if ( newNickname.length > 40 ) {
-			errors.newNickname = 'Keep it under 25 characters.'
+			errors.newNickname = 'Keep it under 40 characters.'
 			hasErrors = true
 		}
 

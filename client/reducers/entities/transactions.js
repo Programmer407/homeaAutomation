@@ -67,6 +67,22 @@ export default function accounts(state = {}, action) {
 			return {...state, updateTransactionList: false}
 		}
 		
+		/** *************************************** UPDATE TRANSACTION *****************************************************************/ 
+		case ActionTypes.UPDATE_TRANSACTIONS_TYPE: {
+			return {...state, updateTransactionList: true}
+		}
+		case ActionTypes.UPDATE_TRANSACTIONS_TYPE_SUCCESS: {
+			const {payload} = action
+			const {transactionList} = payload
+			if (!payload) {
+				throw new Error(`Can't execute ${ ActionTypes.UPDATE_TRANSACTIONS_TYPE_SUCCESS }. {payload} isn't available in action`)
+			}
+			return {...state, transactionList, updateTransactionList: false}
+		}
+		case ActionTypes.UPDATE_TRANSACTIONS_TYPE_FAILURE: {
+			return {...state, updateTransactionList: false}
+		}
+		
 		/** *************************************** MODAL DIALOG *****************************************************************/ 
 		case ActionTypes.CLOSE_FORM_DIALOG: {
 			return {...state, isFormDialogOpen: false}

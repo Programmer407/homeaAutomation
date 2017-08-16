@@ -28,6 +28,56 @@ export const findTransactionsByUserId = (id, typeName):Object =>
     return obj
   })
 
+export const findTransactionsBySearchText = (id, typeName):Object =>
+  Transaction.findAll(Object.assign({
+    where: {
+      $or: [
+        {
+          destination: {
+            $like: '%Received%'
+          }
+        },
+        {
+          note: {
+            $like: '%Received%'
+          }
+        },
+        {
+          amount: {
+            $like: '%Received%'
+          }
+        },
+        {
+          asset: {
+            $like: '%Received%'
+          }
+        },
+        {
+          value: {
+            $like: '%Received%'
+          }
+        }
+      ]
+    },
+    include: [
+      {
+        model: User,
+        where: { id }
+      },
+      {
+        model: TransactionType,
+        where: { typeName }
+      },
+      {model: AssociatedAddress},
+      {model: UserAddress},
+      {model: UserWallet},
+      {model: TransactionImportType}
+    ]
+  }))
+  .then(obj => {
+    return obj
+  })
+
 export const findTransactionById = (id):Object =>
   Transaction.findOne(Object.assign({
     where: {

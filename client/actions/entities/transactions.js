@@ -45,7 +45,7 @@ export const DELETE_TRANSACTION = 'DELETE_TRANSACTION'
 export const DELETE_TRANSACTION_SUCCESS = 'DELETE_TRANSACTION_SUCCESS'
 export const DELETE_TRANSACTION_FAILURE = 'DELETE_TRANSACTION_FAILURE'
 
-export function deleteTransaction(transactionId, transType) {
+export function deleteTransaction(transactionIds, listingParameters) {
   return {
     [CALL_API]: {
       types: [
@@ -56,7 +56,7 @@ export function deleteTransaction(transactionId, transType) {
       endpoint: `/api/transactions/delete-transaction`,
       method: 'POST'
     },
-    payload: {transactionId, transType}
+    payload: {transactionIds, listingParameters}
   }
 }
 
@@ -76,5 +76,24 @@ export function updateTransaction(trxData) {
       method: 'POST'
     },
     payload: {trxData}
+  }
+}
+
+export const UPDATE_TRANSACTIONS_TYPE = 'UPDATE_TRANSACTIONS_TYPE'
+export const UPDATE_TRANSACTIONS_TYPE_SUCCESS = 'UPDATE_TRANSACTIONS_TYPE_SUCCESS'
+export const UPDATE_TRANSACTIONS_TYPE_FAILURE = 'UPDATE_TRANSACTIONS_TYPE_FAILURE'
+
+export function updateTransactionsType(transactionIds, selectedTrxTypeId, listingParameters) {
+  return {
+    [CALL_API]: {
+      types: [
+        UPDATE_TRANSACTIONS_TYPE,
+        UPDATE_TRANSACTIONS_TYPE_SUCCESS,
+        UPDATE_TRANSACTIONS_TYPE_FAILURE
+      ],
+      endpoint: `/api/transactions/update-transactions-type`,
+      method: 'POST'
+    },
+    payload: {transactionIds, selectedTrxTypeId, listingParameters}
   }
 }
