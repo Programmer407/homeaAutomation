@@ -28,33 +28,33 @@ export const findTransactionsByUserId = (id, typeName):Object =>
     return obj
   })
 
-export const findTransactionsBySearchText = (id, typeName):Object =>
+export const findTransactionsBySearchText = (id, typeName, searchParam):Object =>
   Transaction.findAll(Object.assign({
     where: {
       $or: [
         {
           destination: {
-            $like: '%Received%'
+            $like: '%' + searchParam + '%'
           }
         },
         {
           note: {
-            $like: '%Received%'
+            $like: '%' + searchParam + '%'
           }
         },
         {
           amount: {
-            $like: '%Received%'
+            $like: '%' + searchParam + '%'
           }
         },
         {
           asset: {
-            $like: '%Received%'
+            $like: '%' + searchParam + '%'
           }
         },
         {
           value: {
-            $like: '%Received%'
+            $like: '%' + searchParam + '%'
           }
         }
       ]

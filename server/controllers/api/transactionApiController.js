@@ -37,7 +37,7 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
     searchParam = listingParameters.queryString
 
   if (searchParam) {
-    findTransactionsBySearchText(user.id, trxType)
+    findTransactionsBySearchText(user.id, trxType, searchParam)
     .then(transactionList => {
       res
         .status(200)
