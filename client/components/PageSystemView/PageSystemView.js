@@ -31,7 +31,7 @@ class PageSystemView extends React.Component {
 			modifiedTrxs: [],
 			isSearchDatesChecked: false,
 			listingParameters: {
-				trxType: 'Trading'
+				trxType: 'Purchase'
 			},
 			tblData: [
 				{
@@ -166,13 +166,13 @@ class PageSystemView extends React.Component {
 		let newSelectedRows = []
 		let allSelected = false
 		let rowSelected = false
-		const { tblData, selectedRows } = this.state
-
-		if (_.keys(tblData).length === selectedRows.length) {
+		const { selectedRows, modifiedTrxs } = this.state
+ 
+		if (modifiedTrxs.length === selectedRows.length) {
 			newSelectedRows = []
 			allSelected = false
 		} else {
-			const dataIds = Object.keys(tblData).map(data => { return tblData[data].id })
+			const dataIds = modifiedTrxs.map(trx => { return trx.id })
 			newSelectedRows = _.concat(newSelectedRows, dataIds)
 			allSelected = true
 		}
@@ -226,15 +226,15 @@ class PageSystemView extends React.Component {
 
 		switch (tabIndex) {
 			case 0:
-				trxType = 'Trading'
+				trxType = 'Purchase'
 				break
 			
 			case 1:
-				trxType = 'Purchase'
+				trxType = 'Sale'
 				break
 		
 			case 2:
-				trxType = 'Sale'
+				trxType = 'Trading'
 				break
 	
 			default:
@@ -273,11 +273,24 @@ class PageSystemView extends React.Component {
 		})
 	}
 
+	handleMultipleDelete = () => {
+		const { selectedRows } = this.state
+		console.log('---> THESE ARE THE SELECTED ROWS:', selectedRows)
+	}
+	
+	handleMultipleTypeChange = (val) => {
+		const { selectedRows } = this.state
+		console.log('---> THESE ARE THE SELECTED ROWS:', selectedRows, val)
+	}
+
 	/* LIFECYCLE METHODS */
 	componentDidMount() {
 		const { dispatch } = this.props
-
-		dispatch(transactionsData('Purchase'))
+		const listingParameters = {
+			trxType: 'Purchase'
+		}
+		
+		dispatch(transactionsData(listingParameters))
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -327,6 +340,8 @@ class PageSystemView extends React.Component {
 				onHeadCheckboxClick={ this.handleHeadCheckboxClick }
 				onPageClick={ this.handlePageClick }
 				onTabChange={ this.handleTabChange }
+				onBatchDeleteClick={ this.handleMultipleDelete }
+				onBatchTypeClick={ this.handleMultipleTypeChange }
 			/>
 		)
   }

@@ -13,9 +13,37 @@ div.navSpan {
 
 	.selectiveActionBtn {
 		border: 1px solid $theme-color-1;
-		border-radius: 4px;
+		// border-radius: 4px;
 		float: right;
 		margin: 8px 5px;
+	}
+	
+	.selectiveDropdownMenu {
+		border: 1px solid $theme-color-1;
+		// border-radius: 4px;
+		float: right;
+		margin: 8px 5px;
+		max-height: 38px;
+
+		div {
+			width: 180px !important;
+
+			label {
+				color: $theme-color-1 !important;
+			}
+			
+			div {
+				margin: 0px !important;
+
+				button {
+					display: none;
+
+					div {
+						display: none;
+					}
+				}
+			}
+		}
 	}
 }
 
