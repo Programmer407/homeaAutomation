@@ -54,8 +54,15 @@ class ProviderForm extends Component {
 		super(props)
 	}
 
+	handleOnChangeProvider = (e) => {
+    // const fieldName = e.target.name
+    // const fieldValue = e.target.value
+		// console.log('fieldName : ' + fieldName + ' AND fieldValue : ' + fieldValue)
+		console.log('Even called. ')
+	}
+	
 	render() {
-		return <ProviderFormInner {...this.props}/>
+		return <ProviderFormInner {...this.props} handleOnChangeProvider={this.handleOnChangeProvider} />
 	}
 }
 
