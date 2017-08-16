@@ -1,7 +1,7 @@
 // libs
 import React from 'react'
 import MenuItem from 'material-ui/MenuItem'
-import { Field } from 'redux-form'
+import { Field, focus } from 'redux-form'
 
 // src
 import { renderSelectField } from '../../../../utils'
@@ -19,10 +19,7 @@ const ProviderFormInner = props => {
 			</Field>
 			<div className="btn-space">
 				{
-					renderRaisedSubmitButton({
-						label: 'Connect',
-						labelWhenSubmitting: 'Connecting'
-					})
+					renderRaisedSubmitButton({ label: 'Connect', labelWhenSubmitting: 'Connecting' }) 
 				}
 			</div>
 		</form>

@@ -42,7 +42,7 @@ class MyAddresses extends React.Component {
 				delete this.state.selectedAddress;
 				return true;
 			}
-		} /* else {
+		} else {
 			const { userAddressesList } = nextProps
 
 			if (userAddressesList && userAddressesList[0] && userAddressesList[0].id) {
@@ -51,7 +51,7 @@ class MyAddresses extends React.Component {
 					selectedAddress: userAddressesList[0]
 				}
 			}
-		} */
+		}
 	}
 
 	handleRowClick = (value) => {

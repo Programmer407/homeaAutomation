@@ -256,7 +256,8 @@ class PageSystemView extends React.Component {
 	
 	handleTabChange = (tabIndex) => {
 		let trxType = null
-
+		const { listingParameters } = this.state
+		
 		switch (tabIndex) {
 			case 0:
 				trxType = 'Purchase'
@@ -279,9 +280,7 @@ class PageSystemView extends React.Component {
 			selectedRows: [],
 			allSelected: false,
 			rowSelected: false,
-			listingParameters: {
-				trxType
-			}
+			listingParameters: _.set(listingParameters, 'trxType', trxType)
 		}, () => this.getTransactionData(this.state.listingParameters))
 	}
 
