@@ -45,14 +45,15 @@ export const renderTextArea = ({ input, label, rows, rowsMax, autoComplete, inne
     hintStyle={{fontSize: 12}}
     {...input}
     {...custom} />
-)
-
-export const renderAutocomplete = ({ input, label, dataSource, innerRef,  meta: { touched, error }, ...custom }) => (
-  <AutoComplete
+	)
+	
+	export const renderAutocomplete = ({ input, label, dataSource, innerRef,  meta: { touched, error }, ...custom }) => (
+		<AutoComplete
 		underlineShow={false}
 		inputStyle={{ border: '1px solid #C9C9C9', borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomLeftRadius: 4, borderBottomRightRadius: 4, paddingLeft: 15 }}
 		fullWidth
 		hintText={ label }
+		errorText={touched && error}
 		dataSource={ dataSource }
 		hintStyle={{fontSize: 16, paddingLeft: 15}}
     ref={innerRef}

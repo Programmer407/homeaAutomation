@@ -1,9 +1,8 @@
 // libs
 import React from 'react'
-import { Field } from 'redux-form' 
+import { AutoComplete, DatePicker } from 'material-ui'
 
 // src
-import { renderAutocomplete, renderStyledDatePicker } from '../../../utils'
 import './FilterToolbar.scss'
 
 
@@ -23,41 +22,62 @@ const styles = {
 }
 
 const FilterToolbar = props => {
-	const { data } = props
+	const { data, onSubmit, onQueryStringChange, onStartDateChange, onEndDateChange, listingParameters, onStartDatePickerDismiss, onEndDatePickerDismiss } = props
 	const flatData = _.uniq(_.compact(_.flatten(data.map(dat => { return _.flatMap(dat) } ))))
+	const { startDate, endDate, queryString } = listingParameters
 
+	// <Field name="queryString" label="Search" component={ renderAutocomplete } dataSource={ flatData } />
 	return (
 		<div className="row">
 			<div className="col-md-12 col-sm-12">
-				{
-					<form role="form" className="form-inline">
-						<div className="row">
-							<div className="col-md-6">
-								<Field name="queryString" label="Search" component={ renderAutocomplete } dataSource={ flatData } />
-							</div>
-							<div className="col-md-6">
-								<div className="row">
-									<div className="col-sm-6">
-										<Field name="startDate" label="Start Date" component={ renderStyledDatePicker } />
-									</div>
-									<div className="col-sm-6">
-										<Field name="endDate" label="End Date" component={ renderStyledDatePicker } />
-									</div>
+				<form role="form" className="form-inline" onSubmit={ onSubmit }>
+					<div className="row">
+						<div className="col-md-6">
+							<AutoComplete
+								underlineShow={false}
+								inputStyle={{ border: '1px solid #C9C9C9', borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomLeftRadius: 4, borderBottomRightRadius: 4, paddingLeft: 15 }}
+								fullWidth
+								hintText="Search (ex: BTC, XRP, MyWallet)"
+								dataSource={ flatData }
+								hintStyle={{fontSize: 16, paddingLeft: 15}}
+								filter={AutoComplete.caseInsensitiveFilter} 
+								onNewRequest={ onQueryStringChange } 
+								value={ queryString }/>
+						</div>
+						<div className="col-md-6">
+							<div className="row">
+								<div className="col-sm-6">
+									<DatePicker
+										autoOk
+										fullWidth
+										cancelLabel="Reset"
+										underlineShow={ false }
+										style={{ border: '1px solid #C9C9C9', borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomLeftRadius: 4, borderBottomRightRadius: 4, paddingLeft: 15 }}
+										textFieldStyle={{ maxHeight: 46 }}
+										hintText="Start Date"
+										onChange={ onStartDateChange }
+										onDismiss={ onStartDatePickerDismiss }
+										value={ startDate } />
+								</div>
+								
+								<div className="col-sm-6">
+									<DatePicker
+										autoOk
+										fullWidth
+										cancelLabel="Reset"
+										underlineShow={ false }
+										style={{ border: '1px solid #C9C9C9', borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomLeftRadius: 4, borderBottomRightRadius: 4, paddingLeft: 15 }}
+										textFieldStyle={{ maxHeight: 46 }}
+										hintText="End Date"
+										onChange={ onEndDateChange }
+										onDismiss={ onEndDatePickerDismiss }
+										value={ endDate } />
 								</div>
 							</div>
 						</div>
-					</form>
-				}
+					</div>
+				</form>
 			</div>
-			
-			{/* <div className="col-md-4 col-sm-12">
-				<div className="col-xs-6" style={{ backgroundColor: '#F5F5F5' }}>
-					<Checkbox label="Search Dates" iconStyle={ styles.checkboxIconStyle } labelStyle={ styles.checkboxLabelStyle } style={ styles.checkboxStyle } onClick={ onDatesCheckboxClick.bind(this) } checked={ isSearchDatesChecked }/>
-				</div>
-				<div className="col-xs-6 text-right" style={{ backgroundColor: '#F5F5F5', borderLeft: '1px solid #999' }}>
-					<RaisedButton  onClick={ onUploadDialogToggle } label="Upload CSV" primary style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "pre", marginRight: 10 }}/> 
-				</div>
-			</div> */}
 		</div>
 
 	)

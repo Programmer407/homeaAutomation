@@ -64,13 +64,13 @@ const Operations = props => {
 				</SelectField>
 			</span>
 		</span>
-  );
+  )
 }
 
 // <FlatButton label="Set Transaction Type" onClick={ onActionTypeDialogToggle } hoverColor={'rgba(0,188,212,0.1)'} primary />
 
 const TabView = (props) => {
-  const { tabIndex, onTabChange, onFormDialogOpen, rowSelected } = props;
+  const { tabIndex, onTabChange, onFormDialogOpen, rowSelected } = props
   const tabLbls = [ 'Income', 'Spending', 'Trading' ]
   
   return (
@@ -109,7 +109,7 @@ const TabView = (props) => {
 				</div>
 			</div>
 		</div>
-  );
+  )
 }
 
 export default TabView
