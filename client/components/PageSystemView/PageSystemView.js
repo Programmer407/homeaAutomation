@@ -389,6 +389,7 @@ class PageSystemView extends React.Component {
 /* redux connect() and related functions */
 function mapStateToProps(state, ownProps) {
 	const transactionList = state.entities.transactions.transactionList
+	const thisTrxType = state.entities.transactions.trxType
 	const isRefreshTransactionList = state.entities.transactions.refreshTransactionList
 	const isDeletingTrxListItem = state.entities.transactions.deleteTransactionList
 	const isUpdatingTrxListItem = state.entities.transactions.updateTransactionList
@@ -396,6 +397,7 @@ function mapStateToProps(state, ownProps) {
 
 	return {
 		transactionList,
+		thisTrxType,
 		isRefreshTransactionList,
 		isDeletingTrxListItem,
 		isUpdatingTrxListItem,

@@ -9,11 +9,11 @@ export default function accounts(state = {}, action) {
 		}
 		case ActionTypes.TRANSACTION_DATA_SUCCESS: {
 			const {payload} = action
-			const {transactionList} = payload
+			const {transactionList, trxType} = payload
 			if (!payload) {
 				throw new Error(`Can't execute ${ ActionTypes.TRANSACTION_DATA_SUCCESS }. {payload} isn't available in action`)
 			}
-			return {...state, transactionList, refreshTransactionList: false}
+			return {...state, transactionList, trxType, refreshTransactionList: false}
 		}
 		case ActionTypes.TRANSACTION_DATA_FAILURE: {
 			return {...state, refreshTransactionList: false}

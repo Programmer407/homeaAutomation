@@ -22,7 +22,10 @@ const tblCols = {
 }
 
 const SpendingView = (props) => {
-	const { onRowHover, onRowHoverExit, hoveredRow, modifiedTrxs, isRefreshTransactionList } = props
+	const { onRowHover, onRowHoverExit, hoveredRow, modifiedTrxs, isRefreshTransactionList, thisTrxType, listingParameters } = props
+	const { trxType } = listingParameters
+	console.log('SPENDING VIEW PROPS:', props)
+
 
 	return (
 		<div className="box box-default table-box table-responsive mdl-shadow--2dp">
@@ -42,7 +45,7 @@ const SpendingView = (props) => {
 				<tbody className="tbl-body">
 					{
 						<Choose>
-							<When condition={ isRefreshTransactionList }>
+							<When condition={ isRefreshTransactionList || trxType !== thisTrxType }>
 								<tr>
 									<td colSpan="8" className="text-center">
 										<CircularProgress size={30} thickness={3} />
