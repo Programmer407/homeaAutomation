@@ -103,6 +103,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
 
       return (
       	<FlatButton
+					className="submitBtn"
 					type="submit"
           label={submitting ? labelWhenSubmitting : label}
           onClick={this.handleSubmit}
@@ -114,7 +115,7 @@ export default (options:{onSubmit:Function}) => (WrappedComponent:Object):Object
       const { submitting } = this.props
 
       return (
-        <RaisedButton
+				<RaisedButton
 					type="submit"
           label={submitting ? labelWhenSubmitting : label}
           onClick={this.handleSubmit}

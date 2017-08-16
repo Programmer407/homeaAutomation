@@ -48,10 +48,10 @@ const FilterToolbar = props => {
 							underlineShow={false}
 							inputStyle={{ border: '1px solid #C9C9C9', borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomLeftRadius: 4, borderBottomRightRadius: 4, paddingLeft: 15 }}
 							fullWidth
+							filter={ AutoComplete.caseInsensitiveFilter }
 							hintText="Search (ex: BTC, XRP, MyWallet)"
 							dataSource={ flatData }
-							hintStyle={{fontSize: 16, paddingLeft: 15}}
-							filter={AutoComplete.caseInsensitiveFilter} 
+							hintStyle={{fontSize: 16, paddingLeft: 15}} 
 							onNewRequest={ onQueryStringChange } 
 							searchText={ queryString }/>
 					</div>
