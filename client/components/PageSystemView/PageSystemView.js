@@ -2,9 +2,9 @@
 import React from "react"
 import { connect } from "react-redux"
 import PageSystemViewInner from "./PageSystemViewInner"
+import moment from 'moment'
 
 // src
-// import { logoutWhenIdle, bindForm } from '../../utils'
 import { transactionsData, deleteTransaction, updateTransactionsType, openFormDialog, closeFormDialog } from "../../actions"
 
 class PageSystemView extends React.Component {
@@ -29,7 +29,7 @@ class PageSystemView extends React.Component {
 				trxType: 'Purchase',
 				startDate: null,
 				endDate: null,
-				queryString: null
+				queryString: ''
 			},
 			tblData: [
 				{
@@ -115,37 +115,45 @@ class PageSystemView extends React.Component {
 	}
 
 	/* EVENT HANDLERS */
-	handleQueryStringChange = (val) => {
+	handleQueryStringChange = (queryString) => {
 		const { listingParameters } = this.state
 
 		this.setState({
-			listingParameters: _.set(listingParameters, 'queryString', val)
+			listingParameters: _.set(listingParameters, 'queryString', queryString)
 		}, () => this.getTransactionData(listingParameters))
 	}
 	
 	handleStartDateChange = (e, date) => {
 		const { listingParameters } = this.state
-	
-		this.setState({
-			listingParameters: _.set(listingParameters, 'startDate', date)
-		}, () => this.getTransactionData(listingParameters))
+
+		if (date && !moment(date).isSame(listingParameters.startDate)) {
+			this.setState({
+				listingParameters: _.set(listingParameters, 'startDate', date)
+			}, () => this.getTransactionData(listingParameters))
+		}
 	}
 	
 	handleEndDateChange = (e, date) => {
 		const { listingParameters } = this.state
-	
+		
+		if (date && !moment(date).isSame(listingParameters.endDate)) {
+			this.setState({
+				listingParameters: _.set(listingParameters, 'endDate', date)
+			}, () => this.getTransactionData(listingParameters))
+		}
+	}
+
+	resetFilterParams = () => {
+		let { listingParameters } = this.state
+		listingParameters = _.set(listingParameters, 'queryString', '')
+		listingParameters = _.set(listingParameters, 'startDate', null)
+		listingParameters = _.set(listingParameters, 'endDate', null)
+		
 		this.setState({
-			listingParameters: _.set(listingParameters, 'endDate', date)
+			listingParameters
 		}, () => this.getTransactionData(listingParameters))
 	}
 
-	handleStartDatePickerDismiss = () => {
-		this.handleStartDateChange(null, null)
-	}
-	
-	handleEndDatePickerDismiss = () => {
-		this.handleEndDateChange(null, null)
-	}
 
 	handleHelpDialogToggle = () => {
 		const { isHelpDialogOpen } = this.state
@@ -245,10 +253,6 @@ class PageSystemView extends React.Component {
 	handleRowHoverExit = () => {
 		this.setState({ hoveredRow: null })
 	}
-	
-	// handlePageClick = (val) => {
-	// 	console.log('---> Pagination:', val)
-	// }
 	
 	handleTabChange = (tabIndex) => {
 		let trxType = null
@@ -376,8 +380,8 @@ class PageSystemView extends React.Component {
 				onQueryStringChange={ this.handleQueryStringChange }
 				onStartDateChange={ this.handleStartDateChange }
 				onEndDateChange={ this.handleEndDateChange }
-				onStartDatePickerDismiss={ this.handleStartDatePickerDismiss }
 				onEndDatePickerDismiss={ this.handleEndDatePickerDismiss }
+				resetFilterParams={ this.resetFilterParams }
 			/>
 		)
   }

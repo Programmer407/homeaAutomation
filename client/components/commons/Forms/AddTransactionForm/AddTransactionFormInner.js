@@ -2,6 +2,7 @@
 import React from 'react'
 import { Field } from 'redux-form'
 import { MenuItem, FlatButton } from 'material-ui'
+import moment from 'moment'
 
 // src
 import { renderTextField, renderTextArea, renderSelectField, renderDatePicker } from '../../../../utils'
@@ -13,7 +14,7 @@ const AddTransactionFormInner = props => {
 		<form role="form">
 			<div className="form-group">
 				<Field name="transactionId" component="input" type="hidden" />
-				<Field name="transactionDate" label="Date" component={ renderDatePicker } fullWidth autoFocus/>
+				<Field name="transactionDate" label="Date" maxDate={ new Date() } component={ renderDatePicker } fullWidth autoFocus/>
 				<Field name="destination" label="Destination" autoComplete="off" component={ renderTextField } fullWidth />
 				<div className="row">
 					<div className="col-md-6">

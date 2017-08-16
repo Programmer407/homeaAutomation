@@ -93,10 +93,12 @@ export const renderSelectField = ({ input, label, meta: { touched, error }, chil
     children={children}/>
 )
 
-export const renderDatePicker = ({ input, label, meta: { touched, error } }) => (
+export const renderDatePicker = ({ input, label, maxDate, minDate, meta: { touched, error } }) => (
 	<DatePicker
 		autoOk
 		fullWidth
+		minDate={ minDate }
+		maxDate={ maxDate }
 		floatingLabelText={ label }
 		floatingLabelStyle={{ fontWeight: 400 }}
 		errorText = {touched && error} 
