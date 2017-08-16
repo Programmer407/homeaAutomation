@@ -7,11 +7,11 @@ import { Field } from 'redux-form'
 import { renderSelectField } from '../../../../utils'
 
 const ProviderFormInner = props => {
-	const { providerList, onSubmit, renderRaisedSubmitButton } = props
+	const { providerList, onSubmit, renderRaisedSubmitButton, handleOnChangeProvider } = props
 
 	return (
 		<form onSubmit={ onSubmit }>
-			<Field name="selectedProvider" label="Provider" component={ renderSelectField }>
+			<Field name="selectedProvider" label="Provider" component={ renderSelectField } onChange={handleOnChangeProvider} >
 				<MenuItem key={ 0 } value={ 0 } primaryText={ 'Select a provider...' } selected/>
 				{providerList.map( (provider) => 
 					<MenuItem key={ provider.id } value={ provider.id } primaryText={ provider.displayName } />

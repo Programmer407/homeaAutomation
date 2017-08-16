@@ -2,6 +2,7 @@
 import express from 'express'
 import WAValidator from 'wallet-address-validator'
 import moment from 'moment'
+import async from 'async'
 
 // src
 import Transaction from './../../models/Transaction'
@@ -220,16 +221,25 @@ router.post('/api/transactions/delete-transaction', ensureAuthorization, (req, r
   	return
   }
 
-  deleteTransactionById(transactionId)
-  .then(result => {
-    findTransactionsByUserId(user.id, transType)
-    .then(transactionList => {
-      res
-        .status(200)
-        .send({
-          transactionList
-        })
+  async.eachOfSeries(addressArray, function(coinAddress, index, nextAddCallback) {
+    deleteTransactionById(transactionId)
+    .then(result => {
+      nextAddCallback()
     })
+  }, function(err) {
+    if ( err ) {
+      rejectRequest('Failed to process addresses, please try again', res)
+      return
+    } else {
+      findTransactionsByUserId(user.id, transType)
+      .then(transactionList => {
+        res
+          .status(200)
+          .send({
+            transactionList
+          })
+      })
+    }
   })
 })
 
