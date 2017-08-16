@@ -1,3 +1,5 @@
+import Sequelize from "sequelize"
+
 // src
 import Transaction from '../models/Transaction'
 import User from '../models/User'
@@ -28,35 +30,40 @@ export const findTransactionsByUserId = (id, typeName):Object =>
     return obj
   })
 
+export const findTransactionsByUserId1 = (id, typeName, orderBy, orderWay):Object =>
+  Transaction.findAll(Object.assign({
+    include: [
+      {
+        model: User,
+        where: { id }
+      },
+      {
+        model: TransactionType,
+        where: { typeName }
+      },
+      {model: AssociatedAddress},
+      {model: UserAddress},
+      {model: UserWallet},
+      {model: TransactionImportType}
+    ],
+    order: Sequelize.literal(orderBy + ' ' + orderWay)
+  }))
+  .then(obj => {
+    return obj
+  })
+
 export const findTransactionsBySearchText = (id, typeName, searchParam):Object =>
   Transaction.findAll(Object.assign({
     where: {
       $or: [
-        {
-          destination: {
-            $like: '%' + searchParam + '%'
-          }
-        },
-        {
-          note: {
-            $like: '%' + searchParam + '%'
-          }
-        },
-        {
-          amount: {
-            $like: '%' + searchParam + '%'
-          }
-        },
-        {
-          asset: {
-            $like: '%' + searchParam + '%'
-          }
-        },
-        {
-          value: {
-            $like: '%' + searchParam + '%'
-          }
-        }
+        { destination: { $like: '%' + searchParam + '%' } },
+        { note: { $like: '%' + searchParam + '%' } },
+        { amount: { $like: '%' + searchParam + '%' } },
+        { asset: { $like: '%' + searchParam + '%' } },
+        { value: { $like: '%' + searchParam + '%' } },
+        Sequelize.literal("associatedaddress.nick_name like '%" + searchParam + "%'"),
+        Sequelize.literal("useraddress.nick_name like '%" + searchParam + "%'"),
+        Sequelize.literal("userwallet.wallet_name like '%" + searchParam + "%'")
       ]
     },
     include: [
@@ -88,7 +95,10 @@ export const findTransactionsBySearchTextDate = (id, typeName, searchParam, star
           { note: { $like: '%' + searchParam + '%' } },
           { amount: { $like: '%' + searchParam + '%' } },
           { asset: { $like: '%' + searchParam + '%' } },
-          { value: { $like: '%' + searchParam + '%' } }
+          { value: { $like: '%' + searchParam + '%' } },
+          Sequelize.literal("associatedaddress.nick_name like '%" + searchParam + "%'"),
+          Sequelize.literal("useraddress.nick_name like '%" + searchParam + "%'"),
+          Sequelize.literal("userwallet.wallet_name like '%" + searchParam + "%'")
         ]}
       ]
     },
@@ -121,7 +131,10 @@ export const findTransactionsBySearchTextStartDate = (id, typeName, searchParam,
           { note: { $like: '%' + searchParam + '%' } },
           { amount: { $like: '%' + searchParam + '%' } },
           { asset: { $like: '%' + searchParam + '%' } },
-          { value: { $like: '%' + searchParam + '%' } }
+          { value: { $like: '%' + searchParam + '%' } },
+          Sequelize.literal("associatedaddress.nick_name like '%" + searchParam + "%'"),
+          Sequelize.literal("useraddress.nick_name like '%" + searchParam + "%'"),
+          Sequelize.literal("userwallet.wallet_name like '%" + searchParam + "%'")
         ]}
       ]
     },
@@ -154,7 +167,10 @@ export const findTransactionsBySearchTextStartDate = (id, typeName, searchParam,
           { note: { $like: '%' + searchParam + '%' } },
           { amount: { $like: '%' + searchParam + '%' } },
           { asset: { $like: '%' + searchParam + '%' } },
-          { value: { $like: '%' + searchParam + '%' } }
+          { value: { $like: '%' + searchParam + '%' } },
+          Sequelize.literal("associatedaddress.nick_name like '%" + searchParam + "%'"),
+          Sequelize.literal("useraddress.nick_name like '%" + searchParam + "%'"),
+          Sequelize.literal("userwallet.wallet_name like '%" + searchParam + "%'")
         ]}
       ]
     },

@@ -7,7 +7,7 @@ import async from 'async'
 // src
 import Transaction from './../../models/Transaction'
 import { ensureAuthorization, rejectRequest } from '../../utils'
-import { findTransactionsByUserId, findTransactionsBySearchText, 
+import { findTransactionsByUserId, findTransactionsByUserId1, findTransactionsBySearchText, 
   findTransactionsBySearchTextDate, findTransactionsBySearchTextStartDate, 
   findTransactionsBySearchTextEndDate, findTransactionsBySearchDate, 
   findTransactionsBySearchStartDate, findTransactionsBySearchEndDate,
@@ -46,6 +46,14 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
     const moment_start_date = moment(start_date).format("YYYY-MM-DD HH:MM:SS")
     startDate = moment_start_date
   }
+
+  let orderBy = 'transactionDate'
+  if (listingParameters.orderBy)
+    orderBy = listingParameters.orderBy
+
+  let orderWay = 'DESC'
+  if (listingParameters.orderWay)
+    orderWay = listingParameters.orderWay
 
   let endDate = ''
   if (listingParameters.endDate) {
@@ -132,7 +140,7 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
         })
     })
   } else {
-    findTransactionsByUserId(user.id, trxType)
+    findTransactionsByUserId1(user.id, trxType, orderBy, orderWay)
     .then(transactionList => {
       res
         .status(200)
