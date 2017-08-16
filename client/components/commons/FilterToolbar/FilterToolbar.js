@@ -1,10 +1,8 @@
 // libs
 import React from 'react'
-import { Field } from 'redux-form' 
-import { RaisedButton, AutoComplete, DatePicker } from 'material-ui'
+import { AutoComplete, DatePicker } from 'material-ui'
 
 // src
-import { renderAutocomplete, renderStyledDatePicker } from '../../../utils'
 import './FilterToolbar.scss'
 
 

@@ -1,35 +1,12 @@
 // libs
 import React from "react"
 import { connect } from "react-redux"
-import {reduxForm} from 'redux-form'
 import PageSystemViewInner from "./PageSystemViewInner"
 
 // src
-import { logoutWhenIdle, bindForm } from '../../utils'
+// import { logoutWhenIdle, bindForm } from '../../utils'
 import { transactionsData, deleteTransaction, updateTransactionsType, openFormDialog, closeFormDialog } from "../../actions"
 
-
-const fields = [ 'queryString', 'startDate', 'endDate' ]
-const validate = values => {
-	const errors = {}
-	let hasErrors = false
-
-	console.log('---> FILTER VALUES', values)
-	
-	return hasErrors && errors
-}
-
-// @logoutWhenIdle()
-@reduxForm({
-	form: 'filterForm',
-	fields,
-	validate
-})
-@bindForm({
-	onSubmit: (values, dispatch, props) => {
-		console.log('---> FILTER SUBMITTED:', values)
-	}
-})
 class PageSystemView extends React.Component {
   constructor(props) {
     super(props)
