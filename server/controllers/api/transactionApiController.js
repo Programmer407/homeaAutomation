@@ -7,7 +7,11 @@ import async from 'async'
 // src
 import Transaction from './../../models/Transaction'
 import { ensureAuthorization, rejectRequest } from '../../utils'
-import { findTransactionsByUserId, findTransactionsBySearchText, deleteTransactionById, updateTransaction, findTransactionById } from '../../managers/transactionManager'
+import { findTransactionsByUserId, findTransactionsBySearchText, 
+  findTransactionsBySearchTextDate, findTransactionsBySearchTextStartDate, 
+  findTransactionsBySearchTextEndDate, findTransactionsBySearchDate, 
+  findTransactionsBySearchStartDate, findTransactionsBySearchEndDate,
+  deleteTransactionById, updateTransaction, findTransactionById } from '../../managers/transactionManager'
 import { findTransactionTypeById } from '../../managers/transactionTypeManager'
 import { findTrxImportTypeById } from '../../managers/transactionImportManager'
 import { findAssociatedAddByAdd, updateAssociatedAdd } from '../../managers/associatedAddressManager'
@@ -36,8 +40,89 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
   if (listingParameters.queryString)
     searchParam = listingParameters.queryString
 
-  if (searchParam) {
+  let startDate = ''
+  if (listingParameters.startDate) {
+    const start_date = new Date(listingParameters.startDate)
+    const moment_start_date = moment(start_date).format("YYYY-MM-DD HH:MM:SS")
+    startDate = moment_start_date
+  }
+
+  let endDate = ''
+  if (listingParameters.endDate) {
+    const end_date = new Date(listingParameters.endDate)
+    const moment_end_date = moment(end_date).format("YYYY-MM-DD HH:MM:SS")
+    endDate = moment_end_date
+  }
+
+  if (searchParam && startDate && endDate) {
+    console.log('searchParam : ' + searchParam + ' AND startDate : ' + startDate + ' AND endDate : ' + endDate)
+    findTransactionsBySearchTextDate(user.id, trxType, searchParam, startDate, endDate)
+    .then(transactionList => {
+      res
+        .status(200)
+        .send({
+          transactionList,
+          trxType
+        })
+    })
+  } else if (searchParam && startDate) {
+    console.log('searchParam : ' + searchParam + ' AND startDate : ' + startDate)
+    findTransactionsBySearchTextStartDate(user.id, trxType, searchParam, startDate)
+    .then(transactionList => {
+      res
+        .status(200)
+        .send({
+          transactionList,
+          trxType
+        })
+    })
+  } else if (searchParam && endDate) {
+    console.log('searchParam : ' + searchParam + ' AND endDate : ' + endDate)
+    findTransactionsBySearchTextEndDate(user.id, trxType, searchParam, endDate)
+    .then(transactionList => {
+      res
+        .status(200)
+        .send({
+          transactionList,
+          trxType
+        })
+    })
+  } else if (startDate && endDate) {
+    console.log('startDate : ' + startDate + ' AND endDate : ' + endDate)
+    findTransactionsBySearchDate(user.id, trxType, startDate, endDate)
+    .then(transactionList => {
+      res
+        .status(200)
+        .send({
+          transactionList,
+          trxType
+        })
+    })
+  } else if (searchParam) {
+    console.log('searchParam : ' + searchParam)
     findTransactionsBySearchText(user.id, trxType, searchParam)
+    .then(transactionList => {
+      res
+        .status(200)
+        .send({
+          transactionList,
+          trxType
+        })
+    })
+  } else if (startDate) {
+    console.log('startDate : ' + startDate)
+    findTransactionsBySearchStartDate(user.id, trxType, startDate)
+    .then(transactionList => {
+      res
+        .status(200)
+        .send({
+          transactionList,
+          trxType
+        })
+    })
+  } else if (endDate) {
+    console.log('endDate : ' + endDate)
+    findTransactionsBySearchEndDate(user.id, trxType, endDate)
     .then(transactionList => {
       res
         .status(200)

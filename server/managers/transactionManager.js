@@ -1,4 +1,4 @@
-// libs
+// src
 import Transaction from '../models/Transaction'
 import User from '../models/User'
 import TransactionType from '../models/TransactionType'
@@ -58,6 +58,177 @@ export const findTransactionsBySearchText = (id, typeName, searchParam):Object =
           }
         }
       ]
+    },
+    include: [
+      {
+        model: User,
+        where: { id }
+      },
+      {
+        model: TransactionType,
+        where: { typeName }
+      },
+      {model: AssociatedAddress},
+      {model: UserAddress},
+      {model: UserWallet},
+      {model: TransactionImportType}
+    ]
+  }))
+  .then(obj => {
+    return obj
+  })
+
+export const findTransactionsBySearchTextDate = (id, typeName, searchParam, startDate, endDate):Object =>
+  Transaction.findAll(Object.assign({
+    where: {
+      $and: [
+        {transactionDate: {$between: [startDate, endDate]}},
+        {$or: [
+          { destination: { $like: '%' + searchParam + '%' } },
+          { note: { $like: '%' + searchParam + '%' } },
+          { amount: { $like: '%' + searchParam + '%' } },
+          { asset: { $like: '%' + searchParam + '%' } },
+          { value: { $like: '%' + searchParam + '%' } }
+        ]}
+      ]
+    },
+    include: [
+      {
+        model: User,
+        where: { id }
+      },
+      {
+        model: TransactionType,
+        where: { typeName }
+      },
+      {model: AssociatedAddress},
+      {model: UserAddress},
+      {model: UserWallet},
+      {model: TransactionImportType}
+    ]
+  }))
+  .then(obj => {
+    return obj
+  })
+
+export const findTransactionsBySearchTextStartDate = (id, typeName, searchParam, startDate):Object =>
+  Transaction.findAll(Object.assign({
+    where: {
+      $and: [
+        {transactionDate: {$gte: [startDate]}},
+        {$or: [
+          { destination: { $like: '%' + searchParam + '%' } },
+          { note: { $like: '%' + searchParam + '%' } },
+          { amount: { $like: '%' + searchParam + '%' } },
+          { asset: { $like: '%' + searchParam + '%' } },
+          { value: { $like: '%' + searchParam + '%' } }
+        ]}
+      ]
+    },
+    include: [
+      {
+        model: User,
+        where: { id }
+      },
+      {
+        model: TransactionType,
+        where: { typeName }
+      },
+      {model: AssociatedAddress},
+      {model: UserAddress},
+      {model: UserWallet},
+      {model: TransactionImportType}
+    ]
+  }))
+  .then(obj => {
+    return obj
+  })
+
+  export const findTransactionsBySearchTextEndDate = (id, typeName, searchParam, endDate):Object =>
+  Transaction.findAll(Object.assign({
+    where: {
+      $and: [
+        {transactionDate: {$lte: [endDate]}},
+        {$or: [
+          { destination: { $like: '%' + searchParam + '%' } },
+          { note: { $like: '%' + searchParam + '%' } },
+          { amount: { $like: '%' + searchParam + '%' } },
+          { asset: { $like: '%' + searchParam + '%' } },
+          { value: { $like: '%' + searchParam + '%' } }
+        ]}
+      ]
+    },
+    include: [
+      {
+        model: User,
+        where: { id }
+      },
+      {
+        model: TransactionType,
+        where: { typeName }
+      },
+      {model: AssociatedAddress},
+      {model: UserAddress},
+      {model: UserWallet},
+      {model: TransactionImportType}
+    ]
+  }))
+  .then(obj => {
+    return obj
+  })
+
+export const findTransactionsBySearchDate = (id, typeName, startDate, endDate):Object =>
+  Transaction.findAll(Object.assign({
+    where: {
+      transactionDate: {$between: [startDate, endDate]}
+    },
+    include: [
+      {
+        model: User,
+        where: { id }
+      },
+      {
+        model: TransactionType,
+        where: { typeName }
+      },
+      {model: AssociatedAddress},
+      {model: UserAddress},
+      {model: UserWallet},
+      {model: TransactionImportType}
+    ]
+  }))
+  .then(obj => {
+    return obj
+  })
+
+export const findTransactionsBySearchStartDate = (id, typeName, startDate):Object =>
+  Transaction.findAll(Object.assign({
+    where: {
+      transactionDate: {$gte: [startDate]}
+    },
+    include: [
+      {
+        model: User,
+        where: { id }
+      },
+      {
+        model: TransactionType,
+        where: { typeName }
+      },
+      {model: AssociatedAddress},
+      {model: UserAddress},
+      {model: UserWallet},
+      {model: TransactionImportType}
+    ]
+  }))
+  .then(obj => {
+    return obj
+  })
+
+  export const findTransactionsBySearchEndDate = (id, typeName, endDate):Object =>
+  Transaction.findAll(Object.assign({
+    where: {
+      transactionDate: {$lte: [endDate]}
     },
     include: [
       {

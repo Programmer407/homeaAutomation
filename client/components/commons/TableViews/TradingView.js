@@ -58,7 +58,7 @@ const TradingView = (props) => {
 				</thead>
 				<tbody className="tbl-body">
 					{
-						tblData.map((rowData, index) => {
+						/* tblData.map((rowData, index) => {
 							return (
 								<tr 
 									key={ rowData.id }
@@ -76,7 +76,12 @@ const TradingView = (props) => {
 										<td className="mdl-data-table__cell--non-numeric text-center fixedWidthCol">{ (hoveredRow === index) ? <Operations /> : '' }</td>
 								</tr>
 							)
-						})
+						}) */
+						<tr>
+							<td colSpan="8" className="text-center">
+								No transactions found.
+							</td>
+						</tr>
 					}
 				</tbody>
 				<tfoot>
