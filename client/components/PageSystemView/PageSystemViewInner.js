@@ -8,8 +8,8 @@ import styles from "./PageSystemViewInner.scss"
 import { TabView, InfoDialog, FormDialog, FilterToolbar, UploadDialog, ActionTypeDialog } from '../commons'
 
 // assets
-import ActionHelp from 'material-ui/svg-icons/action/help'
-import { grey600 } from 'material-ui/styles/colors'
+// import ActionHelp from 'material-ui/svg-icons/action/help'
+// import { grey600 } from 'material-ui/styles/colors'
 
 const PageSystemViewInner = props => {
 	const { isHelpDialogOpen, isFormDialogOpen, onHelpDialogToggle, onFormDialogOpen, isUploadDialogOpen, onUploadDialogToggle, isActionTypeDialogOpen, onActionTypeDialogToggle, tblData, trxId } = props

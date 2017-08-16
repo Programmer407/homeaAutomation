@@ -5,13 +5,31 @@ import {reduxForm} from 'redux-form'
 import PageSystemViewInner from "./PageSystemViewInner"
 
 // src
-import { logoutWhenIdle } from '../../utils'
-import { transactionsData, deleteTransaction, openFormDialog, closeFormDialog } from "../../actions"
+import { logoutWhenIdle, bindForm } from '../../utils'
+import { transactionsData, deleteTransaction, updateTransactionsType, openFormDialog, closeFormDialog } from "../../actions"
 
-@reduxForm({
-	form: 'AddTrxForm'
-})
+
+const fields = [ 'queryString', 'startDate', 'endDate' ]
+const validate = values => {
+	const errors = {}
+	let hasErrors = false
+
+	console.log('---> FILTER VALUES', values)
+	
+	return hasErrors && errors
+}
+
 // @logoutWhenIdle()
+@reduxForm({
+	form: 'filterForm',
+	fields,
+	validate
+})
+@bindForm({
+	onSubmit: (values, dispatch, props) => {
+		console.log('---> FILTER SUBMITTED:', values)
+	}
+})
 class PageSystemView extends React.Component {
   constructor(props) {
     super(props)
@@ -31,7 +49,10 @@ class PageSystemView extends React.Component {
 			modifiedTrxs: [],
 			isSearchDatesChecked: false,
 			listingParameters: {
-				trxType: 'Purchase'
+				trxType: 'Purchase',
+				startDate: null,
+				endDate: null,
+				queryString: null
 			},
 			tblData: [
 				{
@@ -108,16 +129,47 @@ class PageSystemView extends React.Component {
 
 	deleteTransaction = (parameters) => {
 		const { dispatch } = this.props
-		const { id, type } = parameters
+		const { id } = parameters
+		const { listingParameters } = this.state
 		
 		this.setState({
 			trxId: id
-		}, function() {
-			dispatch(deleteTransaction(id, type))
-		})
+		}, () => dispatch(deleteTransaction([id], listingParameters)))
 	}
 
 	/* EVENT HANDLERS */
+	handleQueryStringChange = (val) => {
+		const { listingParameters } = this.state
+
+		this.setState({
+			listingParameters: _.set(listingParameters, 'queryString', val)
+		}, () => this.getTransactionData(listingParameters))
+	}
+	
+	handleStartDateChange = (e, date) => {
+		const { listingParameters } = this.state
+	
+		this.setState({
+			listingParameters: _.set(listingParameters, 'startDate', date)
+		}, () => this.getTransactionData(listingParameters))
+	}
+	
+	handleEndDateChange = (e, date) => {
+		const { listingParameters } = this.state
+	
+		this.setState({
+			listingParameters: _.set(listingParameters, 'endDate', date)
+		}, () => this.getTransactionData(listingParameters))
+	}
+
+	handleStartDatePickerDismiss = () => {
+		this.handleStartDateChange(null, null)
+	}
+	
+	handleEndDatePickerDismiss = () => {
+		this.handleEndDateChange(null, null)
+	}
+
 	handleHelpDialogToggle = () => {
 		const { isHelpDialogOpen } = this.state
 
@@ -249,9 +301,7 @@ class PageSystemView extends React.Component {
 			listingParameters: {
 				trxType
 			}
-		}, function() {
-			this.getTransactionData(this.state.listingParameters)
-		})
+		}, () => this.getTransactionData(this.state.listingParameters))
 	}
 
 	handleDatesCheckboxClick = () => {
@@ -274,13 +324,17 @@ class PageSystemView extends React.Component {
 	}
 
 	handleMultipleDelete = () => {
-		const { selectedRows } = this.state
-		console.log('---> THESE ARE THE SELECTED ROWS:', selectedRows)
+		const { dispatch } = this.props
+		const { selectedRows, listingParameters } = this.state
+
+		dispatch(deleteTransaction(selectedRows, listingParameters))
 	}
 	
-	handleMultipleTypeChange = (val) => {
-		const { selectedRows } = this.state
-		console.log('---> THESE ARE THE SELECTED ROWS:', selectedRows, val)
+	handleMultipleTypeChange = (trxType) => {
+		const { dispatch } = this.props
+		const { selectedRows, listingParameters } = this.state
+		
+		dispatch(updateTransactionsType(selectedRows, trxType, listingParameters))
 	}
 
 	/* LIFECYCLE METHODS */
@@ -342,6 +396,11 @@ class PageSystemView extends React.Component {
 				onTabChange={ this.handleTabChange }
 				onBatchDeleteClick={ this.handleMultipleDelete }
 				onBatchTypeClick={ this.handleMultipleTypeChange }
+				onQueryStringChange={ this.handleQueryStringChange }
+				onStartDateChange={ this.handleStartDateChange }
+				onEndDateChange={ this.handleEndDateChange }
+				onStartDatePickerDismiss={ this.handleStartDatePickerDismiss }
+				onEndDatePickerDismiss={ this.handleEndDatePickerDismiss }
 			/>
 		)
   }
