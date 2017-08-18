@@ -13,7 +13,7 @@ const orderByColumns = {
 	volume: 'amount',
 	value: 'amount',
 	action: 'transactiontype.type_name',
-	source: 'transactionimporttype.import_type_name'
+	source: 'transactionimporttype.import_type_name, useraddress.nick_name, userwallet.wallet_name'
 }
 
 class PageSystemView extends React.Component {
