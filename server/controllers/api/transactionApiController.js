@@ -6,6 +6,7 @@ import async from 'async'
 
 // src
 import Transaction from './../../models/Transaction'
+import AssociatedAddress from './../../models/AssociatedAddress'
 import { ensureAuthorization, rejectRequest } from '../../utils'
 import { findTransactionsByUserId, findTransactionsByUserId1, findTransactionsBySearchText, 
   findTransactionsBySearchTextDate, findTransactionsBySearchTextStartDate, 
