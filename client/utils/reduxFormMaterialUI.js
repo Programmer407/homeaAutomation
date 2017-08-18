@@ -29,14 +29,15 @@ export const renderTextField = ({ input, label, autoComplete, innerRef, meta: { 
     hintStyle={ {fontSize: 14} }
     {...input}
     {...custom}
-  />
-)
-
-export const renderTextArea = ({ input, label, rows, rowsMax, autoComplete, innerRef,  meta: { touched, error }, ...custom }) => (
-  <TextField
+		/>
+	)
+	
+	export const renderTextArea = ({ input, label, rows, rowsMax, autoComplete, innerRef,  meta: { touched, error, submitting }, ...custom }) => (
+		<TextField
     floatingLabelText={label}
 		floatingLabelStyle={{ fontWeight: 400 }}
     fullWidth
+		disabled={ submitting }
 		multiLine
 		rows={rows}
 		rowsMax={rowsMax}
@@ -61,27 +62,28 @@ export const renderTextArea = ({ input, label, rows, rowsMax, autoComplete, inne
 		filter={AutoComplete.caseInsensitiveFilter} 
 		{...input}
 		{...custom} />
-)
-
-export const renderCheckbox = ({ input, label, padding }) => (
-  <Checkbox label={label}
+	)
+	
+	export const renderCheckbox = ({ input, label, padding }) => (
+		<Checkbox label={label}
     checked={input.value ? true : false}
     onCheck={input.onChange}
     style={{paddingTop: padding[0], paddingRight: padding[1], paddingBottom: padding[2], paddingLeft: padding[3]}}
-  />
-)
-
-export const renderRadioGroup = ({ input, label, ...rest }) => (
-  <div style={{margin: '10px 0'}}>
+		/>
+	)
+	
+	export const renderRadioGroup = ({ input, label, ...rest }) => (
+		<div style={{margin: '10px 0'}}>
     <label style={{fontSize: 12, color: 'rgba(0, 0, 0, 0.298039)'}}>{label}</label>
     <RadioButtonGroup {...input} {...rest}
-      valueSelected={input.value}
-      onChange={(event, value) => input.onChange(value)}/>
-  </div>
-)
-
-export const renderSelectField = ({ input, label, meta: { touched, error }, children }) => (
-  <SelectField
+		valueSelected={input.value}
+		onChange={(event, value) => input.onChange(value)}/>
+		</div>
+	)
+	
+	export const renderSelectField = ({ input, label, meta: { touched, error, submitting }, children }) => (
+		<SelectField
+		disabled={ submitting }
 		selectedMenuItemStyle={{ color: '#00ACC1' }}
     floatingLabelText={label}
 		floatingLabelStyle={{ fontWeight: 400 }}
@@ -92,11 +94,12 @@ export const renderSelectField = ({ input, label, meta: { touched, error }, chil
     {...input}
     onChange={(event, index, value) => input.onChange(value)}
     children={children}/>
-)
-
-export const renderDatePicker = ({ input, label, maxDate, minDate, meta: { touched, error } }) => (
-	<DatePicker
+	)
+	
+	export const renderDatePicker = ({ input, label, maxDate, minDate, meta: { touched, error, submitting } }) => (
+		<DatePicker
 		autoOk
+		disabled={ submitting }
 		fullWidth
 		minDate={ minDate }
 		maxDate={ maxDate }
@@ -105,7 +108,7 @@ export const renderDatePicker = ({ input, label, maxDate, minDate, meta: { touch
 		errorText = {touched && error} 
 		{...input}
 		value = {input.value !== '' ? new Date(input.value) : null}
-		onChange = {(event, value) => {console.log(value); input.onChange(value)}} />
+		onChange = {(event, value) => {input.onChange(value)}} />
 )
 
 export const renderStyledDatePicker = ({ input, label, meta: { touched, error } }) => (
@@ -119,5 +122,5 @@ export const renderStyledDatePicker = ({ input, label, meta: { touched, error } 
 		errorText = {touched && error} 
 		{...input}
 		value = {input.value !== '' ? new Date(input.value) : null}
-		onChange = {(event, value) => {console.log(value); input.onChange(value)}} />
+		onChange = {(event, value) => {input.onChange(value)}} />
 )

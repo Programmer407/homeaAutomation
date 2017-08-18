@@ -44,11 +44,6 @@ const validate = values => {
 		hasErrors = true
 	} 
 
-	if ( !note || note.trim() === '' ) {
-		errors.note = 'Provide at least one address.'
-		hasErrors = true
-	}
-
 	return hasErrors && errors
 }
 @reduxForm({

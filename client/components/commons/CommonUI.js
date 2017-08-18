@@ -143,21 +143,21 @@ export const Selection = props => {
 }
 
 export const Operations = props => {
-	const { id, type, onDeleteClick, onEditClick, isDeletingTrxListItem, isUpdatingTrxListItem, trxId } = props
+	const { id, onDeleteClick, onEditClick, isDeletingTrxListItem, isUpdatingTrxListItem, trxId } = props
 
 	return (
 		<span>
 			<IconButton 
 				className="actionIcon"
-				disabled={ isUpdatingTrxListItem }
-				onClick={ () => onEditClick({ id }) }>
+				disabled={ isUpdatingTrxListItem || isDeletingTrxListItem}
+				onClick={ () => onEditClick(id) }>
 					{ (isUpdatingTrxListItem && trxId === id) ? <RefreshIndicator status="loading" top={12} left={12} size={25}/> : <EditorModeEdit color={cyan200} hoverColor={cyan500}/> }
 			</IconButton>
 
 			<IconButton 
 				className="actionIcon"
-				disabled={ isDeletingTrxListItem }
-				onClick={ () => onDeleteClick({ id, type }) }>
+				disabled={ isDeletingTrxListItem || isUpdatingTrxListItem }
+				onClick={ () => onDeleteClick(id) }>
 				{ (isDeletingTrxListItem && trxId === id) ? <RefreshIndicator status="loading" top={12} left={12} size={25}/> : <ActionDelete color={cyan200} hoverColor={cyan500}/> }
 			</IconButton>
 		</span>
