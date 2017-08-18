@@ -8,11 +8,9 @@ import helmet from 'helmet'
 import compression from 'compression'
 import { Server } from 'http'
 import { renderFile } from 'ejs'
-import setupSocketIO from 'socket.io'
 import cors from 'cors'
 
 // src
-import { default as appUtils } from './utils/appUtils'
 import devUtils from './utils/devUtils'
 import logUtils from './utils/logUtils'
 import {
@@ -35,24 +33,24 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
-app.engine('ejs', renderFile);
-app.set('view engine', 'ejs');
-app.set('views', path.resolve('./server/templates/web'));
-app.use(express.static(path.resolve('./client/dist')));
-app.use(express.static(path.resolve('./server/public')));
-// app.use('/images', express.static(__dirname + "/images"));
+app.engine('ejs', renderFile)
+app.set('view engine', 'ejs')
+app.set('views', path.resolve('./server/templates/web'))
+app.use(express.static(path.resolve('./client/dist')))
+app.use(express.static(path.resolve('./server/public')))
+// app.use('/images', express.static(__dirname + "/images"))
 // If you declare your session and passport configs above static directory configs then all requests 
-//for static content will also get a session, which is not good.
-app.use(cookieParser());
+// for static content will also get a session, which is not good.
+app.use(cookieParser())
 // security package
 app.use(helmet())
-//see setting details here: https://github.com/expressjs/session
-//app.use(expressSession(, store: new MySQLStore(options)}));
+// see setting details here: https://github.com/expressjs/session
+// app.use(expressSession(, store: new MySQLStore(options)}))
 app.use(passport.initialize())
 app.use(passport.session())
 setupPassport()
 
-app.use(cors());
+app.use(cors())
 
 if ( isProduction() ) {
   // handle logging
@@ -82,5 +80,5 @@ httpServer.listen(port, err => {
     console.error(`Server startup failed: `, err)
   }
 
-  console.info('==> 🌎 Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port);
+  console.info('==> 🌎 Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port)
 })

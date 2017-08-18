@@ -1,15 +1,14 @@
-import q from 'q';
-import uuid from 'uuid';
-import AWS from 'aws-sdk';
-import fs from 'fs';
-import path from 'path';
+import q from 'q'
+import uuid from 'uuid'
+import AWS from 'aws-sdk'
+import fs from 'fs'
+import path from 'path'
 
 import awsS3Config from '../../config/aws-s3.config'
 
-AWS.config.update(awsS3Config);
+AWS.config.update(awsS3Config)
 
 const uploadOnS3 = (filePath, mimeType) => {
-  
   const promise = q.defer()
   const extension = path.extname(filePath)
   const s3bucket = new AWS.S3({params: {Bucket: 'wisdom'}})
@@ -19,15 +18,15 @@ const uploadOnS3 = (filePath, mimeType) => {
   
   s3bucket.upload(params, (err, data) => {
     if (err)
-      promise.reject(err);
+      promise.reject(err)
     else
-      promise.resolve(data.Location);    
+      promise.resolve(data.Location)
           
-    fs.unlink(filePath);
+    fs.unlink(filePath)
     return
   })
 
-  return promise.promise;
+  return promise.promise
 }
 
 export default {

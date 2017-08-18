@@ -1,7 +1,7 @@
 // libs
 import AssociatedAddress from '../models/AssociatedAddress'
 
-export const findAssociatedAddById = (id:number):Object =>
+export const findAssociatedAddById = (id) =>
   AssociatedAddress.findOne(Object.assign({
     where: {
       id
@@ -11,7 +11,7 @@ export const findAssociatedAddById = (id:number):Object =>
     return obj
   })
 
-export const findAssociatedAddByAdd = (address:number):Object =>
+export const findAssociatedAddByAdd = (address) =>
   AssociatedAddress.findOne(Object.assign({
     where: {
       address
@@ -21,7 +21,7 @@ export const findAssociatedAddByAdd = (address:number):Object =>
     return obj
   })
 
-export const updateAssociatedAdd = (associatedAddObj): Promise<any> =>
+export const updateAssociatedAdd = (associatedAddObj) =>
   associatedAddObj.save()
   .then(obj => {
     return obj

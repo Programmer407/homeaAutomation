@@ -1,27 +1,27 @@
-'use strict';
+'use strict'
 
-require('babel-polyfill');
+require('babel-polyfill')
 
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var StatsPlugin = require('stats-webpack-plugin');
-var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
-var ManifestPlugin = require('webpack-manifest-plugin');
-var ChunkManifestPlugin = require('chunk-manifest-webpack-plugin');
-var WebpackMd5Hash = require('webpack-md5-hash');
+var path = require('path')
+var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var StatsPlugin = require('stats-webpack-plugin')
+var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin")
+var ManifestPlugin = require('webpack-manifest-plugin')
+var ChunkManifestPlugin = require('chunk-manifest-webpack-plugin')
+var WebpackMd5Hash = require('webpack-md5-hash')
 
 function isExternal(module) {
-  var userRequest = module.userRequest;
+  var userRequest = module.userRequest
 
   if (typeof userRequest !== 'string') {
-    return false;
+    return false
   }
 
   return userRequest.indexOf('bower_components') >= 0 ||
          userRequest.indexOf('node_modules') >= 0 ||
-         userRequest.indexOf('libraries') >= 0;
+         userRequest.indexOf('libraries') >= 0
 }
 
 module.exports = {
@@ -50,7 +50,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       name: "vendor",
       minChunks: function(module) {
-        return isExternal(module);
+        return isExternal(module)
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
@@ -110,4 +110,4 @@ module.exports = {
 			loader: 'style!css' 
 		}]
   }
-};
+}

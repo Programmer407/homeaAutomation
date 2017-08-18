@@ -22,7 +22,7 @@ export const makeLogContextString = req => {
   const { user, headers, connection: { remoteAddress } } = req
 
   // to get forwarded header, added this line on nginx website config
-  // proxy_set_header  X-Forwarded-For $remote_addr;
+  // proxy_set_header  X-Forwarded-For $remote_addr
   const ip = headers['x-forwarded-for'] || remoteAddress
 
   if (user) {
@@ -50,10 +50,10 @@ export const setupSessionStore = (app) => {
     user: username, // Database user.
     password, // Password for the above database user.
     database: dbName, // Database name.
-    //checkExpirationInterval: 900000, // How frequently expired sessions will be cleared; milliseconds.
-    //expiration: 86400000, // The maximum age of a valid session; milliseconds.
-    checkExpirationInterval: 600000, // How frequently expired sessions will be cleared; milliseconds.
-    expiration: 1800000, // The maximum age of a valid session; milliseconds.
+    // checkExpirationInterval: 900000, // How frequently expired sessions will be cleared milliseconds.
+    // expiration: 86400000, // The maximum age of a valid session milliseconds.
+    checkExpirationInterval: 600000, // How frequently expired sessions will be cleared milliseconds.
+    expiration: 1800000, // The maximum age of a valid session milliseconds.
     createDatabaseTable: true, // Whether or not to create the sessions database table, if one does not already exist.
     schema: {
       tableName: 'sessions',
@@ -77,7 +77,7 @@ export const setupSessionStore = (app) => {
     store: sessionStore,
     cookie: {
       domain: domain,
-      //maxAge: 31536000000
+      // maxAge: 31536000000
       maxAge: 1800000
     },
     resave: false,

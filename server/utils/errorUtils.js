@@ -37,8 +37,8 @@ export class AccessDeniedError extends Error {
 
 export const caughtError = (res, error) => {
   const m = `An internal server error occurred: ${error}`
-  console.error('\x1b[31m', m)
-  //console.error(error.stack, '\x1b[0m')
+  // console.error('\x1b[31m', m)
+  // console.error(error.stack, '\x1b[0m')
 
   if ( error && (
        error instanceof BadRequestError

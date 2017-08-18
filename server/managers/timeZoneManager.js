@@ -1,7 +1,7 @@
 // libs
 import TimeZone from '../models/TimeZone'
 
-export const findTimeZoneById = (id): Promise<any> =>
+export const findTimeZoneById = (id) =>
   TimeZone.findOne(Object.assign({
     where: {
       id

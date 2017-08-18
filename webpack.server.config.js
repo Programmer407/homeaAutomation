@@ -1,12 +1,12 @@
-'use strict';
+'use strict'
 
-var path = require('path');
-var webpack = require('webpack');
-var nodeExternals = require('webpack-node-externals');
-var isProduction = process.env.NODE_ENV === 'production';
+var path = require('path')
+var webpack = require('webpack')
+var nodeExternals = require('webpack-node-externals')
+var isProduction = process.env.NODE_ENV === 'production'
 var productionPluginDefine = isProduction ? [
   new webpack.DefinePlugin({'process.env': {'NODE_ENV': JSON.stringify('production')}})
-] : [];
+] : []
 
 console.log('[webpack.server.config.js] __dirname: ', __dirname)
 console.log('[webpack.server.config.js] process.cwd(): ', process.cwd())
@@ -35,7 +35,7 @@ module.exports = {
 			_: 'lodash'
 		}),
     new webpack.BannerPlugin({
-      banner: 'require("source-map-support").install();',
+      banner: 'require("source-map-support").install()',
       raw: true,
       entryOnly: false 
     })

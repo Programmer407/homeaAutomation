@@ -1,12 +1,12 @@
-'use strict';
+'use strict'
 
-require('babel-polyfill');
+require('babel-polyfill')
 
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var ManifestPlugin = require('webpack-manifest-plugin');
+var path = require('path')
+var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+var ExtractTextPlugin = require("extract-text-webpack-plugin")
+var ManifestPlugin = require('webpack-manifest-plugin')
 
 module.exports = {
   devtool: 'eval-source-map',
@@ -91,4 +91,4 @@ module.exports = {
 			loader: 'url-loader?limit=100000'
 		}]
   }
-};
+}

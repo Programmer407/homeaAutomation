@@ -15,14 +15,14 @@ export const build404ErrorHandler = options => {
     
     // respond with html page
     if (req.accepts('html')) {
-      res.render('404', { url: req.url });
-      return;
+      res.render('404', { url: req.url })
+      return
     }
 
     // respond with json
     if (req.accepts('json')) {
-      res.send({ errorMessage: 'Page not found' });
-      return;
+      res.send({ errorMessage: 'Page not found' })
+      return
     }
 
     // default to plain-text. send()

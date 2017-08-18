@@ -126,8 +126,6 @@
     "request": "^2.81.0",
     "sass-loader": "^0.5",
     "sequelize": "^4.4.2",
-    "socket.io": "^1.5.0",
-    "socket.io-client": "^1.7.2",
     "storm-react-diagrams": "^2.4.9",
     "supertest": "^2.0.1",
     "supertest-as-promised": "^4.0.2",

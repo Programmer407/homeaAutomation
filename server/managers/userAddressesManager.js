@@ -4,7 +4,7 @@ import UserAddress from '../models/UserAddress'
 import Transaction from '../models/Transaction'
 import AssociatedAddress from '../models/AssociatedAddress'
 
-export const findAllUserAddresses = (id:number):Object =>
+export const findAllUserAddresses = (id) =>
   UserAddress.findAll(Object.assign({
     include: [
       {
@@ -24,7 +24,7 @@ export const findAllUserAddresses = (id:number):Object =>
     return obj
   })
 
-export const findUserAddressByAddress = (id:number, address:string):Object =>
+export const findUserAddressByAddress = (id, address) =>
   UserAddress.findOne(Object.assign({
     where: {
       address
@@ -38,7 +38,7 @@ export const findUserAddressByAddress = (id:number, address:string):Object =>
     return obj
   })
 
-export const findUserAddressById = (id:number):Object =>
+export const findUserAddressById = (id) =>
   UserAddress.findOne(Object.assign({
     where: {
       id
@@ -48,19 +48,19 @@ export const findUserAddressById = (id:number):Object =>
     return obj
   })
 
-export const insertUserAddress = (userAddressObj): Promise<any> =>
+export const insertUserAddress = (userAddressObj) =>
   userAddressObj.save()
   .then(obj => {
     return obj
   })
 
-export const updateUserAddress = (userAddressObj): Promise<any> =>
+export const updateUserAddress = (userAddressObj) =>
   userAddressObj.save()
   .then(obj => {
     return obj
   })
 
-export const deleteUserAddressById = (userAddressId:number):Object =>
+export const deleteUserAddressById = (userAddressId) =>
     UserAddress.findById(userAddressId)
     .then((object) => {
       if(null == object)

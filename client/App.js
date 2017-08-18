@@ -8,12 +8,12 @@ import HTML5Backend from "react-dnd-html5-backend"
 
 // src
 import styles from "./App.scss"
-import './styles/css/bootstrap.scss';
+import './styles/css/bootstrap.scss'
 // custom
-import './styles/css/layout.scss';
-import './styles/css/theme.scss';
-import './styles/css/ui.scss';
-import './styles/css/app.scss';
+import './styles/css/layout.scss'
+import './styles/css/theme.scss'
+import './styles/css/ui.scss'
+import './styles/css/app.scss'
 import MUITheme from "../config/theme"
 import {
   Header,
@@ -32,16 +32,15 @@ import {
   PageTerms,
   PageErrorView,
   PublicRoute,
-  PrivateRoute,
-  NotificationSystemConnector
+  PrivateRoute
 } from "./components"
 
 export default class App extends React.Component {
   static propTypes = {
     userAgent: PropTypes.string,
     store: PropTypes.object,
-    //Router: React.PropTypes.element,
-    //routerProps: React.PropTypes.routerProps
+    // Router: React.PropTypes.element,
+    // routerProps: React.PropTypes.routerProps
   }
 
   static childContextTypes = {

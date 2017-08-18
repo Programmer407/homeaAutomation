@@ -55,7 +55,6 @@ router.post('/api/accounts/my-account-connect-url', ensureAuthorization, (req, r
 	.then(providerObj => {
 		if (providerObj) {
 			if (providerId === 1) {
-				// let redirectURL = getCoinBaseRedirectURL(providerObj, req)
 				res
 					.status(200)
 					.send({
@@ -116,8 +115,7 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 							const Client = require('coinbase').Client
 							const client = new Client({'accessToken': access_token_string, 'refreshToken': refresh_token_string})
 							client.getCurrentUser(function(err, accountUser) {
-								if (err && !accountUser) 
-									caughtError(res, err)
+								if (err && !accountUser) caughtError(res, err)
 								else {
 									async.waterfall([
 										function(callback) {
@@ -128,10 +126,10 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 													userProvider.refreshToken = refresh_token_string
 													callback(null, userProvider)
 												} else {
-													userProvider = UserProvider.build({accountName: accountUser.id, accessToken: access_token_string, refreshToken: refresh_token_string})
-													userProvider.setUser(user, {save: false})
-													userProvider.setProvider(providerObj, {save: false})
-													callback(null, userProvider)
+													const userProviderNew = UserProvider.build({accountName: accountUser.id, accessToken: access_token_string, refreshToken: refresh_token_string})
+													userProviderNew.setUser(user, {save: false})
+													userProviderNew.setProvider(providerObj, {save: false})
+													callback(null, userProviderNew)
 												}
 											})
 										},
@@ -155,186 +153,135 @@ router.post('/api/accounts/wallet-provider-callback', ensureAuthorization, (req,
 																	userWallet.balance = acct.balance.amount
 																	userWallet.currency = acct.currency.code
 																	userWallet.updatedWalletAt = currentDate
-																	callback(null, userWallet)
+																	callback(userWallet)
 																} else {
-																	userWallet = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code, updatedWalletAt: currentDate})
-																	userWallet.setUserprovider(updatedUserProvider, {save: false})
-																	callback(null, userWallet)
+																	const userWalletNew = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code, updatedWalletAt: currentDate})
+																	userWalletNew.setUserprovider(updatedUserProvider, {save: false})
+																	callback(userWalletNew)
 																}
 															})
 														}
 													],
-													function(err, userWallet) {
+													function(userWallet) {
 														updateUserWallet(userWallet)
 														.then(updatedUserWallet => {
 															acct.getTransactions({}, function(transactionsErr, txs) {
-																if (transactionsErr) 
-																	caughtError(res, transactionsErr)
-																else {
-																	if (txs && txs.length > 0) {
-																		async.eachOfSeries(txs, function(trans, key1, transCallback) {
+																if (txs && txs.length > 0) {
+																	async.eachOfSeries(txs, function(trans, key1, transCallback) {
 																		findTransactionByTrxId(trans.id)
-																			.then(transactionObj => {
-																				const trx_date = new Date(trans.created_at) // The 0 there is the key, which sets the date to the epoch
-																				const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
-																				if (transactionObj) {
-																					if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
-																						transactionObj.destination = trans.details.title + ' ' + trans.details.subtitle
-																						transactionObj.amount = trans.amount.amount
-																						transactionObj.asset = trans.amount.currency
-																						transactionObj.value = trans.native_amount.amount
-																						transactionObj.transactionDate = moment_date
+																		.then(transactionObj => {
+																			const trx_date = new Date(trans.created_at) // The 0 there is the key, which sets the date to the epoch
+																			const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
+																			if (transactionObj) {
+																				if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
+																					transactionObj.destination = trans.details.title + ' ' + trans.details.subtitle
+																					transactionObj.amount = trans.amount.amount
+																					transactionObj.asset = trans.amount.currency
+																					transactionObj.value = trans.native_amount.amount
+																					transactionObj.transactionDate = moment_date
+																					let transType = 2
+																					if (trans.type === 'exchange_withdrawal' || trans.type === 'fiat_withdrawal' || trans.type === 'buy' || (trans.type === 'send' && isNil(trans.to))) {
+																						transType = 3
+																					}
+																					findTransactionTypeById(transType)
+																					.then(transactionTypeObj => {
+																						transactionObj.setTransactiontype(transactionTypeObj, {save: false})
+																						findTrxImportTypeById(1)
+																						.then(trxImportTypeObj => {
+																							transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})
+																							if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
+																								findAssociatedAddByAdd(trans.to.address)
+																								.then(associatedAddObj => {
+																									if (associatedAddObj) {
+																										transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
+																											updateTransaction(transactionObj)
+																											.then(() => {
+																												transCallback()
+																											})
+																									} else {
+																										const associatedAddNew = AssociatedAddress.build({address: trans.to.address, nickName: trans.to.address})
+																										updateAssociatedAdd(associatedAddNew)
+																										.then(updatedAssociatedAdd => {
+																											transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
+																											updateTransaction(transactionObj)
+																											.then(() => {
+																												transCallback()
+																											})
+																										})
+																									}
+																								})
+																							} else {
+																								updateTransaction(transactionObj)
+																								.then(() => {
+																									transCallback()
+																								})
+																							}
+																						})
+																					})
+																				} else {
+																					transCallback()
+																				}
+																			} else {
+																				if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
+																					const transactionNew = Transaction.build({trxId: trans.id, destination: trans.details.title + ' ' + trans.details.subtitle, transactionDate: moment_date, amount: trans.amount.amount, asset: trans.amount.currency, value: trans.native_amount.amount})
+																					transactionNew.setUser(user, {save: false})
+																					transactionNew.setUserwallet(updatedUserWallet, {save: false})
+																					findTransactionTypeById(2)
+																					.then(transactionTypeObj => {
 																						let transType = 2
 																						if (trans.type === 'exchange_withdrawal' || trans.type === 'fiat_withdrawal' || trans.type === 'buy' || (trans.type === 'send' && isNil(trans.to))) {
 																							transType = 3
 																						}
 																						findTransactionTypeById(transType)
-																						.then(transactionTypeObj => {
-																							transactionObj.setTransactiontype(transactionTypeObj, {save: false})
-																							findTrxImportTypeById(1)
-																							.then(trxImportTypeObj => {
-																								transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})
-																								if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
-																									findAssociatedAddByAdd(trans.to.address)
-																									.then(associatedAddObj => {
-																										if (associatedAddObj) {
-																											transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
-																												updateTransaction(transactionObj)
-																												.then(updatedTransaction => {
-																													if (key1 === txs.length - 1) {
-																														if (key === accounts.length - 1)
-																																callback(null, 'some parameter')
-																														else
-																																nextCallback()
-																													} else
-																														transCallback()
-																												})
-																										} else {
-																											associatedAddObj = AssociatedAddress.build({address: trans.to.address, nickName: trans.to.address})
-																											updateAssociatedAdd(associatedAddObj)
-																											.then(updatedAssociatedAdd => {
-																												transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
-																												updateTransaction(transactionObj)
-																												.then(updatedTransaction => {
-																													if (key1 === txs.length - 1) {
-																														if (key === accounts.length - 1)
-																															callback(null, 'some parameter')
-																														else
-																															nextCallback()
-																													} else
-																														transCallback()
-																												})
-																											})
-																										}
-																									})
-																								} else {
-																									updateTransaction(transactionObj)
-																									.then(updatedTransaction => {
-																										if (key1 === txs.length - 1) {
-																											if (key === accounts.length - 1)
-																												callback(null, 'some parameter')
-																											else
-																												nextCallback()
-																										} else
+																						transactionNew.setTransactiontype(transactionTypeObj, {save: false})
+																						findTrxImportTypeById(1)
+																						.then(trxImportTypeObj => {
+																							transactionNew.setTransactionimporttype(trxImportTypeObj, {save: false})
+																							if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
+																								findAssociatedAddByAdd(trans.to.address)
+																								.then(associatedAddObj => {
+																									if (associatedAddObj) {
+																										transactionNew.setAssociatedaddress(associatedAddObj, {save: false})
+																										updateTransaction(transactionNew)
+																										.then(() => {
 																											transCallback()
-																									})
-																								}
-																							})
-																						})
-																					} else {
-																						if (key1 === txs.length - 1) {
-																							if (key === accounts.length - 1)
-																								callback(null, 'some parameter')
-																							else
-																								nextCallback()
-																						} else
-																							transCallback()
-																					}
-																				} else {
-																					if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
-																						transactionObj = Transaction.build({trxId: trans.id, destination: trans.details.title + ' ' + trans.details.subtitle, transactionDate: moment_date, amount: trans.amount.amount, asset: trans.amount.currency, value: trans.native_amount.amount})
-																						transactionObj.setUser(user, {save: false})
-																						transactionObj.setUserwallet(updatedUserWallet, {save: false})
-																						findTransactionTypeById(2)
-																						.then(transactionTypeObj => {
-																							let transType = 2
-																							if (trans.type === 'exchange_withdrawal' || trans.type === 'fiat_withdrawal' || trans.type === 'buy' || (trans.type === 'send' && isNil(trans.to))) {
-																								transType = 3
+																										})
+																									} else {
+																										const associatedAddNew = AssociatedAddress.build({address: trans.to.address, nickName: trans.to.address})
+																										updateAssociatedAdd(associatedAddNew)
+																										.then(updatedAssociatedAdd => {
+																											transactionNew.setAssociatedaddress(updatedAssociatedAdd, {save: false})
+																											updateTransaction(transactionNew)
+																											.then(() => {
+																												transCallback()
+																											})
+																										})
+																									}
+																								})
+																							} else {
+																								updateTransaction(transactionNew)
+																								.then(() => {
+																									transCallback()
+																								})
 																							}
-																							findTransactionTypeById(transType)
-																							transactionObj.setTransactiontype(transactionTypeObj, {save: false})
-																							findTrxImportTypeById(1)
-																							.then(trxImportTypeObj => {
-																								transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})
-																								if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
-																									findAssociatedAddByAdd(trans.to.address)
-																									.then(associatedAddObj => {
-																										if (associatedAddObj) {
-																											transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
-																											updateTransaction(transactionObj)
-																											.then(updatedTransaction => {
-																												if (key1 === txs.length - 1) {
-																													if (key === accounts.length - 1)
-																														callback(null, 'some parameter')
-																													else
-																														nextCallback()
-																												} else
-																													transCallback()
-																											})
-																										} else {
-																											associatedAddObj = AssociatedAddress.build({address: trans.to.address, nickName: trans.to.address})
-																											updateAssociatedAdd(associatedAddObj)
-																											.then(updatedAssociatedAdd => {
-																												transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
-																												updateTransaction(transactionObj)
-																												.then(updatedTransaction => {
-																													if (key1 === txs.length - 1) {
-																														if (key === accounts.length - 1)
-																															callback(null, 'some parameter')
-																														else
-																															nextCallback()
-																													} else
-																														transCallback()
-																												})
-																											})
-																										}
-																									})
-																								} else {
-																									updateTransaction(transactionObj)
-																									.then(updatedTransaction => {
-																										if (key1 === txs.length - 1) {
-																											if (key === accounts.length - 1)
-																													callback(null, 'some parameter')
-																											else
-																													nextCallback()
-																										} else
-																											transCallback()
-																									})
-																								}
-																							})
 																						})
-																					} else {
-																						if (key1 === txs.length - 1) {
-																							if (key === accounts.length - 1)
-																								callback(null, 'some parameter')
-																							else
-																								nextCallback()
-																						} else
-																							transCallback()
-																					}
+																					})
+																				} else {
+																					transCallback()
 																				}
-																			})
+																			}
 																		})
-																	} else {
-																		if (key === accounts.length - 1)
-																			callback(null, 'some parameter')
-																		else
-																			nextCallback()
-																	}
+																	}, function(err) {
+																		nextCallback()
+																	})
+																} else {
+																	nextCallback()
 																}
 															})
 														})
 													})
+												}, function(err) {
+													callback(null, 'some parameter')
 												})
 											})
 										}
@@ -419,7 +366,7 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 				console.log('err : ' + err)
 				if (err === 'RevokedToken: The access token was revoked') {
 					const redirectURL = getCoinBaseRedirectURL(userProviderObj.provider, req)
-					return res
+					res
 						.status(200)
 						.send({
 							redirecturl: redirectURL
@@ -442,7 +389,7 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 					}
 
 					// Start the request
-					request(options, function (error, response, responseBody) {
+					request(options, function(error, response, responseBody) {
 						if (!error && response.statusCode === 200) {
 							const access_token_string = responseBody.substring(responseBody.indexOf('access_token') + 15, responseBody.indexOf(',') - 1)
 							let refresh_token_string = responseBody.substring(responseBody.indexOf('refresh_token') + 16)
@@ -455,215 +402,157 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 							.then(updatedUserProvider => {
 								client = new Client({'accessToken': updatedUserProvider.accessToken, 'refreshToken': updatedUserProvider.refreshToken})
 								client.getAccounts({}, function(err, accounts) {
-									async.waterfall([
-										function(callback) {
-											async.eachOfSeries(accounts, function(acct, key, nextCallback) {
-												async.waterfall([
-													function(callback) {
-														findUserWalletByWalletId(acct.id)
-														.then(userWallet => {
-															const currentDate = new Date()
-															if (userWallet) {
-																userWallet.walletName = acct.name
-																userWallet.walletType = acct.type
-																userWallet.balance = acct.balance.amount
-																userWallet.currency = acct.currency.code
-																userWallet.updatedWalletAt = currentDate
-																callback(null, userWallet, acct)
-															} else {
-																userWallet = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code, updatedWalletAt: currentDate})
-																userWallet.setUserprovider(userProviderObj, {save: false})
-																callback(null, userWallet, acct)
-															}
-														})
+									async.eachOfSeries(accounts, function(acct, key, nextCallback) {
+										async.waterfall([
+											function(callback) {
+												findUserWalletByWalletId(acct.id)
+												.then(userWallet => {
+													const currentDate = new Date()
+													if (userWallet) {
+														userWallet.walletName = acct.name
+														userWallet.walletType = acct.type
+														userWallet.balance = acct.balance.amount
+														userWallet.currency = acct.currency.code
+														userWallet.updatedWalletAt = currentDate
+														callback(null, userWallet, acct)
+													} else {
+														const userWalletNew = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code, updatedWalletAt: currentDate})
+														userWalletNew.setUserprovider(userProviderObj, {save: false})
+														callback(null, userWalletNew, acct)
 													}
-												],
-												function(err, userWallet, acct) {
-													updateUserWallet(userWallet)
-														.then(updatedUserWallet => {
-															acct.getTransactions({}, function(transactionsErr, txs) {
-																if (transactionsErr)
-																	caughtError(res, transactionsErr)
-																else {
-																	if (txs && txs.length > 0) {
-																		async.eachOfSeries(txs, function(trans, key1, transCallback) {
-																		findTransactionByTrxId(trans.id)
-																			.then(transactionObj => {
-																				const trx_date = new Date(trans.created_at) // The 0 there is the key, which sets the date to the epoch
-																				const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
-																				if (transactionObj) {
-																					if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
-																						transactionObj.destination = trans.details.title + ' ' + trans.details.subtitle
-																						transactionObj.amount = trans.amount.amount
-																						transactionObj.asset = trans.amount.currency
-																						transactionObj.value = trans.native_amount.amount
-																						transactionObj.transactionDate = moment_date
-																						let transType = 2
-																						if (trans.type === 'exchange_withdrawal' || trans.type === 'fiat_withdrawal' || trans.type === 'buy' || (trans.type === 'send' && isNil(trans.to))) {
-																							transType = 3
-																						}
-																						findTransactionTypeById(transType)
-																						.then(transactionTypeObj => {
-																							transactionObj.setTransactiontype(transactionTypeObj, {save: false})
-																							findTrxImportTypeById(1)
-																							.then(trxImportTypeObj => {
-																								transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})
-																								if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
-																									findAssociatedAddByAdd(trans.to.address)
-																									.then(associatedAddObj => {
-																										if (associatedAddObj) {
-																											transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
-																												updateTransaction(transactionObj)
-																												.then(updatedTransaction => {
-																													if (key1 === txs.length - 1) {
-																														if (key === accounts.length - 1)
-																															callback(null, 'some parameter')
-																														else
-																															nextCallback()
-																													} else
-																														transCallback()
-																												})
-																										} else {
-																											associatedAddObj = AssociatedAddress.build({address: trans.to.address, nickName: trans.to.address})
-																											updateAssociatedAdd(associatedAddObj)
-																											.then(updatedAssociatedAdd => {
-																												transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
-																												updateTransaction(transactionObj)
-																												.then(updatedTransaction => {
-																													if (key1 === txs.length - 1) {
-																														if (key === accounts.length - 1)
-																															callback(null, 'some parameter')
-																														else
-																															nextCallback()
-																													} else
-																														transCallback()
-																												})
-																											})
-																										}
-																									})
-																								} else {
-																									updateTransaction(transactionObj)
-																									.then(updatedTransaction => {
-																										if (key1 === txs.length - 1) {
-																											if (key === accounts.length - 1)
-																												callback(null, 'some parameter')
-																											else
-																												nextCallback()
-																										} else
-																											transCallback()
-																									})
-																								}
-																							})
-																						})
-																					} else {
-																						if (key1 === txs.length - 1) {
-																							if (key === accounts.length - 1)
-																								callback(null, 'some parameter')
-																							else
-																								nextCallback()
-																						} else
-																							transCallback()
-																					}
-																				} else {
-																					if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
-																						transactionObj = Transaction.build({trxId: trans.id, destination: trans.details.title + ' ' + trans.details.subtitle, transactionDate: moment_date, amount: trans.amount.amount, asset: trans.amount.currency, value: trans.native_amount.amount})
-																						transactionObj.setUser(user, {save: false})
-																						transactionObj.setUserwallet(updatedUserWallet, {save: false})
-
-																						let transType = 2
-																						if (trans.type === 'exchange_withdrawal' || trans.type === 'fiat_withdrawal' || trans.type === 'buy' || (trans.type === 'send' && isNil(trans.to)))
-																							transType = 3
-
-																						findTransactionTypeById(transType)
-																						.then(transactionTypeObj => {
-																							transactionObj.setTransactiontype(transactionTypeObj, {save: false})
-																							findTrxImportTypeById(1)
-																							.then(trxImportTypeObj => {
-																								transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})
-																								if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
-																									findAssociatedAddByAdd(trans.to.address)
-																									.then(associatedAddObj => {
-																										if (associatedAddObj) {
-																											transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
-																											updateTransaction(transactionObj)
-																											.then(updatedTransaction => {
-																												if (key1 === txs.length - 1) {
-																													if (key === accounts.length - 1)
-																														callback(null, 'some parameter')
-																													else
-																														nextCallback()
-																												} else
-																													transCallback()
-																											})
-																										} else {
-																											associatedAddObj = AssociatedAddress.build({address: trans.to.address, nickName: trans.to.address})
-																											updateAssociatedAdd(associatedAddObj)
-																											.then(updatedAssociatedAdd => {
-																												transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
-																												updateTransaction(transactionObj)
-																												.then(updatedTransaction => {
-																													if (key1 === txs.length - 1) {
-																														if (key === accounts.length - 1)
-																															callback(null, 'some parameter')
-																														else
-																															nextCallback()
-																													} else
-																														transCallback()
-																												})
-																											})
-																										}
-																									})
-																								} else {
-																									updateTransaction(transactionObj)
-																									.then(updatedTransaction => {
-																										if (key1 === txs.length - 1) {
-																											if (key === accounts.length - 1)
-																												callback(null, 'some parameter')
-																											else
-																												nextCallback()
-																										} else
-																											transCallback()
-																									})
-																								}
-																							})
-																						})
-																					} else {
-																						if (key1 === txs.length - 1) {
-																							if (key === accounts.length - 1)
-																								callback(null, 'some parameter')
-																							else
-																								nextCallback()
-																						} else
-																							transCallback()
-																					}
-																				}
-																			})
-																		})
-																	} else {
-																		if (key === accounts.length - 1)
-																			callback(null, 'some parameter')
-																		else
-																			nextCallback()
-																	}
-																}
-															})                                                                   
-														})
 												})
-											})
-										},
-										function(arg1, callback) {
-											findAllUserProviderList(user.id)
-												.then(userProviderList => 
-													callback(null, userProviderList)
-												)
-										}
-									],
-									function(err, userProviderList) {
-										res
-											.status(200)
-											.send(
-												userProviderList
-											)
+											}
+										],
+										function(err, userWallet, acct) {
+											updateUserWallet(userWallet)
+												.then(updatedUserWallet => {
+													acct.getTransactions({}, function(transactionsErr, txs) {
+														if (txs && txs.length > 0) {
+															async.eachOfSeries(txs, function(trans, transIndex, transCallback) {
+																findTransactionByTrxId(trans.id)
+																.then(transactionObj => {
+																	const trx_date = new Date(trans.created_at) // The 0 there is the key, which sets the date to the epoch
+																	const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
+																	if (transactionObj) {
+																		if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
+																			transactionObj.destination = trans.details.title + ' ' + trans.details.subtitle
+																			transactionObj.amount = trans.amount.amount
+																			transactionObj.asset = trans.amount.currency
+																			transactionObj.value = trans.native_amount.amount
+																			transactionObj.transactionDate = moment_date
+																			let transType = 2
+																			if (trans.type === 'exchange_withdrawal' || trans.type === 'fiat_withdrawal' || trans.type === 'buy' || (trans.type === 'send' && isNil(trans.to))) {
+																				transType = 3
+																			}
+																			findTransactionTypeById(transType)
+																			.then(transactionTypeObj => {
+																				transactionObj.setTransactiontype(transactionTypeObj, {save: false})
+																				findTrxImportTypeById(1)
+																				.then(trxImportTypeObj => {
+																					transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})
+																					if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
+																						findAssociatedAddByAdd(trans.to.address)
+																						.then(associatedAddObj => {
+																							if (associatedAddObj) {
+																								transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
+																									updateTransaction(transactionObj)
+																									.then(() => {
+																										transCallback()
+																									})
+																							} else {
+																								const associatedAddNew = AssociatedAddress.build({address: trans.to.address, nickName: trans.to.address})
+																								updateAssociatedAdd(associatedAddNew)
+																								.then(updatedAssociatedAdd => {
+																									transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
+																									updateTransaction(transactionObj)
+																									.then(() => {
+																										transCallback()
+																									})
+																								})
+																							}
+																						})
+																					} else {
+																						updateTransaction(transactionObj)
+																						.then(() => {
+																							transCallback()
+																						})
+																					}
+																				})
+																			})
+																		} else {
+																			transCallback()
+																		}
+																	} else {
+																		if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
+																			const transactionNew = Transaction.build({trxId: trans.id, destination: trans.details.title + ' ' + trans.details.subtitle, transactionDate: moment_date, amount: trans.amount.amount, asset: trans.amount.currency, value: trans.native_amount.amount})
+																			transactionNew.setUser(user, {save: false})
+																			transactionNew.setUserwallet(updatedUserWallet, {save: false})
+
+																			let transType = 2
+																			if (trans.type === 'exchange_withdrawal' || trans.type === 'fiat_withdrawal' || trans.type === 'buy' || (trans.type === 'send' && isNil(trans.to))) {
+																				transType = 3
+																			}
+
+																			findTransactionTypeById(transType)
+																			.then(transactionTypeObj => {
+																				transactionNew.setTransactiontype(transactionTypeObj, {save: false})
+																				findTrxImportTypeById(1)
+																				.then(trxImportTypeObj => {
+																					transactionNew.setTransactionimporttype(trxImportTypeObj, {save: false})
+																					if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
+																						findAssociatedAddByAdd(trans.to.address)
+																						.then(associatedAddObj => {
+																							if (associatedAddObj) {
+																								transactionNew.setAssociatedaddress(associatedAddObj, {save: false})
+																								updateTransaction(transactionNew)
+																								.then(() => {
+																									transCallback()
+																								})
+																							} else {
+																								const associatedAddNew = AssociatedAddress.build({address: trans.to.address, nickName: trans.to.address})
+																								updateAssociatedAdd(associatedAddNew)
+																								.then(updatedAssociatedAdd => {
+																									transactionNew.setAssociatedaddress(updatedAssociatedAdd, {save: false})
+																									updateTransaction(transactionNew)
+																									.then(() => {
+																										transCallback()
+																									})
+																								})
+																							}
+																						})
+																					} else {
+																						updateTransaction(transactionNew)
+																						.then(() => {
+																							transCallback()
+																						})
+																					}
+																				})
+																			})
+																		} else {
+																			transCallback()
+																		}
+																	}
+																})
+															}, function(err) {
+																nextCallback()
+															})
+														} else {
+															console.log('transaction length is less*******************************')
+															nextCallback()
+														}
+													})                                                                   
+												})
+										})
+									}, function(err) {
+										findAllUserProviderList(user.id)
+										.then(userProviderList => {
+											res
+												.status(200)
+												.send({
+													userProviderList
+												})
+										})
+										return
 									})
 								})
 							})
@@ -671,218 +560,277 @@ router.post('/api/accounts/refresh-userproviders', ensureAuthorization, (req, re
 					})
 				}
 			} else {
-				async.waterfall([
-					function(callback) {
-						async.eachOfSeries(accounts, function(acct, key, nextCallback) {
-							async.waterfall([
-								function(callback) {
-									findUserWalletByWalletId(acct.id)
-									.then(userWallet => {
-										let currentDate = new Date()
-										if (userWallet) {
-											userWallet.walletName = acct.name
-											userWallet.walletType = acct.type
-											userWallet.balance = acct.balance.amount
-											userWallet.currency = acct.currency.code
-											userWallet.updatedWalletAt = currentDate
-											callback(null, userWallet, acct)
-										} else {
-											userWallet = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code, updatedWalletAt: currentDate})
-											userWallet.setUserprovider(userProviderObj, {save: false})
-											callback(null, userWallet, acct)
-										}
-									})
+				async.eachOfSeries(accounts, function(acct, key, nextCallback) {
+					async.waterfall([
+						function(callback) {
+							findUserWalletByWalletId(acct.id)
+							.then(userWallet => {
+								const currentDate = new Date()
+								if (userWallet) {
+									userWallet.walletName = acct.name
+									userWallet.walletType = acct.type
+									userWallet.balance = acct.balance.amount
+									userWallet.currency = acct.currency.code
+									userWallet.updatedWalletAt = currentDate
+									callback(null, userWallet, acct)
+								} else {
+									const userWalletNew = UserWallet.build({walletId: acct.id, walletName: acct.name, walletType: acct.type, balance: acct.balance.amount, currency: acct.currency.code, updatedWalletAt: currentDate})
+									userWalletNew.setUserprovider(userProviderObj, {save: false})
+									callback(null, userWalletNew, acct)
 								}
-							],
-							function(err, userWallet, acct) {
-								updateUserWallet(userWallet)
-								.then(updatedUserWallet => {
-									acct.getTransactions({}, function(transactionErr, txs) {
-										if (transactionErr)
-											caughtError(res, transactionErr)
-										else {
-											if (txs && txs.length > 0) {
-												async.eachOfSeries(txs, function(trans, key1, transCallback) {
-													findTransactionByTrxId(trans.id)
-													.then(transactionObj => {
-														const trx_date = new Date(trans.created_at) // The 0 there is the key, which sets the date to the epoch
-														const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
-														if (transactionObj) {
-															if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
-																transactionObj.destination = trans.details.title + ' ' + trans.details.subtitle
-																transactionObj.amount = trans.amount.amount
-																transactionObj.asset = trans.amount.currency
-																transactionObj.value = trans.native_amount.amount
-																transactionObj.transactionDate = moment_date
-																let transType = 2
-																if (trans.type === 'exchange_withdrawal' || trans.type === 'fiat_withdrawal' || trans.type === 'buy' || (trans.type === 'send' && isNil(trans.to))) {
-																	transType = 3
-																}
-																findTransactionTypeById(transType)
-																.then(transactionTypeObj => {
-																	transactionObj.setTransactiontype(transactionTypeObj, {save: false})
-																	findTrxImportTypeById(1)
-																	.then(trxImportTypeObj => {
-																		transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})
-																		if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
-																			findAssociatedAddByAdd(trans.to.address)
-																			.then(associatedAddObj => {
-																				if (associatedAddObj) {
-																					transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
-																					updateTransaction(transactionObj)
-																					.then(updatedTransaction => {
-																						if (key1 === txs.length - 1) {
-																							if (key === accounts.length - 1)
-																								callback(null, 'some parameter')
-																							else
-																								nextCallback()
-																						} else
-																							transCallback()
-																					})
-																				} else {
-																					associatedAddObj = AssociatedAddress.build({address: trans.to.address, nickName: trans.to.address})
-																					updateAssociatedAdd(associatedAddObj)
-																					.then(updatedAssociatedAdd => {
-																						transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
-																						updateTransaction(transactionObj)
-																						.then(updatedTransaction => {
-																							if (key1 === txs.length - 1) {
-																								if (key === accounts.length - 1)
-																									callback(null, 'some parameter')
-																								else
-																									nextCallback()
-																							} else
-																								transCallback()
-																						})
-																					})
-																				}
-																			})
-																		} else {
-																			updateTransaction(transactionObj)
-																			.then(updatedTransaction => {
-																				if (key1 === txs.length - 1) {
-																					if (key === accounts.length - 1)
-																						callback(null, 'some parameter')
-																					else
-																						nextCallback()
-																				} else
-																					transCallback()
-																			})
-																		}
-																	})
-																})
-															} else {
-																if (key1 === txs.length - 1) {
-																	if (key === accounts.length - 1)
-																		callback(null, 'some parameter')
-																	else
-																		nextCallback()
-																} else
-																	transCallback()
-															}
-														} else {
-															if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
-																transactionObj = Transaction.build({trxId: trans.id, destination: trans.details.title + ' ' + trans.details.subtitle, transactionDate: moment_date, amount: trans.amount.amount, asset: trans.amount.currency, value: trans.native_amount.amount})
-																transactionObj.setUser(user, {save: false})
-																transactionObj.setUserwallet(updatedUserWallet, {save: false})
-																let transType = 2
-																if (trans.type === 'exchange_withdrawal' || trans.type === 'fiat_withdrawal' || trans.type === 'buy' || (trans.type === 'send' && isNil(trans.to)))
-																	transType = 3
-																findTransactionTypeById(transType)
-																.then(transactionTypeObj => {
-																	transactionObj.setTransactiontype(transactionTypeObj, {save: false})
-																	findTrxImportTypeById(1)
-																	.then(trxImportTypeObj => {
-																		transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})
-																		if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
-																			findAssociatedAddByAdd(trans.to.address)
-																			.then(associatedAddObj => {
-																				if (associatedAddObj) {
-																					transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
-																					updateTransaction(transactionObj)
-																					.then(updatedTransaction => {
-																						if (key1 === txs.length - 1) {
-																							if (key === accounts.length - 1)
-																								callback(null, 'some parameter')
-																							else
-																								nextCallback()
-																						} else
-																							transCallback()
-																					})
-																				} else {
-																					associatedAddObj = AssociatedAddress.build({address: trans.to.address, nickName: trans.to.address})
-																					updateAssociatedAdd(associatedAddObj)
-																					.then(updatedAssociatedAdd => {
-																						transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
-																						updateTransaction(transactionObj)
-																						.then(updatedTransaction => {
-																							if (key1 === txs.length - 1) {
-																								if (key === accounts.length - 1)
-																									callback(null, 'some parameter')
-																								else
-																									nextCallback()
-																							} else
-																								transCallback()
-																						})
-																					})
-																				}
-																			})
-																		} else {
-																			updateTransaction(transactionObj)
-																			.then(updatedTransaction => {
-																				if (key1 === txs.length - 1) {
-																					if (key === accounts.length - 1)
-																						callback(null, 'some parameter')
-																					else
-																						nextCallback()
-																				} else
-																					transCallback()
-																			})
-																		}
-																	})
-																})
-															} else {
-																if (key1 === txs.length - 1) {
-																	if (key === accounts.length - 1)
-																		callback(null, 'some parameter')
-																	else
-																		nextCallback()
-																} else
-																	transCallback()
-															}
-														}
-													})
-												})
-											} else {
-												if (key === accounts.length - 1)
-													callback(null, 'some parameter')
-												else
-													nextCallback()
-											}
-										}
-									})                                          
-								})
 							})
+						}
+					],
+					function(err, userWallet, acct) {
+						updateUserWallet(userWallet)
+						.then(updatedUserWallet => {
+							acct.getTransactions({}, function(transactionsErr, txs) {
+								if (txs && txs.length > 0) {
+									async.eachOfSeries(txs, function(trans, transIndex, transCallback) {
+										findTransactionByTrxId(trans.id)
+										.then(transactionObj => {
+											const trx_date = new Date(trans.created_at) // The 0 there is the key, which sets the date to the epoch
+											const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
+											if (transactionObj) {
+												if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
+													transactionObj.destination = trans.details.title + ' ' + trans.details.subtitle
+													transactionObj.amount = trans.amount.amount
+													transactionObj.asset = trans.amount.currency
+													transactionObj.value = trans.native_amount.amount
+													transactionObj.transactionDate = moment_date
+													let transType = 2
+													if (trans.type === 'exchange_withdrawal' || trans.type === 'fiat_withdrawal' || trans.type === 'buy' || (trans.type === 'send' && isNil(trans.to))) {
+														transType = 3
+													}
+													findTransactionTypeById(transType)
+													.then(transactionTypeObj => {
+														transactionObj.setTransactiontype(transactionTypeObj, {save: false})
+														findTrxImportTypeById(1)
+														.then(trxImportTypeObj => {
+															transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})
+															if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
+																findAssociatedAddByAdd(trans.to.address)
+																.then(associatedAddObj => {
+																	if (associatedAddObj) {
+																		transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
+																		updateTransaction(transactionObj)
+																		.then(() => {
+																			transCallback()
+																		})
+																	} else {
+																		const associatedAddNew = AssociatedAddress.build({address: trans.to.address, nickName: trans.to.address})
+																		updateAssociatedAdd(associatedAddNew)
+																		.then(updatedAssociatedAdd => {
+																			transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
+																			updateTransaction(transactionObj)
+																			.then(() => {
+																				transCallback()
+																			})
+																		})
+																	}
+																})
+															} else {
+																updateTransaction(transactionObj)
+																.then(() => {
+																	transCallback()
+																})
+															}
+														})
+													})
+												} else {
+													transCallback()
+												}
+											} else {
+												if (trans.type === 'exchange_deposit' || trans.type === 'exchange_withdrawal' || trans.type === 'send' || trans.type === 'fiat_deposit' || trans.type === 'fiat_withdrawal' || trans.type === 'buy') {
+													const transactionNew = Transaction.build({trxId: trans.id, destination: trans.details.title + ' ' + trans.details.subtitle, transactionDate: moment_date, amount: trans.amount.amount, asset: trans.amount.currency, value: trans.native_amount.amount})
+													transactionNew.setUser(user, {save: false})
+													transactionNew.setUserwallet(updatedUserWallet, {save: false})
+
+													let transType = 2
+													if (trans.type === 'exchange_withdrawal' || trans.type === 'fiat_withdrawal' || trans.type === 'buy' || (trans.type === 'send' && isNil(trans.to))) {
+														transType = 3
+													}
+
+													findTransactionTypeById(transType)
+													.then(transactionTypeObj => {
+														transactionNew.setTransactiontype(transactionTypeObj, {save: false})
+														findTrxImportTypeById(1)
+														.then(trxImportTypeObj => {
+															transactionNew.setTransactionimporttype(trxImportTypeObj, {save: false})
+															if (trans.type === 'send' && !isNil(trans.to) && !isNil(trans.to.address)) {
+																findAssociatedAddByAdd(trans.to.address)
+																.then(associatedAddObj => {
+																	if (associatedAddObj) {
+																		transactionNew.setAssociatedaddress(associatedAddObj, {save: false})
+																		updateTransaction(transactionNew)
+																		.then(() => {
+																			transCallback()
+																		})
+																	} else {
+																		const associatedAddNew = AssociatedAddress.build({address: trans.to.address, nickName: trans.to.address})
+																		updateAssociatedAdd(associatedAddNew)
+																		.then(updatedAssociatedAdd => {
+																			transactionNew.setAssociatedaddress(updatedAssociatedAdd, {save: false})
+																			updateTransaction(transactionNew)
+																			.then(() => {
+																				transCallback()
+																			})
+																		})
+																	}
+																})
+															} else {
+																updateTransaction(transactionNew)
+																.then(() => {
+																	transCallback()
+																})
+															}
+														})
+													})
+												} else {
+													transCallback()
+												}
+											}
+										})
+									}, function(err) {
+										nextCallback()
+									})
+								} else {
+									nextCallback()
+								}
+							})                                          
 						})
-					},
-					function(arg1, callback) {
-						findAllUserProviderList(user.id)
-						.then(userProviderList => 
-							callback(null, userProviderList)
-						)
-					}
-				],
-				function(err, userProviderList) {
-					res
-						.status(200)
-						.send({
-							userProviderList
-						})
+					})
+				}, function(err) {
+					findAllUserProviderList(user.id)
+					.then(userProviderList => {
+						res
+							.status(200)
+							.send({
+								userProviderList
+							})
+					})
+					return
 				})
 			}
 		})
 	})
 })
+
+function insertTransactions(transactionArr, index, done, userObj, userAddressObj) {
+  if (index === transactionArr.length) {
+  	done()
+  } else {
+  	const transaction = transactionArr[index]
+    findTransactionByTrxId(transaction.tx_index)
+    	.then(transactionObj => {
+      	// console.log('inside promise************************')
+        const utcSeconds = transaction.time
+        const trx_date = new Date(utcSeconds * 1000) // The 0 there is the key, which sets the date to the epoch
+        const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
+				
+				const transaction_Input_Arr = transaction.inputs
+				let transType = 2
+				transaction_Input_Arr.forEach(function(trx_input, j) {
+					if (trx_input.prev_out.addr !== userAddressObj.address) {
+						transType = 3
+					}
+				})
+
+				const transaction_Out_Arr = transaction.out
+				let myAssociateAdd = ''
+				let transAmount = ''
+				transaction_Out_Arr.forEach(function(trx_out, j) {
+					if (trx_out.addr !== userAddressObj.address) {
+						myAssociateAdd = trx_out.addr
+					} else if (trx_out.addr === userAddressObj.address && transType === 3) {
+						transAmount = trx_out.value
+					}
+				})
+                  
+        if (transactionObj) {
+        	transactionObj.transactionDate = moment_date
+					transactionObj.amount = transAmount
+					transactionObj.asset = userAddressObj.currency
+					findTransactionTypeById(transType)
+          	.then(transactionTypeObj => {
+            	transactionObj.setTransactiontype(transactionTypeObj, {save: false})
+              findTrxImportTypeById(2)
+                .then(trxImportTypeObj => {
+                	transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})                  
+                  if (myAssociateAdd) {
+                  	findAssociatedAddByAdd(myAssociateAdd)
+                    	.then(associatedAddObj => {
+                      	if (associatedAddObj) {
+                        	transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
+                          updateTransaction(transactionObj)
+                          	.then(() => {
+                            	insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
+                            })
+                        } else {
+                        	const associatedAddNew = AssociatedAddress.build({address: myAssociateAdd, nickName: myAssociateAdd})
+                          updateAssociatedAdd(associatedAddNew)
+                          	.then(updatedAssociatedAdd => {
+                            	transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
+                              updateTransaction(transactionObj)
+                              	.then(() => {
+                                	insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
+                                })
+                            })
+                        }
+                      })
+                  } else {
+                  	transactionObj.destination = userAddressObj.address
+                    updateTransaction(transactionObj)
+                    	.then(() => {
+                      	insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
+                      })
+                  }
+                })
+            })
+        } else {
+        	const transactionNew = Transaction.build({trxId: transaction.tx_index, transactionDate: moment_date, amount: transAmount, asset: userAddressObj.currency})
+          transactionNew.setUser(userObj, {save: false})
+          transactionNew.setUseraddress(userAddressObj, {save: false})
+          findTransactionTypeById(transType)
+          	.then(transactionTypeObj => {
+            	transactionNew.setTransactiontype(transactionTypeObj, {save: false})
+              findTrxImportTypeById(2)
+              	.then(trxImportTypeObj => {
+                	transactionNew.setTransactionimporttype(trxImportTypeObj, {save: false})                                    
+                  if (myAssociateAdd) {
+                  	findAssociatedAddByAdd(myAssociateAdd)
+                    	.then(associatedAddObj => {
+                      	if (associatedAddObj) {
+                        	transactionNew.setAssociatedaddress(associatedAddObj, {save: false})
+                          updateTransaction(transactionNew)
+                          	.then(() => {
+                            	insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
+                            })
+                        } else {
+                        	const associatedAddNew = AssociatedAddress.build({address: myAssociateAdd, nickName: myAssociateAdd})
+                          updateAssociatedAdd(associatedAddNew)
+                          	.then(updatedAssociatedAdd => {
+                            	transactionNew.setAssociatedaddress(updatedAssociatedAdd, {save: false})
+                              updateTransaction(transactionNew)
+                               	.then(() => {
+                                 	insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
+                               	})
+                            })
+                        }
+                      })
+                  } else {
+                  	transactionNew.destination = userAddressObj.address
+                    updateTransaction(transactionNew)
+                    	.then(() => {
+                      	insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
+                      })
+                	}
+                })
+            })
+        }        
+      })
+  }
+}
 
 router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, res) => {
 	const { body, user } = req
@@ -912,9 +860,9 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 									userAddress.balance = addressObj.balance
 									callback(null, userAddress)
 								} else {
-									userAddress = UserAddress.build({address: coinAddress, nickName: coinAddress, balance: addressObj.balance, currency: addressObj.addressType})
-									userAddress.setUser(user, {save: false})
-									callback(null, userAddress)
+									const userAddressNew = UserAddress.build({address: coinAddress, nickName: coinAddress, balance: addressObj.balance, currency: addressObj.addressType})
+									userAddressNew.setUser(user, {save: false})
+									callback(null, userAddressNew)
 								}
 							})
 					},
@@ -933,11 +881,11 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 								insertTransactions(transactionArr, transIndex, callback, user, userAddress)
 							})
 						} else {
-							callback(null, 'some params')
+							callback()
 						}
 					}
 				],
-				function(err, arg1) {
+				function() {
 					nextAddCallback()
 				})
 			} else {
@@ -948,7 +896,6 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 	}, function(err) {
 		if ( err ) {
 			rejectRequest('Failed to process addresses, please try again', res)
-			return
 		} else {
 			if (addressArray.length === inValidAddresses.length) {
 				findAllUserAddresses(user.id)
@@ -960,7 +907,6 @@ router.post('/api/accounts/user-addresses-insert', ensureAuthorization, (req, re
 								message: 'Invalid Addresses'
 						})
 				})
-				return
 			} else {
 				findAllUserAddresses(user.id)
 				.then(userAddressesList => {
@@ -989,7 +935,7 @@ router.post('/api/accounts/user-addresses-refresh', ensureAuthorization, (req, r
 	}
 
 	async.waterfall([
-		function(callback) {
+		(callback) => {
 			findUserAddressById(userAddressId)
 			.then(userAddress => {
 				addressInfo(userAddress.address)
@@ -1002,13 +948,13 @@ router.post('/api/accounts/user-addresses-refresh', ensureAuthorization, (req, r
 				)
 			})
 		},
-		function(userAddress, address, callback) {
+		(userAddress, address, callback) => {
 			updateUserAddress(userAddress)
 			.then(updatedUserAddress => 
 				callback(null, updatedUserAddress, address)
 			)
 		},
-		function(userAddress, address, callback) {
+		(userAddress, address, callback) => {
 			if (address.addressType === 'BTC') {
 				blockexplorer.getAddress(userAddress.address)
 				.then(addressObj => {
@@ -1017,11 +963,11 @@ router.post('/api/accounts/user-addresses-refresh', ensureAuthorization, (req, r
 					insertTransactions(transactionArr, transIndex, callback, user, userAddress)
 				})
 			} else {
-				callback(null, 'some params')
+				callback()
 			}
 		}
 	],
-	function(err, arg1) {
+	() => {
 		findAllUserAddresses(user.id)
 		.then(userAddressesList => {
 			res
@@ -1047,7 +993,7 @@ router.post('/api/accounts/user-address-delete', ensureAuthorization, (req, res)
 	}
 	
 	deleteUserAddressById(userAddressId)
-	.then(result => {
+	.then(() => {
 		findAllUserAddresses(user.id)
 		.then(userAddressesList => {
 			res
@@ -1077,7 +1023,7 @@ router.post('/api/accounts/user-address-update', ensureAuthorization, (req, res)
 		if (userAddress) {
 			userAddress.nickName = userAddressNickName
 			updateUserAddress(userAddress)
-			.then(updatedUserAddress => {
+			.then(() => {
 				findAllUserAddresses(user.id)
 				.then(userAddressesList => {
 					res
@@ -1112,7 +1058,7 @@ router.post('/api/accounts/associated-myaddress-update', ensureAuthorization, (r
 		if (associatedAdd) {
 			associatedAdd.nickName = associatedAddNick
 			updateAssociatedAdd(associatedAdd)
-			.then(updatedUserAddress => {
+			.then(() => {
 				findAllUserAddresses(user.id)
 				.then(userAddressesList => {
 					res
@@ -1147,7 +1093,7 @@ router.post('/api/accounts/associated-walletaddress-update', ensureAuthorization
 		if (associatedAdd) {
 			associatedAdd.nickName = associatedAddNick
 			updateAssociatedAdd(associatedAdd)
-			.then(updatedUserAddress => {
+			.then(() => {
 				findAllUserProviderList(user.id)
 				.then(userProviderList => {
 					res
@@ -1163,121 +1109,5 @@ router.post('/api/accounts/associated-walletaddress-update', ensureAuthorization
 		}
 	})
 })
-
-function insertTransactions(transactionArr, index, done, userObj, userAddressObj) {
-  if (index === transactionArr.length) {
-  	done(null, 'some params')
-  } else {
-  	const transaction = transactionArr[index]
-    findTransactionByTrxId(transaction.tx_index)
-    	.then(transactionObj => {
-      	// console.log('inside promise************************')
-        const utcSeconds = transaction.time
-        const trx_date = new Date(utcSeconds * 1000) // The 0 there is the key, which sets the date to the epoch
-        const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
-				
-				const transaction_Input_Arr = transaction.inputs
-				let transType = 2
-				transaction_Input_Arr.forEach(function(trx_input, j) {
-					if (trx_input.prev_out.addr != userAddressObj.address) {
-						transType = 3
-					}
-				})
-
-				const transaction_Out_Arr = transaction.out
-				let myAssociateAdd = ''
-				let transAmount = ''
-				transaction_Out_Arr.forEach(function(trx_out, j) {
-					if (trx_out.addr != userAddressObj.address) {
-						myAssociateAdd = trx_out.addr
-					} else if (trx_out.addr === userAddressObj.address && transType === 3) {
-						transAmount = trx_out.value
-					}
-				})
-                  
-        if (transactionObj) {
-        	transactionObj.transactionDate = moment_date
-					transactionObj.amount = transAmount
-					transactionObj.asset = userAddressObj.currency
-					findTransactionTypeById(transType)
-          	.then(transactionTypeObj => {
-            	transactionObj.setTransactiontype(transactionTypeObj, {save: false})
-              findTrxImportTypeById(2)
-                .then(trxImportTypeObj => {
-                	transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})                  
-                  if (myAssociateAdd) {
-                  	findAssociatedAddByAdd(myAssociateAdd)
-                    	.then(associatedAddObj => {
-                      	if (associatedAddObj) {
-                        	transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
-                          updateTransaction(transactionObj)
-                          	.then(updatedTransaction => {
-                            	insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
-                            })
-                        } else {
-                        	associatedAddObj = AssociatedAddress.build({address: myAssociateAdd, nickName: myAssociateAdd})
-                          updateAssociatedAdd(associatedAddObj)
-                          	.then(updatedAssociatedAdd => {
-                            	transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
-                              updateTransaction(transactionObj)
-                              	.then(updatedTransaction => {
-                                	insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
-                                })
-                            })
-                        }
-                      })
-                  } else {
-                  	transactionObj.destination = userAddressObj.address
-                    updateTransaction(transactionObj)
-                    	.then(updatedTransaction => {
-                      	insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
-                      })
-                  }
-                })
-            })
-        } else {
-        	transactionObj = Transaction.build({trxId: transaction.tx_index, transactionDate: moment_date, amount: transAmount, asset: userAddressObj.currency})
-          transactionObj.setUser(userObj, {save: false})
-          transactionObj.setUseraddress(userAddressObj, {save: false})
-          findTransactionTypeById(transType)
-          	.then(transactionTypeObj => {
-            	transactionObj.setTransactiontype(transactionTypeObj, {save: false})
-              findTrxImportTypeById(2)
-              	.then(trxImportTypeObj => {
-                	transactionObj.setTransactionimporttype(trxImportTypeObj, {save: false})                                    
-                  if (myAssociateAdd) {
-                  	findAssociatedAddByAdd(myAssociateAdd)
-                    	.then(associatedAddObj => {
-                      	if (associatedAddObj) {
-                        	transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
-                          updateTransaction(transactionObj)
-                          	.then(updatedTransaction => {
-                            	insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
-                            })
-                        } else {
-                        	associatedAddObj = AssociatedAddress.build({address: myAssociateAdd, nickName: myAssociateAdd})
-                          updateAssociatedAdd(associatedAddObj)
-                          	.then(updatedAssociatedAdd => {
-                            	transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
-                              updateTransaction(transactionObj)
-                               	.then(updatedTransaction => {
-                                 	insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
-                               	})
-                            })
-                        }
-                      })
-                  } else {
-                  	transactionObj.destination = userAddressObj.address
-                    updateTransaction(transactionObj)
-                    	.then(updatedTransaction => {
-                      	insertTransactions(transactionArr, ++index, done, userObj, userAddressObj)
-                      })
-                	}
-                })
-            })
-        }        
-      })
-  }
-}
 
 export default router

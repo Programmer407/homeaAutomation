@@ -37,12 +37,12 @@ export const addressInfo = (coinAddress) => {
   })
 }
 
-const isValidBTCAddress = (add => {
+const isValidBTCAddress = (add) => {
   return new Promise(function(resolve, reject) {
-    let btcURL = 'https://api.blockcypher.com/v1/btc/main/addrs/'+add
-    request(btcURL, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        var bodyObj = JSON.parse(body);
+    const btcURL = 'https://api.blockcypher.com/v1/btc/main/addrs/' + add
+    request(btcURL, (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        const bodyObj = JSON.parse(body)
         const resultObj = {isValid: true, balance: bodyObj.final_balance}
         resolve(resultObj)
       } else {
@@ -51,14 +51,14 @@ const isValidBTCAddress = (add => {
       }
     })
   })
-})
+}
 
-const isValidLTCAddress = (add => {
+const isValidLTCAddress = (add) => {
   return new Promise(function(resolve, reject) {
-    let ltcURL = 'https://api.blockcypher.com/v1/ltc/main/addrs/'+add
-    request(ltcURL, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        var bodyObj = JSON.parse(body);
+    const ltcURL = 'https://api.blockcypher.com/v1/ltc/main/addrs/' + add
+    request(ltcURL, (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        const bodyObj = JSON.parse(body)
         const resultObj = {isValid: true, balance: bodyObj.final_balance}
         resolve(resultObj)
       } else {
@@ -67,14 +67,14 @@ const isValidLTCAddress = (add => {
       }
     })
   })
-})
+}
 
-const isValidDOGEAddress = (add => {
+const isValidDOGEAddress = (add) => {
   return new Promise(function(resolve, reject) {
-    let dogeURL = 'https://api.blockcypher.com/v1/doge/main/addrs/'+add
-    request(dogeURL, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        var bodyObj = JSON.parse(body);
+    const dogeURL = 'https://api.blockcypher.com/v1/doge/main/addrs/' + add
+    request(dogeURL, (error, response, body) => {
+      if (!error && response.statusCode === 200) {
+        const bodyObj = JSON.parse(body)
         const resultObj = {isValid: true, balance: bodyObj.final_balance}
         resolve(resultObj)
       } else {
@@ -83,14 +83,14 @@ const isValidDOGEAddress = (add => {
       }
     })
   })
-})
+}
 
-const isValidETHAddress = (add => {
+const isValidETHAddress = (add) => {
   return new Promise(function(resolve, reject) {
-    let etthURL = 'https://etherchain.org/api/account/'+add
-    request(etthURL, function (error, response, body) {
-      if (!error && response.statusCode == 200 && body) {
-        var bodyObj = JSON.parse(body);
+    const ethURL = 'https://etherchain.org/api/account/' + add
+    request(ethURL, (error, response, body) => {
+      if (!error && response.statusCode === 200 && body) {
+        const bodyObj = JSON.parse(body)
         if (bodyObj && bodyObj.data && bodyObj.data[0]) {
           const resultObj = {isValid: true, balance: bodyObj.data[0].balance}
           resolve(resultObj)
@@ -104,4 +104,4 @@ const isValidETHAddress = (add => {
       }
     })
   })
-})
+}

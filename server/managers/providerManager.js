@@ -1,7 +1,7 @@
 // libs
 import Provider from '../models/Provider'
 
-export const findProviderByID = (id:number):Object =>
+export const findProviderByID = (id) =>
   Provider.findOne(Object.assign({
     where: {
       id
@@ -11,13 +11,13 @@ export const findProviderByID = (id:number):Object =>
     return obj
   })
 
-export const findAllProviderList = (): Promise<any> =>
+export const findAllProviderList = () =>
   Provider.findAll()
   .then(obj => {
     return obj
   })
 
-export const findProviderByName = (providerName:string): Promise<any> =>
+export const findProviderByName = (providerName) =>
   Provider.findOne(Object.assign({
     where: {
       providerName
@@ -26,5 +26,3 @@ export const findProviderByName = (providerName:string): Promise<any> =>
   .then(obj => {
     return obj
   })
-
-

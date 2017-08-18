@@ -9,28 +9,7 @@ import UserAddress from '../models/UserAddress'
 import UserWallet from '../models/UserWallet'
 import TransactionImportType from '../models/TransactionImportType'
 
-export const findTransactionsByUserId = (id, typeName):Object =>
-  Transaction.findAll(Object.assign({
-    include: [
-      {
-        model: User,
-        where: { id }
-      },
-      {
-        model: TransactionType,
-        where: { typeName }
-      },
-      {model: AssociatedAddress},
-      {model: UserAddress},
-      {model: UserWallet},
-      {model: TransactionImportType}
-    ]
-  }))
-  .then(obj => {
-    return obj
-  })
-
-export const findTransactionsByUserId1 = (id, typeName, orderBy, orderWay):Object =>
+export const findTransactionsByUserId = (id, typeName, orderBy, limit, offset) =>
   Transaction.findAll(Object.assign({
     include: [
       {
@@ -46,13 +25,18 @@ export const findTransactionsByUserId1 = (id, typeName, orderBy, orderWay):Objec
       {model: UserWallet},
       {model: TransactionImportType}
     ],
-    order: Sequelize.literal(orderBy + ' ' + orderWay)
+    // order: [[Sequelize.literal(orderBy + ' ' + orderWay)], [Sequelize.literal('destination ASC')]]
+    // order: [[Sequelize.literal('transactionimporttype.import_type_name ASC, useraddress.nick_name ASC, userwallet.wallet_name ASC')], [Sequelize.literal('useraddress.nick_name ASC')], [Sequelize.literal('userwallet.wallet_name ASC')]]
+    // order: Sequelize.literal('transactionimporttype.import_type_name ASC, useraddress.nick_name ASC, userwallet.wallet_name ASC')
+    limit: limit,
+    offset: offset,
+    order: Sequelize.literal(orderBy)
   }))
   .then(obj => {
     return obj
   })
 
-export const findTransactionsBySearchText = (id, typeName, searchParam):Object =>
+export const findTransactionsBySearchText = (id, typeName, searchParam, orderBy, limit, offset) =>
   Transaction.findAll(Object.assign({
     where: {
       $or: [
@@ -79,13 +63,16 @@ export const findTransactionsBySearchText = (id, typeName, searchParam):Object =
       {model: UserAddress},
       {model: UserWallet},
       {model: TransactionImportType}
-    ]
+    ],
+    limit: limit,
+    offset: offset,
+    order: Sequelize.literal(orderBy)
   }))
   .then(obj => {
     return obj
   })
 
-export const findTransactionsBySearchTextDate = (id, typeName, searchParam, startDate, endDate):Object =>
+export const findTransactionsBySearchTextDate = (id, typeName, searchParam, startDate, endDate, orderBy, limit, offset) =>
   Transaction.findAll(Object.assign({
     where: {
       $and: [
@@ -115,13 +102,16 @@ export const findTransactionsBySearchTextDate = (id, typeName, searchParam, star
       {model: UserAddress},
       {model: UserWallet},
       {model: TransactionImportType}
-    ]
+    ],
+    limit: limit,
+    offset: offset,
+    order: Sequelize.literal(orderBy)
   }))
   .then(obj => {
     return obj
   })
 
-export const findTransactionsBySearchTextStartDate = (id, typeName, searchParam, startDate):Object =>
+export const findTransactionsBySearchTextStartDate = (id, typeName, searchParam, startDate, orderBy, limit, offset) =>
   Transaction.findAll(Object.assign({
     where: {
       $and: [
@@ -151,13 +141,16 @@ export const findTransactionsBySearchTextStartDate = (id, typeName, searchParam,
       {model: UserAddress},
       {model: UserWallet},
       {model: TransactionImportType}
-    ]
+    ],
+    limit: limit,
+    offset: offset,
+    order: Sequelize.literal(orderBy)
   }))
   .then(obj => {
     return obj
   })
 
-  export const findTransactionsBySearchTextEndDate = (id, typeName, searchParam, endDate):Object =>
+  export const findTransactionsBySearchTextEndDate = (id, typeName, searchParam, endDate, orderBy, limit, offset) =>
   Transaction.findAll(Object.assign({
     where: {
       $and: [
@@ -187,13 +180,16 @@ export const findTransactionsBySearchTextStartDate = (id, typeName, searchParam,
       {model: UserAddress},
       {model: UserWallet},
       {model: TransactionImportType}
-    ]
+    ],
+    limit: limit,
+    offset: offset,
+    order: Sequelize.literal(orderBy)
   }))
   .then(obj => {
     return obj
   })
 
-export const findTransactionsBySearchDate = (id, typeName, startDate, endDate):Object =>
+export const findTransactionsBySearchDate = (id, typeName, startDate, endDate, orderBy, limit, offset) =>
   Transaction.findAll(Object.assign({
     where: {
       transactionDate: {$between: [startDate, endDate]}
@@ -211,13 +207,16 @@ export const findTransactionsBySearchDate = (id, typeName, startDate, endDate):O
       {model: UserAddress},
       {model: UserWallet},
       {model: TransactionImportType}
-    ]
+    ],
+    limit: limit,
+    offset: offset,
+    order: Sequelize.literal(orderBy)
   }))
   .then(obj => {
     return obj
   })
 
-export const findTransactionsBySearchStartDate = (id, typeName, startDate):Object =>
+export const findTransactionsBySearchStartDate = (id, typeName, startDate, orderBy, limit, offset) =>
   Transaction.findAll(Object.assign({
     where: {
       transactionDate: {$gte: [startDate]}
@@ -235,13 +234,16 @@ export const findTransactionsBySearchStartDate = (id, typeName, startDate):Objec
       {model: UserAddress},
       {model: UserWallet},
       {model: TransactionImportType}
-    ]
+    ],
+    limit: limit,
+    offset: offset,
+    order: Sequelize.literal(orderBy)
   }))
   .then(obj => {
     return obj
   })
 
-  export const findTransactionsBySearchEndDate = (id, typeName, endDate):Object =>
+  export const findTransactionsBySearchEndDate = (id, typeName, endDate, orderBy, limit, offset) =>
   Transaction.findAll(Object.assign({
     where: {
       transactionDate: {$lte: [endDate]}
@@ -259,13 +261,16 @@ export const findTransactionsBySearchStartDate = (id, typeName, startDate):Objec
       {model: UserAddress},
       {model: UserWallet},
       {model: TransactionImportType}
-    ]
+    ],
+    limit: limit,
+    offset: offset,
+    order: Sequelize.literal(orderBy)
   }))
   .then(obj => {
     return obj
   })
 
-export const findTransactionById = (id):Object =>
+export const findTransactionById = (id) =>
   Transaction.findOne(Object.assign({
     where: {
       id
@@ -275,7 +280,7 @@ export const findTransactionById = (id):Object =>
     return obj
   })
 
-export const findTransactionByTrxId = (trxId):Object =>
+export const findTransactionByTrxId = (trxId) =>
   Transaction.findOne(Object.assign({
     where: {
       trxId
@@ -285,16 +290,16 @@ export const findTransactionByTrxId = (trxId):Object =>
     return obj
   })
 
-export const updateTransaction = (transactionObj): Promise<any> =>
+export const updateTransaction = (transactionObj) =>
   transactionObj.save()
   .then(obj => {
     return obj
   })
 
-export const deleteTransactionById = (transactionId:number):Object =>
+export const deleteTransactionById = (transactionId) =>
   Transaction.findById(transactionId)
   .then((object) => {
-    if(null == object)
+    if (object === null)
       return
     
     return object.destroy({ force: true })

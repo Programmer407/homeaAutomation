@@ -1,7 +1,7 @@
 // libs
 import Role from '../models/Role'
 
-export const findRoleById = (id): Promise<any> =>
+export const findRoleById = (id) =>
   Role.findOne(Object.assign({
     where: {
       id

@@ -6,7 +6,7 @@ import UserWallet from '../models/UserWallet'
 import Transaction from '../models/Transaction'
 import AssociatedAddress from '../models/AssociatedAddress'
 
-export const findAllUserProviderList = (id:number):Object =>
+export const findAllUserProviderList = (id) =>
   UserProvider.findAll(Object.assign({
     include: [
       {
@@ -35,7 +35,7 @@ export const findAllUserProviderList = (id:number):Object =>
     return obj
   })
 
-export const findUserProviderByID = (id:number):Object =>
+export const findUserProviderByID = (id) =>
   UserProvider.findOne(Object.assign({
     where: {
       id
@@ -48,7 +48,7 @@ export const findUserProviderByID = (id:number):Object =>
     return obj
   })
 
-  export const findUserProviderByAccountName = (accountName:number):Object =>
+  export const findUserProviderByAccountName = (accountName) =>
   UserProvider.findOne(Object.assign({
     where: {
       accountName
@@ -58,13 +58,13 @@ export const findUserProviderByID = (id:number):Object =>
     return obj
   })
 
-export const insertUserProvider = (userProviderObj): Promise<any> =>
+export const insertUserProvider = (userProviderObj) =>
   userProviderObj.save()
   .then(obj => {
     return obj
   })
 
-export const updateUserProvider = (userProviderObj): Promise<any> =>
+export const updateUserProvider = (userProviderObj) =>
   userProviderObj.save()
   .then(obj => {
     return obj

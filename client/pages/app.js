@@ -4,7 +4,6 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 import { ConnectedRouter as Router } from 'react-router-redux'
 
 import configureStore from '../store/configureStore'
-import configureSocketIO from '../utils/configureSocketIO'
 import { history } from '../utils/configureRouter'
 import App from '../App'
 

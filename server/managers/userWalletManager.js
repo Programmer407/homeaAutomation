@@ -1,6 +1,6 @@
 import UserWallet from '../models/UserWallet'
 
-export const findUserWalletByWalletId = (walletId:number):Object =>
+export const findUserWalletByWalletId = (walletId) =>
   UserWallet.findOne(Object.assign({
     where: {
       walletId
@@ -10,19 +10,19 @@ export const findUserWalletByWalletId = (walletId:number):Object =>
     return obj
   })
 
-export const updateUserWallet = (userWalletObj): Promise<any> =>
+export const updateUserWallet = (userWalletObj) =>
   userWalletObj.save()
   .then(obj => {
     return obj
   })
 
-export const insertUserWallet = (userWalletObj): Promise<any> =>
+export const insertUserWallet = (userWalletObj) =>
   userWalletObj.save()
   .then(obj => {
     return obj
   })
 
-export const deleteUserWalletById = (walletId:number):Object =>
+export const deleteUserWalletById = (walletId) =>
     UserWallet.findById(walletId)
     .then((object) => {
       if(null == object)

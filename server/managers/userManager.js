@@ -4,7 +4,7 @@ import Role from '../models/Role'
 import UserAccountType from '../models/UserAccountType'
 import TimeZone from '../models/TimeZone'
 
-export const findUserByID = (id:number):Object =>
+export const findUserByID = (id) =>
   User.findOne(Object.assign({
     where: {
       id
@@ -15,7 +15,7 @@ export const findUserByID = (id:number):Object =>
     return obj
   })
 
-export const findUserByEmailAndPassword = (email:string, password:string): Promise<any> =>
+export const findUserByEmailAndPassword = (email, password) =>
   User.findOne(Object.assign({
     where: {
       email,
@@ -27,7 +27,7 @@ export const findUserByEmailAndPassword = (email:string, password:string): Promi
     return obj
   })
 
-export const isActiveUser = (id:int): Promise<any> =>
+export const isActiveUser = (id) =>
   User.findOne(Object.assign({
     where: {
       id,
@@ -35,13 +35,13 @@ export const isActiveUser = (id:int): Promise<any> =>
     }
   }))
   .then(obj => {
-    if(obj)
+    if (obj)
       return true
     else
       return false
   })
 
-export const findUserByEmail = (email:string): Promise<any> =>
+export const findUserByEmail = (email) =>
   User.findOne(Object.assign({
     where: {
       email
@@ -51,19 +51,19 @@ export const findUserByEmail = (email:string): Promise<any> =>
     return obj
   })
 
-export const insertUser = (userObj): Promise<any> =>
+export const insertUser = (userObj) =>
   userObj.save()
   .then(obj => {
     return obj
   })
   
-export const updateUser = (userObj): Promise<any> =>
+export const updateUser = (userObj) =>
   userObj.save()
   .then(obj => {
     return obj
   })
 
-export const findUserByToken = (resetPasswordToken:string): Promise<any> =>
+export const findUserByToken = (resetPasswordToken) =>
   User.findOne(Object.assign({
     where: {
       resetPasswordToken, 
@@ -74,7 +74,7 @@ export const findUserByToken = (resetPasswordToken:string): Promise<any> =>
     return obj
   })
 
-export const findUserByRegistrationToken = (registerToken:string): Promise<any> =>
+export const findUserByRegistrationToken = (registerToken) =>
   User.findOne(Object.assign({
     where: {
       registerToken, 

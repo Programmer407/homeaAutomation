@@ -36,17 +36,15 @@ router.post('/api/login', ensureAnonymity, (req, res) => {
         isActiveUser(user.id)
         .then(isActive => {
           if (isActive) {
-            return req.login(user, err => {
-              if ( err )
-                caughtError(res, err)
-              else
-                res.send({ user })
+            req.login(user, err => {
+              if ( err ) caughtError(res, err)
+              else res.send({ user })
             })
           } else {
             res
               .status(404)
               .send({
-                message: 'Your account is currently inactive. Please click <a href="/resend/activation/'+user.id+'">here</a> to resend the email containing activation link'
+                message: 'Your account is currently inactive. Please click <a href="/resend/activation/' + user.id + '">here</a> to resend the email containing activation link'
               })
           }
         })
@@ -92,7 +90,7 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
   findUserByEmail(email)
   .then(user => {
     if (user) {
-      return res
+      res
         .status(404)
         .send({
           message: 'Username already exist'
@@ -114,41 +112,33 @@ router.post('/api/users/create', ensureAnonymity, (req, res) => {
             userObj.setTimezone(timeZone, {save: false})
             userObj.status = 0
                   
-            crypto.randomBytes(20, function(err, buf) {
+            crypto.randomBytes(20, (err, buf) => {
               const token = buf.toString('hex')
               userObj.registerToken = token
               userObj.registerExpires = Date.now() + 86400000 // 24 hours 1 hour = 3600000
                     
               updateUser(userObj)
-              .then(user => {
-                if (user) {
-                  const activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + user.registerToken
-                  const data = {firstName: user.firstName, activationUrl: activationUrl}
-                        
-                  const allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
-                  let toEmailAddress = 'majid.hussain@emumba.com'
-                  if (allowedEmailList.indexOf(email) > -1) {
-                    toEmailAddress = email
-                  }
-
-                  emailUtils.sendAccountActivationEmail(toEmailAddress, data)
-                  .then(result => {
-                    res
-                      .status(200)
-                      .send({
-                        message: 'Sign up Successfully! Please follow a link in your email to activate your account'
-                      })
-                  })
-                  .catch(error => 
-                    caughtError(res, error)
-                  )
-                } else {
-                  res
-                    .status(400)
-                    .send({
-                      message: 'Something went wrong, Please try again'
-                      })
+              .then(updatedUser => {
+                const activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + updatedUser.registerToken
+                const data = {firstName: updatedUser.firstName, activationUrl: activationUrl}
+                      
+                const allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
+                let toEmailAddress = 'majid.hussain@emumba.com'
+                if (allowedEmailList.indexOf(email) > -1) {
+                  toEmailAddress = email
                 }
+
+                emailUtils.sendAccountActivationEmail(toEmailAddress, data)
+                .then(() => {
+                  res
+                    .status(200)
+                    .send({
+                      message: 'Sign up Successfully! Please follow a link in your email to activate your account'
+                    })
+                })
+                .catch(error => 
+                  caughtError(res, error)
+                )
               })
             })
           })
@@ -174,23 +164,23 @@ router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
   findUserByEmail(email)
   .then(user => {
     if (user) {
-      crypto.randomBytes(20, function(err, buf) {
+      crypto.randomBytes(20, (err, buf) => {
         const token = buf.toString('hex')
         user.resetPasswordToken = token
         user.resetPasswordExpires = Date.now() + 86400000 // 24 hours 1 hour = 3600000
         updateUser(user)
-        .then(user => {
-          const resetUrl = req.protocol + '://' + req.get('host') + '/resetPassword/' + user.resetPasswordToken
-          const data = {firstName: user.firstName, resetLink: resetUrl}
+        .then(userObj => {
+          const activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + userObj.registerToken
+          const data = {firstName: userObj.firstName, activationUrl: activationUrl}
 
           const allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
           let toEmailAddress = 'majid.hussain@emumba.com'
-          if (allowedEmailList.indexOf(email) > -1) {
-            toEmailAddress = email
+          if (allowedEmailList.indexOf(userObj.email) > -1) {
+            toEmailAddress = userObj.email
           }
 
           emailUtils.sendResendPasswordEmail(toEmailAddress, data)
-          .then(result => {
+          .then(() => {
             res
             .status(200)
             .send({
@@ -267,7 +257,7 @@ router.post('/api/users/reset-password', (req, res) => {
       user.resetPasswordToken = null
       user.resetPasswordExpires = null
       updateUser(user)
-      .then(user => {
+      .then(() => {
         res
           .status(200)
           .send({
@@ -304,7 +294,7 @@ router.post('/api/users/verify-account', (req, res) => {
       user.registerToken = null
       user.registerExpires = null
       updateUser(user)
-      .then(user => {
+      .then(() => {
         res
           .status(200)
           .send({
@@ -337,24 +327,24 @@ router.post('/api/users/resend-activation', (req, res) => {
   findUserByID(userId)
   .then(user => {
     if (user) {
-      crypto.randomBytes(20, function(err, buf) {
+      crypto.randomBytes(20, (err, buf) => {
         const token = buf.toString('hex')
         user.registerToken = token
         user.registerExpires = Date.now() + 86400000 // 24 hours 1 hour = 3600000
         user.status = 0
         updateUser(user)
-        .then(user => {
-          const activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + user.registerToken
-          const data = {firstName: user.firstName, activationUrl: activationUrl}
+        .then(userObj => {
+          const activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + userObj.registerToken
+          const data = {firstName: userObj.firstName, activationUrl: activationUrl}
 
           const allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
           let toEmailAddress = 'majid.hussain@emumba.com'
-          if (allowedEmailList.indexOf(user.email) > -1) {
-            toEmailAddress = user.email
+          if (allowedEmailList.indexOf(userObj.email) > -1) {
+            toEmailAddress = userObj.email
           }
 
           emailUtils.resendAccountActivationEmail(toEmailAddress, data)
-          .then(result => {
+          .then(() => {
             res
               .status(200)
               .send({

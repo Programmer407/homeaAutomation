@@ -8,7 +8,7 @@ import async from 'async'
 import Transaction from './../../models/Transaction'
 import AssociatedAddress from './../../models/AssociatedAddress'
 import { ensureAuthorization, rejectRequest } from '../../utils'
-import { findTransactionsByUserId, findTransactionsByUserId1, findTransactionsBySearchText, 
+import { findTransactionsByUserId, findTransactionsBySearchText, 
   findTransactionsBySearchTextDate, findTransactionsBySearchTextStartDate, 
   findTransactionsBySearchTextEndDate, findTransactionsBySearchDate, 
   findTransactionsBySearchStartDate, findTransactionsBySearchEndDate,
@@ -34,27 +34,17 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
   }
 
   let trxType = 'Sale'
-  if (listingParameters.trxType)
-    trxType = listingParameters.trxType
-
+  if (listingParameters.trxType) trxType = listingParameters.trxType
+    
   let searchParam = ''
-  if (listingParameters.queryString)
-    searchParam = listingParameters.queryString
-
+  if (listingParameters.queryString) searchParam = listingParameters.queryString
+    
   let startDate = ''
   if (listingParameters.startDate) {
     const start_date = new Date(listingParameters.startDate)
     const moment_start_date = moment(start_date).format("YYYY-MM-DD HH:MM:SS")
     startDate = moment_start_date
   }
-
-  let orderBy = 'transactionDate'
-  if (listingParameters.orderBy)
-    orderBy = listingParameters.orderBy
-
-  let orderWay = 'DESC'
-  if (listingParameters.orderWay)
-    orderWay = listingParameters.orderWay
 
   let endDate = ''
   if (listingParameters.endDate) {
@@ -63,9 +53,31 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
     endDate = moment_end_date
   }
 
+  let limit = '10'
+  if (listingParameters.limit) limit = listingParameters.limit
+
+  let offset = '0'
+  if (listingParameters.offset) offset = listingParameters.offset
+
+  // let orderBy = 'transactionimporttype.import_type_name,useraddress.nick_name,userwallet.wallet_name'
+  let orderBy = 'transactionDate'
+  if (listingParameters.orderBy) orderBy = listingParameters.orderBy
+
+  let orderWay = 'DESC'
+  if (listingParameters.orderWay) orderWay = listingParameters.orderWay
+
+  const orderbyArray = orderBy.toString().split(',')
+  let order = ''
+  async.eachOfSeries(orderbyArray, (ordering, index, nextAddCallback) => {
+    order += ordering + ' ' + orderWay + ', '
+    nextAddCallback()
+  })
+  order = order.substring(0, order.length - 2)
+  console.log('order : ' + order)
+
   if (searchParam && startDate && endDate) {
     console.log('searchParam : ' + searchParam + ' AND startDate : ' + startDate + ' AND endDate : ' + endDate)
-    findTransactionsBySearchTextDate(user.id, trxType, searchParam, startDate, endDate)
+    findTransactionsBySearchTextDate(user.id, trxType, searchParam, startDate, endDate, order, limit, offset)
     .then(transactionList => {
       res
         .status(200)
@@ -76,7 +88,7 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
     })
   } else if (searchParam && startDate) {
     console.log('searchParam : ' + searchParam + ' AND startDate : ' + startDate)
-    findTransactionsBySearchTextStartDate(user.id, trxType, searchParam, startDate)
+    findTransactionsBySearchTextStartDate(user.id, trxType, searchParam, startDate, order, limit, offset)
     .then(transactionList => {
       res
         .status(200)
@@ -87,7 +99,7 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
     })
   } else if (searchParam && endDate) {
     console.log('searchParam : ' + searchParam + ' AND endDate : ' + endDate)
-    findTransactionsBySearchTextEndDate(user.id, trxType, searchParam, endDate)
+    findTransactionsBySearchTextEndDate(user.id, trxType, searchParam, endDate, order, limit, offset)
     .then(transactionList => {
       res
         .status(200)
@@ -98,7 +110,7 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
     })
   } else if (startDate && endDate) {
     console.log('startDate : ' + startDate + ' AND endDate : ' + endDate)
-    findTransactionsBySearchDate(user.id, trxType, startDate, endDate)
+    findTransactionsBySearchDate(user.id, trxType, startDate, endDate, order, limit, offset)
     .then(transactionList => {
       res
         .status(200)
@@ -109,7 +121,7 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
     })
   } else if (searchParam) {
     console.log('searchParam : ' + searchParam)
-    findTransactionsBySearchText(user.id, trxType, searchParam)
+    findTransactionsBySearchText(user.id, trxType, searchParam, order, limit, offset)
     .then(transactionList => {
       res
         .status(200)
@@ -120,7 +132,7 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
     })
   } else if (startDate) {
     console.log('startDate : ' + startDate)
-    findTransactionsBySearchStartDate(user.id, trxType, startDate)
+    findTransactionsBySearchStartDate(user.id, trxType, startDate, order, limit, offset)
     .then(transactionList => {
       res
         .status(200)
@@ -131,7 +143,7 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
     })
   } else if (endDate) {
     console.log('endDate : ' + endDate)
-    findTransactionsBySearchEndDate(user.id, trxType, endDate)
+    findTransactionsBySearchEndDate(user.id, trxType, endDate, order, limit, offset)
     .then(transactionList => {
       res
         .status(200)
@@ -141,7 +153,8 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
         })
     })
   } else {
-    findTransactionsByUserId1(user.id, trxType, orderBy, orderWay)
+    console.log('else default listing.')
+    findTransactionsByUserId(user.id, trxType, order, limit, offset)
     .then(transactionList => {
       res
         .status(200)
@@ -161,16 +174,22 @@ router.post('/api/transactions/insert-transaction', ensureAuthorization, (req, r
     return
   }
 
-  const { trxData } = body
-  if ( !trxData ) {
+  const { trxData, listingParameters } = body
+  if ( !trxData || !listingParameters ) {
   	rejectRequest('Missing required arguments', res)
   	return
   }
 
+  let limit = '10'
+  if (listingParameters.limit) limit = listingParameters.limit
+
+  let offset = '0'
+  if (listingParameters.offset) offset = listingParameters.offset
+  
   const { transactionDate, destination, note, amount, asset, value, transactionTypeId } = trxData
   const trx_date = new Date(transactionDate)
   const moment_date = moment(trx_date).format("YYYY-MM-DD HH:MM:SS")
-
+  
   const transactionObj = Transaction.build({destination: destination, note: note, transactionDate: moment_date, amount: amount, asset: asset, value: value})
   transactionObj.setUser(user, {save: false})
   findTransactionTypeById(transactionTypeId)
@@ -185,8 +204,8 @@ router.post('/api/transactions/insert-transaction', ensureAuthorization, (req, r
           if (associatedAddObj) {
             transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
             updateTransaction(transactionObj)
-            .then(updatedTransaction => {
-              findTransactionsByUserId(user.id, transactionTypeObj.typeName)
+            .then(() => {
+              findTransactionsByUserId(user.id, transactionTypeObj.typeName, 'transactionDate DESC', limit, offset)
               .then(transactionList => {
                 res
                   .status(200)
@@ -196,13 +215,13 @@ router.post('/api/transactions/insert-transaction', ensureAuthorization, (req, r
               })
             })
           } else {
-            associatedAddObj = AssociatedAddress.build({address: destination, nickName: destination})
-            updateAssociatedAdd(associatedAddObj)
+            const associatedAddNew = AssociatedAddress.build({address: destination, nickName: destination})
+            updateAssociatedAdd(associatedAddNew)
             .then(updatedAssociatedAdd => {
               transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
               updateTransaction(transactionObj)
-              .then(updatedTransaction => {
-                findTransactionsByUserId(user.id, transactionTypeObj.typeName)
+              .then(() => {
+                findTransactionsByUserId(user.id, transactionTypeObj.typeName, 'transactionDate DESC', limit, offset)
                 .then(transactionList => {
                   res
                     .status(200)
@@ -216,8 +235,8 @@ router.post('/api/transactions/insert-transaction', ensureAuthorization, (req, r
         })
       } else {
         updateTransaction(transactionObj)
-        .then(updatedTransaction => {
-          findTransactionsByUserId(user.id, transactionTypeObj.typeName)
+        .then(() => {
+          findTransactionsByUserId(user.id, transactionTypeObj.typeName, 'transactionDate DESC', limit, offset)
           .then(transactionList => {
             res
               .status(200)
@@ -239,8 +258,8 @@ router.post('/api/transactions/update-transaction', ensureAuthorization, (req, r
     return
   }
 
-  const { trxData } = body
-  if ( !trxData ) {
+  const { trxData, listingParameters } = body
+  if ( !trxData || !listingParameters ) {
   	rejectRequest('Missing required arguments', res)
   	return
   }
@@ -250,6 +269,12 @@ router.post('/api/transactions/update-transaction', ensureAuthorization, (req, r
   	rejectRequest('Missing required arguments', res)
   	return
   }
+  
+  let limit = '10'
+  if (listingParameters.limit) limit = listingParameters.limit
+
+  let offset = '0'
+  if (listingParameters.offset) offset = listingParameters.offset
 
   findTransactionById(transactionId)
   .then(transactionObj => {
@@ -271,8 +296,8 @@ router.post('/api/transactions/update-transaction', ensureAuthorization, (req, r
           if (associatedAddObj) {
             transactionObj.setAssociatedaddress(associatedAddObj, {save: false})
             updateTransaction(transactionObj)
-            .then(updatedTransaction => {
-              findTransactionsByUserId(user.id, transactionTypeObj.typeName)
+            .then(() => {
+              findTransactionsByUserId(user.id, transactionTypeObj.typeName, 'transactionDate DESC', limit, offset)
               .then(transactionList => {
                 res
                   .status(200)
@@ -282,13 +307,13 @@ router.post('/api/transactions/update-transaction', ensureAuthorization, (req, r
               })
             })
           } else {
-            associatedAddObj = AssociatedAddress.build({address: destination, nickName: destination})
-            updateAssociatedAdd(associatedAddObj)
+            const associatedAddNew = AssociatedAddress.build({address: destination, nickName: destination})
+            updateAssociatedAdd(associatedAddNew)
             .then(updatedAssociatedAdd => {
               transactionObj.setAssociatedaddress(updatedAssociatedAdd, {save: false})
               updateTransaction(transactionObj)
-              .then(updatedTransaction => {
-                findTransactionsByUserId(user.id, transactionTypeObj.typeName)
+              .then(() => {
+                findTransactionsByUserId(user.id, transactionTypeObj.typeName, 'transactionDate DESC', limit, offset)
                 .then(transactionList => {
                   res
                     .status(200)
@@ -302,8 +327,8 @@ router.post('/api/transactions/update-transaction', ensureAuthorization, (req, r
         })
       } else {
         updateTransaction(transactionObj)
-        .then(updatedTransaction => {
-          findTransactionsByUserId(user.id, transactionTypeObj.typeName)
+        .then(() => {
+          findTransactionsByUserId(user.id, transactionTypeObj.typeName, 'transactionDate DESC', limit, offset)
           .then(transactionList => {
             res
               .status(200)
@@ -332,20 +357,24 @@ router.post('/api/transactions/delete-transaction', ensureAuthorization, (req, r
   }
 
   let trxType = 'Sale'
-  if (listingParameters.trxType)
-    trxType = listingParameters.trxType
+  if (listingParameters.trxType) trxType = listingParameters.trxType
 
-  async.eachOfSeries(transactionIds, function(trxId, index, nextAddCallback) {
+  let limit = '10'
+  if (listingParameters.limit) limit = listingParameters.limit
+
+  let offset = '0'
+  if (listingParameters.offset) offset = listingParameters.offset
+
+  async.eachOfSeries(transactionIds, (trxId, index, nextAddCallback) => {
     deleteTransactionById(trxId)
-    .then(result => {
+    .then(() => {
       nextAddCallback()
     })
-  }, function(err) {
+  }, (err) => {
     if ( err ) {
       rejectRequest('Failed to process addresses, please try again', res)
-      return
     } else {
-      findTransactionsByUserId(user.id, trxType)
+      findTransactionsByUserId(user.id, trxType, 'transactionDate DESC', limit, offset)
       .then(transactionList => {
         res
           .status(200)
@@ -370,29 +399,33 @@ router.post('/api/transactions/update-transactions-type', ensureAuthorization, (
   	rejectRequest('Missing required arguments', res)
   	return
   }
-
+  
   let trxType = 'Sale'
-  if (listingParameters.trxType)
-    trxType = listingParameters.trxType
+  if (listingParameters.trxType) trxType = listingParameters.trxType
 
-  async.eachOfSeries(transactionIds, function(trxId, index, nextAddCallback) {
+  let limit = '10'
+  if (listingParameters.limit) limit = listingParameters.limit
+
+  let offset = '0'
+  if (listingParameters.offset) offset = listingParameters.offset
+
+  async.eachOfSeries(transactionIds, (trxId, index, nextAddCallback) => {
     findTransactionById(trxId)
     .then(transactionObj => {
       findTransactionTypeById(selectedTrxTypeId)
       .then(transactionTypeObj => {
         transactionObj.setTransactiontype(transactionTypeObj, {save: false})
         updateTransaction(transactionObj)
-        .then(updatedTransaction => {
+        .then(() => {
           nextAddCallback()
         })
       })
     })
-  }, function(err) {
+  }, (err) => {
     if ( err ) {
       rejectRequest('Failed to process addresses, please try again', res)
-      return
     } else {
-      findTransactionsByUserId(user.id, trxType)
+      findTransactionsByUserId(user.id, trxType, 'transactionDate DESC', limit, offset)
       .then(transactionList => {
         res
           .status(200)
