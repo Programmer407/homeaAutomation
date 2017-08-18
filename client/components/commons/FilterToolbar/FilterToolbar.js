@@ -1,11 +1,14 @@
 // libs
 import React from 'react'
-import { AutoComplete, DatePicker, FlatButton, RaisedButton } from 'material-ui'
+import { AutoComplete, DatePicker, FlatButton, RaisedButton, Chip } from 'material-ui'
 
 // src
 import './FilterToolbar.scss'
 import { ResetBtn } from '../../commons'
 
+// assets
+import ActionSearch from 'material-ui/svg-icons/action/search'
+import { grey600, grey700  } from 'material-ui/styles/colors'
 
 const styles = {
 	checkboxLabelStyle: {
@@ -23,7 +26,7 @@ const styles = {
 }
 
 const FilterToolbar = props => {
-	const { data, onSubmit, onQueryStringChange, onStartDateChange, onEndDateChange, listingParameters, onStartDatePickerDismiss, onEndDatePickerDismiss, resetFilterParams } = props
+	const { data, getTransactionData, onQueryStringChange, onStartDateChange, onEndDateChange, listingParameters, resetFilterParams } = props
 	const flatData = _.uniq(_.compact(_.flatten(data.map(dat => { return _.flatMap(dat) } ))))
 	const { startDate, endDate, queryString } = listingParameters
 	// let minDate
@@ -40,20 +43,27 @@ const FilterToolbar = props => {
 	// console.log('MAX DATE', maxDate)
 
 	return (
-		<div className="row">
+		<div className="row filterToolbar">
 			<div className="col-md-7 col-sm-12">
 				<div className="row">
-					<div className="col-md-5">
-						<AutoComplete
-							underlineShow={false}
-							inputStyle={{ border: '1px solid #C9C9C9', borderTopLeftRadius: 4, borderTopRightRadius: 4, borderBottomLeftRadius: 4, borderBottomRightRadius: 4, paddingLeft: 15 }}
-							fullWidth
-							filter={ AutoComplete.caseInsensitiveFilter }
-							hintText="Search (ex: BTC, XRP, MyWallet)"
-							dataSource={ flatData }
-							hintStyle={{fontSize: 16, paddingLeft: 15}} 
-							onNewRequest={ onQueryStringChange } 
-							searchText={ queryString }/>
+					<div className="col-md-5 searchBar">
+						<div>
+							<AutoComplete
+								className="autoComplete"
+								underlineShow={false}
+								inputStyle={{ paddingLeft: 15 }}
+								fullWidth
+								filter={ AutoComplete.caseInsensitiveFilter }
+								hintText="Search..."
+								dataSource={ flatData }
+								hintStyle={{fontSize: 16, paddingLeft: 15}}
+								onUpdateInput={ onQueryStringChange }
+								onNewRequest={ getTransactionData } 
+								searchText={ queryString } />
+						</div>
+						<span className="iconBtn" onClick={ getTransactionData }>
+							<ActionSearch color={grey600} hoverColor={grey700} style={{ width: 28, height: 28, position: 'relative', top: 9 }}/>
+						</span>
 					</div>
 					<div className="col-md-7">
 						<div className="row">

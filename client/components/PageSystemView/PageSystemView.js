@@ -7,11 +7,21 @@ import moment from 'moment'
 // src
 import { transactionsData, deleteTransaction, updateTransactionsType, openFormDialog, closeFormDialog } from "../../actions"
 
+const orderByColumns = {
+	date: 'transactionDate',
+	destination: 'destination',
+	volume: 'amount',
+	value: 'amount',
+	action: 'transactiontype.type_name',
+	source: 'transactionimporttype.import_type_name'
+}
+
 class PageSystemView extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
 			trxId: null,
+			deletingAll: false,
 			isHelpDialogOpen: false, 
 			isUploadDialogOpen: false,
 			isActionTypeDialogOpen: false,
@@ -25,11 +35,14 @@ class PageSystemView extends React.Component {
 			tabIndex: 0,
 			modifiedTrxs: [],
 			isSearchDatesChecked: false,
+			orderBy: 'date',
 			listingParameters: {
 				trxType: 'Purchase',
 				startDate: null,
 				endDate: null,
-				queryString: ''
+				queryString: '',
+				orderBy: 'transactionDate',
+				orderWay: 'DESC'
 			},
 			tblData: [
 				{
@@ -98,20 +111,31 @@ class PageSystemView extends React.Component {
   }
 	
 	/* DATA ACTIONS */
-	getTransactionData = (parameters) => {
-		const { dispatch } = this.props
-		
-		dispatch(transactionsData(parameters))
-	}
+	getTransactionData = () => {
+		console.log('Fetching transaction data...')
 
-	deleteTransaction = (parameters) => {
 		const { dispatch } = this.props
-		const { id } = parameters
 		const { listingParameters } = this.state
 		
-		this.setState({
-			trxId: id
-		}, () => dispatch(deleteTransaction([id], listingParameters)))
+		dispatch(transactionsData(listingParameters))
+	}
+	
+	deleteTransactions = (trxIds) => {
+		console.log('Deleting transactions...')
+
+		const { dispatch } = this.props
+		const { listingParameters } = this.state
+		
+		return dispatch(deleteTransaction(trxIds, listingParameters))
+			.then(action => {
+				this.setState({
+					selectedRows: [],
+					allSelected: false,
+					rowSelected: false,
+					deletingAll: false
+				})
+				return action
+			})
 	}
 
 	/* EVENT HANDLERS */
@@ -120,7 +144,7 @@ class PageSystemView extends React.Component {
 
 		this.setState({
 			listingParameters: _.set(listingParameters, 'queryString', queryString)
-		}, () => this.getTransactionData(listingParameters))
+		})
 	}
 	
 	handleStartDateChange = (e, date) => {
@@ -204,7 +228,9 @@ class PageSystemView extends React.Component {
 		let allSelected = false
 		let rowSelected = false
 		const { selectedRows, modifiedTrxs } = this.state
- 
+		
+		console.log('handleHeadCheckboxClick', selectedRows, modifiedTrxs)
+
 		if (modifiedTrxs.length === selectedRows.length) {
 			newSelectedRows = []
 			allSelected = false
@@ -227,15 +253,10 @@ class PageSystemView extends React.Component {
 		let allSelected = false
 		let rowSelected = false
 		let newSelectedRows = []
-		const { selectedRows, tblData } = this.state
-		const keyCount = _.keys(tblData).length
+		const { selectedRows, modifiedTrxs } = this.state
+		const keyCount = _.keys(modifiedTrxs).length
 
-		if (_.indexOf(selectedRows, checkedRow) !== -1) {
-			newSelectedRows = _.pull(selectedRows, checkedRow)
-		} else {
-			newSelectedRows = _.concat(selectedRows, checkedRow)
-		}
-
+		newSelectedRows = (_.indexOf(selectedRows, checkedRow) !== -1) ? _.pull(selectedRows, checkedRow) : _.concat(selectedRows, checkedRow)
 		allSelected = (keyCount === newSelectedRows.length) ? true : false
 		rowSelected = (newSelectedRows.length > 0) ? true : false
 		
@@ -303,11 +324,18 @@ class PageSystemView extends React.Component {
 		})
 	}
 
-	handleMultipleDelete = () => {
-		const { dispatch } = this.props
-		const { selectedRows, listingParameters } = this.state
+	handleDeleteClick = (trxId) => {
+		this.setState({
+			trxId
+		}, this.deleteTransactions([trxId]))
+	}
 
-		dispatch(deleteTransaction(selectedRows, listingParameters))
+	handleMultipleDelete = () => {
+		const { selectedRows } = this.state
+
+		this.setState({
+			deletingAll: true
+		}, this.deleteTransactions(selectedRows))
 	}
 	
 	handleMultipleTypeChange = (trxType) => {
@@ -317,14 +345,29 @@ class PageSystemView extends React.Component {
 		dispatch(updateTransactionsType(selectedRows, trxType, listingParameters))
 	}
 
+	handleColHeaderClick = (orderBy) => {
+		const { listingParameters } = this.state
+		// console.log('HANDLER CALLED:', orderByColumns[orderBy])
+
+		if (listingParameters.orderBy !== orderByColumns[orderBy]) {
+			_.set(listingParameters, 'orderBy', orderByColumns[orderBy])
+			_.set(listingParameters, 'orderWay', 'DESC')
+		} else {
+			listingParameters.orderWay === 'DESC' ? _.set(listingParameters, 'orderWay', 'ASC') : _.set(listingParameters, 'orderWay', 'DESC')
+		}
+
+		this.setState({
+			orderBy,
+			listingParameters
+		}, this.getTransactionData())
+		
+		console.log('UPDATED LISTING PARAMS:', listingParameters)
+	}
+	
 	/* LIFECYCLE METHODS */
 	componentDidMount() {
-		const { dispatch } = this.props
-		const listingParameters = {
-			trxType: 'Purchase'
-		}
-		
-		dispatch(transactionsData(listingParameters))
+		console.log('ORIGNAL LISTING PARAMS:', this.state.listingParameters)
+		this.getTransactionData()
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -361,13 +404,12 @@ class PageSystemView extends React.Component {
 			<PageSystemViewInner
 				{...this.props}
 				{...this.state}
-				onDeleteClick={ this.deleteTransaction }
+				onDeleteClick={ this.handleDeleteClick }
 				onEditClick={ this.handleEditTrxClick }
 				onHelpDialogToggle={ this.handleHelpDialogToggle }
 				onFormDialogOpen={ this.handleFormDialogOpen }
 				onFormDialogClose={ this.handleFormDialogClose }
 				onUploadDialogToggle={ this.handleUploadDialogToggle }
-				onActionTypeDialogToggle={ this.handleActionTypeDialogToggle }
 				onRowHover={ this.handleRowHover }
 				onRowHoverExit={ this.handleRowHoverExit }
 				onCheckboxClick={ this.handleCheckboxClick }
@@ -379,8 +421,9 @@ class PageSystemView extends React.Component {
 				onQueryStringChange={ this.handleQueryStringChange }
 				onStartDateChange={ this.handleStartDateChange }
 				onEndDateChange={ this.handleEndDateChange }
-				onEndDatePickerDismiss={ this.handleEndDatePickerDismiss }
 				resetFilterParams={ this.resetFilterParams }
+				onColHeaderClick={ this.handleColHeaderClick }
+				getTransactionData={ this.getTransactionData }
 			/>
 		)
   }
