@@ -53,10 +53,10 @@ router.post('/api/transactions/transaction-data', ensureAuthorization, (req, res
     endDate = moment_end_date
   }
 
-  let limit = '10'
+  let limit = 10
   if (listingParameters.limit) limit = listingParameters.limit
 
-  let offset = '0'
+  let offset = 0
   if (listingParameters.offset) offset = listingParameters.offset
 
   // let orderBy = 'transactionimporttype.import_type_name,useraddress.nick_name,userwallet.wallet_name'
@@ -180,10 +180,10 @@ router.post('/api/transactions/insert-transaction', ensureAuthorization, (req, r
   	return
   }
 
-  let limit = '10'
+  let limit = 10
   if (listingParameters.limit) limit = listingParameters.limit
 
-  let offset = '0'
+  let offset = 0
   if (listingParameters.offset) offset = listingParameters.offset
   
   const { transactionDate, destination, note, amount, asset, value, transactionTypeId } = trxData
@@ -270,10 +270,10 @@ router.post('/api/transactions/update-transaction', ensureAuthorization, (req, r
   	return
   }
   
-  let limit = '10'
+  let limit = 10
   if (listingParameters.limit) limit = listingParameters.limit
 
-  let offset = '0'
+  let offset = 0
   if (listingParameters.offset) offset = listingParameters.offset
 
   findTransactionById(transactionId)
@@ -359,10 +359,10 @@ router.post('/api/transactions/delete-transaction', ensureAuthorization, (req, r
   let trxType = 'Sale'
   if (listingParameters.trxType) trxType = listingParameters.trxType
 
-  let limit = '10'
+  let limit = 10
   if (listingParameters.limit) limit = listingParameters.limit
 
-  let offset = '0'
+  let offset = 0
   if (listingParameters.offset) offset = listingParameters.offset
 
   async.eachOfSeries(transactionIds, (trxId, index, nextAddCallback) => {
@@ -403,10 +403,10 @@ router.post('/api/transactions/update-transactions-type', ensureAuthorization, (
   let trxType = 'Sale'
   if (listingParameters.trxType) trxType = listingParameters.trxType
 
-  let limit = '10'
+  let limit = 10
   if (listingParameters.limit) limit = listingParameters.limit
 
-  let offset = '0'
+  let offset = 0
   if (listingParameters.offset) offset = listingParameters.offset
 
   async.eachOfSeries(transactionIds, (trxId, index, nextAddCallback) => {
