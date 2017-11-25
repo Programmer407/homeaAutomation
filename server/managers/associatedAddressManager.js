@@ -1,3 +1,4 @@
+/*
 // libs
 import AssociatedAddress from '../models/AssociatedAddress'
 
@@ -26,3 +27,4 @@ export const updateAssociatedAdd = (associatedAddObj) =>
   .then(obj => {
     return obj
   })
+*/

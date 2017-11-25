@@ -1,3 +1,4 @@
+/*
 import moment from 'moment'
 import sequelizeUtils from './../utils/sequelizeUtils'
 import errorUtils from './../utils/errorUtils'
@@ -86,3 +87,4 @@ export default class BaseManager {
   }
 
 }
+*/

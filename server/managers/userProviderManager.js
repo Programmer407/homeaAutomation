@@ -1,3 +1,4 @@
+/*
 // libs
 import UserProvider from '../models/UserProvider'
 import User from '../models/User'
@@ -69,3 +70,4 @@ export const updateUserProvider = (userProviderObj) =>
   .then(obj => {
     return obj
   })
+*/

@@ -8,6 +8,7 @@ import styles from './HeaderInner.scss';
 import Spinner from 'react-spinner-material';
 import DocumentTitle from 'react-document-title';
 import QueueAnim from 'rc-queue-anim';
+import PageLoading from '../PageLoading'
 
 
 const PublicHeader = React.createClass ({
@@ -33,7 +34,7 @@ const PublicHeader = React.createClass ({
 								className="my-navbar">
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/login">Wisdom</Link>
+              <Link to="/login">Home Automation</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
@@ -50,29 +51,6 @@ const PublicHeader = React.createClass ({
 						</Nav>
           </Navbar.Collapse>
         </Navbar>
-      </div>
-    )
-  }
-});
-
-const LogoutInProgress = React.createClass ({
-  render() {
-    return (
-      <div className="page-login">
-        <div className="main-body">
-          <DocumentTitle title="Wisdom"/>
-          <QueueAnim type="bottom" className="ui-animate">
-            <div key="1">
-              <div className="text-center">
-                <Spinner width={100}
-                  height={120}
-                  spinnerColor={"#333"}
-                  spinnerWidth={2}
-                  show={true} />
-              </div>
-            </div>
-          </QueueAnim>
-        </div>
       </div>
     )
   }
@@ -101,27 +79,17 @@ const PrivateHeader = React.createClass ({
 								className="my-navbar collapse-early">
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/">Wisdom</Link>
+              <Link to="/dashboard">Home Automation</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav onSelect={this.closeNav}>
-              <LinkContainer to="/system" activeClassName="activeNavLink"><NavItem eventKey={1} className="nav-item">Transactions</NavItem></LinkContainer>
-	 						<LinkContainer to="/account" activeClassName="activeNavLink"><NavItem eventKey={2} className="nav-item">Accounts</NavItem></LinkContainer>
-		 					<LinkContainer to="/calculate" activeClassName="activeNavLink"><NavItem eventKey={3} className="nav-item">Calculate</NavItem></LinkContainer>
-		 					<LinkContainer to="/reports" activeClassName="activeNavLink"><NavItem eventKey={3} className="nav-item">Reports</NavItem></LinkContainer>
-		 					<LinkContainer to="/charts" activeClassName="activeNavLink"><NavItem eventKey={3} className="nav-item">Charts</NavItem></LinkContainer>
+              <LinkContainer to="/dashboard" activeClassName="activeNavLink"><NavItem eventKey={1} className="nav-item">Dashboard</NavItem></LinkContainer>
+	 						<LinkContainer to="/currentStatus" activeClassName="activeNavLink"><NavItem eventKey={2} className="nav-item">Current Status</NavItem></LinkContainer>
+		 					<LinkContainer to="/history" activeClassName="activeNavLink"><NavItem eventKey={3} className="nav-item">History</NavItem></LinkContainer>
+
             </Nav>
-						<Nav className="nav-right-dropdown" onSelect={this.closeNav} pullRight>
-							<NavDropdown eventKey={1} title={ this.props.user.firstName } id="basic-nav-dropdown">
-								<LinkContainer to="/logout"><MenuItem eventKey={1.1}>Logout</MenuItem></LinkContainer>
-							</NavDropdown>
-						</Nav>
-						<Nav className="nav-right" pullRight>
-							<MenuItem className="menu-divider" divider/>
-							<LinkContainer to="/logout"><MenuItem eventKey={1}>Logout</MenuItem></LinkContainer>
-						</Nav>
           </Navbar.Collapse>
         </Navbar>
       </div>
@@ -135,17 +103,18 @@ const HeaderInner = (props) => {
 	return (
     <Choose>
 			<When condition={ isLogoutLoading }>
-        <LogoutInProgress  />
+        <PageLoading />
       </When>
 			<Otherwise>
-        <Choose>
+                <PrivateHeader/>
+        {/*<Choose>
           <When condition={ user }>
             <PrivateHeader user={ user } />
           </When>
           <Otherwise>
             <PublicHeader />
           </Otherwise>
-        </Choose>
+        </Choose>*/}
     </Otherwise>
 		</Choose>
 	);

@@ -5,6 +5,7 @@ import moment from 'moment'
 
 import * as ActionTypes from '../actions'
 import entities from './entities'
+import feed from './feed'
 
 // Updates error message to notify about the failed fetches.
 function errorMessage(state = null, action) {
@@ -73,6 +74,7 @@ const rootReducer = combineReducers({
   auth,
   meta,
   entities,
+    feed,
   form: formReducer,
   errorMessage,
   hashes,

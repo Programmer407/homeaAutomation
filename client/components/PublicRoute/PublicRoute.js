@@ -17,7 +17,7 @@ export default class PublicRoute extends React.Component {
   
   render() {
     const {component, render, user, ...rest} = this.props
-    
+    debugger;
     return (
       <Route {...rest} render={props => (
         <Choose>

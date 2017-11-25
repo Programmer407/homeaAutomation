@@ -1,3 +1,4 @@
+/*
 // libs
 import TimeZone from '../models/TimeZone'
 
@@ -10,3 +11,4 @@ export const findTimeZoneById = (id) =>
   .then(obj => {
     return obj
   })
+*/

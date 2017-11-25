@@ -1,3 +1,4 @@
+/*
 // libs
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize'
@@ -24,3 +25,4 @@ const UserAddress = sequelize.define(
 UserAddress.belongsTo(User)
 
 export default UserAddress
+*/

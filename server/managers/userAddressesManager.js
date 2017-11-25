@@ -1,3 +1,4 @@
+/*
 // libs
 import User from '../models/User'
 import UserAddress from '../models/UserAddress'
@@ -68,3 +69,4 @@ export const deleteUserAddressById = (userAddressId) =>
       
       return object.destroy({ force: true })
     })
+*/

@@ -1,3 +1,4 @@
+/*
 // libs
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize'
@@ -18,3 +19,4 @@ const TransactionType = sequelize.define(
   }
 )
 export default TransactionType
+*/

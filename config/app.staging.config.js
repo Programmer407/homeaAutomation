@@ -1,8 +1,8 @@
 export default {
     name: 'staging',
     mysql: {
-        username: 'root',
-        password: 'root',
+        username: 'verse',
+        password: 'verse',
         multiStatement: false,
         dbName: 'cryptax',
         host: 'localhost',

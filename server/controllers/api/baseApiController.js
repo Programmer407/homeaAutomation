@@ -1,3 +1,4 @@
+/*
 import errorUtils from './../../utils/errorUtils'
 
 const get = (req, res, manager) => {
@@ -30,3 +31,4 @@ const get = (req, res, manager) => {
 export default {
   get: get
 }
+*/

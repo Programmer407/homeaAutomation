@@ -1,3 +1,4 @@
+/*
 // libs
 import Role from '../models/Role'
 
@@ -10,3 +11,4 @@ export const findRoleById = (id) =>
   .then(obj => {
     return obj
   })
+*/

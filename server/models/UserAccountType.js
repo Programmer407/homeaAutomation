@@ -1,3 +1,4 @@
+/*
 // libs
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize'
@@ -19,3 +20,4 @@ const UserAccountType = sequelize.define(
 )
 
 export default UserAccountType
+*/

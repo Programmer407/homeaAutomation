@@ -1,3 +1,4 @@
+/*
 // libs
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize'
@@ -20,3 +21,4 @@ const AssociatedAddress = sequelize.define(
 )
 
 export default AssociatedAddress
+*/

@@ -5,7 +5,7 @@ import Spinner from 'react-spinner-material';
 import DocumentTitle from 'react-document-title';
 import QueueAnim from 'rc-queue-anim';
 
-//import './PageLoading.scss';
+import './PageLoading.scss';
 
 export default class PageLoading extends React.Component {
   constructor(props) {
@@ -14,14 +14,13 @@ export default class PageLoading extends React.Component {
   }
 
   render() {
-    return <div className="page-login">
+    return (<div className="page-login">
               <div className="main-body">
                 <DocumentTitle title="Wisdom"/>
                 <QueueAnim type="bottom" className="ui-animate">
                 <div key="1">
-                <div className="text-center">
-                  <Spinner width={100}
-                    height={120}
+                <div className="text-center center-canvas">
+                  <Spinner size={120}
                     spinnerColor={"#333"}
                     spinnerWidth={2}
                     show={true} />
@@ -29,6 +28,6 @@ export default class PageLoading extends React.Component {
               </div>
               </QueueAnim>
             </div>
-            </div>;
+            </div>)
   }
 }

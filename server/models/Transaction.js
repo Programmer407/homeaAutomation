@@ -1,3 +1,4 @@
+/*
 // libs
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize'
@@ -39,3 +40,4 @@ UserWallet.hasMany(Transaction, {as: 'Transactions', onDelete: 'cascade', hooks:
 UserAddress.hasMany(Transaction, {as: 'AddressTransactions', onDelete: 'cascade', hooks: true})
 
 export default Transaction
+*/

@@ -1,3 +1,4 @@
+/*
 // libs
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize'
@@ -25,3 +26,4 @@ UserProvider.belongsTo(User)
 UserProvider.belongsTo(Provider)
 
 export default UserProvider
+*/

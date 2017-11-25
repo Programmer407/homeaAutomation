@@ -1,3 +1,4 @@
+/*
 // libs
 import express from 'express'
 import crypto from 'crypto'
@@ -370,3 +371,4 @@ router.post('/api/users/resend-activation', (req, res) => {
 })
 
 export default router
+*/

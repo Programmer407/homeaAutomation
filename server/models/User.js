@@ -1,3 +1,4 @@
+/*
 // libs
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize'
@@ -33,3 +34,4 @@ User.belongsTo(UserAccountType)
 User.belongsTo(TimeZone)
 
 export default User
+*/

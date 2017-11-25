@@ -1,3 +1,4 @@
+/*
 // libs
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize'
@@ -27,3 +28,4 @@ UserWallet.belongsTo(UserProvider)
 UserProvider.hasMany(UserWallet, {as: 'UserWallets'})
 
 export default UserWallet
+*/

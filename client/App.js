@@ -17,22 +17,13 @@ import './styles/css/app.scss'
 import MUITheme from "../config/theme"
 import {
   Header,
-	PageCalculateView,
-	PageChartsView,
-	PageReportsView,
-  PageLogin,
-  PageRegister,
-  PageForgotPassword,
-  PageResetPassword,
-  PageLogout,
   Page404,
-  PageAccountView,
-  PageSystemView,
-  PagePrivacy,
-  PageTerms,
-  PageErrorView,
-  PublicRoute,
-  PrivateRoute
+    PageErrorView,
+    PageDashboard,
+    PageCurrentStatus,
+    PageHistory,
+    PublicRoute
+
 } from "./components"
 
 export default class App extends React.Component {
@@ -72,52 +63,9 @@ export default class App extends React.Component {
 
                   <div className={`container-fluid`}>
                     <Switch>
-                      <PublicRoute path="/login" component={PageLogin} />
-                      <PublicRoute path="/activateAccount/:usertoken" component={PageLogin} />
-                      <PublicRoute path="/register" component={PageRegister} />
-                      <PublicRoute path="/forgotPassword" component={PageForgotPassword} />
-                      <PublicRoute path="/resetPassword/:usertoken" component={PageResetPassword} />
-                      <PublicRoute path="/privacy" component={PagePrivacy} />
-                      <PublicRoute path="/terms" component={PageTerms} />
-                      <PublicRoute path="/resend/activation/:id" component={PageLogin} />
-                      <Route path="/logout" component={PageLogout} />
-                      
-                      <PrivateRoute
-                        exact
-                        path="/"
-                        render={() => <Redirect to="/system" />}
-                      />
-                      <PrivateRoute
-                        exact
-                        path="/system"
-                        component={PageSystemView}
-                      />
-                      <PrivateRoute
-                        exact
-                        path="/account"
-                        component={PageAccountView}
-                      />
-                      <PrivateRoute
-                        exact
-                        path="/account/:providername/callback"
-                        component={PageAccountView}
-                      />
-											<PrivateRoute
-                        exact
-                        path="/calculate"
-                        component={PageCalculateView}
-                      />
-											<PrivateRoute
-                        exact
-                        path="/reports"
-                        component={PageReportsView}
-                      />
-											<PrivateRoute
-                        exact
-                        path="/charts"
-                        component={PageChartsView}
-                      />
-                      
+                      <PublicRoute path="/dashboard" component={PageDashboard} />
+                      <PublicRoute path="/currentStatus" component={PageCurrentStatus} />
+                      <PublicRoute path="/history" component={PageHistory} />
                       <Route exact path="/errors" component={PageErrorView} />
                       <Route component={Page404} />
                     </Switch>

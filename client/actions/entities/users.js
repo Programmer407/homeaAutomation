@@ -16,7 +16,7 @@ function callApiLogin(email, password, rememberMe) {
         USER_LOGIN_SUCCESS,
         USER_LOGIN_FAILURE
       ],
-      endpoint: `/api/login`,
+     /* endpoint: `/api/login`,*/
       method: 'POST'
     },
     payload: {email, password, rememberMe}
@@ -40,7 +40,7 @@ function callApiLogout() {
         USER_LOGOUT_SUCCESS,
         USER_LOGOUT_FAILURE
       ],
-      endpoint: `/api/logout`,
+    /*  endpoint: `/api/logout`,*/
       method: 'GET'
     }
   }
@@ -64,7 +64,7 @@ export function register(firstName, lastName, email, password) {
         USER_REGISTER_SUCCESS,
         USER_REGISTER_FAILURE
       ],
-      endpoint: `/api/users/create`,
+    /*  endpoint: `/api/users/create`,*/
       method: 'POST'
     },
     payload: {firstName, lastName, email, password}
@@ -83,7 +83,7 @@ export function forgotPassword(email) {
         USER_FORGOT_PASSWORD_SUCCESS,
         USER_FORGOT_PASSWORD_FAILURE
       ],
-      endpoint: `/api/users/forgot-password`,
+    /*  endpoint: `/api/users/forgot-password`,*/
       method: 'POST'
     },
     payload: {email}
@@ -102,7 +102,7 @@ export function confirmRegistration(token) {
         USER_CONFIRM_REGISTRATION_SUCCESS,
         USER_CONFIRM_REGISTRATION_FAILURE
       ],
-      endpoint: `/api/users/verify-account?token=${token}`,
+   /*   endpoint: `/api/users/verify-account?token=${token}`,*/
       method: 'POST'
     },
     payload: {token}
@@ -121,7 +121,7 @@ export function resetPassword(token, password, confirmPassword) {
         USER_RESET_PASSWORD_SUCCESS,
         USER_RESET_PASSWORD_FAILURE
       ],
-      endpoint: `/api/users/reset-password?token=${token}`,
+    /*  endpoint: `/api/users/reset-password?token=${token}`,*/
       method: 'POST'
     },
     payload: {token, password, confirmPassword}
@@ -140,7 +140,7 @@ export function changePassword(currentPassword, newPassword, confirmNewPassword)
         USER_CHANGE_PASSWORD_SUCCESS,
         USER_CHANGE_PASSWORD_FAILURE
       ],
-      endpoint: `/api/users/change-password`,
+  /*    endpoint: `/api/users/change-password`,*/
       method: 'POST'
     },
     payload: {currentPassword, newPassword, confirmNewPassword}
@@ -159,7 +159,7 @@ export function searchUsersByEmail(searchString) {
         USER_SEARCH_BY_EMAIL_SUCCESS,
         USER_SEARCH_BY_EMAIL_FAILURE
       ],
-      endpoint: `/api/users/search-by-email?search=${searchString}`
+     /* endpoint: `/api/users/search-by-email?search=${searchString}`*/
     }
   }
 }
@@ -176,7 +176,7 @@ export function searchUsersByName(searchString) {
         USER_SEARCH_BY_NAME_SUCCESS,
         USER_SEARCH_BY_NAME_FAILURE
       ],
-      endpoint: `/api/users/search-by-name?search=${searchString}`
+  /*    endpoint: `/api/users/search-by-name?search=${searchString}`*/
     }
   }
 }
@@ -193,7 +193,7 @@ export function isValidResetToken(tokenString) {
         CHECK_TOKEN_RESET_SUCCESS,
         CHECK_TOKEN_RESET_FAILURE
       ],
-      endpoint: `/api/users/search-user-token?search=${tokenString}`,
+   /*   endpoint: `/api/users/search-user-token?search=${tokenString}`,*/
       method: 'POST'
     },
     payload: {tokenString}
@@ -212,7 +212,7 @@ export function resendActivation(userId) {
         USER_RESEND_ACTIVATION_SUCCESS,
         USER_RESEND_ACTIVATION_FAILURE
       ],
-      endpoint: `/api/users/resend-activation?id=${userId}`,
+     /* endpoint: `/api/users/resend-activation?id=${userId}`,*/
       method: 'POST'
     },
     payload: {userId}

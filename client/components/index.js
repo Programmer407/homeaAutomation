@@ -1,20 +1,9 @@
 export { default as Header } from "./Header"
-export { default as PageLogin } from "./PageLogin"
-export { default as PageRegister } from "./PageRegister"
-export { default as PageForgotPassword } from "./PageForgotPassword"
-export { default as PageResetPassword } from "./PageResetPassword"
-export { default as PagePrivacy } from "./PagePrivacy"
-export { default as PageTerms } from "./PageTerms"
-export { default as PageLogout } from "./PageLogout"
 export { default as Page404 } from "./Page404"
 export { default as PageErrorView } from "./PageErrorView"
-export { default as PageAccountView } from "./PageAccountView"
-export { default as PageCalculateView } from "./PageCalculateView"
-export { default as PageChartsView } from "./PageChartsView"
-export { default as PageReportsView } from "./PageReportsView"
-export { default as PageSystemView } from "./PageSystemView"
 export { default as PrivateRoute } from "./PrivateRoute"
 export { default as PublicRoute } from "./PublicRoute"
-export { default as NotificationSystemConnector } from "./NotificationSystemConnector"
 export { default as PageLoading } from "./PageLoading"
-
+export {default as PageDashboard} from './PageDashboard'
+export {default as PageCurrentStatus} from './PageCurrentStatus'
+export {default as PageHistory} from './PageHistory'

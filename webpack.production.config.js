@@ -82,29 +82,29 @@ module.exports = {
       test: /\.json?$/,
       loader: 'json-loader'
     }, {
-      test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192'
+      test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192000'
     }, {
       test: /bootstrap\/js\//,
       loader: 'imports-loader?jQuery=jquery'
     }, {
       test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-      loader: "url-loader?limit=10000&mimetype=application/font-woff"
+      loader: "url-loader?limit=10000000&mimetype=application/font-woff"
     }, {
       test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-      loader: "url-loader?limit=10000&mimetype=application/octet-stream"
+      loader: "url-loader?limit=10000000&mimetype=application/octet-stream"
     }, {
       test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
       loader: "file-loader"
     }, {
       test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-      loader: "url-loader?limit=10000&mimetype=image/svg+xml"
+      loader: "url-loader?limit=10000000&mimetype=image/svg+xml"
     }, {
       test: /\.scss$/,
       include: /.client/,
       loaders: ["style-loader", "css-loader", "sass-loader"]
     }, {
 			test: /\.(png|woff|woff2|eot|ttf|svg)$/,
-			loader: 'url-loader?limit=100000'
+			loader: 'url-loader?limit=100000000'
 		}, { 
 			test: /\.css$/, 
 			loader: 'style!css' 

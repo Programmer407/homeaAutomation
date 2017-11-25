@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import DocumentTitle from 'react-document-title'
 import styles from './PageErrorView.scss'
 
-const mapStateToProps = state => {
+/*const mapStateToProps = state => {
   const {
     entities: {events}
   } = state
@@ -14,7 +14,7 @@ const mapStateToProps = state => {
   }
 }
 
-@connect(mapStateToProps)
+@connect(mapStateToProps)*/
 export default class PageErrorView extends React.Component {
   constructor(props) {
     super(props)

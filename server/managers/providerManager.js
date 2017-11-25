@@ -1,3 +1,4 @@
+/*
 // libs
 import Provider from '../models/Provider'
 
@@ -26,3 +27,4 @@ export const findProviderByName = (providerName) =>
   .then(obj => {
     return obj
   })
+*/

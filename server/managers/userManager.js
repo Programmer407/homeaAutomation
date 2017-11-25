@@ -1,3 +1,4 @@
+/*
 // libs
 import User from '../models/User'
 import Role from '../models/Role'
@@ -56,7 +57,7 @@ export const insertUser = (userObj) =>
   .then(obj => {
     return obj
   })
-  
+
 export const updateUser = (userObj) =>
   userObj.save()
   .then(obj => {
@@ -66,7 +67,7 @@ export const updateUser = (userObj) =>
 export const findUserByToken = (resetPasswordToken) =>
   User.findOne(Object.assign({
     where: {
-      resetPasswordToken, 
+      resetPasswordToken,
       resetPasswordExpires: { $gt: Date.now() }
     }
   }))
@@ -77,10 +78,11 @@ export const findUserByToken = (resetPasswordToken) =>
 export const findUserByRegistrationToken = (registerToken) =>
   User.findOne(Object.assign({
     where: {
-      registerToken, 
+      registerToken,
       registerExpires: { $gt: Date.now() }
     }
   }))
   .then(obj => {
     return obj
   })
+*/

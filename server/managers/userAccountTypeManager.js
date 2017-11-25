@@ -1,3 +1,4 @@
+/*
 // libs
 import UserAccountType from '../models/UserAccountType'
 
@@ -10,3 +11,4 @@ export const findUserAccountTypeById = (id) =>
   .then(obj => {
     return obj
   })
+*/

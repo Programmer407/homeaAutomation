@@ -1,3 +1,4 @@
+/*
 import UserWallet from '../models/UserWallet'
 
 export const findUserWalletByWalletId = (walletId) =>
@@ -30,3 +31,4 @@ export const deleteUserWalletById = (walletId) =>
       
       return object.destroy({ force: true })
     })
+*/

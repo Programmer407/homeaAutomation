@@ -1,3 +1,4 @@
+/*
 // libs
 import Sequelize from "sequelize"
 import sequelize from './../utils/sequelize'
@@ -25,3 +26,4 @@ const Provider = sequelize.define(
   }
 )
 export default Provider
+*/

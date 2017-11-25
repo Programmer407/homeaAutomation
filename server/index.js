@@ -66,10 +66,9 @@ if ( process.env.UNIVERSAL_RENDERING === 'false' ) {
 
 // Include server routes as a middleware
 [
-  'api/userApiController',
-  'api/accountApiController',
-  'api/transactionApiController',
-  'defaultController'
+  /*'api/userApiController',*/
+    'api/generealAPIController',
+  'defaultController',
 ].forEach(name => app.use(require(`./controllers/${name}`)))
 
 app.use(build404ErrorHandler())

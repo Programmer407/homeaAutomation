@@ -1,3 +1,4 @@
+/*
 // libs
 import TransactionType from '../models/TransactionType'
 
@@ -20,3 +21,4 @@ export const findTransactionTypeByName = (typeName) =>
   .then(obj => {
     return obj
   })
+*/

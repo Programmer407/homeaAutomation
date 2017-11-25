@@ -1,3 +1,4 @@
+/*
 import Sequelize from "sequelize"
 
 // src
@@ -304,3 +305,4 @@ export const deleteTransactionById = (transactionId) =>
     
     return object.destroy({ force: true })
   })
+*/

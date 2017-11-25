@@ -1,3 +1,4 @@
+/*
 // libs
 import TransactionImportType from '../models/TransactionImportType'
 
@@ -10,3 +11,4 @@ export const findTrxImportTypeById = (id) =>
   .then(obj => {
     return obj
   })
+*/
