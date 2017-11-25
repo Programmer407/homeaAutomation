@@ -19,7 +19,7 @@ export function fetchDashboardData() {
                 DASHBOARD_ALL_DATA_SUCCESS,
                 DASHBOARD_ALL_DATA_FAILURE
             ],
-             endpoint: `/api/dashboardData`,
+             endpoint: `/api/dashboard`,
             method: 'GET'
         },
     }

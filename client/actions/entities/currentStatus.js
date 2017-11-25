@@ -19,7 +19,7 @@ export function fetchCurrentStatusData() {
                 CURRENT_STATAS_DATA_SUCCESS,
                 CURRENT_STATAS_DATA_FAILURE
             ],
-            endpoint: `/api/currentStatusData`,
+            endpoint: `/api/now`,
             method: 'GET'
         },
     }

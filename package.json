@@ -16,7 +16,7 @@
   "license": "ISC",
   "scripts": {
     "start": "webpack --progress --config webpack.server.config.js && set UNIVERSAL_RENDERING=true && node server/dist/build.js",
-    "fast": "set UNIVERSAL_RENDERING=false && babel-node server/index.js",
+    "fast": "set UNIVERSAL_RENDERING=false && babel-node --inspect server/index.js",
     "build": "webpack --progress --config webpack.server.config.js",
     "jest": "set NODE_ENV=development && jest --no-cache",
     "flow": "flow",
@@ -94,7 +94,7 @@
     "redux-thunk": "^2.1.0",
     "request": "^2.81.0",
     "sass-loader": "^0.5",
-    "sequelize": "^4.4.2",
+    "sequelize": "^3.30.4",
     "tmp": "0.0.28",
     "underscore": "^1.8.3",
     "url-loader": "^0.6.2",

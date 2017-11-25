@@ -16,7 +16,7 @@ module.exports ={
 
         }
         var date =new Date();
-        date.setDate(date.getDate()-2);
+        date.setDate(date.getDate());
         var query_data = {switches:switchesArray,date:date};
 
         switchlogManager.getBulbLog(query_data).then(function(bulblogs){
@@ -47,7 +47,7 @@ module.exports ={
 
         }
         var date =new Date();
-        date.setDate(date.getDate()-2);
+        date.setDate(date.getDate());
         var query_data = {switches:switchesArray,data:date};
         switchlogManager.getFanLog(query_data).then(function(fanlog){
 

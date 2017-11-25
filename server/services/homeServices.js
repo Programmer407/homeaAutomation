@@ -7,7 +7,8 @@ module.exports ={
 
     findHome:function(data,callback){
         console.log('find home called')
-        user=data.user;
+        console.log('data object'+data);
+       var user=data.user;
 
         var query_data={account:user[0].dataValues.accountAccountId}
 

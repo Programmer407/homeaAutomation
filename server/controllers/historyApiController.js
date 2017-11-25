@@ -19,18 +19,8 @@ module.exports = function(io){
     })
 
     router.get('/activity_log',function(req,res){
-        console.log('auth ='+req.get('Authorization'));
-        var  Stringtoken = req.get('Authorization');
-        var StringTokenArray = Stringtoken.split(' ');
 
-        var token = StringTokenArray[1];
-
-        jwt.verify(token, 'irfanbsse2060', function(err, decoded) {
-            if (err) {
-                return res.json({success: false, message: 'Failed to authenticate token.'});
-            }
-            else {
-                activitylogService.findActivity({home_id:decoded.home_id},function(error,data){
+                activitylogService.findActivity({home_id:1},function(error,data){
 
                     if(error)
                         res.end('error in getting log')
@@ -58,14 +48,12 @@ module.exports = function(io){
 
 
                         }
-                        res.json(final_data);
+                        res.send({history:final_data});
 
 
                     }
 
                 })
-            }
-        });
 
 
     });

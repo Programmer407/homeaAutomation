@@ -214,7 +214,7 @@ module.exports= function(io){
                         console.log('dashboard data ='+dashboardData);
                         console.log('result'+result);
 
-                        res.json(dashboardData);
+                        res.send({DashboardData:dashboardData});
 
                     }
 

@@ -29,23 +29,8 @@ module.exports= function(io){
     router.get('/',function(req,res,next){
 
 
-        console.log('auth ='+req.get('Authorization'));
-        var  Stringtoken = req.get('Authorization');
-        var StringTokenArray = Stringtoken.split(' ');
-
-        var token = StringTokenArray[1];
-
-        jwt.verify(token, 'irfanbsse2060', function(err, decoded) {
-            if (err) {
-                return res.json({ success: false, message: 'Failed to authenticate token.' });
-            } else {
-                // if everything is good, save to request for use in other routes
-                req.decoded = decoded;
-                console.log('decoded'+req.decoded);
-                console.log(req.decoded.username);
-
                 var data = {
-                    email:req.decoded.username
+                    email:'ali@gmail.com'
                 }
                 async.waterfall([
 
@@ -116,7 +101,7 @@ module.exports= function(io){
 
 
                         console.log('now data ='+nowData);
-                          res.json(nowData);
+                          res.send({now:nowData});
 
                        // res.render('now',{nowData});
 
@@ -127,16 +112,6 @@ module.exports= function(io){
                 });
 
 
-
-
-
-
-
-
-
-
-            }
-        });
 
 
     });

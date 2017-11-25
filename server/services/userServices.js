@@ -14,6 +14,7 @@ module.exports= {
          if(user)
          {
              data.user=user;
+             console.log('here is user'+user);
              callback(null,data);
 
          }
