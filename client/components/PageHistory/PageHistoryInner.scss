@@ -1,8 +1,14 @@
-.scrollbarStyle {
-  margin-left: 20px;
-  width: 94%;
-}
+.historyStyle {
+  .scrollbarStyle {
+    margin-left: 20px;
+    width: 94%;
+  }
 
-.panel-heading{
-  text-align: center;
+  .panel-heading {
+    text-align: center;
+  }
+
+  .panel-body {
+    overflow-x: auto;
+  }
 }

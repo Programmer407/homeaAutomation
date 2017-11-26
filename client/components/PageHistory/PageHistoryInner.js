@@ -19,7 +19,7 @@ const PageHistoryInner = (props) =>{
      return <PageLoading/>
     return (
         <div>
-            <div className="row ">
+            <div className="row historyStyle">
                 <div className=" col-lg-8 col-lg-push-2 ">
                     <AppBar style={{height : "6%", textAlign : "center"}}
                             titleStyle={{paddingBottom : "0px", marginBottom : "0px",lineHeight :"41px"}}

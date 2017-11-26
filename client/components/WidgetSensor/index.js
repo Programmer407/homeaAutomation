@@ -18,8 +18,9 @@ class StatWidget extends Component{ // eslint-disable-line
     }
     render() {
         return (
+           <div className="widget-sensor">
             <Panel style={{height : "186px"}}
-                header={<div className="row" style={{backgroundColor : this.props.applianceType  == 'Light' ? "#f5f5f5" : "#d9534f",width : "108%", height : "117%", marginTop : "-10px"}}>
+                header={<div className="row " style={{backgroundColor : this.props.applianceType  == 'Light' ? "#f5f5f5" : "#d9534f",width : "108%", height : "117%", marginTop : "-10px"}}>
           <div className="col-xs-3">
 
  <div className="imag"  style={{paddingTop : "13px"}}>
@@ -62,7 +63,7 @@ class StatWidget extends Component{ // eslint-disable-line
             >
 
             </Panel>
-
+           </div>
         );
     }
 }
