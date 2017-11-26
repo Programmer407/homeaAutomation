@@ -9,6 +9,21 @@ import compression from 'compression'
 import { Server } from 'http'
 import { renderFile } from 'ejs'
 import cors from 'cors'
+import http from 'http'
+var  expressJwt = require('express-jwt');
+var socket = require('socket.io');
+var secretToken = require('./../config/secretToken');
+
+var io = socket();
+
+
+var user = require('./controllers/userApiController');
+var dashboard = require('./controllers/dashboardApiController')(io);
+var now = require('./controllers/nowApiController')(io);
+var history = require('./controllers/historyApiController')(io);
+var microservice = require('./controllers/microserviceApiController')(io);
+
+var models =require('./models');
 
 // src
 import devUtils from './utils/devUtils'
@@ -20,9 +35,10 @@ import {
 } from './utils'
 
 const port = getPort()
-const app = express()
+const app = express();
+app.io= io;
 const httpServer = Server(app)
-setupSessionStore(app)
+// setupSessionStore(app)
 
 // gzip filter
 app.use(compression())
@@ -44,11 +60,12 @@ app.use(express.static(path.resolve('./server/public')))
 app.use(cookieParser())
 // security package
 app.use(helmet())
+// app.use(expressJwt({secret:secretToken.secret}).unless({path:['','/','/login','/login/test']}));
 // see setting details here: https://github.com/expressjs/session
 // app.use(expressSession(, store: new MySQLStore(options)}))
-app.use(passport.initialize())
-app.use(passport.session())
-setupPassport()
+// app.use(passport.initialize())
+// app.use(passport.session())
+// setupPassport()
 
 app.use(cors())
 
@@ -65,19 +82,38 @@ if ( process.env.UNIVERSAL_RENDERING === 'false' ) {
 }
 
 // Include server routes as a middleware
+
+app.use('/api/login', user);
+app.use('/api/dashboard',dashboard);
+app.use('/api/now',now);
+app.use('/microservice',microservice);
+app.use('/api/history',history);
+
 [
-  /*'api/userApiController',*/
-    'api/generealAPIController',
-  'defaultController',
+    'generealApiController',
+    'defaultController',
 ].forEach(name => app.use(require(`./controllers/${name}`)))
 
 app.use(build404ErrorHandler())
 app.use(build500ErrorHandler())
 
-httpServer.listen(port, err => {
-  if (err) {
-    console.error(`Server startup failed: `, err)
-  }
+models.sequelize.sync({logging:console.log}).then(function(){
+  console.log('sequelized connected');
+    var server = http.createServer(app);
+    io.attach(server);
+    server.listen(port, err => {
+        if (err) {
+            console.error(`Server startup failed: `, err)
+        }
 
-  console.info('==> 🌎 Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port)
+        console.info('==> 🌎 Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port)
+    })
+
+}).catch(function(error){
+  console.log('error in connected to microsoft server '+error);
 })
+
+
+
+
+

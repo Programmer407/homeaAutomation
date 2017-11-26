@@ -19,7 +19,7 @@ export function fetchHistoryData() {
                 HISTORY_DATA_SUCCESS,
                 HISTORY_DATA_FAILURE
             ],
-            endpoint: `/api/historyData`,
+            endpoint: `/api/history/activity_log`,
             method: 'GET'
         },
     }
