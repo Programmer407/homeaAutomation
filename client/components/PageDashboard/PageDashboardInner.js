@@ -1,6 +1,7 @@
 //libs
 import React from 'react';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
+import {BarChart,Bar, Cell} from 'recharts';
 import { Panel } from 'react-bootstrap';
 import AppBar from 'material-ui/AppBar';
 
@@ -11,7 +12,7 @@ import './PageDashboardInner.scss'
 import PageLoading from '../PageLoading';
 
 
-
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042','#4CF335 '];
 //libs
 import {PageHeader} from 'react-bootstrap';
 
@@ -22,8 +23,8 @@ const PageDashboardInner = (props) =>{
 
    debugger;
     return (
-       <div>
-           <div className="row "  >
+       <div className="dahsboard">
+           <div className="row"  >
 
 
 
@@ -83,13 +84,8 @@ const PageDashboardInner = (props) =>{
 
            </div>
 
-
            <div className="row">
-                               Bulbs and Fans Graph
-           </div>
-
-           <div className="row">
-               <div className="col-lg-12">
+               <div className="col-lg-6">
                    <Panel
                        header={<span>
               <i className="fa fa-bar-chart-o fa-fw" /> Bulb Logs Graph of Last 24 hours
@@ -97,7 +93,62 @@ const PageDashboardInner = (props) =>{
                    >
 
                        <div className="row">
-                           <div className="col-lg-12">
+                           <div className="col-lg-6">
+                               <BarChart width={730} height={300} data={DashboardData.bulb_log}>
+                                   <XAxis angle={-45} interval={0} dataKey="time"/>
+                                   <YAxis />
+                                   <Tooltip />
+                                   <Legend  />
+                                   <Bar dataKey="total_on" fill="#8884d8" >
+                                       {
+                                           (DashboardData.bulb_log || []).map((entry, index) => <Cell  fill={COLORS[index % COLORS.length]}/>)
+                                       }
+                                   </Bar>
+                               </BarChart>
+                           </div>
+                       </div>
+
+
+                   </Panel>
+               </div>
+               <div className="col-lg-6">
+                   <Panel
+                       header={<span>
+              <i className="fa fa-bar-chart-o fa-fw" /> Fan Logs Graph of Last 24 hours
+            </span>}
+                   >
+
+                       <div className="row">
+                           <div className="col-lg-6">
+                               <BarChart width={730} height={300} data={DashboardData.fan_log}>
+                                   <XAxis angle={-45} interval={0} dataKey="time"/>
+                                   <YAxis />
+                                   <Tooltip  />
+                                   <Legend />
+                                   <Bar dataKey="total_on" fill="#8884d8" >
+                                       {
+                                           (DashboardData.bulb_log || []).map((entry, index) => <Cell  fill={COLORS[index % COLORS.length]}/>)
+                                       }
+                                   </Bar>
+                               </BarChart>
+                           </div>
+                       </div>
+
+
+                   </Panel>
+               </div>
+           </div>
+
+         {/*  <div className="row">
+               <div className="col-lg-6">
+                   <Panel
+                       header={<span>
+              <i className="fa fa-bar-chart-o fa-fw" /> Bulb Logs Graph of Last 24 hours
+            </span>}
+                   >
+
+                       <div className="row">
+                           <div className="col-lg-6">
                                <LineChart width={600} height={300} data={DashboardData.bulb_log}
                                           margin={{top: 5, right: 0, left: 80, bottom: 5}}>
                                    <XAxis dataKey="time"/>
@@ -114,10 +165,7 @@ const PageDashboardInner = (props) =>{
 
                    </Panel>
                </div>
-           </div>
-
-           <div className="row">
-               <div className="col-lg-12">
+               <div className="col-lg-6">
                    <Panel
                        header={<span>
          <i className="fa fa-bar-chart-o fa-fw" /> Fan Logs Graph of Last 24 hours
@@ -125,14 +173,14 @@ const PageDashboardInner = (props) =>{
                    >
 
                        <div className="row">
-                           <div className="col-lg-12">
+                           <div className="col-lg-6">
                                <LineChart width={600} height={300} data={DashboardData.fan_log}
                                           margin={{top: 5, right: 0, left: 80, bottom: 5}}>
                                    <XAxis dataKey="time"/>
                                    <YAxis/>
                                    <CartesianGrid strokeDasharray="3 3"/>
                                    <Tooltip/>
-                                   <Legend />
+                                   <Legend  />
                                    <Line type="monotone" dataKey="total_on" stroke="#8884d8" activeDot={{r: 8}}/>
                                    /!*<Line type="monotone" dataKey="uv" stroke="#82ca9d" />*!/
                                </LineChart>
@@ -142,7 +190,8 @@ const PageDashboardInner = (props) =>{
 
                    </Panel>
                </div>
-           </div>
+           </div>*/}
+
 
        </div>
     )

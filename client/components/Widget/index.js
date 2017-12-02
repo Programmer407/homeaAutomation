@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Panel } from 'react-bootstrap';
 
+import './Widget.scss'
+
 
 class StatWidget extends Component{ // eslint-disable-line
   static propTypes = {
@@ -81,7 +83,8 @@ class StatWidget extends Component{ // eslint-disable-line
               }
           </div>
         </div>*/
-     <Panel
+    <div className="Widget">
+    <Panel
         header={<div className="row" style={{backgroundColor : this.props.applianceType  == 'bulb' ? "#337ab7" : (this.props.applianceType == 'fan' ?  "#5cb85c" : "#d9534f"),   width : "108%", height : "117%", marginTop : "-10px"}}>
           <div className="col-xs-3">
 
@@ -147,7 +150,7 @@ class StatWidget extends Component{ // eslint-disable-line
                   <div>Home</div>
           }
       </Panel>
-
+    </div>
     );
   }
 }
