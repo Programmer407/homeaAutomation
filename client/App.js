@@ -22,7 +22,9 @@ import {
     PageDashboard,
     PageCurrentStatus,
     PageHistory,
-    PublicRoute
+    PublicRoute,
+    PageLogin,
+    PageRegister
 
 } from "./components"
 
@@ -63,6 +65,8 @@ export default class App extends React.Component {
 
                   <div className={`container-fluid`}>
                     <Switch>
+                      <PublicRoute path="/login" component={PageLogin} />
+                      <PublicRoute path="/register" component={PageRegister} />
                       <PublicRoute path="/dashboard" component={PageDashboard} />
                       <PublicRoute path="/currentStatus" component={PageCurrentStatus} />
                       <PublicRoute path="/history" component={PageHistory} />
