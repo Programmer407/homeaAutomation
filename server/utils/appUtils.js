@@ -45,11 +45,11 @@ export const getPort = () => {
 export const setupSessionStore = (app) => {
   const MySQLStore = expressMySqlStore(session)
   const options = {
-    host, // Host name for database connection.
+    host:"localhost",// Host name for database connection.
     port: 3306, // Port number for database connection.
-    user: username, // Database user.
-    password, // Password for the above database user.
-    database: dbName, // Database name.
+    user: "root", // Database user.
+    password:"root", // Password for the above database user.
+    database: "HomeAutomationSystem", // Database name.
     // checkExpirationInterval: 900000, // How frequently expired sessions will be cleared milliseconds.
     // expiration: 86400000, // The maximum age of a valid session milliseconds.
     checkExpirationInterval: 600000, // How frequently expired sessions will be cleared milliseconds.
