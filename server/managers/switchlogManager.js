@@ -9,11 +9,11 @@ module.exports = {
     getBulbLog:function(query_data)
     {
 
-        return models.switch_log.findAll({where:{date:query_data.date,switchSwitchId:query_data.switches},include:[{model:models.switches,where:{applianceApplianceId:1}}] })
+        return models.switch_log.findAll({where:{date:{gte:query_data.date},switchSwitchId:query_data.switches},include:[{model:models.switches,where:{applianceApplianceId:1}}] })
     },
     getFanLog:function(query_data){
 
-        return models.switch_log.findAll({where:{date:query_data.date,switchSwitchId:query_data.switches},include:[{model:models.switches,where:{applianceApplianceId:2}}] });
+        return models.switch_log.findAll({where:{date:{gte:query_data.date},switchSwitchId:query_data.switches},include:[{model:models.switches,where:{applianceApplianceId:2}}] });
 
     },
     addLogbyId:function(query_data){

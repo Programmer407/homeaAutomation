@@ -11,11 +11,11 @@ module.exports = {
     {
 
 
-        return models.sensor_log.findAll({where:{date:query_data.date,sensorSensorId:query_data.sensors},include:[{model:models.sensor,where:{sensorTypeStId:1}}] })
+        return models.sensor_log.findAll({where:{date:{gte:query_data.date},sensorSensorId:query_data.sensors},include:[{model:models.sensor,where:{sensorTypeStId:1}}] })
     },
     getLightLog:function(query_data){
 
-        return models.sensor_log.findAll({where:{date:query_data.date,sensorSensorId:query_data.sensors},include:[{model:models.sensor,where:{sensorTypeStId:2}}] });
+        return models.sensor_log.findAll({where:{date:{gte:query_data.date},sensorSensorId:query_data.sensors},include:[{model:models.sensor,where:{sensorTypeStId:2}}] });
 
     },
     addLogbyId:function(query_data){
