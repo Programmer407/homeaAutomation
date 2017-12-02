@@ -43,7 +43,7 @@ module.exports  = {
         }
 
         var date =new Date();
-        date.setDate(date.getDate());
+        date.setDate(date.getDate()-1);
         var query_data = {sensors:listofgraph,date:date};
         sensorlogManager.getTempLog(query_data).then(function(templog){
             if(templog)
@@ -88,11 +88,9 @@ module.exports  = {
             }
 
 
-
-
         }
         var date =new Date();
-        date.setDate(date.getDate());
+        date.setDate(date.getDate()-1);
         var query_data = {sensors:listofgraph,date:date};
 
         sensorlogManager.getLightLog(query_data).then(function(lightlog){
