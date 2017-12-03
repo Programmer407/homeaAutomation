@@ -23,6 +23,7 @@ import {
     PageCurrentStatus,
     PageHistory,
     PublicRoute,
+    PrivateRoute,
     PageLogin,
     PageRegister
 
@@ -71,6 +72,16 @@ export default class App extends React.Component {
                       <PublicRoute path="/currentStatus" component={PageCurrentStatus} />
                       <PublicRoute path="/history" component={PageHistory} />
                       <Route exact path="/errors" component={PageErrorView} />
+                    {/*  <PrivateRoute
+                          exact
+                          path="/"
+                          render={() => <Redirect to="/dashboard" />}
+                      />
+                      <PrivateRoute
+                          exact
+                          path="/dashboard"
+                          component={PageDashboard}
+                      />*/}
                       <Route component={Page404} />
                     </Switch>
                   </div>

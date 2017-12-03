@@ -9,6 +9,7 @@ export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS'
 export const USER_LOGIN_FAILURE = 'USER_LOGIN_FAILURE'
 
 function callApiLogin(email, password, rememberMe) {
+  console.log("Email \n"+email+"\n Passowrd \n"+password+"\n remember \n"+rememberMe )
   return {
     [CALL_API]: {
       types: [
@@ -57,6 +58,7 @@ export const USER_REGISTER_SUCCESS = 'USER_REGISTER_SUCCESS'
 export const USER_REGISTER_FAILURE = 'USER_REGISTER_FAILURE'
 
 export function register(firstName, lastName, email, password) {
+  console.log("firstName \n"+firstName+"\n LastName \n"+lastName+"\n Email \n"+email+"\n Password \n"+password)
   return {
     [CALL_API]: {
       types: [

@@ -18,7 +18,7 @@ const PageRegisterInner = props => {
   return (
     <div className="page-login">
       <div className="main-body main-body-primary">
-        <DocumentTitle title="Register - Wisdom"/>
+        <DocumentTitle title="Register - IOT"/>
         <QueueAnim type="bottom" className="ui-animate">
           <div key="1">
             

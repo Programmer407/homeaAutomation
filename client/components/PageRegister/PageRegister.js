@@ -79,10 +79,12 @@ const validate = values => {
   onSubmit: (values, dispatch, props) => {
     const { firstName, lastName, email, password } = values;
 
-    return dispatch(register(firstName, lastName, email, password))
+    /*return dispatch(register(firstName, lastName, email, password))
     .then(action => {
       return action
-    })
+    })*/
+    dispatch(register(firstName, lastName, email, password))
+
   }
 })
 export default class PageRegister extends React.Component {
