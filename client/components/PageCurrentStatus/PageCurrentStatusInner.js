@@ -2,6 +2,7 @@
 import React from 'react';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+import FlatButton from 'material-ui/FlatButton';
 
 
 //src
@@ -9,9 +10,10 @@ import './PageCurrentStatusInner.scss'
 import WidgetOnOffAppliance from '../../components/WidgetOnOffAppliance';
 import WidgetSensor from '../../components/WidgetSensor';
 import PageLoading from '../PageLoading';
+import AddAppliance from '../AddAppliaceDialog/AddAppliance'
 
 const PageCurrentStatusInner = (props) =>{
-  const {NowData,isLoading,afterFloorSelected,afterRoomSelected,floorSelected,roomSelected,handleFloorSelected,handleRoomSelected} = props
+  const {NowData,isLoading,afterFloorSelected,afterRoomSelected,floorSelected,roomSelected,handleFloorSelected,handleRoomSelected,handleAddApplianceDialogOpen,handleAddApplianceDialogClose,addApplianceDialogOpen} = props
 if(isLoading ==true)
     return <PageLoading/>
 
@@ -22,7 +24,11 @@ if(isLoading ==true)
 
             <div className="row">
                     <div className="col-lg-8 col-md-6 col-sm-4 ">
-
+                        <FlatButton label="+ Add Appliance" onTouchTap={handleAddApplianceDialogOpen}/>
+                        <AddAppliance
+                               open = {addApplianceDialogOpen}
+                               handleCancelDialog = {handleAddApplianceDialogClose}
+                        />
                     </div>
                     <div className="col-lg-2 col-md-3 col-sm-4 text-center ">
                         <DropDownMenu value={floorSelected} onChange={handleFloorSelected} >

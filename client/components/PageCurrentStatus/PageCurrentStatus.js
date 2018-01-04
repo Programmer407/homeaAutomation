@@ -24,6 +24,7 @@ export default class PageCurrentStatus extends React.Component {
         this.state ={
             floorSelected : '',
             roomSelected : '',
+            addApplianceDialogOpen : false,
              now : {
                 "floors": [
                     {
@@ -225,6 +226,8 @@ export default class PageCurrentStatus extends React.Component {
         this.afterRoomSelected = this.afterRoomSelected.bind(this);
         this.handleFloorSelected = this.handleFloorSelected.bind(this);
         this.handleRoomSelected = this.handleRoomSelected.bind(this)
+        this.handleAddApplianceDialogOpen = this.handleAddApplianceDialogOpen.bind(this)
+        this.handleAddApplianceDialogClose = this.handleAddApplianceDialogClose.bind(this)
     }
 
     componentDidMount(){
@@ -270,6 +273,14 @@ export default class PageCurrentStatus extends React.Component {
     }
 
 
+    handleAddApplianceDialogOpen(){
+        this.setState({addApplianceDialogOpen : true})
+    }
+
+    handleAddApplianceDialogClose(){
+        this.setState({addApplianceDialogOpen : false})
+    }
+
 
 
     render(){
@@ -284,10 +295,13 @@ export default class PageCurrentStatus extends React.Component {
                 NowData = {now}
                 floorSelected = {this.state.floorSelected}
                 roomSelected  = {this.state.roomSelected}
+                addApplianceDialogOpen = {this.state.addApplianceDialogOpen}
                 afterFloorSelected ={this.afterFloorSelected}
                 afterRoomSelected = {this.afterRoomSelected}
                 handleFloorSelected = {this.handleFloorSelected}
                 handleRoomSelected = {this.handleRoomSelected}
+                handleAddApplianceDialogOpen = {this.handleAddApplianceDialogOpen}
+                handleAddApplianceDialogClose = {this.handleAddApplianceDialogClose}
                 isLoading = {isLoading}
             />
         )
