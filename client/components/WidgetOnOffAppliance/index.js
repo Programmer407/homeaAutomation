@@ -21,7 +21,7 @@ class StatWidget extends Component{ // eslint-disable-line
         return (
             <div className="widget-appliance ">
             <Panel style={{height : "186px"}}
-                header={<div className="row widget-appliance" style={{backgroundColor : this.props.applianceType  == 'bulb' ? "#337ab7" : "#5cb85c",width : "108%", height : "117%", marginTop : "-10px"}}>
+                header={<div className="row widget-row" style={{backgroundColor : this.props.applianceType  == 'bulb' ? "#337ab7" : "#5cb85c", height : "117%", marginTop : "-10px"}}>
           <div className="col-xs-3">
 
  <div className="imag" style={{paddingTop : "13px"}}>

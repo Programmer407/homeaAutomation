@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Panel } from 'react-bootstrap';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 
 class StatWidget extends Component{ // eslint-disable-line
@@ -58,12 +60,16 @@ class StatWidget extends Component{ // eslint-disable-line
                 </div>
 
                 <div className="col-lg-6 col-md-6 text-center">
-                  <select>
-                    <option value="" >Select Mood</option>
-                    <option value="General"  >Auto</option>
-                    <option value="Manual"  >Manual</option>
-                    <option value="Manual"  >Sleep</option>
-                  </select>
+                    <DropDownMenu value="General" >
+                        {/*<MenuItem value="" primaryText="Select Floor" />*/}
+                       {/* {NowData.floors.map((floor, key) => {
+                            return (*/}
+                                <MenuItem value="General" primaryText="General" />
+                                 <MenuItem value="Manual" primaryText="Manual" />
+                                 <MenuItem value="Sleep" primaryText="Sleep" />
+
+                         /*   );})}*/
+                    </DropDownMenu>
                 </div>
               </div>
             </Panel>

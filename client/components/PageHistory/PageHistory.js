@@ -13,7 +13,7 @@ import PageLoading from '../PageLoading';
 const mapStateToProps = (state, ownProps) => {
     const {feed : {history : {history : {history}}}} = state
     const {feed : {history : {isLoading }}} = state
-    debugger;
+
     return {history,isLoading}
 }
 

@@ -44,7 +44,7 @@ const validate = values => {
         return dispatch(login(email, password, rememberMe))
             .then(action => {
                 console.log(action.payload.user.roleId)
-                debugger;
+
                 const { error } = action
                /* if ( !error ) {
                   dispatch(push('/dashboard'))

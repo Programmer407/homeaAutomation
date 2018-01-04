@@ -25,7 +25,8 @@ import {
     PublicRoute,
     PrivateRoute,
     PageLogin,
-    PageRegister
+    PageRegister,
+    TestComponent
 
 } from "./components"
 
@@ -66,6 +67,7 @@ export default class App extends React.Component {
 
                   <div className={`container-fluid`}>
                     <Switch>
+                      <PublicRoute path="/test" component={TestComponent} />
                       <PublicRoute path="/login" component={PageLogin} />
                       <PublicRoute path="/register" component={PageRegister} />
                       <PublicRoute path="/dashboard" component={PageDashboard} />

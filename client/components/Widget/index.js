@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Panel } from 'react-bootstrap';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 import './Widget.scss'
 
@@ -85,7 +87,7 @@ class StatWidget extends Component{ // eslint-disable-line
         </div>*/
     <div className="Widget">
     <Panel
-        header={<div className="row" style={{backgroundColor : this.props.applianceType  == 'bulb' ? "#337ab7" : (this.props.applianceType == 'fan' ?  "#5cb85c" : "#d9534f"),   width : "108%", height : "117%", marginTop : "-10px"}}>
+        header={<div className="row" style={{backgroundColor : this.props.applianceType  == 'bulb' ? "#0088FE" : (this.props.applianceType == 'fan' ?  "#5cb85c" : "#FF8042"),   width : "108%", height : "117%", marginTop : "-10px"}}>
           <div className="col-xs-3">
 
  <div className="imag" style={{paddingTop : "13px"}}>

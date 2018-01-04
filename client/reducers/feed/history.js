@@ -4,7 +4,6 @@ import * as ActionTypes from '../../actions'
 import { combineReducers } from 'redux'
 
 function isLoading(state = false, action) {
-    debugger;
     switch (action.type) {
         case ActionTypes.HISTORY_DATA: {
             return true
@@ -24,7 +23,6 @@ function isLoading(state = false, action) {
 
 function history(state = "", action) {
     const {payload} = action
-    debugger;
     switch (action.type) {
         case ActionTypes.HISTORY_DATA_SUCCESS: {
             return action.payload;

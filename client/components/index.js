@@ -9,3 +9,4 @@ export { default as PageLoading } from "./PageLoading"
 export {default as PageDashboard} from './PageDashboard'
 export {default as PageCurrentStatus} from './PageCurrentStatus'
 export {default as PageHistory} from './PageHistory'
+export {default as TestComponent} from './TestComponent'
