@@ -73,6 +73,28 @@ export function register(firstName, lastName, email, password) {
   }
 }
 
+
+export const USER_DELETE = 'USER_DELETE'
+export const USER_DELETE_SUCCESS = 'USER_DELETE_SUCCESS'
+export const USER_DELETE_FAILURE = 'USER_DELETE_FAILURE'
+
+export function deleteUser(email) {
+    console.log(" Email \n"+email)
+    return {
+        [CALL_API]: {
+            types: [
+                USER_DELETE,
+                USER_DELETE_SUCCESS,
+                USER_DELETE_FAILURE
+            ],
+          /*  endpoint: `/api/users/deleteUser,*/
+            method: 'POST'
+        },
+        payload: {email}
+    }
+}
+
+
 export const USER_FORGOT_PASSWORD = 'USER_FORGOT_PASSWORD'
 export const USER_FORGOT_PASSWORD_SUCCESS = 'USER_FORGOT_PASSWORD_SUCCESS'
 export const USER_FORGOT_PASSWORD_FAILURE = 'USER_FORGOT_PASSWORD_FAILURE'
