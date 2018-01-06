@@ -1,12 +1,27 @@
-@media screen and (max-width: 768px) {
-  .for_small_screen {
-    margin-left: 26%;
-    width: 45%;
+.Page-current-status {
+
+  hr {
+    margin-top: 0rem;
+    margin-left: -30px;
+    margin-right: -30px;
+    margin-bottom: 0rem;
+    box-shadow: 1px 1px 1px #ddd;
+    /* border-bottom: 1px solid #ccc; */
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
   }
-  .for_small_screen_dropDown {
-    margin-left: 24%;
-    width: 50%;
-    margin-bottom: 2%;
-    margin-top: 2%;
+
+  @media screen and (max-width: 768px) {
+    .for_small_screen {
+      margin-left: 26%;
+      width: 45%;
+    }
+    .for_small_screen_dropDown {
+      margin-left: 24%;
+      width: 50%;
+      margin-bottom: 2%;
+      margin-top: 2%;
+    }
   }
+
 }

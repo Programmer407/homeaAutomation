@@ -4,6 +4,8 @@ import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'rec
 import {BarChart,Bar, Cell} from 'recharts';
 import { Panel } from 'react-bootstrap';
 import AppBar from 'material-ui/AppBar';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 //src
 import StatWidget from '../../components/Widget';
@@ -17,7 +19,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042','#4CF335 '];
 import {PageHeader} from 'react-bootstrap';
 
 const PageDashboardInner = (props) =>{
-   const {DashboardData,isLoading} = props;
+   const {DashboardData,NowData,isLoading,handleFloorSelected,handleRoomSelected,floorSelected,roomSelected} = props;
    if(isLoading == true)
        return <PageLoading/>
 
@@ -29,7 +31,7 @@ const PageDashboardInner = (props) =>{
 
 
                {/*  bulb with dynamic data*/}
-               <div className="col-lg-4 col-md-6 ">
+               <div className="col-lg-4 col-md-6 col-sm-6 ">
                    <div>
                        <StatWidget
                            style="panel-primary"
@@ -47,7 +49,7 @@ const PageDashboardInner = (props) =>{
 
 
                {/* fan with dynamic data*/}
-               <div className="col-lg-4 col-md-6 ">
+               <div className="col-lg-4 col-md-6 col-sm-6 ">
 
                    <div>
                        <StatWidget
@@ -65,7 +67,7 @@ const PageDashboardInner = (props) =>{
 
 
                   {/* mode*/}
-               <div className="col-lg-4 col-md-6 ">
+               <div className="col-lg-4 col-md-6 col-sm-6">
 
                    <div>
                        <StatWidget
@@ -139,6 +141,89 @@ const PageDashboardInner = (props) =>{
                </div>
            </div>
 
+
+
+           <div className="row">
+               <div className="col-lg-8 col-md-6 col-sm-4 ">
+
+               </div>
+               <div className="col-lg-2 col-md-3 col-sm-4 text-center ">
+                   <DropDownMenu value={floorSelected} onChange={handleFloorSelected} >
+                       {/*<MenuItem value="" primaryText="Select Floor" />*/}
+                       {NowData.floors.map((floor, key) => {
+                           return (
+                               <MenuItem value={floor.floor_id} primaryText={floor.name} />
+                           );})}
+                   </DropDownMenu>
+               </div>
+               <div className="col-lg-2 col-md-3 col-sm-4 text-center">
+                   <DropDownMenu value={roomSelected} onChange={handleRoomSelected} >
+                       {/* <MenuItem value="" primaryText="Select Room" />*/}
+                       {NowData.palaces.map((palace, key) => {
+                           if(palace.floorFloorId == floorSelected)
+                               return (
+                                   <MenuItem value={palace.palace_id} primaryText={palace.name} />
+                               );})}
+                   </DropDownMenu>
+               </div>
+           </div>
+
+   {/* Temperature and light sensor data*/}
+
+           <div className="row">
+               <div className="col-lg-6">
+                   <Panel
+                       header={<span>
+              <i className="fa fa-bar-chart-o fa-fw" /> Temperature Data of last 24 hours
+            </span>}
+                   >
+
+                       <div className="row">
+                           <div className="col-lg-6">
+                               <BarChart width={730} height={300} data={DashboardData.bulb_log}>
+                                   <XAxis angle={-45} interval={0} dataKey="time"/>
+                                   <YAxis />
+                                   <Tooltip />
+                                   <Legend  />
+                                   <Bar dataKey="total_on" fill="#8884d8" >
+                                       {
+                                           (DashboardData.bulb_log || []).map((entry, index) => <Cell  fill={COLORS[index % COLORS.length]}/>)
+                                       }
+                                   </Bar>
+                               </BarChart>
+                           </div>
+                       </div>
+
+
+                   </Panel>
+               </div>
+               <div className="col-lg-6">
+                   <Panel
+                       header={<span>
+              <i className="fa fa-bar-chart-o fa-fw" /> Light sensor of last 24 hours
+            </span>}
+                   >
+
+                       <div className="row">
+                           <div className="col-lg-6">
+                               <BarChart width={730} height={300} data={DashboardData.fan_log}>
+                                   <XAxis angle={-45} interval={0} dataKey="time"/>
+                                   <YAxis />
+                                   <Tooltip  />
+                                   <Legend />
+                                   <Bar dataKey="total_on" fill="#8884d8" >
+                                       {
+                                           (DashboardData.bulb_log || []).map((entry, index) => <Cell  fill={COLORS[index % COLORS.length]}/>)
+                                       }
+                                   </Bar>
+                               </BarChart>
+                           </div>
+                       </div>
+
+
+                   </Panel>
+               </div>
+           </div>
          {/*  <div className="row">
                <div className="col-lg-6">
                    <Panel

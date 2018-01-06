@@ -13,7 +13,6 @@ import PageLoading from '../PageLoading';
 const mapStateToProps = (state, ownProps) => {
     const {feed : {currentStatus : {currentStatus : {now}}}} = state
     const {feed : {currentStatus : {isLoading }}} = state
-    debugger;
     return {now,isLoading}
 }
 
@@ -24,7 +23,8 @@ export default class PageCurrentStatus extends React.Component {
         super(props);
         this.state ={
             floorSelected : '',
-            roomSelected : ' ',
+            roomSelected : '',
+            addApplianceDialogOpen : false,
              now : {
                 "floors": [
                     {
@@ -224,11 +224,21 @@ export default class PageCurrentStatus extends React.Component {
         }
         this.afterFloorSelected = this.afterFloorSelected.bind(this);
         this.afterRoomSelected = this.afterRoomSelected.bind(this);
+        this.handleFloorSelected = this.handleFloorSelected.bind(this);
+        this.handleRoomSelected = this.handleRoomSelected.bind(this)
+        this.handleAddApplianceDialogOpen = this.handleAddApplianceDialogOpen.bind(this)
+        this.handleAddApplianceDialogClose = this.handleAddApplianceDialogClose.bind(this)
     }
 
     componentDidMount(){
         const {fetchCurrentStatusData} = this.props
         fetchCurrentStatusData();
+        setTimeout(() => {
+           this.setState({
+               floorSelected : this.props.now.floors[0].floor_id ?  this.props.now.floors[0].floor_id : "" ,
+               roomSelected : this.props.now.palaces[0].palace_id ?  this.props.now.palaces[0].palace_id : ""
+           })
+        }, 1000);
     }
 
     componentWillMount(){
@@ -239,16 +249,40 @@ export default class PageCurrentStatus extends React.Component {
 
 
     afterFloorSelected(e){
+        debugger;
         this.setState({floorSelected: e.target.value});
        debugger;
     }
 
     afterRoomSelected(e){
+        debugger;
         this.setState({roomSelected: e.target.value});
-       debugger;
+    }
+
+    handleFloorSelected(event, index, value){
+        if(value == ""){
+            this.setState({
+                roomSelected : ""
+            })
+        }
+        this.setState({
+            floorSelected: value,
+            roomSelected : this.props.now.palaces[value].palace_id ?  this.props.now.palaces[value].palace_id : ""
+        });
+    }
+
+    handleRoomSelected(event, index, value){
+        this.setState({roomSelected: value});
     }
 
 
+    handleAddApplianceDialogOpen(){
+        this.setState({addApplianceDialogOpen : true})
+    }
+
+    handleAddApplianceDialogClose(){
+        this.setState({addApplianceDialogOpen : false})
+    }
 
 
 
@@ -264,8 +298,13 @@ export default class PageCurrentStatus extends React.Component {
                 NowData = {now}
                 floorSelected = {this.state.floorSelected}
                 roomSelected  = {this.state.roomSelected}
+                addApplianceDialogOpen = {this.state.addApplianceDialogOpen}
                 afterFloorSelected ={this.afterFloorSelected}
                 afterRoomSelected = {this.afterRoomSelected}
+                handleFloorSelected = {this.handleFloorSelected}
+                handleRoomSelected = {this.handleRoomSelected}
+                handleAddApplianceDialogOpen = {this.handleAddApplianceDialogOpen}
+                handleAddApplianceDialogClose = {this.handleAddApplianceDialogClose}
                 isLoading = {isLoading}
             />
         )

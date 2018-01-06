@@ -18,7 +18,7 @@ const PageRegisterInner = props => {
   return (
     <div className="page-login">
       <div className="main-body main-body-primary">
-        <DocumentTitle title="Register - Wisdom"/>
+        <DocumentTitle title="Register - IOT"/>
         <QueueAnim type="bottom" className="ui-animate">
           <div key="1">
             
@@ -26,7 +26,7 @@ const PageRegisterInner = props => {
               <div className="card bg-white">
                 <div className="card-content">
                   <section className="logo text-center">
-                    <h1><a href="#/">Sign Up</a></h1>
+                    <h1><a href="#/">Add User</a></h1>
                     {
                       renderMessage()
                     }
@@ -51,17 +51,16 @@ const PageRegisterInner = props => {
                       </div>
                       <div className="divider" />
                       <div className="form-group">
-                        <p className="text-small">By clicking on sign up, you agree to <Link to="/terms"><i>terms</i></Link> and <Link to="/privacy"><i>privacy policy</i></Link></p>
                       </div>
                     </fieldset>
 										<div className="card-action no-border text-right">
-											<Link to="/login" className="color-gray-light">Login</Link>
 											{
 												renderSubmitButton({
 													label: 'Sign Up',
 													labelWhenSubmitting: 'Sign Up'
 												})
 											}
+                                          <Link to="/adminDashboard" className="color-gray-light">Cancel</Link>
 										</div>
                   </form>
                 </div>

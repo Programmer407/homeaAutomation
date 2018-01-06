@@ -23,8 +23,13 @@ import {
     PageCurrentStatus,
     PageHistory,
     PublicRoute,
+    PrivateRoute,
     PageLogin,
-    PageRegister
+    PageRegister,
+    PageAdminDashboard,
+    PageDeleteUser,
+    PageEditUser,
+    TestComponent
 
 } from "./components"
 
@@ -65,12 +70,26 @@ export default class App extends React.Component {
 
                   <div className={`container-fluid`}>
                     <Switch>
+                      <PublicRoute path="/test" component={TestComponent} />
                       <PublicRoute path="/login" component={PageLogin} />
                       <PublicRoute path="/register" component={PageRegister} />
                       <PublicRoute path="/dashboard" component={PageDashboard} />
+                      <PublicRoute path="/adminDashboard" component={PageAdminDashboard} />
+                      <PublicRoute path="/deleteUser" component={PageDeleteUser} />
+                      <PublicRoute path="/editUser" component={PageEditUser} />
                       <PublicRoute path="/currentStatus" component={PageCurrentStatus} />
                       <PublicRoute path="/history" component={PageHistory} />
                       <Route exact path="/errors" component={PageErrorView} />
+                    {/*  <PrivateRoute
+                          exact
+                          path="/"
+                          render={() => <Redirect to="/dashboard" />}
+                      />
+                      <PrivateRoute
+                          exact
+                          path="/dashboard"
+                          component={PageDashboard}
+                      />*/}
                       <Route component={Page404} />
                     </Switch>
                   </div>

@@ -8,16 +8,19 @@ import { connect } from 'react-redux';
 //src
 import PageDashboardInner from './PageDashboardInner'
 import {fetchDashboardData} from '../../actions/entities/dashboard'
+import {fetchCurrentStatusData} from '../../actions/entities/currentStatus'
 import PageLoading from '../PageLoading';
 
 const mapStateToProps = (state, ownProps) => {
     const {feed : {dashboard : {dashboard : {DashboardData}}}} = state
     const {feed : {dashboard : {isLoading }}} = state
-    debugger;
-    return {DashboardData,isLoading}
+    const {feed : {currentStatus : {currentStatus : {now}}}} = state
+
+
+    return {DashboardData,isLoading,now}
 }
 
-@connect(mapStateToProps,{fetchDashboardData})
+@connect(mapStateToProps,{fetchDashboardData,fetchCurrentStatusData})
 
 export default class PageAdminDashboard extends React.Component {
     constructor(props){
@@ -1091,15 +1094,25 @@ export default class PageAdminDashboard extends React.Component {
                 ]
             },
             floorSelected : '',
-            roomSelected : ' ',
+            roomSelected : '',
         }
         this.afterFloorSelected = this.afterFloorSelected.bind(this);
         this.afterRoomSelected = this.afterRoomSelected.bind(this);
+        this.handleFloorSelected = this.handleFloorSelected.bind(this);
+        this.handleRoomSelected  = this.handleRoomSelected.bind(this);
     }
 
     componentDidMount(){
         const {fetchDashboardData} = this.props
         fetchDashboardData();
+        const {fetchCurrentStatusData} = this.props
+        fetchCurrentStatusData();
+        setTimeout(() => {
+            this.setState({
+                floorSelected : this.props.now.floors[0].floor_id ?  this.props.now.floors[0].floor_id : "" ,
+                roomSelected : this.props.now.palaces[0].palace_id ?  this.props.now.palaces[0].palace_id : ""
+            })
+        }, 1000);
     }
 
     componentWillMount(){
@@ -1115,11 +1128,22 @@ export default class PageAdminDashboard extends React.Component {
         this.setState({roomSelected: e.target.value});
     }
 
+    handleFloorSelected(event, index, value){
+        if(value == ""){
+            this.setState({
+                roomSelected : ""
+            })
+        }
+        this.setState({floorSelected: value});
+    }
 
+    handleRoomSelected(event, index, value){
+        this.setState({roomSelected: value});
+    }
 
 
     render(){
-        const {isLoading,DashboardData,} = this.props
+        const {isLoading,DashboardData,now} = this.props
         debugger;
         if(isLoading == true || DashboardData == undefined)
             return <PageLoading/>
@@ -1127,6 +1151,11 @@ export default class PageAdminDashboard extends React.Component {
         return(
             <PageDashboardInner {...this.props}
                 DashboardData = {DashboardData}
+                NowData = {now}
+                floorSelected = {this.state.floorSelected}
+                roomSelected  = {this.state.roomSelected}
+                handleFloorSelected = {this.handleFloorSelected}
+                handleRoomSelected = {this.handleRoomSelected}
                 isLoading = {isLoading}
 
             />

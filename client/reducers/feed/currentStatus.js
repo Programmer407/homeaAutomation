@@ -4,7 +4,7 @@ import * as ActionTypes from '../../actions'
 import { combineReducers } from 'redux'
 
 function isLoading(state = false, action) {
-    debugger;
+
     switch (action.type) {
         case ActionTypes.CURRENT_STATAS_DATA: {
             return true
@@ -24,7 +24,7 @@ function isLoading(state = false, action) {
 
 function currentStatus(state = "", action) {
     const {payload} = action
-    debugger;
+
     switch (action.type) {
         case ActionTypes.CURRENT_STATAS_DATA_SUCCESS: {
             return action.payload;

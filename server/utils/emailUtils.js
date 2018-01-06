@@ -10,7 +10,7 @@ const ses = new aws.SES({apiVersion: '2010-12-01'})
 const FROM_EMAIL = 'majid.hussain@emumba.com'
 
 const sendResendPasswordEmail = (to, data) => {
-  return sendEmail('reset-password.html', to, 'Wisdom - Reset Password', data)
+  return sendEmail('reset-password.html', to, ' Reset Password', data)
 }
 
 const sendAccountActivationEmail = (to, data) => {    

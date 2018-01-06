@@ -24,7 +24,7 @@ export default class PageErrorView extends React.Component {
   render() {
     return (
       <div className={`${styles.root} row`}>
-        <DocumentTitle title="Dashboard - Wisdom"/>
+        <DocumentTitle title="Dashboard -IOT"/>
         <div className="col-lg-2"></div>
         <div className="col-lg-8">
           <div className="row">

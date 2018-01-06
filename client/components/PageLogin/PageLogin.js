@@ -44,16 +44,12 @@ const validate = values => {
         return dispatch(login(email, password, rememberMe))
             .then(action => {
                 console.log(action.payload.user.roleId)
-                debugger;
+
                 const { error } = action
-                if ( !error ) {
-                    // const linkNext = _.get(payload, 'user.linkHome', '/')
-                  /*  if(action.payload.user.roleId == 1)
-                    dispatch(push('/dashboard'))
-                   else  if(action.payload.user.roleId == 2)
-                        dispatch(push('/userDashboard'))*/
+               /* if ( !error ) {
                   dispatch(push('/dashboard'))
-                }
+                }*/
+                dispatch(push('/dashboard'))
                 return action
             })
     }
