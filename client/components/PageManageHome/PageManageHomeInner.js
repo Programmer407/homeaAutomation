@@ -50,7 +50,7 @@ const PageManageHomeInner = props => {
                         </div>
                         <div className="col-lg-6">
                           <FlatButton
-                              label="Add Account"
+                              label="Add Home"
                               primary={true}
                               icon={<AddIcon />}
                               fullWidth={true}

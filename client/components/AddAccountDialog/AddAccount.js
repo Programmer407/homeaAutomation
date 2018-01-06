@@ -3,14 +3,14 @@ import {connect} from 'react-redux'
 import moment from 'moment'
 //src
 import AddAccountInner from './AddAccountInner'
-import {addAppliance} from '../../actions/entities/appliance'
+import {accountCreate} from '../../actions/entities/account'
 
 
 const mapStateToProps = (state, ownProps) => {
     return {}
 }
 
-@connect(mapStateToProps,{addAppliance})
+@connect(mapStateToProps,{accountCreate})
 
 
 export default class AddAccount extends React.Component {
@@ -18,19 +18,43 @@ export default class AddAccount extends React.Component {
         super(props)
         this.state ={
                isSubmit  : false,
-            applianceName : "",
+            isChecked :false,
         }
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
+        this.handleCheckbox = this.handleCheckbox.bind(this);
+        this.handleCancelDialog = this.handleCancelDialog.bind(this);
     }
 
 
 
    handleCloseDialog() {
-   const {handleCancelDialog} = this.props
+   const {handleCancelDialog,accountCreate} = this.props
+       const {isSubmit,isChecked} = this.state
        this.setState({isSubmit : true})
-       handleCancelDialog();
+       if(isChecked == true){
+      /* accountCreate();*/
+           handleCancelDialog();
+           this.setState({isSubmit : false,
+           isChecked : false
+           })
+       }
+
     }
 
+    handleCancelDialog() {
+        const {handleCancelDialog} = this.props
+        const {isSubmit, isChecked} = this.state
+        this.setState({
+            isChecked : false,
+            isSubmit : false
+        })
+        handleCancelDialog();
+    }
+
+    handleCheckbox(){
+        const {isChecked} = this.state
+        this.setState({isChecked : !isChecked})
+    }
 
 
 
@@ -39,6 +63,8 @@ export default class AddAccount extends React.Component {
              {...this.state}
             {...this.props}
              handleCloseDialog = {this.handleCloseDialog}
+             handleCheckbox = {this.handleCheckbox}
+             handleCancelDialog = {this.handleCancelDialog}
         />
     }
 
