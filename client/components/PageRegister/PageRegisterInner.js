@@ -60,7 +60,7 @@ const PageRegisterInner = props => {
 													labelWhenSubmitting: 'Sign Up'
 												})
 											}
-                                          <Link to="/adminDashboard" className="color-gray-light">Cancel</Link>
+                                          <Link to="/manageUser" className="color-gray-light">Cancel</Link>
 										</div>
                   </form>
                 </div>

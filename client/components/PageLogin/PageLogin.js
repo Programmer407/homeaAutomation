@@ -43,7 +43,7 @@ const validate = values => {
 
         return dispatch(login(email, password, rememberMe))
             .then(action => {
-                console.log(action.payload.user.roleId)
+              /*  console.log(action.payload.user.roleId)*/
 
                 const { error } = action
                /* if ( !error ) {

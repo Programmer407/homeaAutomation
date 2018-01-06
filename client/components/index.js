@@ -7,6 +7,7 @@ export {default as PageLogin} from "./PageLogin"
 export { default as PageRegister } from "./PageRegister"
 export { default as PageLoading } from "./PageLoading"
 export { default as PageAdminDashboard } from "./PageAdminDashboard"
+export { default as PageManageUser } from "./PageManageUser"
 export { default as PageDeleteUser } from "./PageDeleteUser"
 export { default as PageEditUser } from "./PageEditUser"
 export {default as PageDashboard} from './PageDashboard'

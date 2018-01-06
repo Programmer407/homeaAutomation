@@ -9,17 +9,15 @@ import TextField from 'material-ui/TextField';
 import QueueAnim from 'rc-queue-anim';
 import FlatButton from 'material-ui/FlatButton';
 import ActionAndroid from 'material-ui/svg-icons/action/android';
-import UserManagement from 'material-ui/svg-icons/action/account-circle';
-import HomeManagement from 'material-ui/svg-icons/action/home';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
 import AddIcon from 'material-ui/svg-icons/content/add'
 
 // src
-import './PageAdminDashboardInner.scss';
+import './PageManageUserInner.scss';
 import { renderTextField } from '../../utils'
 
-const PageAdminDashboardInner = props => {
+const PageManageUserInner = props => {
   const { onSubmit, renderSubmitButton, renderMessage, onHandleNoSpaces } = props;
 
   return (
@@ -49,11 +47,11 @@ const PageAdminDashboardInner = props => {
 
                         </div>
                         <div className="col-lg-6">
-                          <Link to="/manageUser" className="color-gray-light">
+                          <Link to="/register" className="color-gray-light">
                           <FlatButton
-                              label="User Managenet"
+                              label="Add User"
                               primary={true}
-                              icon={<UserManagement />}
+                              icon={<AddIcon />}
                               fullWidth={true}
                               style={{textAlign : 'left'}}
                           />
@@ -65,20 +63,19 @@ const PageAdminDashboardInner = props => {
                       </div>
 
 
-
                       <div className="row">
                         <div className="col-lg-3">
 
                         </div>
                         <div className="col-lg-6">
-                          <Link to="/manageUser" className="color-gray-light">
-                            <FlatButton
-                                label="Home Management"
-                                primary={true}
-                                icon={<HomeManagement />}
-                                fullWidth={true}
-                                style={{textAlign : 'left'}}
-                            />
+                          <Link to="/deleteUser" className="color-gray-light">
+                          <FlatButton
+                              label="Delete User"
+                              primary={true}
+                              icon={<DeleteIcon />}
+                              fullWidth={true}
+                              style={{textAlign : 'left'}}
+                          />
                           </Link>
                         </div>
                         <div className="col-lg-3">
@@ -86,20 +83,19 @@ const PageAdminDashboardInner = props => {
                         </div>
                       </div>
 
-
                       <div className="row">
                         <div className="col-lg-3">
 
                         </div>
                         <div className="col-lg-6">
-                          <Link to="/manageUser" className="color-gray-light">
-                            <FlatButton
-                                label="Floor Management"
-                                primary={true}
-                                icon={<UserManagement />}
-                                fullWidth={true}
-                                style={{textAlign : 'left'}}
-                            />
+                          <Link to="/editUser" className="color-gray-light">
+                          <FlatButton
+                              label="Edit User"
+                              primary={true}
+                              icon={<EditIcon />}
+                              style={{textAlign : 'left'}}
+                              fullWidth={true}
+                          />
                           </Link>
                         </div>
                         <div className="col-lg-3">
@@ -107,21 +103,18 @@ const PageAdminDashboardInner = props => {
                         </div>
                       </div>
 
-
                       <div className="row">
                         <div className="col-lg-3">
 
                         </div>
                         <div className="col-lg-6">
-                          <Link to="/manageUser" className="color-gray-light">
-                            <FlatButton
-                                label="Palace Management"
-                                primary={true}
-                                icon={<UserManagement />}
-                                fullWidth={true}
-                                style={{textAlign : 'left'}}
-                            />
-                          </Link>
+                          <FlatButton
+                              label="Show All User"
+                              primary={true}
+                              icon={<ActionAndroid />}
+                              fullWidth={true}
+                              style={{textAlign : 'left'}}
+                          />
                         </div>
                         <div className="col-lg-3">
 
@@ -129,26 +122,6 @@ const PageAdminDashboardInner = props => {
                       </div>
 
 
-
-                      <div className="row">
-                        <div className="col-lg-3">
-
-                        </div>
-                        <div className="col-lg-6">
-                          <Link to="/manageUser" className="color-gray-light">
-                            <FlatButton
-                                label="Appliances Management"
-                                primary={true}
-                                icon={<UserManagement />}
-                                fullWidth={true}
-                                style={{textAlign : 'left'}}
-                            />
-                          </Link>
-                        </div>
-                        <div className="col-lg-3">
-
-                        </div>
-                      </div>
 
 
                       <div className="divider" />
@@ -161,6 +134,7 @@ const PageAdminDashboardInner = props => {
 													labelWhenSubmitting: 'Logout'
 												})
 											}
+                                          <Link to="/adminDashboard" className="color-gray-light">Cancel</Link>
 										</div>
                   </form>
                 </div>
@@ -175,4 +149,4 @@ const PageAdminDashboardInner = props => {
   );
 }
 
-export default PageAdminDashboardInner
+export default PageManageUserInner

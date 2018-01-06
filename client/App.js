@@ -27,6 +27,7 @@ import {
     PageLogin,
     PageRegister,
     PageAdminDashboard,
+    PageManageUser,
     PageDeleteUser,
     PageEditUser,
     TestComponent
@@ -75,6 +76,7 @@ export default class App extends React.Component {
                       <PublicRoute path="/register" component={PageRegister} />
                       <PublicRoute path="/dashboard" component={PageDashboard} />
                       <PublicRoute path="/adminDashboard" component={PageAdminDashboard} />
+                      <PublicRoute path="/manageUser" component={PageManageUser} />
                       <PublicRoute path="/deleteUser" component={PageDeleteUser} />
                       <PublicRoute path="/editUser" component={PageEditUser} />
                       <PublicRoute path="/currentStatus" component={PageCurrentStatus} />
