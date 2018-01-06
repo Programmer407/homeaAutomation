@@ -83,7 +83,7 @@ if ( process.env.UNIVERSAL_RENDERING === 'false' ) {
 
 // Include server routes as a middleware
 
-app.use('/api/login', user);
+app.use('/api/user', user);
 app.use('/api/dashboard',dashboard);
 app.use('/api/now',now);
 app.use('/microservice',microservice);

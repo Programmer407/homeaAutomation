@@ -1,84 +1,357 @@
-var express = require('express');
-var router = express.Router();
-var jsonWebToken = require('jsonwebtoken');
-var cookie= require('cookie-parser');
-var model = require('../models');
-var secretToken = require('../../config/secretToken');
-var userServices = require('../services/userServices');
-var homeService = require('../services/homeServices');
+// libs
+import express from 'express'
+import crypto from 'crypto'
 
-/* GET users listing. */
+// src
+// import { encrypt, decrypt } from '../../utils/encryptionUtils'
+import { ensureAnonymity, rejectRequest, caughtError } from '../utils'
+import {   findUserByEmail } from '../managers/userManager'
+// import { findRoleById } from '../../managers/roleManager'
+// import { findUserAccountTypeById } from '../../managers/userAccountTypeManager'
+// import { findTimeZoneById } from '../../managers/timeZoneManager'
+// import User from './../../models/User'
+// import emailUtils from './../../utils/emailUtils'
 
+const router = express.Router()
 
-router.post('/',function(req,res,next){
+// requires email and password
+router.post('/login', ensureAnonymity, (req, res) => {
+    const { body } = req
+    if ( !body ) {
+        rejectRequest('Missing request body', res)
+        return
+    }
 
-    var data = {email:req.body.username};
-    userServices.findUser(data,function(error,data){
-        if(error)
-            res.end('error occured');
-        else
-        {
-            var user = data.user;
-            if(user.length>0){
+    const { email, password } = body
+    if ( !email || !password ) {
+        rejectRequest('Missing required arguments', res)
+        return
+    }
 
-                if(req.body.password==user[0].dataValues.password){
+    findUserByEmail(email)
+        .then(user => {
+            if (user) {
+                if (password === user.password) {
 
-                    homeService.findHome({user:data.user},function(error,data)
-                    {
-                        if(error)
-                            res.end('invalid credientials');
-                        else
-                        {
-                            var token = jsonWebToken.sign({username:req.body.username,home_id:data.home[0].dataValues.home_id},secretToken.secret);
-                            res.statusCode=200;
-                            res.cookie('token',token);
-                            res.json(token);
-
-                        }
-
-
-
-                    });
-
+                    req.login(user, err => {
+                        if (err) caughtError(res, err)
+                        else res.send({user})
+                    })
                 }
-                else
-                    res.end('invalid credientials');
             }
+            else {
+                    res
+                        .status(404)
+                        .send({
+                            message: 'Invalid username or password'
+                        })
+                }
 
-            else
-                res.end('invalid credientials');
+        })
+})
 
-        }
+// router.get('/api/logout', (req, res) => {
+//     req.logout()
+//     res
+//         .status(200)
+//         .send({
+//             message: 'User logged out successfully!'
+//         })
+// })
+//
+// router.post('/api/users/create', ensureAnonymity, (req, res) => {
+//     const { body } = req
+//     if ( !body ) {
+//         rejectRequest('Missing request body', res)
+//         return
+//     }
+//
+//     const { firstName, lastName, email, password } = body
+//     if ( !firstName || !lastName || !email || !password ) {
+//         rejectRequest('Missing required arguments', res)
+//         return
+//     }
+//
+//     findUserByEmail(email)
+//         .then(user => {
+//             if (user) {
+//                 res
+//                     .status(404)
+//                     .send({
+//                         message: 'Username already exist'
+//                     })
+//             } else {
+//                 const encryptedPassword = encrypt(password)
+//
+//                 // now instantiate an object
+//                 const userObj = User.build({firstName: firstName, lastName: lastName, email: email, password: encryptedPassword})
+//
+//                 findRoleById(2)
+//                     .then(role => {
+//                         userObj.setRole(role, {save: false})
+//                         findUserAccountTypeById(1)
+//                             .then(userAccountType => {
+//                                 userObj.setUseraccounttype(userAccountType, {save: false})
+//                                 findTimeZoneById(1)
+//                                     .then(timeZone => {
+//                                         userObj.setTimezone(timeZone, {save: false})
+//                                         userObj.status = 0
+//
+//                                         crypto.randomBytes(20, (err, buf) => {
+//                                             const token = buf.toString('hex')
+//                                             userObj.registerToken = token
+//                                             userObj.registerExpires = Date.now() + 86400000 // 24 hours 1 hour = 3600000
+//
+//                                             updateUser(userObj)
+//                                                 .then(updatedUser => {
+//                                                     const activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + updatedUser.registerToken
+//                                                     const data = {firstName: updatedUser.firstName, activationUrl: activationUrl}
+//
+//                                                     const allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
+//                                                     let toEmailAddress = 'majid.hussain@emumba.com'
+//                                                     if (allowedEmailList.indexOf(email) > -1) {
+//                                                         toEmailAddress = email
+//                                                     }
+//
+//                                                     emailUtils.sendAccountActivationEmail(toEmailAddress, data)
+//                                                         .then(() => {
+//                                                             res
+//                                                                 .status(200)
+//                                                                 .send({
+//                                                                     message: 'Sign up Successfully! Please follow a link in your email to activate your account'
+//                                                                 })
+//                                                         })
+//                                                         .catch(error =>
+//                                                             caughtError(res, error)
+//                                                         )
+//                                                 })
+//                                         })
+//                                     })
+//                             })
+//                     })
+//             }
+//         })
+// })
+//
+// router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
+//     const { body } = req
+//     if ( !body ) {
+//         rejectRequest('Missing request body', res)
+//         return
+//     }
+//
+//     const { email } = body
+//     if ( !email ) {
+//         rejectRequest('Missing required arguments', res)
+//         return
+//     }
+//
+//     findUserByEmail(email)
+//         .then(user => {
+//             if (user) {
+//                 crypto.randomBytes(20, (err, buf) => {
+//                     const token = buf.toString('hex')
+//                     user.resetPasswordToken = token
+//                     user.resetPasswordExpires = Date.now() + 86400000 // 24 hours 1 hour = 3600000
+//                     updateUser(user)
+//                         .then(userObj => {
+//                             const activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + userObj.registerToken
+//                             const data = {firstName: userObj.firstName, activationUrl: activationUrl}
+//
+//                             const allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
+//                             let toEmailAddress = 'majid.hussain@emumba.com'
+//                             if (allowedEmailList.indexOf(userObj.email) > -1) {
+//                                 toEmailAddress = userObj.email
+//                             }
+//
+//                             emailUtils.sendResendPasswordEmail(toEmailAddress, data)
+//                                 .then(() => {
+//                                     res
+//                                         .status(200)
+//                                         .send({
+//                                             message: 'Reset password email has been sent to the email address'
+//                                         })
+//                                 })
+//                                 .catch(error =>
+//                                     caughtError(res, error)
+//                                 )
+//                         })
+//                 })
+//             } else {
+//                 res
+//                     .status(404)
+//                     .send({
+//                         message: 'Invalid username'
+//                     })
+//             }
+//         })
+// })
+//
+// router.post('/api/users/search-user-token', (req, res) => {
+//     const { body } = req
+//     if ( !body ) {
+//         rejectRequest('Missing request body', res)
+//         return
+//     }
+//
+//     const { tokenString } = body
+//     if ( !tokenString ) {
+//         rejectRequest('Missing required arguments', res)
+//         return
+//     }
+//
+//     findUserByToken(tokenString)
+//         .then(user => {
+//             if (user) {
+//                 res
+//                     .status(200)
+//                     .send({
+//                         message: 'true'
+//                     })
+//             } else {
+//                 res
+//                     .status(400)
+//                     .send({
+//                         message: 'false'
+//                     })
+//             }
+//         })
+// })
+//
+// router.post('/api/users/reset-password', (req, res) => {
+//     const { body } = req
+//     if ( !body ) {
+//         rejectRequest('Missing request body', res)
+//         return
+//     }
+//
+//     const { token, password, confirmPassword } = body
+//     if ( !token || !password || !confirmPassword ) {
+//         rejectRequest('Missing required arguments', res)
+//         return
+//     } else if (password !== confirmPassword) {
+//         rejectRequest('Password and Confirm Password does not match', res)
+//         return
+//     }
+//
+//     findUserByToken(token)
+//         .then(user => {
+//             if (user) {
+//                 const encryptedPassword = encrypt(password)
+//                 user.password = encryptedPassword
+//                 user.resetPasswordToken = null
+//                 user.resetPasswordExpires = null
+//                 updateUser(user)
+//                     .then(() => {
+//                         res
+//                             .status(200)
+//                             .send({
+//                                 message: 'Password has been changed, please <a href="/login">login</a>'
+//                             })
+//                     })
+//             } else {
+//                 res
+//                     .status(400)
+//                     .send({
+//                         message: 'User does not exist'
+//                     })
+//             }
+//         })
+// })
+//
+// router.post('/api/users/verify-account', (req, res) => {
+//     const { body } = req
+//     if ( !body ) {
+//         rejectRequest('Missing request body', res)
+//         return
+//     }
+//
+//     const { token } = body
+//     if ( !token ) {
+//         rejectRequest('Missing required arguments', res)
+//         return
+//     }
+//
+//     findUserByRegistrationToken(token)
+//         .then(user => {
+//             if (user) {
+//                 user.status = 1
+//                 user.registerToken = null
+//                 user.registerExpires = null
+//                 updateUser(user)
+//                     .then(() => {
+//                         res
+//                             .status(200)
+//                             .send({
+//                                 message: 'Your account has been activated, please login'
+//                             })
+//                     })
+//             } else {
+//                 res
+//                     .status(400)
+//                     .send({
+//                         message: 'User does not exist'
+//                     })
+//             }
+//         })
+// })
+//
+// router.post('/api/users/resend-activation', (req, res) => {
+//     const { body } = req
+//     if ( !body ) {
+//         rejectRequest('Missing request body', res)
+//         return
+//     }
+//
+//     const { userId } = body
+//     if ( !userId ) {
+//         rejectRequest('Missing required arguments', res)
+//         return
+//     }
+//
+//     findUserByID(userId)
+//         .then(user => {
+//             if (user) {
+//                 crypto.randomBytes(20, (err, buf) => {
+//                     const token = buf.toString('hex')
+//                     user.registerToken = token
+//                     user.registerExpires = Date.now() + 86400000 // 24 hours 1 hour = 3600000
+//                     user.status = 0
+//                     updateUser(user)
+//                         .then(userObj => {
+//                             const activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + userObj.registerToken
+//                             const data = {firstName: userObj.firstName, activationUrl: activationUrl}
+//
+//                             const allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
+//                             let toEmailAddress = 'majid.hussain@emumba.com'
+//                             if (allowedEmailList.indexOf(userObj.email) > -1) {
+//                                 toEmailAddress = userObj.email
+//                             }
+//
+//                             emailUtils.resendAccountActivationEmail(toEmailAddress, data)
+//                                 .then(() => {
+//                                     res
+//                                         .status(200)
+//                                         .send({
+//                                             message: 'Activation email sent Successfully! Please follow a link in your email to activate your account'
+//                                         })
+//                                 })
+//                                 .catch(error =>
+//                                     caughtError(res, error)
+//                                 )
+//                         })
+//                         .catch(error =>
+//                             caughtError(res, error)
+//                         )
+//                 })
+//             } else {
+//                 res
+//                     .status(400)
+//                     .send({
+//                         message: 'User does not exist'
+//                     })
+//             }
+//         })
+// })
 
-
-    });
-
-
-    /* model.user.findOne({where:{user_name:req.body.username}}).then(function(user){
-       console.log(secretToken.secret);
-       if(user)
-       {
-         if(req.body.password==user.password){
-           var token = jsonWebToken.sign({username:req.body.username},secretToken.secret);
-           res.statusCode=200;
-           res.cookie('token',token);
-           res.json(token);
-         }
-       }
-       else
-       {
-         res.end('invalid  crediatenls send  again login page with error');
-       }
-
-     }); */
-
-
-});
-
-router.get('/test',function(req,res){
-
-    console.log('cookie ='+req.cookies.token);
-    res.send('done');
-});
-
-module.exports = router;
+export default router
