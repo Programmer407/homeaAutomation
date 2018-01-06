@@ -28,6 +28,7 @@ if(isLoading ==true)
                         <AddAppliance
                                open = {addApplianceDialogOpen}
                                handleCancelDialog = {handleAddApplianceDialogClose}
+                               NowData = {NowData}
                         />
                     </div>
                     <div className="col-lg-2 col-md-3 col-sm-4 text-center ">

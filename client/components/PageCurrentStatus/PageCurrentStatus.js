@@ -265,7 +265,10 @@ export default class PageCurrentStatus extends React.Component {
                 roomSelected : ""
             })
         }
-        this.setState({floorSelected: value});
+        this.setState({
+            floorSelected: value,
+            roomSelected : this.props.now.palaces[value].palace_id ?  this.props.now.palaces[value].palace_id : ""
+        });
     }
 
     handleRoomSelected(event, index, value){

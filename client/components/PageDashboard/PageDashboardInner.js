@@ -31,7 +31,7 @@ const PageDashboardInner = (props) =>{
 
 
                {/*  bulb with dynamic data*/}
-               <div className="col-lg-4 col-md-6 ">
+               <div className="col-lg-4 col-md-6 col-sm-6 ">
                    <div>
                        <StatWidget
                            style="panel-primary"
@@ -49,7 +49,7 @@ const PageDashboardInner = (props) =>{
 
 
                {/* fan with dynamic data*/}
-               <div className="col-lg-4 col-md-6 ">
+               <div className="col-lg-4 col-md-6 col-sm-6 ">
 
                    <div>
                        <StatWidget
@@ -67,7 +67,7 @@ const PageDashboardInner = (props) =>{
 
 
                   {/* mode*/}
-               <div className="col-lg-4 col-md-6 ">
+               <div className="col-lg-4 col-md-6 col-sm-6">
 
                    <div>
                        <StatWidget

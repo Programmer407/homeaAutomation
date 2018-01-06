@@ -10,8 +10,9 @@ export const ADD_APPLIANCE = 'ADD_APPLIANCE'
 export const ADD_APPLIANCE_SUCCESS = 'ADD_APPLIANCE_SUCCESS'
 export const ADD_APPLIANCE_FAILURE = 'ADD_APPLIANCE_FAILURE'
 
-export function addAppliance(applianceName) {
+export function addAppliance(applianceName,floorSelectedId,roomSelectedId) {
     console.log("Add appliance  action has been called")
+    debugger;
     return {
         [CALL_API]: {
             types: [
@@ -22,6 +23,6 @@ export function addAppliance(applianceName) {
            /* endpoint: `/api/addAppliance`,*/
             method: 'GET'
         },
-        payload: {applianceName}
+        payload: {applianceName,floorSelectedId,roomSelectedId}
     }
 }
