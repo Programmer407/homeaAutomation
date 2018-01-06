@@ -7,10 +7,12 @@ module.exports = {
 
     getByhome:function(query_data)
     {
-
-
         return models.floor.findAll({where:{homeHomeId:query_data.home_id},include:models.floor_type})
-    }
+    },
+  addFloor:function(floorObj){
+
+    return floorObj.save()
+  }
 
 
 

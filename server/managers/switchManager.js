@@ -16,7 +16,11 @@ module.exports = {
 
 
 
-    }
+    },
+  addSwitch:function(Obj){
+
+    return Obj.save()
+  }
 
 
 

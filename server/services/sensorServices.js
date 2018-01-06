@@ -2,7 +2,7 @@
  * Created by Irfan on 11-Jun-17.
  */
 var sensorManager = require('../managers/sensorManager');
-
+var models = require('../models');
 
 module.exports ={
 
@@ -37,7 +37,15 @@ module.exports ={
                 callback('error',null);
         })
 
-    }
+    },
+  addSensor:function(data,callback){
+    const { name,sensorType,palaceId}  =data
+    const addObj =  models.sensor.build({name: name, sensorTypeStId:sensorType,palacePalaceId:palaceId,value:0});
+    sensorManager.addSensor(addObj).then(function(obj){
+      callback(null,obj)
+
+    })
+  }
 
 
 

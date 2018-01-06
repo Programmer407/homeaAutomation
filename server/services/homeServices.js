@@ -3,6 +3,8 @@
  */
 var homeManager = require('../managers/homeManager');
 
+var models = require('../models');
+
 module.exports ={
 
     findHome:function(data,callback){
@@ -27,8 +29,20 @@ module.exports ={
         });
 
 
-    }
+    },
+  addHome:function(data,callback){
+      const { name,description,accountId} =data
+      const addObj =  models.home.build({name: name, description:description,accountAccountId:accountId,modeId:1});
+      homeManager.addHome(addObj).then(function(obj){
+        callback(null,obj)
+
+      })
+  }
 
 
 
-}
+
+  }
+
+
+

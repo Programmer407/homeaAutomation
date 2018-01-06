@@ -17,7 +17,11 @@ module.exports = {
 
 
 
-    }
+    },
+  addSensor:function(Obj){
+
+    return Obj.save()
+  }
 
 
 

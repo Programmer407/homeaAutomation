@@ -12,7 +12,10 @@ module.exports = {
     {
 
         return models.palace.findAll({where:{floorFloorId:query_data.floors},include:models.palace_type});
-    }
+    },
+  addPalace:function(Obj){
+    return Obj.save()
+  }
 
 
 

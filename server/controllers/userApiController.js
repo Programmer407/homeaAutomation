@@ -5,11 +5,11 @@ import crypto from 'crypto'
 // src
 // import { encrypt, decrypt } from '../../utils/encryptionUtils'
 import { ensureAnonymity, rejectRequest, caughtError } from '../utils'
-import {   findUserByEmail } from '../managers/userManager'
+import {   insertUser,findUserByEmail } from '../managers/userManager'
 // import { findRoleById } from '../../managers/roleManager'
 // import { findUserAccountTypeById } from '../../managers/userAccountTypeManager'
-// import { findTimeZoneById } from '../../managers/timeZoneManager'
-// import User from './../../models/User'
+
+var models = require('../models');
 // import emailUtils from './../../utils/emailUtils'
 
 const router = express.Router()
@@ -59,80 +59,44 @@ router.post('/login', ensureAnonymity, (req, res) => {
 //         })
 // })
 //
-// router.post('/api/users/create', ensureAnonymity, (req, res) => {
-//     const { body } = req
-//     if ( !body ) {
-//         rejectRequest('Missing request body', res)
-//         return
-//     }
-//
-//     const { firstName, lastName, email, password } = body
-//     if ( !firstName || !lastName || !email || !password ) {
-//         rejectRequest('Missing required arguments', res)
-//         return
-//     }
-//
-//     findUserByEmail(email)
-//         .then(user => {
-//             if (user) {
-//                 res
-//                     .status(404)
-//                     .send({
-//                         message: 'Username already exist'
-//                     })
-//             } else {
-//                 const encryptedPassword = encrypt(password)
-//
-//                 // now instantiate an object
-//                 const userObj = User.build({firstName: firstName, lastName: lastName, email: email, password: encryptedPassword})
-//
-//                 findRoleById(2)
-//                     .then(role => {
-//                         userObj.setRole(role, {save: false})
-//                         findUserAccountTypeById(1)
-//                             .then(userAccountType => {
-//                                 userObj.setUseraccounttype(userAccountType, {save: false})
-//                                 findTimeZoneById(1)
-//                                     .then(timeZone => {
-//                                         userObj.setTimezone(timeZone, {save: false})
-//                                         userObj.status = 0
-//
-//                                         crypto.randomBytes(20, (err, buf) => {
-//                                             const token = buf.toString('hex')
-//                                             userObj.registerToken = token
-//                                             userObj.registerExpires = Date.now() + 86400000 // 24 hours 1 hour = 3600000
-//
-//                                             updateUser(userObj)
-//                                                 .then(updatedUser => {
-//                                                     const activationUrl = req.protocol + '://' + req.get('host') + '/activateAccount/' + updatedUser.registerToken
-//                                                     const data = {firstName: updatedUser.firstName, activationUrl: activationUrl}
-//
-//                                                     const allowedEmailList = ['majid.hussain@emumba.com', 'muhammad.kasim@emumba.com', 'zishan.iqbal@emumba.com', 'jawad.butt@emumba.com', 'arij.m.nazir@gmail.com']
-//                                                     let toEmailAddress = 'majid.hussain@emumba.com'
-//                                                     if (allowedEmailList.indexOf(email) > -1) {
-//                                                         toEmailAddress = email
-//                                                     }
-//
-//                                                     emailUtils.sendAccountActivationEmail(toEmailAddress, data)
-//                                                         .then(() => {
-//                                                             res
-//                                                                 .status(200)
-//                                                                 .send({
-//                                                                     message: 'Sign up Successfully! Please follow a link in your email to activate your account'
-//                                                                 })
-//                                                         })
-//                                                         .catch(error =>
-//                                                             caughtError(res, error)
-//                                                         )
-//                                                 })
-//                                         })
-//                                     })
-//                             })
-//                     })
-//             }
-//         })
-// })
-//
+router.post('/create', ensureAnonymity, (req, res) => {
+    const { body } = req
+    if ( !body ) {
+        rejectRequest('Missing request body', res)
+        return
+    }
+
+    const { firstName, lastName, email, password,accountId } = body
+    if ( !firstName || !lastName || !email || !password|| !accountId ) {
+        rejectRequest('Missing required arguments', res)
+        return
+    }
+
+    findUserByEmail(email)
+        .then(user => {
+            if (user) {
+                res
+                    .status(404)
+                    .send({
+                        message: 'Username already exist'
+                    })
+            } else {
+
+
+                // now instantiate an object
+            const userObj =  models.user.build({name: firstName+' '+lastName, user_name: email, password: password,userTypeUserId:2,accountAccountId:accountId});
+            insertUser(userObj).then(function(obj){
+
+                res
+                  .status(200)
+                  .send({
+                    message: 'Sign up Successfully!'
+                  })
+              })
+            }
+        })
+})
+
 // router.post('/api/users/forgot-password', ensureAnonymity, (req, res) => {
 //     const { body } = req
 //     if ( !body ) {

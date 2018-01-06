@@ -5,7 +5,7 @@
  * Created by Irfan on 11-Jun-17.
  */
 var palaceManager = require('../managers/palaceManager');
-
+var models = require('../models');
 module.exports ={
 
     findPalace:function(data,callback){
@@ -33,7 +33,15 @@ module.exports ={
         });
 
 
-    }
+    },
+  addPalace:function(data,callback){
+    const { name,floorId,palaceType}  =data
+    const addObj =  models.palace.build({name: name, floorFloorId:floorId,palaceTypePalaceId:palaceType});
+    palaceManager.addPalace(addObj).then(function(obj){
+      callback(null,obj)
+
+    })
+  }
 
 
 

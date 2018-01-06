@@ -8,7 +8,7 @@ export const findUserByUsername = (email) =>
         });
 
 export const findUserByEmailAndPassword = (email, password) =>
-    models.user.findOne(Object.assign({
+    models.User.findOne(Object.assign({
         where: {
             email,
             password
@@ -43,36 +43,18 @@ export const findUserByEmail = (email) =>
             return obj
         })
 
-// export const insertUser = (userObj) =>
-//     userObj.save()
-//         .then(obj => {
-//             return obj
-//         })
-//
-// export const updateUser = (userObj) =>
-//     userObj.save()
-//         .then(obj => {
-//             return obj
-//         })
-//
-// export const findUserByToken = (resetPasswordToken) =>
-//     User.findOne(Object.assign({
-//         where: {
-//             resetPasswordToken,
-//             resetPasswordExpires: { $gt: Date.now() }
-//         }
-//     }))
-//         .then(obj => {
-//             return obj
-//         })
-//
-// export const findUserByRegistrationToken = (registerToken) =>
-//     User.findOne(Object.assign({
-//         where: {
-//             registerToken,
-//             registerExpires: { $gt: Date.now() }
-//         }
-//     }))
-//         .then(obj => {
-//             return obj
-//         })
+
+
+
+
+export const insertUser = (userObj) =>
+  userObj.save()
+    .then(obj => {
+      return obj
+    })
+
+export const updateUser = (userObj) =>
+  userObj.save()
+    .then(obj => {
+      return obj
+    })
