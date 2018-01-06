@@ -29,9 +29,12 @@ export default class PageManageAppliance extends React.Component {
     super(props)
       this.state = {
           addApplianceDialogOpen : false,
+          addSensorDialogOpen : false
       }
       this.handleAddApplianceDialogClose = this.handleAddApplianceDialogClose.bind(this);
     this.handleAddApplianceDialogOpen = this.handleAddApplianceDialogOpen.bind(this);
+    this.handleAddSensoDialogClose = this.handleAddSensoDialogClose.bind(this);
+    this.handleAddSensorDialogOpen  = this.handleAddSensorDialogOpen.bind(this);
   }
 
     handleAddApplianceDialogOpen(){
@@ -43,12 +46,22 @@ export default class PageManageAppliance extends React.Component {
     }
 
 
+    handleAddSensorDialogOpen(){
+        this.setState({addSensorDialogOpen : true})
+    }
+
+    handleAddSensoDialogClose(){
+        this.setState({addSensorDialogOpen : false})
+    }
+
 
   render() {
     return <PageManageApplianceInner {...this.props}
         {...this.state}
         handleAddApplianceDialogOpen = {this.handleAddApplianceDialogOpen}
         handleAddApplianceDialogClose = {this.handleAddApplianceDialogClose}
+        handleAddSensoDialogClose = {this.handleAddSensoDialogClose}
+        handleAddSensorDialogOpen = {this.handleAddSensorDialogOpen}
     />
 
 

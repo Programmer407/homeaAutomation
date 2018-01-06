@@ -17,10 +17,11 @@ import './PageManageApplianceInner.scss';
 import { renderTextField } from '../../utils'
 
 import AddPalace from '../AddPalaceDialog/AddPalace'
+import AddSensor from '../AddSensorDialog/AddSensor'
 import FlatButton from 'material-ui/FlatButton';
 
 const PageManageApplianceInner = props => {
-  const { onSubmit, renderSubmitButton, renderMessage, onHandleNoSpaces, addApplianceDialogOpen,handleAddApplianceDialogClose,handleAddApplianceDialogOpen} = props;
+  const { onSubmit, renderSubmitButton, renderMessage, onHandleNoSpaces, addApplianceDialogOpen,handleAddApplianceDialogClose,handleAddApplianceDialogOpen,handleAddSensoDialogClose,handleAddSensorDialogOpen,addSensorDialogOpen} = props;
 
   return (
     <div className="page-login">
@@ -67,6 +68,28 @@ const PageManageApplianceInner = props => {
                         </div>
                       </div>
 
+                      <div className="row">
+                        <div className="col-lg-3">
+
+                        </div>
+                        <div className="col-lg-6">
+                          <FlatButton
+                              label="Add Sensor"
+                              primary={true}
+                              icon={<AddIcon />}
+                              fullWidth={true}
+                              style={{textAlign : 'left'}}
+                              onTouchTap={handleAddSensorDialogOpen}
+                          />
+                          < AddSensor
+                              open = {addSensorDialogOpen}
+                              handleCancelDialog = {handleAddSensoDialogClose}
+                          />
+                        </div>
+                        <div className="col-lg-3">
+
+                        </div>
+                      </div>
 
                       <div className="row">
                         <div className="col-lg-3">
