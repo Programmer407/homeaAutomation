@@ -17,7 +17,7 @@ function callApiLogin(email, password, rememberMe) {
         USER_LOGIN_SUCCESS,
         USER_LOGIN_FAILURE
       ],
-     /* endpoint: `/api/login`,*/
+      endpoint: `/api/user/login`,
       method: 'POST'
     },
     payload: {email, password, rememberMe}

@@ -38,7 +38,7 @@ const port = getPort()
 const app = express();
 app.io= io;
 const httpServer = Server(app)
-// setupSessionStore(app)
+ setupSessionStore(app)
 
 // gzip filter
 app.use(compression())
@@ -63,9 +63,9 @@ app.use(helmet())
 // app.use(expressJwt({secret:secretToken.secret}).unless({path:['','/','/login','/login/test']}));
 // see setting details here: https://github.com/expressjs/session
 // app.use(expressSession(, store: new MySQLStore(options)}))
-// app.use(passport.initialize())
-// app.use(passport.session())
-// setupPassport()
+app.use(passport.initialize())
+app.use(passport.session())
+setupPassport()
 
 app.use(cors())
 
@@ -83,7 +83,7 @@ if ( process.env.UNIVERSAL_RENDERING === 'false' ) {
 
 // Include server routes as a middleware
 
-app.use('/api/login', user);
+app.use('/api/user', user);
 app.use('/api/dashboard',dashboard);
 app.use('/api/now',now);
 app.use('/microservice',microservice);

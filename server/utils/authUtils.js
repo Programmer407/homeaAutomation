@@ -2,15 +2,18 @@
 import passport from 'passport'
 
 // src
-// import { findUserByID } from '../managers'
+ import { findUserByUsername } from '../managers/userManager'
 
 export const setupPassport = () => {
   passport.serializeUser((user, done) => {
-    done(null, user.id)
+    console.log('serializeUser' )
+    console.log(user)
+    done(null, user.user_name)
   })
 
-  passport.deserializeUser((id, done) => {
-    findUserByID(id)
+  passport.deserializeUser((user_name, done) => {
+    console.log('deserializeUser user name'+user_name )
+      findUserByUsername(user_name)
     .then(user => { 
       done(null, user)
     }) 
