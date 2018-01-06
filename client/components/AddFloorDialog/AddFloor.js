@@ -3,14 +3,14 @@ import {connect} from 'react-redux'
 import moment from 'moment'
 //src
 import AddFloorInner from './AddFloorInner'
-import {addAppliance} from '../../actions/entities/appliance'
+import {addfloor} from '../../actions/entities/floor'
 
 
 const mapStateToProps = (state, ownProps) => {
     return {}
 }
 
-@connect(mapStateToProps,{addAppliance})
+@connect(mapStateToProps,{addfloor})
 
 
 export default class AddFloor extends React.Component {
@@ -18,17 +18,61 @@ export default class AddFloor extends React.Component {
         super(props)
         this.state ={
                isSubmit  : false,
-            applianceName : "",
+            homeId : "",
+            floorType : "",
+            floorName : "",
         }
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
+        this.handleCancelDialog = this.handleCancelDialog.bind(this);
+        this.handleHomeId = this.handleHomeId.bind(this);
+        this.handleFloorType = this.handleFloorType.bind(this);
+        this.handleFloorName = this.handleFloorName.bind(this);
     }
 
 
 
    handleCloseDialog() {
-   const {handleCancelDialog} = this.props
+   const {handleCancelDialog,addfloor} = this.props
+       const {isSubmit,homeId,floorType,floorName}   = this.state
        this.setState({isSubmit : true})
-       handleCancelDialog();
+       if(homeId != "" && floorType != "" && floorName != "") {
+          /* addfloor(floorName,floorType,homeId);*/
+       this.setState({
+           homeId : "",
+           floorType : "",
+           floorName : "",
+           isSubmit : false
+       })
+           handleCancelDialog();
+       }
+    }
+
+
+    handleHomeId(event, index, value){
+        this.setState({homeId: value});
+    }
+
+
+    handleFloorType(event, index, value){
+        this.setState({floorType: value});
+    }
+
+
+    handleFloorName(event){
+        console.log(event.target.value)
+        this.setState({floorName : event.target.value})
+    }
+
+    handleCancelDialog(){
+        const {handleCancelDialog} = this.props
+        const {isSubmit,homeId,floorType,floorName}   = this.state
+        this.setState({
+            homeId : "",
+            floorType : "",
+            floorName : "",
+            isSubmit : false
+        })
+        handleCancelDialog()
     }
 
 
@@ -39,6 +83,10 @@ export default class AddFloor extends React.Component {
              {...this.state}
             {...this.props}
              handleCloseDialog = {this.handleCloseDialog}
+             handleCancelDialog = {this.handleCancelDialog}
+             handleHomeId = {this.handleHomeId}
+             handleFloorType = {this.handleFloorType}
+             handleFloorName = {this.handleFloorName}
         />
     }
 
