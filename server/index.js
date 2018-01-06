@@ -93,7 +93,7 @@ app.use('/api/admin',adminApiController);
 
 
 [
-    'generealApiController',
+
     'defaultController',
 ].forEach(name => app.use(require(`./controllers/${name}`)))
 
