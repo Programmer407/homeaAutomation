@@ -84,12 +84,21 @@ const PrivateHeader = React.createClass ({
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
-            <Nav onSelect={this.closeNav}>
+              <Nav onSelect={this.closeNav}>
               <LinkContainer to="/dashboard" activeClassName="activeNavLink"><NavItem eventKey={1} className="nav-item">Dashboard</NavItem></LinkContainer>
 	 						<LinkContainer to="/currentStatus" activeClassName="activeNavLink"><NavItem eventKey={2} className="nav-item">Current Status</NavItem></LinkContainer>
 		 					<LinkContainer to="/history" activeClassName="activeNavLink"><NavItem eventKey={3} className="nav-item">History</NavItem></LinkContainer>
 
             </Nav>
+              <Nav className="nav-right-dropdown" onSelect={this.closeNav} pullRight>
+                  <NavDropdown eventKey={1} title="kamran" id="basic-nav-dropdown">
+                      <LinkContainer to="/logout"><MenuItem eventKey={1.1}>Logout</MenuItem></LinkContainer>
+                  </NavDropdown>
+              </Nav>
+              <Nav className="nav-right" pullRight>
+                  <MenuItem className="menu-divider" divider/>
+                  <LinkContainer to="/logout"><MenuItem eventKey={1}>Logout</MenuItem></LinkContainer>
+              </Nav>
           </Navbar.Collapse>
         </Navbar>
       </div>
