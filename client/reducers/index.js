@@ -27,7 +27,8 @@ function auth(state = {user: null}, action) {
   
   switch (type) {
     case ActionTypes.USER_LOGIN_SUCCESS: {
-      return {...state, user: payload.user.id}
+      debugger;
+      return {...state, user: payload.user}
     }
     /*case ActionTypes.USER_REGISTER_SUCCESS: {
       return {...state, user: payload.user.id}

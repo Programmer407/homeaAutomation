@@ -41,7 +41,7 @@ function callApiLogout() {
         USER_LOGOUT_SUCCESS,
         USER_LOGOUT_FAILURE
       ],
-    /*  endpoint: `/api/logout`,*/
+     endpoint: `/api/user/logout`,
       method: 'GET'
     }
   }

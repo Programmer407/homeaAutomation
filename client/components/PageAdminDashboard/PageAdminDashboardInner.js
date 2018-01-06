@@ -45,10 +45,30 @@ const PageAdminDashboardInner = props => {
                     <fieldset>
 
                       <div className="row">
-                        <div className="col-lg-3">
+                        <div className="col-lg-2">
 
                         </div>
-                        <div className="col-lg-6">
+                        <div className="col-lg-8">
+                          <Link to="/manageAccount" className="color-gray-light">
+                            <FlatButton
+                                label="Account Management"
+                                primary={true}
+                                icon={<UserManagement />}
+                                fullWidth={true}
+                                style={{textAlign : 'left'}}
+                            />
+                          </Link>
+                        </div>
+                        <div className="col-lg-2">
+
+                        </div>
+                      </div>
+
+                      <div className="row">
+                        <div className="col-lg-2">
+
+                        </div>
+                        <div className="col-lg-8">
                           <Link to="/manageUser" className="color-gray-light">
                           <FlatButton
                               label="User Managenet"
@@ -59,19 +79,18 @@ const PageAdminDashboardInner = props => {
                           />
                           </Link>
                         </div>
-                        <div className="col-lg-3">
+                        <div className="col-lg-2">
 
                         </div>
                       </div>
 
 
-
                       <div className="row">
-                        <div className="col-lg-3">
+                        <div className="col-lg-2">
 
                         </div>
-                        <div className="col-lg-6">
-                          <Link to="/manageUser" className="color-gray-light">
+                        <div className="col-lg-8">
+                          <Link to="/manageHome" className="color-gray-light">
                             <FlatButton
                                 label="Home Management"
                                 primary={true}
@@ -81,18 +100,18 @@ const PageAdminDashboardInner = props => {
                             />
                           </Link>
                         </div>
-                        <div className="col-lg-3">
+                        <div className="col-lg-2">
 
                         </div>
                       </div>
 
 
                       <div className="row">
-                        <div className="col-lg-3">
+                        <div className="col-lg-2">
 
                         </div>
-                        <div className="col-lg-6">
-                          <Link to="/manageUser" className="color-gray-light">
+                        <div className="col-lg-8">
+                          <Link to="/manageFloor" className="color-gray-light">
                             <FlatButton
                                 label="Floor Management"
                                 primary={true}
@@ -102,18 +121,18 @@ const PageAdminDashboardInner = props => {
                             />
                           </Link>
                         </div>
-                        <div className="col-lg-3">
+                        <div className="col-lg-2">
 
                         </div>
                       </div>
 
 
                       <div className="row">
-                        <div className="col-lg-3">
+                        <div className="col-lg-2">
 
                         </div>
-                        <div className="col-lg-6">
-                          <Link to="/manageUser" className="color-gray-light">
+                        <div className="col-lg-8">
+                          <Link to="/managePalace" className="color-gray-light">
                             <FlatButton
                                 label="Palace Management"
                                 primary={true}
@@ -123,7 +142,7 @@ const PageAdminDashboardInner = props => {
                             />
                           </Link>
                         </div>
-                        <div className="col-lg-3">
+                        <div className="col-lg-2">
 
                         </div>
                       </div>
@@ -131,11 +150,11 @@ const PageAdminDashboardInner = props => {
 
 
                       <div className="row">
-                        <div className="col-lg-3">
+                        <div className="col-lg-2">
 
                         </div>
-                        <div className="col-lg-6">
-                          <Link to="/manageUser" className="color-gray-light">
+                        <div className="col-lg-8">
+                          <Link to="/manageAppliance" className="color-gray-light">
                             <FlatButton
                                 label="Appliances Management"
                                 primary={true}
@@ -145,7 +164,7 @@ const PageAdminDashboardInner = props => {
                             />
                           </Link>
                         </div>
-                        <div className="col-lg-3">
+                        <div className="col-lg-2">
 
                         </div>
                       </div>

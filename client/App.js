@@ -25,9 +25,15 @@ import {
     PublicRoute,
     PrivateRoute,
     PageLogin,
+    PageLogout,
     PageRegister,
     PageAdminDashboard,
     PageManageUser,
+    PageManageAccount,
+    PageManageHome,
+    PageManageFloor,
+    PageManagePalace,
+    PageManageAppliance,
     PageDeleteUser,
     PageEditUser,
     TestComponent
@@ -73,10 +79,16 @@ export default class App extends React.Component {
                     <Switch>
                       <PublicRoute path="/test" component={TestComponent} />
                       <PublicRoute path="/login" component={PageLogin} />
+                      <Route path="/logout" component={PageLogout} />
                       <PublicRoute path="/register" component={PageRegister} />
                       <PublicRoute path="/dashboard" component={PageDashboard} />
                       <PublicRoute path="/adminDashboard" component={PageAdminDashboard} />
                       <PublicRoute path="/manageUser" component={PageManageUser} />
+                      <PublicRoute path="/manageAccount" component={PageManageAccount} />
+                      <PublicRoute path="/manageFloor" component={PageManageFloor} />
+                      <PublicRoute path="/managePalace" component={PageManagePalace} />
+                      <PublicRoute path="/manageAppliance" component={PageManageAppliance} />
+                      <PublicRoute path="/manageHome" component={PageManageHome} />
                       <PublicRoute path="/deleteUser" component={PageDeleteUser} />
                       <PublicRoute path="/editUser" component={PageEditUser} />
                       <PublicRoute path="/currentStatus" component={PageCurrentStatus} />
