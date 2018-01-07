@@ -10,7 +10,7 @@ export const SENSOR_ADD = 'SENSOR_ADD'
 export const SENSOR_ADD_SUCCESS = 'SENSOR_ADD_SUCCESS'
 export const SENSOR_ADD_FAILURE = 'SENSOR_ADD_FAILURE'
 
-export function addSensor(homeName,floorName,palaceName,sensorType,sensorName) {
+export function addSensor(homeId,floorId,palaceId,sensorType,name) {
     console.log("add senosr action has been called")
     return {
         [CALL_API]: {
@@ -19,9 +19,9 @@ export function addSensor(homeName,floorName,palaceName,sensorType,sensorName) {
                 SENSOR_ADD_SUCCESS,
                 SENSOR_ADD_FAILURE
             ],
-            /* endpoint: `/api/palace/add`,*/
+            endpoint: `/api/admin/addSensor`,
             method: 'POST'
         },
-        payload: {homeName, floorName, palaceName,sensorType,sensorName}
+        payload: {name,sensorType,palaceId,floorId,homeId}
     }
 }

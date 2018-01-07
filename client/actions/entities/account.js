@@ -10,7 +10,7 @@ export const ACCOUNT_CREATE = 'ACCOUNT_CREATE'
 export const ACCOUNT_CREATE_SUCCESS = 'ACCOUNT_CREATE_SUCCESS'
 export const ACCOUNT_CREATE_FAILURE = 'ACCOUNT_CREATE_FAILURE'
 
-export function accountCreate() {
+export function accountCreate(status) {
     console.log("account create d action has been called")
     return {
         [CALL_API]: {
@@ -19,8 +19,9 @@ export function accountCreate() {
                 ACCOUNT_CREATE_SUCCESS,
                 ACCOUNT_CREATE_FAILURE
             ],
-          /* endpoint: `/api/accout/create`,*/
-            method: 'GET'
+          endpoint: `/api/admin/addAccount`,
+            method: 'POST'
         },
+        payload : {status}
     }
 }

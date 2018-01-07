@@ -36,7 +36,7 @@ export default class AddFloor extends React.Component {
        const {isSubmit,homeId,floorType,floorName}   = this.state
        this.setState({isSubmit : true})
        if(homeId != "" && floorType != "" && floorName != "") {
-          /* addfloor(floorName,floorType,homeId);*/
+           addfloor(floorName,floorType,homeId);
        this.setState({
            homeId : "",
            floorType : "",

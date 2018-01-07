@@ -38,7 +38,7 @@ export default class AddPalace extends React.Component {
        const {selectedHomeName,selectedFloorName,selectedPalaceType,palaceName,isSubmit} = this.state
        this.setState({isSubmit : true})
        if(selectedHomeName != "" && selectedFloorName != "" && selectedPalaceType != "" && palaceName != "") {
-          /* addPalace(selectedHomeName,selectedFloorName,selectedPalaceType,palaceName);*/
+           addPalace(selectedHomeName,selectedFloorName,selectedPalaceType,palaceName);
            handleCancelDialog();
            this.setState({
                isSubmit : false,

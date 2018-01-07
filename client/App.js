@@ -81,7 +81,7 @@ export default class App extends React.Component {
                       <PublicRoute path="/login" component={PageLogin} />
                       <Route path="/logout" component={PageLogout} />
                       <PublicRoute path="/register" component={PageRegister} />
-                      <PublicRoute path="/dashboard" component={PageDashboard} />
+                    {/*  <PublicRoute path="/dashboard" component={PageDashboard} />*/}
                       <PublicRoute path="/adminDashboard" component={PageAdminDashboard} />
                       <PublicRoute path="/manageUser" component={PageManageUser} />
                       <PublicRoute path="/manageAccount" component={PageManageAccount} />
@@ -94,7 +94,7 @@ export default class App extends React.Component {
                       <PublicRoute path="/currentStatus" component={PageCurrentStatus} />
                       <PublicRoute path="/history" component={PageHistory} />
                       <Route exact path="/errors" component={PageErrorView} />
-                    {/*  <PrivateRoute
+                      <PrivateRoute
                           exact
                           path="/"
                           render={() => <Redirect to="/dashboard" />}
@@ -103,7 +103,7 @@ export default class App extends React.Component {
                           exact
                           path="/dashboard"
                           component={PageDashboard}
-                      />*/}
+                      />
                       <Route component={Page404} />
                     </Switch>
                   </div>

@@ -32,7 +32,7 @@ export default class AddAccount extends React.Component {
        const {isSubmit,isChecked} = this.state
        this.setState({isSubmit : true})
        if(isChecked == true){
-      /* accountCreate();*/
+      accountCreate("active");
            handleCancelDialog();
            this.setState({isSubmit : false,
            isChecked : false

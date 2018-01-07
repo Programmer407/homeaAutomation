@@ -36,7 +36,7 @@ export default class AddHome extends React.Component {
        const {homeName,homeDesc,isSubmit,accountIdSelected} = this.state
        this.setState({isSubmit : true})
        if(homeName != "" && homeDesc != "" && accountIdSelected != "") {
-          /* addHome(homeName,homeDesc,accountIdSelected);*/
+           addHome(homeName,homeDesc,accountIdSelected);
           this.setState({
               homeName : "",
               homeDesc : "",

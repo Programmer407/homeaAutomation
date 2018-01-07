@@ -17,7 +17,7 @@ const PageLoginInner = (props) => {
     return (
         <div className="page-login">
             <div className="main-body">
-                <DocumentTitle title="Login - Goals App"/>
+                <DocumentTitle title="Login - IOT"/>
                 <QueueAnim type="bottom" className="ui-animate">
                     <div key="1">
                         <div className="body-inner">

@@ -50,15 +50,15 @@ router.post('/login', ensureAnonymity, (req, res) => {
         })
 })
 
-// router.get('/api/logout', (req, res) => {
-//     req.logout()
-//     res
-//         .status(200)
-//         .send({
-//             message: 'User logged out successfully!'
-//         })
-// })
-//
+ router.get('/logout', (req, res) => {
+     req.logout()
+     res
+         .status(200)
+         .send({
+             message: 'User logged out successfully!'
+         })
+ })
+
 router.post('/create', ensureAnonymity, (req, res) => {
     const { body } = req
     if ( !body ) {

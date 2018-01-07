@@ -2,18 +2,18 @@ import React from 'react';
 import {connect} from 'react-redux'
 import moment from 'moment'
 //src
-import AddSensorInner from './AddSensorInner'
-import {addSensor} from '../../actions/entities/sesnor'
+import AddApplianceNewInner from './AddApplianceNewInner'
+import {addAppliance} from '../../actions/entities/appliance'
 
 
 const mapStateToProps = (state, ownProps) => {
     return {}
 }
 
-@connect(mapStateToProps,{addSensor})
+@connect(mapStateToProps,{addAppliance})
 
 
-export default class AddSensor extends React.Component {
+export default class AddApplianceNew extends React.Component {
     constructor(props){
         super(props)
         this.state ={
@@ -21,35 +21,35 @@ export default class AddSensor extends React.Component {
             selectedHomeName : "",
             selectedFloorName : "",
             selectedPalaceName : "",
-            sensorType : "",
-            sensorName : "",
+            applianceType : "",
+            applianceName : "",
         }
         this.handleCloseDialog = this.handleCloseDialog.bind(this);
         this.handleHomeName = this.handleHomeName.bind(this);
         this.handleFloorName = this.handleFloorName.bind(this);
         this.handlePalaceName = this.handlePalaceName.bind(this);
         this.handlePalaceName = this.handlePalaceName.bind(this);
-        this.handleSensorName = this.handleSensorName.bind(this);
-        this.handleSensorType = this.handleSensorType.bind(this)
+        this.handleApplianceName = this.handleApplianceName.bind(this);
+        this.handleApplianceType = this.handleApplianceType.bind(this)
         this.handleCancelDialog = this.handleCancelDialog.bind(this);
     }
 
 
 
    handleCloseDialog() {
-   const {handleCancelDialog,addSensor} = this.props
-       const {selectedHomeName,selectedFloorName, selectedPalaceName,sensorType,sensorName,isSubmit} = this.state
+   const {handleCancelDialog,addAppliance} = this.props
+       const {selectedHomeName,selectedFloorName, selectedPalaceName,applianceType,applianceName,isSubmit} = this.state
        this.setState({isSubmit : true})
-       if(selectedHomeName != "" && selectedFloorName != "" && selectedPalaceName != "" &&  sensorType != "" && sensorName != "") {
-          addSensor(selectedHomeName,selectedFloorName,selectedPalaceName,sensorType,sensorName);
+       if(selectedHomeName != "" && selectedFloorName != "" && selectedPalaceName != "" &&  applianceType != "" && applianceName != "") {
+           addAppliance(selectedHomeName,selectedFloorName,selectedPalaceName,applianceType,applianceName);
            handleCancelDialog();
            this.setState({
                isSubmit : false,
                selectedHomeName : "",
                selectedFloorName : "",
                selectedPalaceName : "",
-               sensorType : "",
-               sensorName : "",
+               applianceType : "",
+               applianceName : "",
            })
        }
     }
@@ -68,13 +68,13 @@ export default class AddSensor extends React.Component {
         this.setState({selectedPalaceName: value});
     }
 
-    handleSensorType(event, index, value){
-        this.setState({sensorType: value});
+    handleApplianceType(event, index, value){
+        this.setState({applianceType: value});
     }
 
-    handleSensorName(event){
+    handleApplianceName(event){
         console.log(event.target.value)
-        this.setState({sensorName : event.target.value})
+        this.setState({applianceName : event.target.value})
     }
 
 
@@ -86,23 +86,23 @@ export default class AddSensor extends React.Component {
             selectedHomeName : "",
             selectedFloorName : "",
             selectedPalaceName : "",
-            sensorType : "",
-            sensorName : "",
+            applianceType : "",
+            applianceName : "",
         })
         handleCancelDialog();
     }
 
 
     render(){
-         return <AddSensorInner
+         return <AddApplianceNewInner
              {...this.state}
             {...this.props}
              handleCloseDialog = {this.handleCloseDialog}
              handleHomeName = {this.handleHomeName}
              handleFloorName = {this.handleFloorName}
              handlePalaceName = {this.handlePalaceName}
-             handleSensorType = {this.handleSensorType}
-             handleSensorName = {this.handleSensorName}
+             handleApplianceType = {this.handleApplianceType}
+             handleApplianceName = {this.handleApplianceName}
              handleCancelDialog = {this.handleCancelDialog}
 
         />
