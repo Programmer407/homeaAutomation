@@ -41,7 +41,7 @@ export default class AddSensor extends React.Component {
        const {selectedHomeName,selectedFloorName, selectedPalaceName,sensorType,sensorName,isSubmit} = this.state
        this.setState({isSubmit : true})
        if(selectedHomeName != "" && selectedFloorName != "" && selectedPalaceName != "" &&  sensorType != "" && sensorName != "") {
-        /*   addSensor(selectedHomeName,selectedFloorName,selectedPalaceName,sensorType,sensorName);*/
+          addSensor(selectedHomeName,selectedFloorName,selectedPalaceName,sensorType,sensorName);
            handleCancelDialog();
            this.setState({
                isSubmit : false,

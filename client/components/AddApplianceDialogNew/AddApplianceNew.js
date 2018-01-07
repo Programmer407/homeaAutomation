@@ -41,7 +41,7 @@ export default class AddApplianceNew extends React.Component {
        const {selectedHomeName,selectedFloorName, selectedPalaceName,applianceType,applianceName,isSubmit} = this.state
        this.setState({isSubmit : true})
        if(selectedHomeName != "" && selectedFloorName != "" && selectedPalaceName != "" &&  applianceType != "" && applianceName != "") {
-          /* addAppliance(selectedHomeName,selectedFloorName,selectedPalaceName,applianceType,applianceName);*/
+           addAppliance(selectedHomeName,selectedFloorName,selectedPalaceName,applianceType,applianceName);
            handleCancelDialog();
            this.setState({
                isSubmit : false,

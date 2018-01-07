@@ -87,7 +87,7 @@ const AddApplianceNewInner = (props) =>{
                     <div className="col-sm-6">
                         <TextField
                             id="applianceName"
-                            floatingLabelText="Sensor Name"
+                            floatingLabelText="Apliance Name"
                             floatingLabelFixed
                             fullWidth
                             onChange={handleApplianceName}

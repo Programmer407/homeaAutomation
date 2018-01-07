@@ -10,7 +10,7 @@ export const FLOOR_ADD = 'FLOOR_ADD'
 export const FLOOR_ADD_SUCCESS = 'FLOOR_ADD_SUCCESS'
 export const FLOOR_ADD_FAILURE = 'FLOOR_ADD_FAILURE'
 
-export function addfloor(floorName,floorType,homeID) {
+export function addfloor(name,floortype,homeId) {
     console.log("add home action has been called")
     return {
         [CALL_API]: {
@@ -19,9 +19,9 @@ export function addfloor(floorName,floorType,homeID) {
                 FLOOR_ADD_SUCCESS,
                 FLOOR_ADD_FAILURE
             ],
-            /* endpoint: `/api/floor/add`,*/
+            endpoint: `/api/admin/addFloor`,
             method: 'POST'
         },
-        payload: {floorName, floorType, homeID}
+        payload: {name,homeId,floortype}
     }
 }

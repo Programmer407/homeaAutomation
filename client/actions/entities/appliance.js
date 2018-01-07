@@ -10,7 +10,7 @@ export const APPLIANCE_ADD = 'APPLIANCE_ADD'
 export const APPLIANCE_ADD_SUCCESS = 'APPLIANCE_ADD_SUCCESS'
 export const APPLIANCE_ADD_FAILURE = 'APPLIANCE_ADD_FAILURE'
 
-export function addAppliance(homeName,floorName,palaceName,applianceType,applianceName) {
+export function addAppliance(homeId,floorId,palaceId,applianceType,name) {
     console.log("Add appliance  action has been called")
     return {
         [CALL_API]: {
@@ -19,10 +19,10 @@ export function addAppliance(homeName,floorName,palaceName,applianceType,applian
                 APPLIANCE_ADD_SUCCESS,
                 APPLIANCE_ADD_FAILURE
             ],
-            /* endpoint: `/api/aappliance/add`,*/
+            endpoint: `/api/admin/addSwitch`,
             method: 'POST'
         },
-        payload: {homeName,floorName,palaceName,applianceType,applianceName}
+        payload: { name,applianceType,palaceId,floorId,homeId}
     }
 }
 
