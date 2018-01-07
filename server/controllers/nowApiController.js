@@ -20,8 +20,7 @@ var sensorlogService = require('../services/sensorlogServices');
 
 
 
-
-
+import {rejectRequest} from "./../utils"
 
 module.exports= function(io){
     var now_io = io.of('/now');
@@ -125,7 +124,7 @@ module.exports= function(io){
     }
 
     const { switch_id,status} = body
-    if ( !switch_id || !status ) {
+    if ( !switch_id || (typeof(status) == undefined )) {
       rejectRequest('Missing required arguments', res)
       return
     }
@@ -142,7 +141,7 @@ module.exports= function(io){
 
       if(user.accountAccountId){
         console.log('sending message to room '+user.accountAccountId);
-        now_io.to(data.accountAccountId).emit('msg',{ switch_id,status} );
+        now_io.to(user.accountAccountId).emit('switchStatus',{ switch_id,status} );
       }
 
     })
@@ -156,10 +155,18 @@ module.exports= function(io){
 
       socket.on('token',function(data) {
 
-        let {user} = data.user;
-        console.log('user' + user);
-        console.log('In /now end point i am connecting to room ' + user.accountAccountId);
-        socket.join(user.accountAccountId);
+        let {user} = data;
+          console.log('data')
+          console.log(data)
+
+          if(user.accountAccountId){
+              console.log('In /now end point i am connecting to room ' + user.accountAccountId);
+              socket.join(user.accountAccountId);
+          }
+          else {
+              console.log('user not found')
+          }
+
 
       })
 

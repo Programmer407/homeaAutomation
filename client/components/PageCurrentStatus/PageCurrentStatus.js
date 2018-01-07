@@ -9,11 +9,13 @@ import { connect } from 'react-redux';
 import PageCurrentStatusInner from './PageCurrentStatusInner'
 import {fetchCurrentStatusData} from '../../actions/entities/currentStatus'
 import PageLoading from '../PageLoading';
+import {configureSocketNowPage} from '../../utils/configureSocketIO'
 
 const mapStateToProps = (state, ownProps) => {
     const {feed : {currentStatus : {currentStatus : {now}}}} = state
+    const {auth : {user}} = state
     const {feed : {currentStatus : {isLoading }}} = state
-    return {now,isLoading}
+    return {now,isLoading,user}
 }
 
 @connect(mapStateToProps, {fetchCurrentStatusData})
@@ -231,7 +233,7 @@ export default class PageCurrentStatus extends React.Component {
     }
 
     componentDidMount(){
-        const {fetchCurrentStatusData} = this.props
+        const {fetchCurrentStatusData,user} = this.props
         fetchCurrentStatusData();
         setTimeout(() => {
            this.setState({
@@ -239,6 +241,7 @@ export default class PageCurrentStatus extends React.Component {
                roomSelected : this.props.now.palaces[0].palace_id ?  this.props.now.palaces[0].palace_id : ""
            })
         }, 1000);
+        configureSocketNowPage(user);
     }
 
     componentWillMount(){

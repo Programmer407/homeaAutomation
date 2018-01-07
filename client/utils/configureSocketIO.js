@@ -24,7 +24,10 @@ import io from 'socket.io-client'
 
 let socket
 
-export default function configureSocketIO(store) {
+
+let store;
+export default function configureSocketIO(st) {
+    store=st;
   if (socket) {
     console.log(`socketIO is already configured`)
     return
@@ -32,10 +35,34 @@ export default function configureSocketIO(store) {
 
   debugger;
   socket = io("http://localhost:3010/")
-    socket.on('connect', function(){ console.log('socket connected')});
+  socket.on('connect', function(){ console.log('socket connected')});
 
-  socket.on("Testing",     msg     => console.log('it is working'))
 
   
   //SEE LIST OF ALL INCOMING NOTIFICATION TYPES IN socketIoMessageTypes.js
+}
+
+
+
+export const configureSocketNowPage = function (user) {
+    socket = io("http://localhost:3010/now")
+    socket.on('connect', function(){
+        console.log('socket connected to namespace now')
+        socket.emit('token',{user})
+        socket.emit("subscribe", { room: user.accountAccountId });
+
+
+
+    });
+
+    socket.on("switchStatus",     (msg)     => {
+        console.log('switchStatus')
+        console.log(msg)
+
+
+    })
+
+
+
+    //SEE LIST OF ALL INCOMING NOTIFICATION TYPES IN socketIoMessageTypes.js
 }
