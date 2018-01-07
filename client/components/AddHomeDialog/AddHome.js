@@ -4,13 +4,15 @@ import moment from 'moment'
 //src
 import AddHomeInner from './AddHomeInner'
 import {addHome} from '../../actions/entities/home'
+import {getAllAccounts} from '../../actions/entities/account'
 
 
 const mapStateToProps = (state, ownProps) => {
-    return {}
+    const {entities : {accounts : {allAccount}}} = state
+    return {allAccount}
 }
 
-@connect(mapStateToProps,{addHome})
+@connect(mapStateToProps,{addHome,getAllAccounts})
 
 
 export default class AddHome extends React.Component {
@@ -31,7 +33,13 @@ export default class AddHome extends React.Component {
 
 
 
-   handleCloseDialog() {
+    componentDidMount(){
+        const  {getAllAccounts} = this.props
+        getAllAccounts();
+    }
+
+
+    handleCloseDialog() {
    const {handleCancelDialog,addHome} = this.props
        const {homeName,homeDesc,isSubmit,accountIdSelected} = this.state
        this.setState({isSubmit : true})
@@ -58,6 +66,7 @@ export default class AddHome extends React.Component {
     }
 
     handleAccountID(event, index, value){
+        debugger;
         this.setState({accountIdSelected: value});
     }
 

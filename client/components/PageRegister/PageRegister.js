@@ -6,7 +6,7 @@ import PageRegisterInner from './PageRegisterInner'
 import {register} from '../../actions/entities/users'
 import { bindForm } from '../../utils'
 
-const fields = ['firstName', 'lastName', 'email', 'password']
+const fields = ['firstName', 'lastName', 'email', 'password','accountId']
 
 const validate = values => {
   let errors = {};
@@ -66,6 +66,12 @@ const validate = values => {
       hasErrors = true;
     }
   }
+
+    if(!values.accountId ) {
+            errors.accountId = 'Please Select Account ID';
+            hasErrors = true;
+    }
+
   return hasErrors && errors;
 }
 
@@ -77,13 +83,13 @@ const validate = values => {
 })
 @bindForm({
   onSubmit: (values, dispatch, props) => {
-    const { firstName, lastName, email, password } = values;
+    const { firstName, lastName, email, password,accountId } = values;
 
-    /*return dispatch(register(firstName, lastName, email, password))
+    return dispatch(register(firstName, lastName, email, password,accountId))
     .then(action => {
       return action
-    })*/
-    dispatch(register(firstName, lastName, email, password))
+    })
+   /* dispatch(register(firstName, lastName, email, password,accountId))*/
 
   }
 })

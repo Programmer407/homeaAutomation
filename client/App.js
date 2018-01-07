@@ -91,8 +91,8 @@ export default class App extends React.Component {
                       <PublicRoute path="/manageHome" component={PageManageHome} />
                       <PublicRoute path="/deleteUser" component={PageDeleteUser} />
                       <PublicRoute path="/editUser" component={PageEditUser} />
-                      <PublicRoute path="/currentStatus" component={PageCurrentStatus} />
-                      <PublicRoute path="/history" component={PageHistory} />
+                      {/*<PublicRoute path="/currentStatus" component={PageCurrentStatus} />*/}
+                    {/*  <PublicRoute path="/history" component={PageHistory} />*/}
                       <Route exact path="/errors" component={PageErrorView} />
                       <PrivateRoute
                           exact
@@ -103,6 +103,16 @@ export default class App extends React.Component {
                           exact
                           path="/dashboard"
                           component={PageDashboard}
+                      />
+                      <PrivateRoute
+                          exact
+                          path="/currentStatus"
+                          component={PageCurrentStatus}
+                      />
+                      <PrivateRoute
+                          exact
+                          path="/history"
+                          component={PageHistory}
                       />
                       <Route component={Page404} />
                     </Switch>

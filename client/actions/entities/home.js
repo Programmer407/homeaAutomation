@@ -12,6 +12,7 @@ export const HOME_ADD_FAILURE = 'HOME_ADD_FAILURE'
 
 export function addHome(name,description,accountId) {
     console.log("add home action has been called")
+    debugger;
     return {
         [CALL_API]: {
             types: [

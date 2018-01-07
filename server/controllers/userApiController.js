@@ -59,7 +59,7 @@ router.post('/login', ensureAnonymity, (req, res) => {
          })
  })
 
-router.post('/create', ensureAnonymity, (req, res) => {
+router.post('/create', (req, res) => {
     const { body } = req
     if ( !body ) {
         rejectRequest('Missing request body', res)

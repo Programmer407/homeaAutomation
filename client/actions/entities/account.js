@@ -25,3 +25,22 @@ export function accountCreate(status) {
         payload : {status}
     }
 }
+
+export const ACCOUNT_READ_ALL = 'ACCOUNT_READ_ALL'
+export const ACCOUNT_READ_ALL_SUCCESS = 'ACCOUNT_READ_ALL_SUCCESS'
+export const ACCOUNT_READ_ALL_FAILURE = 'ACCOUNT_READ_ALL_FAILURE'
+
+export function getAllAccounts() {
+    console.log("get All account action has been called")
+    return {
+        [CALL_API]: {
+            types: [
+                ACCOUNT_READ_ALL,
+                ACCOUNT_READ_ALL_SUCCESS,
+                ACCOUNT_READ_ALL_FAILURE
+            ],
+            endpoint: `/api/admin/allAccount`,
+            method: 'GET'
+        },
+    }
+}

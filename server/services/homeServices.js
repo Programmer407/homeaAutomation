@@ -32,7 +32,7 @@ module.exports ={
     },
   addHome:function(data,callback){
       const { name,description,accountId} =data
-      const addObj =  models.home.build({name: name, description:description,accountAccountId:accountId,modeId});
+      const addObj =  models.home.build({name: name, description:description,accountAccountId:accountId,modeId : 1});
       homeManager.addHome(addObj).then(function(obj){
         callback(null,obj)
 
