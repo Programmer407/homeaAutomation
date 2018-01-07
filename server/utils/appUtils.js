@@ -76,7 +76,7 @@ export const setupSessionStore = (app) => {
     secret: SESSION_SECRET,
     store: sessionStore,
     cookie: {
-      domain: domain,
+
       // maxAge: 31536000000
       maxAge: 1800000
     },
