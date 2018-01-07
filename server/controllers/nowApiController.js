@@ -20,17 +20,20 @@ var sensorlogService = require('../services/sensorlogServices');
 
 
 
-import {rejectRequest} from "./../utils"
+import {rejectRequest,ensureAuthorization} from "./../utils"
 
 module.exports= function(io){
     var now_io = io.of('/now');
     var micro_io = io.of('/microservice');
-    router.get('/',function(req,res,next){
+    router.get('/',ensureAuthorization,function(req,res,next){
 
 
-                var data = {
-                    email:'ali@gmail.com'
-                }
+      var data = {
+        email:req.user.user_name
+      }
+
+
+
                 async.waterfall([
 
                     function findUser(callback){
@@ -129,22 +132,76 @@ module.exports= function(io){
       return
     }
 
-    switchService.updateSwitchStatus({ switch_id,status},function(err,result){
+    var {user} = req
+    //save it in the db
+    //update relay and relaylog table.
 
-      res
-        .status(200)
-        .send({
-          message: 'saved!'
-        })
+    var data = {switch_id,status,account:user.accountAccountId}
+    var receive_data = data;
 
-      const { user } = req
 
-      if(user.accountAccountId){
-        console.log('sending message to room '+user.accountAccountId);
-        now_io.to(user.accountAccountId).emit('switchStatus',{ switch_id,status} );
+    async.waterfall([
+
+
+      function findHome(callback){
+        homeService.findHome(data,callback);
+
+      },
+      function findFloor(data,callback){
+        floorService.findFloor(data,callback);
+
+      },
+      function findPalace(data,callback){
+        palaceService.findPalace(data,callback);
+      },
+      function findSwitch(data,callback)
+      {
+        switchService.findSwitch(data,callback);
+      },
+      function updateSwitchStatus(data,callback){
+        switchService.updateSwitchStatus(data,callback);
+
+      },
+      function addSwitchLog(data,callback){
+
+        switchLogService.addSwitchLog(data,callback);
       }
 
-    })
+
+
+
+    ],function(error,result) {
+
+      if (error)
+        console.log('error = ' + error)
+      else
+      {
+        res
+          .status(200)
+          .send({
+            message: 'saved!'
+          })
+        const { user } = req
+
+        if(user.accountAccountId){
+          console.log('sending message to room '+user.accountAccountId);
+          now_io.to(user.accountAccountId).emit('switchStatus',{ switch_id,status} );
+        }
+
+        //send it to gateway raspberry pi
+        micro_io.to(data.home_id).emit('message',receive_data);
+        console.log('done');
+
+
+      }
+
+
+
+
+    });
+
+
+
 
 
   });
