@@ -1144,7 +1144,6 @@ export default class PageAdminDashboard extends React.Component {
 
     render(){
         const {isLoading,DashboardData,now} = this.props
-        debugger;
         if(isLoading == true || DashboardData == undefined)
             return <PageLoading/>
 

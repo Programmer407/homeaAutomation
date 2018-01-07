@@ -23,7 +23,7 @@ const PageDashboardInner = (props) =>{
    if(isLoading == true)
        return <PageLoading/>
 
-   debugger;
+
     return (
        <div className="dahsboard">
            <div className="row"  >

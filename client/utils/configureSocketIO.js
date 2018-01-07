@@ -22,6 +22,10 @@ import io from 'socket.io-client'
 //   UNDO_GOING
 // } from '../../shared/socketIoMessageTypes'
 
+import {toggleApplianceSocket} from '../actions'
+
+import {SWITCH_STATUS} from '../../shared/socketIoMessageTypes'
+
 let socket
 
 
@@ -32,8 +36,7 @@ export default function configureSocketIO(st) {
     console.log(`socketIO is already configured`)
     return
   }
-
-  debugger;
+    
   socket = io("http://localhost:3010/")
   socket.on('connect', function(){ console.log('socket connected')});
 
@@ -55,11 +58,10 @@ export const configureSocketNowPage = function (user) {
 
     });
 
-    socket.on("switchStatus",     (msg)     => {
+    socket.on(SWITCH_STATUS,     (msg)     => {
         console.log('switchStatus')
         console.log(msg)
-
-
+        store.dispatch(toggleApplianceSocket(msg))
     })
 
 

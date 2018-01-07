@@ -11,7 +11,6 @@ import { DatePicker, SelectField, RadioButtonGroup, Checkbox,  AutoComplete } fr
 
 const AddHomeInner = (props) =>{
     const {handleCloseDialog,handleCancelDialog,open,handleHomeName,handleHomeDesc,homeName,accountIdSelected, homeDesc,isSubmit,handleAccountID,allAccount} = props;
-    debugger;
     const AddAccountActions = [
         <FlatButton
             label="Cancel"
