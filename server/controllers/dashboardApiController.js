@@ -234,20 +234,12 @@ module.exports= function(io){
 
         socket.on('token',function(data) {
 
-
-            jwt.verify(data.token, 'irfanbsse2060', function (err, decoded) {
-                if (err) {
-                    console.log('error')
-                } else {
-
-                    console.log('In /dashboard end point i am connecting to room '+decoded.home_id);
-                    socket.join(decoded.home_id);
+            let {user}  = data.user;
+            console.log('user'+user);
+            console.log('In /dashboard end point i am connecting to room '+user.accountAccountId);
+            socket.join(user.accountAccountId);
 
 
-                }
-
-
-            });
         });
 
 
