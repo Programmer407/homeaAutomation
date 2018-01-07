@@ -35,7 +35,8 @@ module.exports ={
 
     },
   findPalceByFloorId:function(data,callback){
-    palaceManager.getByFloor(data.floor).then(function(obj){
+      console.log('in service'+data.floor)
+    palaceManager.getByFloor({floors:data.floor}).then(function(obj){
       callback(null,obj)
 
     })

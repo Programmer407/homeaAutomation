@@ -116,27 +116,52 @@ module.exports= function(io){
 
     });
 
+  router.post('/changeSwitchStatus',function(req,res,nex){
+    console.log('/changeSwitchStatus called')
+    const { body } = req
+    if ( !body ) {
+      rejectRequest('Missing request body', res)
+      return
+    }
+
+    const { switch_id,status} = body
+    if ( !switch_id || !status ) {
+      rejectRequest('Missing required arguments', res)
+      return
+    }
+
+    switchService.updateSwitchStatus({ switch_id,status},function(err,result){
+
+      res
+        .status(200)
+        .send({
+          message: 'saved!'
+        })
+
+      const { user } = req
+
+      if(user.accountAccountId){
+        console.log('sending message to room '+user.accountAccountId);
+        now_io.to(data.accountAccountId).emit('msg',{ switch_id,status} );
+      }
+
+    })
+
+
+  });
+
     now_io.on('connection',function(socket ){
        console.log('a new user connected in /now end point');
 
 
-        socket.on('token',function(data) {
+      socket.on('token',function(data) {
 
+        let {user} = data.user;
+        console.log('user' + user);
+        console.log('In /now end point i am connecting to room ' + user.accountAccountId);
+        socket.join(user.accountAccountId);
 
-            jwt.verify(data.token, 'irfanbsse2060', function (err, decoded) {
-                if (err) {
-                    console.log('error')
-                } else {
-
-                    console.log('In /now end point i am connecting to room '+decoded.home_id);
-                    socket.join(decoded.home_id);
-
-
-                }
-
-
-            });
-        });
+      })
 
 
 
