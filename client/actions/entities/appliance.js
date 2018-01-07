@@ -33,7 +33,6 @@ export const APPLIANCE_TOGGLE_FAILURE = 'APPLIANCE_TOGGLE_FAILURE'
 
 export function toggleAppliance(switch_id,status) {
     console.log("toggle appliance  action has been called")
-    debugger;
     return {
         [CALL_API]: {
             types: [
@@ -44,6 +43,19 @@ export function toggleAppliance(switch_id,status) {
             endpoint: `/api/now/changeSwitchStatus`,
             method: 'POST'
         },
+        payload: { switch_id,status}
+    }
+}
+
+
+export const APPLIANCE_TOGGLE_SOCKET = 'APPLIANCE_TOGGLE_SOCKET'
+
+
+export function toggleApplianceSocket(switchData) {
+    const {status,switch_id} = switchData
+    console.log("toggle appliance  socket action has been called")
+    return {
+            type: APPLIANCE_TOGGLE_SOCKET,
         payload: { switch_id,status}
     }
 }

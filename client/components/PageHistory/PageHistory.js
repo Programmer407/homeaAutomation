@@ -86,7 +86,6 @@ export default class PageHistory extends React.Component {
 
     render(){
         const {isLoading,history} = this.props
-        debugger;
         if(isLoading == true || history == undefined)
             return <PageLoading/>
 

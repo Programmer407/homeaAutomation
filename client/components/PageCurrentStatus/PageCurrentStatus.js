@@ -254,7 +254,6 @@ export default class PageCurrentStatus extends React.Component {
     afterFloorSelected(e){
         debugger;
         this.setState({floorSelected: e.target.value});
-       debugger;
     }
 
     afterRoomSelected(e){
@@ -291,7 +290,7 @@ export default class PageCurrentStatus extends React.Component {
 
     render(){
         const {isLoading,now} = this.props
-        debugger;
+
 
         if(isLoading == true || now == undefined)
             return <PageLoading/>

@@ -43,7 +43,6 @@ const validate = values => {
 
         return dispatch(login(email, password, rememberMe))
             .then(action => {
-                debugger;
                 const { error } = action
                 if ( !error ) {
                     // const linkNext = _.get(payload, 'user.linkHome', '/')

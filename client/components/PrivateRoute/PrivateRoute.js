@@ -17,7 +17,6 @@ export default class PrivateRoute extends React.Component {
   
   render() {
     const {component, render, user, ...rest} = this.props
-    debugger;
     return (
       <Route {...rest} render={props => (
         <Choose>
