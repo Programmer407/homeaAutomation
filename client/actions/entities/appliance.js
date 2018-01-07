@@ -26,3 +26,24 @@ export function addAppliance(homeId,floorId,palaceId,applianceType,name) {
     }
 }
 
+
+export const APPLIANCE_TOGGLE = 'APPLIANCE_TOGGLE'
+export const APPLIANCE_TOGGLE_SUCCESS = 'APPLIANCE_TOGGLE_SUCCESS'
+export const APPLIANCE_TOGGLE_FAILURE = 'APPLIANCE_TOGGLE_FAILURE'
+
+export function toggleAppliance(switch_id,status) {
+    console.log("toggle appliance  action has been called")
+    debugger;
+    return {
+        [CALL_API]: {
+            types: [
+                APPLIANCE_TOGGLE,
+                APPLIANCE_TOGGLE_SUCCESS,
+                APPLIANCE_TOGGLE_FAILURE
+            ],
+            endpoint: `/api/now/changeSwitchStatus`,
+            method: 'POST'
+        },
+        payload: { switch_id,status}
+    }
+}

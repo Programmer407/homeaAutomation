@@ -5,27 +5,39 @@ import Toggle from 'material-ui/Toggle';
 import './WidgetOnOffAplliance.scss'
 
 
+import {connect} from 'react-redux'
+
+
+import {toggleAppliance} from '../../actions/entities/appliance'
+
+
+const mapStateToProps = (state, ownProps) => {
+    return {}
+}
+
+@connect(mapStateToProps,{toggleAppliance})
+
+
 class StatWidget extends Component{ // eslint-disable-line
-    static propTypes = {
-        applianceId : React.PropTypes.number,
-        style: React.PropTypes.string,
-        picture: React.PropTypes.string,
-        applianceType : React.PropTypes.string,
-        applianceName: React.PropTypes.string,
-        applianceCondition: React.PropTypes.string,
-        roomName: React.PropTypes.string,
-        id : React.PropTypes.number,
-        floorName : React.PropTypes.string,
-    }
+  constructor(props){
+      super(props);
+      this.state = {
+      }
+      this.handleToggle = this.handleToggle.bind(this);
+  }
+
+  handleToggle(event,newValue){
+      const {toggleAppliance,applianceId} = this.props
+      toggleAppliance(applianceId,newValue);
+  }
+
     render() {
         return (
             <div className="widget-appliance ">
             <Panel style={{height : "186px"}}
                 header={<div className="row widget-row" style={{backgroundColor : this.props.applianceType  == 'bulb' ? "#337ab7" : "#5cb85c", height : "117%", marginTop : "-10px"}}>
           <div className="col-xs-3">
-
- <div className="imag" style={{paddingTop : "13px"}}>
-
+            <div className="imag" style={{paddingTop : "13px"}}>
           {
                      this.props.applianceType  == 'bulb'
                 ?    <img src={require("../../Public/Images/BulbNew.jpg")}   width="75" height="110"  />
@@ -44,11 +56,9 @@ class StatWidget extends Component{ // eslint-disable-line
 
           <div className="col-xs-9 text-right">
             <div className="huge" style={{paddingTop : "20px"}}>
-            {/*  {
-                this.props.applianceCondition
-              }*/}
               <Toggle style={{paddingLeft : "82%"}}
               defaultToggled={ this.props.applianceCondition==1 ? true : false}
+              onToggle={this.handleToggle}
               />
             </div>
             <div style={{paddingTop : "16px" , paddingBottom : "16px"}}>
