@@ -6,23 +6,23 @@ import { CALL_API } from '../../middleware/api'
 
 
 
-export const ADD_APPLIANCE = 'ADD_APPLIANCE'
-export const ADD_APPLIANCE_SUCCESS = 'ADD_APPLIANCE_SUCCESS'
-export const ADD_APPLIANCE_FAILURE = 'ADD_APPLIANCE_FAILURE'
+export const APPLIANCE_ADD = 'APPLIANCE_ADD'
+export const APPLIANCE_ADD_SUCCESS = 'APPLIANCE_ADD_SUCCESS'
+export const APPLIANCE_ADD_FAILURE = 'APPLIANCE_ADD_FAILURE'
 
-export function addAppliance(applianceName,floorSelectedId,roomSelectedId) {
+export function addAppliance(homeName,floorName,palaceName,applianceType,applianceName) {
     console.log("Add appliance  action has been called")
-    debugger;
     return {
         [CALL_API]: {
             types: [
-                ADD_APPLIANCE,
-                ADD_APPLIANCE_SUCCESS,
-                ADD_APPLIANCE_FAILURE
+                APPLIANCE_ADD,
+                APPLIANCE_ADD_SUCCESS,
+                APPLIANCE_ADD_FAILURE
             ],
-           /* endpoint: `/api/addAppliance`,*/
-            method: 'GET'
+            /* endpoint: `/api/aappliance/add`,*/
+            method: 'POST'
         },
-        payload: {applianceName,floorSelectedId,roomSelectedId}
+        payload: {homeName,floorName,palaceName,applianceType,applianceName}
     }
 }
+

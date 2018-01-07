@@ -44,11 +44,11 @@ const PublicHeader = React.createClass ({
 	 						<LinkContainer to="#"><NavItem eventKey={2} className="nav-item">Pricing</NavItem></LinkContainer>
 		 					<LinkContainer to="#"><NavItem eventKey={3} className="nav-item">Contact Us</NavItem></LinkContainer>
             </Nav>
-						<Nav onSelect={this.closeNav} pullRight>
+					{/*	<Nav onSelect={this.closeNav} pullRight>
 							<MenuItem className="menu-divider" divider/>
 							<LinkContainer to="/login" activeClassName="activeNavLink"><NavItem eventKey={1}>Login</NavItem></LinkContainer>
 							<LinkContainer to="/register" activeClassName="activeNavLink"><NavItem eventKey={2}>Sign Up</NavItem></LinkContainer>
-						</Nav>
+						</Nav>*/}
           </Navbar.Collapse>
         </Navbar>
       </div>
@@ -91,7 +91,7 @@ const PrivateHeader = React.createClass ({
 
             </Nav>
               <Nav className="nav-right-dropdown" onSelect={this.closeNav} pullRight>
-                  <NavDropdown eventKey={1} title="kamran" id="basic-nav-dropdown">
+                  <NavDropdown eventKey={1} title={this.props.user.name} id="basic-nav-dropdown">
                       <LinkContainer to="/logout"><MenuItem eventKey={1.1}>Logout</MenuItem></LinkContainer>
                   </NavDropdown>
               </Nav>
@@ -115,15 +115,14 @@ const HeaderInner = (props) => {
         <PageLoading />
       </When>
 			<Otherwise>
-                <PrivateHeader/>
-        {/*<Choose>
-          <When condition={ user }>
-            <PrivateHeader user={ user } />
+        <Choose>
+          <When condition={ user!= null && user != undefined && user.userTypeUserId == 2}>
+            <PrivateHeader user={user } />
           </When>
           <Otherwise>
             <PublicHeader />
           </Otherwise>
-        </Choose>*/}
+        </Choose>
     </Otherwise>
 		</Choose>
 	);

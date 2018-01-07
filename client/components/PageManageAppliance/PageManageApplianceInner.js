@@ -17,6 +17,7 @@ import './PageManageApplianceInner.scss';
 import { renderTextField } from '../../utils'
 
 import AddPalace from '../AddPalaceDialog/AddPalace'
+import AddApplianceNew from '../AddApplianceDialogNew/AddApplianceNew'
 import AddSensor from '../AddSensorDialog/AddSensor'
 import FlatButton from 'material-ui/FlatButton';
 
@@ -58,7 +59,7 @@ const PageManageApplianceInner = props => {
                               style={{textAlign : 'left'}}
                               onTouchTap={handleAddApplianceDialogOpen}
                           />
-                            < AddPalace
+                            < AddApplianceNew
                                 open = {addApplianceDialogOpen}
                                 handleCancelDialog = {handleAddApplianceDialogClose}
                             />

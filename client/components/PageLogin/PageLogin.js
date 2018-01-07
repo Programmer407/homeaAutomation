@@ -43,13 +43,15 @@ const validate = values => {
 
         return dispatch(login(email, password, rememberMe))
             .then(action => {
-              /*  console.log(action.payload.user.roleId)*/
-
+                debugger;
                 const { error } = action
-               /* if ( !error ) {
-                  dispatch(push('/dashboard'))
-                }*/
-                dispatch(push('/dashboard'))
+                if ( !error ) {
+                    // const linkNext = _.get(payload, 'user.linkHome', '/')
+                    if(action.payload.user.userTypeUserId == 1)
+                        dispatch(push('/adminDashboard'))
+                    else  if(action.payload.user.userTypeUserId == 2)
+                        dispatch(push('/dashboard'))
+                }
                 return action
             })
     }

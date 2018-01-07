@@ -3,7 +3,7 @@ import React from 'react'
 import {reduxForm, change as changeFieldValue} from 'redux-form'
 import {push} from 'react-router-redux'
 import PageManageUserInner from './PageManageUserInner'
-import {register} from '../../actions/entities/users'
+import { logout } from '../../actions'
 import { bindForm } from '../../utils'
 
 
