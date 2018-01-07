@@ -2,7 +2,7 @@
  * Created by Irfan on 11-Jun-17.
  */
 var switchManager = require('../managers/switchManager');
-
+var models = require('../models');
 module.exports ={
 
     findSwitch:function(data,callback){
@@ -40,7 +40,16 @@ module.exports ={
                 callback('error occured in saving sensor value',null);
         })
 
-    }
+    },
+  addSwitch:function(data,callback){
+    const { name,applianceType,palaceId}  =data
+    const addObj =  models.switches.build({name: name, applianceApplianceId:applianceType,palacePalaceId:palaceId,status:0});
+    switchManager.addSwitch(addObj).then(function(obj){
+      callback(null,obj)
+
+    })
+  }
+
 
 
 

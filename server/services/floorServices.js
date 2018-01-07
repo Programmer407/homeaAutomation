@@ -2,6 +2,7 @@
  * Created by Irfan on 11-Jun-17.
  */
 var floorManager = require('../managers/floorManager');
+var models = require('../models');
 
 module.exports ={
 
@@ -33,7 +34,16 @@ module.exports ={
         });
 
 
-    }
+    },
+  addFloor:function(data,callback){
+    const { name,homeId,floortype} =data
+    const addObj =  models.floor.build({name: name, homeHomeId:homeId,floorTypeFloorId:floortype});
+    floorManager.addFloor(addObj).then(function(obj){
+      callback(null,obj)
+
+    })
+  }
+
 
 
 

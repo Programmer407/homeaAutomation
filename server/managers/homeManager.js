@@ -4,9 +4,13 @@
 var models= require('../models');
 module.exports= {
     getByAccount:function(query_data){
-
         return models.home.findAll({where:{accountAccountId:query_data.account},include:models.mode})
-    }
+    },
+  addHome:function(homeObj){
+
+   return homeObj.save()
+
+  }
 
 
 

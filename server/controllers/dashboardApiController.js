@@ -19,6 +19,8 @@ var switchLogService = require('../services/switchLogService');
 var sensorlogService = require('../services/sensorlogServices');
 var dashboarduserdataService = require('../services/dashboarduserdataServices');
 
+import {ensureAuthorization} from "./../utils/"
+
 var models = require('./../models')
 
 
@@ -34,12 +36,14 @@ module.exports= function(io){
     })
 
     // basically request for /dashboard
-    router.get('/',function(req,res,nex){
+    router.get('/',ensureAuthorization,function(req,res,nex){
 
                 console.log('my dashboard api called')
                 var data = {
-                    email:"ali@gmail.com"
+                    email:req.user.user_name
                 }
+                console.log('request . user')
+                console.log(req.user)
                 async.waterfall([
 
                     function findUser(callback){

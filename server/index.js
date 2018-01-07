@@ -21,6 +21,7 @@ var user = require('./controllers/userApiController');
 var dashboard = require('./controllers/dashboardApiController')(io);
 var now = require('./controllers/nowApiController')(io);
 var history = require('./controllers/historyApiController')(io);
+var adminApiController = require('./controllers/adminApiController')(io);
 var microservice = require('./controllers/microserviceApiController')(io);
 
 var models =require('./models');
@@ -88,9 +89,11 @@ app.use('/api/dashboard',dashboard);
 app.use('/api/now',now);
 app.use('/microservice',microservice);
 app.use('/api/history',history);
+app.use('/api/admin',adminApiController);
+
 
 [
-    'generealApiController',
+
     'defaultController',
 ].forEach(name => app.use(require(`./controllers/${name}`)))
 
