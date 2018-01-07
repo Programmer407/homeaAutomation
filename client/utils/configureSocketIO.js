@@ -34,7 +34,7 @@ export default function configureSocketIO(st) {
   }
 
   debugger;
-  socket = io("http://localhost:3010/")
+  socket = io(location.origin+"/")
   socket.on('connect', function(){ console.log('socket connected')});
 
 
@@ -45,7 +45,7 @@ export default function configureSocketIO(st) {
 
 
 export const configureSocketNowPage = function (user) {
-    socket = io("http://localhost:3010/now")
+    socket = io(location.origin+"/now")
     socket.on('connect', function(){
         console.log('socket connected to namespace now')
         socket.emit('token',{user})
