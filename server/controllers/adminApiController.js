@@ -29,7 +29,7 @@ import { ensureAnonymity, rejectRequest, caughtError } from '../utils'
 module.exports= function(io){
 
 
-  // /addHome
+  // /addAcount
   router.post('/addAccount',function(req,res,nex){
 
     console.log('/addAccount called')
@@ -52,6 +52,43 @@ module.exports= function(io){
         .status(200)
         .send({
           message: 'saved!'
+        })
+    })
+
+
+
+
+  });
+  // get all data by account
+  router.get('/dataByAccounts',function(req,res,nex){
+
+    console.log('/dataByAccounts called')
+
+    accountService.getAllData(function(err,result){
+
+      res
+        .status(200)
+        .send({
+          data: result
+        })
+    })
+
+
+
+
+  });
+
+  //get all accounts
+  router.get('/allAccount',function(req,res,nex){
+
+    console.log('/allAccount called')
+
+    accountService.getAllAccount(function(err,result){
+
+      res
+        .status(200)
+        .send({
+          data: result
         })
     })
 
@@ -87,6 +124,25 @@ module.exports= function(io){
 
 
   });
+  //get all home
+  router.get('/allHome',function(req,res,nex){
+
+    console.log('/allHome called')
+
+    homeService.getAllHome(function(err,result){
+
+      res
+        .status(200)
+        .send({
+          data: result
+        })
+    })
+
+
+
+
+  });
+
 
 
   // /addFloor
@@ -133,6 +189,26 @@ module.exports= function(io){
 
 
   });
+  //get floor by home id
+  router.get('/floor/:home_id',function(req,res,nex){
+
+    console.log('/floor home id called')
+
+    floorService.findFloor({home_id:req.params.home_id},function(err,result){
+
+      res
+        .status(200)
+        .send({
+          data: result
+        })
+    })
+
+
+
+
+  });
+
+
 
   // /addPalace
   router.post('/addPalace',function(req,res,nex){
@@ -177,6 +253,25 @@ module.exports= function(io){
 
 
   });
+  //get paalace by floor id
+  router.get('/palace/:floor',function(req,res,nex){
+
+    console.log('/paalace floor id called')
+
+    palaceService.findPalceByFloorId({floor:req.params.floor},function(err,result){
+
+      res
+        .status(200)
+        .send({
+          data: result
+        })
+    })
+
+
+
+
+  });
+
 
   // /addSwitch
   router.post('/addSwitch',function(req,res,nex){

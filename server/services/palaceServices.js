@@ -34,14 +34,13 @@ module.exports ={
 
 
     },
-  addPalace:function(data,callback){
-    const { name,floorId,palaceType}  =data
-    const addObj =  models.palace.build({name: name, floorFloorId:floorId,palaceTypePalaceId:palaceType});
-    palaceManager.addPalace(addObj).then(function(obj){
+  findPalceByFloorId:function(data,callback){
+    palaceManager.getByFloor(data.floor).then(function(obj){
       callback(null,obj)
 
     })
   }
+
 
 
 
