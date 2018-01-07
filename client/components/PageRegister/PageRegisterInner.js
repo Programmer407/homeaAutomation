@@ -10,7 +10,11 @@ import QueueAnim from 'rc-queue-anim';
 
 // src
 import './PageRegisterInner.scss';
-import { renderTextField } from '../../utils'
+import { renderTextField,renderSelectField } from '../../utils'
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+import Subheader from 'material-ui/Subheader';
+import Divider from 'material-ui/Divider';
 
 const PageRegisterInner = props => {
   const { onSubmit, renderSubmitButton, renderMessage, onHandleNoSpaces } = props;
@@ -34,6 +38,28 @@ const PageRegisterInner = props => {
 
                   <form className="form-horizontal">
                     <fieldset>
+                   {/*   <div className="form-group">
+                       <div className="row">
+                         <div className="col-sm-6">
+                           <Subheader style={{marginTop : 16,paddingLeft : 0}}>Account ID</Subheader>
+                         /!*  <Divider />*!/
+                         </div>
+                         <div className="col-sm-6">
+                           <DropDownMenu value={1}  style={{marginTop : 15}}  >
+                             <MenuItem value={1} primaryText="1" />
+                             <MenuItem value={2} primaryText="2" />
+                             <MenuItem value={3} primaryText="3" />
+                           </DropDownMenu>
+                         </div>
+                       </div>
+                      </div>*/}
+                      <div className="form-group">
+                        <Field name="accountId" label="Account ID" component={renderSelectField} fullWidth>
+                          <MenuItem value={1} primaryText="1" />
+                          <MenuItem value={2} primaryText="2" />
+                          <MenuItem value={3} primaryText="3" />
+                        </Field>
+                      </div>
                       <div className="form-group">
                         <Field name="firstName" label="First Name" autoComplete="off" component={renderTextField} onChange={onHandleNoSpaces.bind(this)} />
                       </div>

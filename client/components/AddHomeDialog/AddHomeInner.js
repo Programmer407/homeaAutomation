@@ -7,9 +7,10 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
+import { DatePicker, SelectField, RadioButtonGroup, Checkbox,  AutoComplete } from 'material-ui'
 
 const AddHomeInner = (props) =>{
-    const {handleCloseDialog,handleCancelDialog,open,handleHomeName,handleHomeDesc,homeName, homeDesc,isSubmit,handleAccountID} = props;
+    const {handleCloseDialog,handleCancelDialog,open,handleHomeName,handleHomeDesc,homeName,accountIdSelected, homeDesc,isSubmit,handleAccountID} = props;
     const AddAccountActions = [
         <FlatButton
             label="Cancel"
@@ -34,7 +35,7 @@ const AddHomeInner = (props) =>{
 
 
                 <div className="row">
-                    <div className="col-sm-8">
+                    <div className="col-sm-9">
                         <TextField
                             id="homeName"
                             floatingLabelText="Home Name"
@@ -45,17 +46,19 @@ const AddHomeInner = (props) =>{
                             errorText={isSubmit && homeName == "" && "Please add Home Name"}
                         />
                     </div>
-                    <div className="col-lg-2">
-                        <Subheader style={{marginTop : 17,paddingLeft : 0}}>Account ID</Subheader>
-                        <Divider />
-                    </div>
-                    <div className="col-sm-2">
-                        <DropDownMenu value={1}  style={{marginTop : 15}} onChange={handleAccountID} >
-                                        <MenuItem value={1} primaryText="1" />
+
+                    <div className="col-sm-3">
+                        <SelectField onChange={handleAccountID}
+                                     value={accountIdSelected}
+                                     floatingLabelText="Account ID"
+                                     floatingLabelFixed
+                                     fullWidth
+                                     errorText={isSubmit && accountIdSelected == "" && "Please Select Account ID"}
+                        >
+                            <MenuItem value={1} primaryText="1" />
                             <MenuItem value={2} primaryText="2" />
                             <MenuItem value={3} primaryText="3" />
-                            <MenuItem value={4} primaryText="4" />
-                        </DropDownMenu>
+                        </SelectField>
                     </div>
                 </div>
 
@@ -72,6 +75,7 @@ const AddHomeInner = (props) =>{
                         />
                     </div>
                 </div>
+
 
 
             </Dialog>

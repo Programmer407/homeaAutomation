@@ -57,8 +57,9 @@ export const USER_REGISTER = 'USER_REGISTER'
 export const USER_REGISTER_SUCCESS = 'USER_REGISTER_SUCCESS'
 export const USER_REGISTER_FAILURE = 'USER_REGISTER_FAILURE'
 
-export function register(firstName, lastName, email, password) {
+export function register(firstName, lastName, email, password,accountId) {
   console.log("firstName \n"+firstName+"\n LastName \n"+lastName+"\n Email \n"+email+"\n Password \n"+password)
+    debugger;
   return {
     [CALL_API]: {
       types: [
@@ -66,10 +67,10 @@ export function register(firstName, lastName, email, password) {
         USER_REGISTER_SUCCESS,
         USER_REGISTER_FAILURE
       ],
-    /*  endpoint: `/api/users/create`,*/
+     endpoint: `/api/user/create`,
       method: 'POST'
     },
-    payload: {firstName, lastName, email, password}
+    payload: {firstName, lastName, email, password,accountId}
   }
 }
 
