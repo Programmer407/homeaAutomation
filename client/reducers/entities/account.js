@@ -24,7 +24,6 @@ function isLoading(state = false, action) {
 
 function account(state = "", action) {
     const {payload} = action
-    debugger;
     console.log("add acount reducer is")
     console.log(payload)
 
@@ -40,7 +39,25 @@ function account(state = "", action) {
 
 }
 
+
+
+function allAccount(state = [], action) {
+    const {payload} = action
+    console.log("all account reducer is")
+    console.log(payload)
+
+    switch (action.type) {
+        case ActionTypes.ACCOUNT_READ_ALL_SUCCESS: {
+            return action.payload.data;
+        }
+        default: {
+            return state
+        }
+    }
+
+}
+
 export default combineReducers({
-    isLoading, account
+    isLoading, account,allAccount
 })
 
