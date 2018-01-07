@@ -13,7 +13,24 @@ module.exports ={
       callback(null,obj)
 
     })
+  },
+
+  getAllData:function(callback){
+
+    accountManager.getAllDataByAccount().then(function(obj){
+      callback(null,obj)
+
+    })
+  },
+
+  getAllAccount:function(callback){
+
+    accountManager.getAllAccount().then(function(obj){
+      callback(null,obj)
+
+    })
   }
+
 
 
 

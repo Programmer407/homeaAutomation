@@ -10,6 +10,11 @@ module.exports= {
 
    return homeObj.save()
 
+  },
+  getAllHomes:function(Obj){
+
+    return models.home.findAll()
+
   }
 
 
