@@ -10,16 +10,44 @@ module.exports ={
     findHome:function(data,callback){
         console.log('find home called')
         console.log('data object'+data);
-       var user=data.user;
 
-        var query_data={account:user[0].dataValues.accountAccountId}
+        console.log('type of callback' +typeof callback)
+
+        if(data.user)
+        {
+          var user=data.user;
+
+          var query_data={account:user[0].dataValues.accountAccountId}
+        }
+        else
+          var query_data={account:data.account}
+
+
+          console.log('query data')
+      console.log(query_data)
+
 
         homeManager.getByAccount(query_data).then(function(home){
 
             if(home)
             {
+              console.log('home result')
+              console.log(home)
+              if(data.user)
+              {
                 data.home = home;
                 callback(null,data);
+              }
+              else{
+
+                console.log('else condition')
+
+                if(home.length>0){
+                  console.log('lenght greater then zero')
+                  data.home_id = home[0].dataValues.home_id
+                  callback(null,data);
+                }
+              }
             }
 
             else

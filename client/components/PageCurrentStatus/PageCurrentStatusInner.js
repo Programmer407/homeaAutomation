@@ -109,7 +109,7 @@ if(isLoading ==true)
 
             <div className="row ">
 
-                <div className="col-lg-3 col-md-4 col-sm-6  " style={{paddingTop : "30px"}}>
+                <div className="col-lg-3 col-lg-offset-2 col-md-4 col-sm-6  " style={{paddingTop : "30px"}}>
                     {NowData.switches.map((switch1,key) => {
                         if((switch1.palacePalaceId == roomSelected && (switch1.appliance.type == "Light"))) {
 
@@ -136,7 +136,7 @@ if(isLoading ==true)
                 </div>
 
 
-                <div className="col-lg-3 col-md-4 col-sm-6  "  style={{paddingTop : "30px"}}>
+                <div className="col-lg-3 col-lg-offset-2 col-md-4 col-sm-6  "  style={{paddingTop : "30px"}}>
                     {NowData.switches.map((switch1,key) => {
                         if((switch1.palacePalaceId == roomSelected && (switch1.appliance.type == "Fan"))) {
 
@@ -162,7 +162,7 @@ if(isLoading ==true)
 
                 </div>
 
-                <div className="col-lg-3 col-md-4 col-sm-6 "  style={{paddingTop : "30px"}}>
+                <div className="col-lg-3 col-lg-offset-2 col-md-4 col-sm-6 "  style={{paddingTop : "30px"}}>
                     {NowData.sensors.map((sensor,key) => {
                         if((sensor.palacePalaceId == roomSelected && (sensor.sensor_type.name == "temp"))) {
 
@@ -187,7 +187,7 @@ if(isLoading ==true)
 
                 </div>
 
-                <div className="col-lg-3 col-md-4 col-sm-6 "  style={{paddingTop : "30px"}}>
+                <div className="col-lg-3 col-lg-offset-2 col-md-4 col-sm-6 "  style={{paddingTop : "30px"}}>
                     {NowData.sensors.map((sensor,key) => {
                         if((sensor.palacePalaceId == roomSelected && (sensor.sensor_type.name == "light"))) {
 

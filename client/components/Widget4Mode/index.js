@@ -24,12 +24,12 @@ class StatWidget extends Component{ // eslint-disable-line
 
           {
                      this.props.applianceType  == 'bulb'
-                ?    <img src={require("../../Public/Images/BulbNew.jpg")}   width="60" height="80"  />
+                ?    <img src={require("../../Public/Images/BulbNew.jpg")}   width="100" height="100"  />
                 :
             (
                      this.props.applianceType == 'fan'
-                 ?   <img src={require("../../Public/Images/Fan2New.jpg")}   width="60" height="80"  />
-                 :   <img src={require("../../Public/Images/modeNew.jpg")}   width="60" height="80"  />  )
+                 ?   <img src={require("../../Public/Images/Fan2New.jpg")}   width="100" height="100"  />
+                 :   <img src={require("../../Public/Images/modeNew.jpg")}   width="100" height="100"  />  )
 
             }
 
