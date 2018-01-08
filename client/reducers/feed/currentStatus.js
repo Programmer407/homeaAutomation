@@ -23,6 +23,7 @@ function isLoading(state = false, action) {
 
 
 function currentStatus(state = "", action) {
+    debugger;
     const {payload} = action
     switch (action.type) {
         case ActionTypes.CURRENT_STATAS_DATA_SUCCESS: {
@@ -31,12 +32,14 @@ function currentStatus(state = "", action) {
 
         case ActionTypes.APPLIANCE_TOGGLE_SOCKET: {
             const {payload : {switch_id,status}} = action
-            var newState = state;
+            let newState = Object.assign({},state);
             newState.now.switches.map((switch1=>{
                 if(switch1.switch_id == switch_id){
                     switch1.status = status == true ? 1 : 0
                 }
             }))
+            /*return Object.assign({},...state,newState);*/
+            // return Object.assign({},...newState)
             return newState;
         }
 

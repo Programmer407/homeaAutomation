@@ -12,6 +12,7 @@ import PageLoading from '../PageLoading';
 import {configureSocketNowPage} from '../../utils/configureSocketIO'
 
 const mapStateToProps = (state, ownProps) => {
+    debugger;
     const {feed : {currentStatus : {currentStatus : {now}}}} = state
     const {auth : {user}} = state
     const {feed : {currentStatus : {isLoading }}} = state
@@ -290,7 +291,7 @@ export default class PageCurrentStatus extends React.Component {
 
     render(){
         const {isLoading,now} = this.props
-
+debugger;
 
         if(isLoading == true || now == undefined)
             return <PageLoading/>

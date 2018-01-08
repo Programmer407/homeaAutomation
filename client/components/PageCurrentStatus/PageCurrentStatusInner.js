@@ -13,6 +13,7 @@ import PageLoading from '../PageLoading';
 import AddAppliance from '../AddAppliaceDialog/AddAppliance'
 
 const PageCurrentStatusInner = (props) =>{
+    debugger;
   const {NowData,isLoading,afterFloorSelected,afterRoomSelected,floorSelected,roomSelected,handleFloorSelected,handleRoomSelected,handleAddApplianceDialogOpen,handleAddApplianceDialogClose,addApplianceDialogOpen} = props
 if(isLoading ==true)
     return <PageLoading/>
