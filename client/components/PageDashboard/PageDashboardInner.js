@@ -22,8 +22,31 @@ const PageDashboardInner = (props) =>{
    const {DashboardData,NowData,isLoading,handleFloorSelected,handleRoomSelected,floorSelected,roomSelected} = props;
    if(isLoading == true)
        return <PageLoading/>
+debugger;
 
 
+var newBulgLog  = DashboardData.bulb_log;
+    if(newBulgLog != undefined && newBulgLog != null)
+    {
+        debugger;
+        for(var i=0;i<newBulgLog.length;i++){
+         /* var newTime = newBulgLog[i].time.substring(0,5)*/
+           newBulgLog[i].time = newBulgLog[i].time.substring(0,5)
+        }
+    }
+
+
+    var newFanLog  = DashboardData.fan_log;
+    if(newFanLog != undefined && newFanLog != null)
+    {
+        debugger;
+        for(var i=0;i<newFanLog.length;i++){
+            /* var newTime = newBulgLog[i].time.substring(0,5)*/
+            newFanLog[i].time = newFanLog[i].time.substring(0,5)
+        }
+    }
+
+debugger;
     return (
        <div className="dahsboard">
            <div className="row"  >
@@ -96,14 +119,14 @@ const PageDashboardInner = (props) =>{
 
                        <div className="row">
                            <div className="col-lg-6">
-                               <BarChart width={730} height={300} data={DashboardData.bulb_log}>
-                                   <XAxis angle={-45} interval={0} dataKey="time"/>
+                               <BarChart width={730} height={300} data={newBulgLog}>
+                                   <XAxis angle={-45} interval={0} dataKey="time" padding={{ top : 100}}/>
                                    <YAxis />
                                    <Tooltip />
                                    <Legend  />
                                    <Bar dataKey="total_on" fill="#8884d8" >
                                        {
-                                           (DashboardData.bulb_log || []).map((entry, index) => <Cell  fill={COLORS[index % COLORS.length]}/>)
+                                           (newBulgLog || []).map((entry, index) => <Cell  fill={COLORS[index % COLORS.length]}/>)
                                        }
                                    </Bar>
                                </BarChart>

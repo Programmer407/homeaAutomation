@@ -12,7 +12,6 @@ import PageLoading from '../PageLoading';
 import {configureSocketNowPage} from '../../utils/configureSocketIO'
 
 const mapStateToProps = (state, ownProps) => {
-    debugger;
     const {feed : {currentStatus : {currentStatus : {now}}}} = state
     const {auth : {user}} = state
     const {feed : {currentStatus : {isLoading }}} = state
@@ -258,7 +257,6 @@ export default class PageCurrentStatus extends React.Component {
     }
 
     afterRoomSelected(e){
-        debugger;
         this.setState({roomSelected: e.target.value});
     }
 

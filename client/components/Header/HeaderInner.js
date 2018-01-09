@@ -39,11 +39,11 @@ const PublicHeader = React.createClass ({
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
-            <Nav onSelect={this.closeNav}>
+          {/*  <Nav onSelect={this.closeNav}>
               <LinkContainer to="#"><NavItem eventKey={1} className="nav-item">Features</NavItem></LinkContainer>
 	 						<LinkContainer to="#"><NavItem eventKey={2} className="nav-item">Pricing</NavItem></LinkContainer>
 		 					<LinkContainer to="#"><NavItem eventKey={3} className="nav-item">Contact Us</NavItem></LinkContainer>
-            </Nav>
+            </Nav>*/}
 					{/*	<Nav onSelect={this.closeNav} pullRight>
 							<MenuItem className="menu-divider" divider/>
 							<LinkContainer to="/login" activeClassName="activeNavLink"><NavItem eventKey={1}>Login</NavItem></LinkContainer>

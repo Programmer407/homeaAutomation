@@ -23,7 +23,6 @@ function isLoading(state = false, action) {
 
 
 function currentStatus(state = "", action) {
-    debugger;
     const {payload} = action
     switch (action.type) {
         case ActionTypes.CURRENT_STATAS_DATA_SUCCESS: {
