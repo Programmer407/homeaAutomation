@@ -25,3 +25,24 @@ export function addfloor(name,floortype,homeId) {
         payload: {name,homeId,floortype}
     }
 }
+
+
+export const FLOOR_READ_ALL_FOR_SPECIFIC_HOME = 'FLOOR_READ_ALL_FOR_SPECIFIC_HOME'
+export const FLOOR_READ_ALL_FOR_SPECIFIC_HOME_SUCCESS = 'FLOOR_READ_ALL_FOR_SPECIFIC_HOME_SUCCESS'
+export const FLOOR_READ_ALL_FOR_SPECIFIC_HOME_FAILURE = 'FLOOR_READ_ALL_FOR_SPECIFIC_HOME_FAILURE'
+
+export function getAllFloorsForSpecificHome(home_id) {
+    console.log("get All floor for specific home action has been called")
+    debugger;
+    return {
+        [CALL_API]: {
+            types: [
+                FLOOR_READ_ALL_FOR_SPECIFIC_HOME,
+                FLOOR_READ_ALL_FOR_SPECIFIC_HOME_SUCCESS,
+                FLOOR_READ_ALL_FOR_SPECIFIC_HOME_FAILURE
+            ],
+            endpoint: `/api/admin/floor/:${home_id}`,
+            method: 'GET'
+        },
+    }
+}

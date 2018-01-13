@@ -4,13 +4,16 @@ import moment from 'moment'
 //src
 import AddApplianceNewInner from './AddApplianceNewInner'
 import {addAppliance} from '../../actions/entities/appliance'
+import {getAllHomes} from '../../actions/entities/home'
+import {getAllFloorsForSpecificHome} from '../../actions/entities/floor'
 
 
 const mapStateToProps = (state, ownProps) => {
-    return {}
+    const {entities : {homes : {allHomes}}} = state
+    return {allHomes}
 }
 
-@connect(mapStateToProps,{addAppliance})
+@connect(mapStateToProps,{addAppliance,getAllHomes,getAllFloorsForSpecificHome})
 
 
 export default class AddApplianceNew extends React.Component {
@@ -34,6 +37,10 @@ export default class AddApplianceNew extends React.Component {
         this.handleCancelDialog = this.handleCancelDialog.bind(this);
     }
 
+    componentDidMount(){
+        const  {getAllHomes} = this.props
+        getAllHomes();
+    }
 
 
    handleCloseDialog() {
@@ -56,6 +63,8 @@ export default class AddApplianceNew extends React.Component {
 
 
     handleHomeName(event, index, value){
+        const {getAllFloorsForSpecificHome} = this.props
+        getAllFloorsForSpecificHome(value);
         this.setState({selectedHomeName: value});
     }
 

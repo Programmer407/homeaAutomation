@@ -4,13 +4,16 @@ import moment from 'moment'
 //src
 import AddPalaceInner from './AddPalaceInner'
 import {addPalace} from '../../actions/entities/palace'
+import {getAllHomes} from '../../actions/entities/home'
+import {getAllFloorsForSpecificHome} from '../../actions/entities/floor'
 
 
 const mapStateToProps = (state, ownProps) => {
-    return {}
+    const {entities : {homes : {allHomes}}} = state
+    return {allHomes}
 }
 
-@connect(mapStateToProps,{addPalace})
+@connect(mapStateToProps,{addPalace,getAllHomes,getAllFloorsForSpecificHome})
 
 
 export default class AddPalace extends React.Component {
@@ -32,6 +35,10 @@ export default class AddPalace extends React.Component {
     }
 
 
+    componentDidMount(){
+        const  {getAllHomes} = this.props
+        getAllHomes();
+    }
 
    handleCloseDialog() {
    const {handleCancelDialog,addPalace} = this.props
@@ -52,6 +59,8 @@ export default class AddPalace extends React.Component {
 
 
     handleHomeName(event, index, value){
+        const {getAllFloorsForSpecificHome} = this.props
+        getAllFloorsForSpecificHome(value);
         this.setState({selectedHomeName: value});
     }
 

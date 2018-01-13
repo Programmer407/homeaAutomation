@@ -4,13 +4,16 @@ import moment from 'moment'
 //src
 import AddSensorInner from './AddSensorInner'
 import {addSensor} from '../../actions/entities/sesnor'
+import {getAllHomes} from '../../actions/entities/home'
+import {getAllFloorsForSpecificHome} from '../../actions/entities/floor'
 
 
 const mapStateToProps = (state, ownProps) => {
-    return {}
+    const {entities : {homes : {allHomes}}} = state
+    return {allHomes}
 }
 
-@connect(mapStateToProps,{addSensor})
+@connect(mapStateToProps,{addSensor,getAllHomes,getAllFloorsForSpecificHome})
 
 
 export default class AddSensor extends React.Component {
@@ -34,7 +37,10 @@ export default class AddSensor extends React.Component {
         this.handleCancelDialog = this.handleCancelDialog.bind(this);
     }
 
-
+    componentDidMount(){
+        const  {getAllHomes} = this.props
+        getAllHomes();
+    }
 
    handleCloseDialog() {
    const {handleCancelDialog,addSensor} = this.props
