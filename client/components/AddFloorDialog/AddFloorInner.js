@@ -7,9 +7,10 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
+import { DatePicker, SelectField, RadioButtonGroup, Checkbox,  AutoComplete } from 'material-ui'
 
 const AddFloorInner = (props) =>{
-    const {handleCloseDialog,handleCancelDialog,open,isSubmit,handleHomeId,handleFloorType,handleFloorName, homeId,floorType,floorName} = props;
+    const {handleCloseDialog,handleCancelDialog,open,isSubmit,handleHomeId,handleFloorType,handleFloorName, homeId,floorType,floorName,allHomes} = props;
     const AddFloorActions = [
         <FlatButton
             label="Cancel"
@@ -33,28 +34,31 @@ const AddFloorInner = (props) =>{
             >
 
                 <div className="row">
-                    <div className="col-sm-2">
-                        <Subheader style={{marginTop : 17,paddingLeft : 0}}>Home Name</Subheader>
-                        <Divider />
+                    <div className="col-sm-6">
+                        <SelectField onChange={handleHomeId}
+                                     value={homeId}
+                                     floatingLabelText="Home"
+                                     floatingLabelFixed
+                                     fullWidth
+                                     errorText={isSubmit && homeId == "" && "Please Select Home"}
+                        >
+                            {allHomes.map((home,index)=>{
+                                return <MenuItem value={home.home_id} primaryText={home.name} />
+                            })}
+                        </SelectField>
                     </div>
-                    <div className="col-sm-4">
-                        <DropDownMenu value={1}  style={{marginTop : 15}} onChange={handleHomeId} >
-                            <MenuItem value={1} primaryText="Kamran Home" />
-                            <MenuItem value={2} primaryText="Irfan Home" />
-                            <MenuItem value={3} primaryText="My New Home" />
-                            <MenuItem value={4} primaryText="My Another Home" />
-                        </DropDownMenu>
-                    </div>
-                    <div className="col-sm-2">
-                        <Subheader style={{marginTop : 16,paddingLeft : 0}}>Floor Type</Subheader>
-                        <Divider />
-                    </div>
-                    <div className="col-sm-4">
-                        <DropDownMenu value={1}  style={{marginTop : 15}} onChange={handleFloorType} >
+                    <div className="col-sm-6">
+                        <SelectField onChange={handleFloorType}
+                                     value={floorType}
+                                     floatingLabelText="Floor Type"
+                                     floatingLabelFixed
+                                     fullWidth
+                                     errorText={isSubmit && floorType == "" && "Please Select Floor Type"}
+                        >
                             <MenuItem value={1} primaryText="Ground Floor" />
                             <MenuItem value={2} primaryText="First Floor" />
                             <MenuItem value={3} primaryText="Second Floor" />
-                        </DropDownMenu>
+                        </SelectField>
                     </div>
 
                 </div>

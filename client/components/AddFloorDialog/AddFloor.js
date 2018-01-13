@@ -4,13 +4,15 @@ import moment from 'moment'
 //src
 import AddFloorInner from './AddFloorInner'
 import {addfloor} from '../../actions/entities/floor'
+import {getAllHomes} from '../../actions/entities/home'
 
 
 const mapStateToProps = (state, ownProps) => {
-    return {}
+    const {entities : {homes : {allHomes}}} = state
+    return {allHomes}
 }
 
-@connect(mapStateToProps,{addfloor})
+@connect(mapStateToProps,{addfloor,getAllHomes})
 
 
 export default class AddFloor extends React.Component {
@@ -30,6 +32,10 @@ export default class AddFloor extends React.Component {
     }
 
 
+    componentDidMount(){
+        const  {getAllHomes} = this.props
+        getAllHomes();
+    }
 
    handleCloseDialog() {
    const {handleCancelDialog,addfloor} = this.props

@@ -25,7 +25,7 @@ if(isLoading ==true)
 
             <div className="row">
                     <div className="col-lg-8 col-md-6 col-sm-4 ">
-                        <FlatButton label="+ Add Appliance" onTouchTap={handleAddApplianceDialogOpen}/>
+                        {/*<FlatButton label="+ Add Appliance" onTouchTap={handleAddApplianceDialogOpen}/>*/}
                         <AddAppliance
                                open = {addApplianceDialogOpen}
                                handleCancelDialog = {handleAddApplianceDialogClose}

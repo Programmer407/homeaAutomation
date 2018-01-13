@@ -25,3 +25,22 @@ export function addHome(name,description,accountId) {
         payload: {name,description,accountId}
     }
 }
+
+export const HOME_READ_ALL = 'HOME_READ_ALL'
+export const HOME_READ_ALL_SUCCESS = 'HOME_READ_ALL_SUCCESS'
+export const HOME_READ_ALL_FAILURE = 'HOME_READ_ALL_FAILURE'
+
+export function getAllHomes() {
+    console.log("get All home action has been called")
+    return {
+        [CALL_API]: {
+            types: [
+                HOME_READ_ALL,
+                HOME_READ_ALL_SUCCESS,
+                HOME_READ_ALL_FAILURE
+            ],
+            endpoint: `/api/admin/allHome`,
+            method: 'GET'
+        },
+    }
+}
