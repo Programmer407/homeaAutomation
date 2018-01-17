@@ -31,7 +31,7 @@ const PageManageUserInner = props => {
               <div className="card bg-white">
                 <div className="card-content">
                   <section className="logo text-center">
-                    <h1><a href="#/">Wellcome Admin</a></h1>
+                    <h1><a href="#/">Manage User</a></h1>
                     {
                       renderMessage()
                     }
@@ -128,12 +128,12 @@ const PageManageUserInner = props => {
                     </fieldset>
 										<div className="card-action no-border text-right">
 
-											{
+											{/*{
 												renderSubmitButton({
 													label: 'Logout',
 													labelWhenSubmitting: 'Logout'
 												})
-											}
+											}*/}
                                           <Link to="/adminDashboard" className="color-gray-light">Cancel</Link>
 										</div>
                   </form>

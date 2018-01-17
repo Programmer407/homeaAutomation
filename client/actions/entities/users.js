@@ -27,6 +27,10 @@ function callApiLogin(email, password, rememberMe) {
 export function login(email, password, rememberMe) {
   return (dispatch, getState) =>
     dispatch(callApiLogin(email, password, rememberMe))
+       /* .then((response) => dispatch(push(
+            '/adminDashboard'
+        )));*/
+
 }
 
 export const USER_LOGOUT = 'USER_LOGOUT'

@@ -75,7 +75,7 @@ const PageManageFloorInner = props => {
                         <div className="col-lg-6">
                           <Link to="/deleteUser" className="color-gray-light">
                           <FlatButton
-                              label="Delete Account"
+                              label="Delete Floor"
                               primary={true}
                               icon={<DeleteIcon />}
                               fullWidth={true}
@@ -96,12 +96,12 @@ const PageManageFloorInner = props => {
                     </fieldset>
 										<div className="card-action no-border text-right">
 
-											{
-												renderSubmitButton({
-													label: 'Logout',
-													labelWhenSubmitting: 'Logout'
-												})
-											}
+											{/*{*/}
+												{/*renderSubmitButton({*/}
+													{/*label: 'Logout',*/}
+													{/*labelWhenSubmitting: 'Logout'*/}
+												{/*})*/}
+											{/*}*/}
                                           <Link to="/adminDashboard" className="color-gray-light">Cancel</Link>
 										</div>
                   </form>

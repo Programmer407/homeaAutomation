@@ -96,12 +96,12 @@ const PageManageAccountInner = props => {
                     </fieldset>
 										<div className="card-action no-border text-right">
 
-											{
+											{/*{
 												renderSubmitButton({
 													label: 'Logout',
 													labelWhenSubmitting: 'Logout'
 												})
-											}
+											}*/}
                                           <Link to="/adminDashboard" className="color-gray-light">Cancel</Link>
 										</div>
                   </form>

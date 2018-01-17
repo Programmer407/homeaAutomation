@@ -56,9 +56,9 @@ const PageLoginInner = (props) => {
                                 </div>
                             </div>
                             <div className="additional-info back-plate">
-                                <Link to="/register">Sign Up</Link>
+                               {/* <Link to="/register">Sign Up</Link>
                                 <span className="divider-h" />
-                                <Link to="/forgotPassword">Forgot your password?</Link>
+                                <Link to="/forgotPassword">Forgot your password?</Link>*/}
                             </div>
                         </div>
                     </div>

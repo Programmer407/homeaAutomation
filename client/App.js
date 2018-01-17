@@ -80,17 +80,17 @@ export default class App extends React.Component {
                       <PublicRoute path="/test" component={TestComponent} />
                       <PublicRoute path="/login" component={PageLogin} />
                       <Route path="/logout" component={PageLogout} />
-                      <PublicRoute path="/register" component={PageRegister} />
+                      <PrivateRoute path="/register" component={PageRegister} />
                     {/*  <PublicRoute path="/dashboard" component={PageDashboard} />*/}
-                      <PublicRoute path="/adminDashboard" component={PageAdminDashboard} />
-                      <PublicRoute path="/manageUser" component={PageManageUser} />
-                      <PublicRoute path="/manageAccount" component={PageManageAccount} />
-                      <PublicRoute path="/manageFloor" component={PageManageFloor} />
-                      <PublicRoute path="/managePalace" component={PageManagePalace} />
-                      <PublicRoute path="/manageAppliance" component={PageManageAppliance} />
-                      <PublicRoute path="/manageHome" component={PageManageHome} />
-                      <PublicRoute path="/deleteUser" component={PageDeleteUser} />
-                      <PublicRoute path="/editUser" component={PageEditUser} />
+                      {/*<PublicRoute path="/adminDashboard" component={PageAdminDashboard} />*/}
+                      <PrivateRoute path="/manageUser" component={PageManageUser} />
+                      <PrivateRoute path="/manageAccount" component={PageManageAccount} />
+                      <PrivateRoute path="/manageFloor" component={PageManageFloor} />
+                      <PrivateRoute path="/managePalace" component={PageManagePalace} />
+                      <PrivateRoute path="/manageAppliance" component={PageManageAppliance} />
+                      <PrivateRoute path="/manageHome" component={PageManageHome} />
+                      <PrivateRoute path="/deleteUser" component={PageDeleteUser} />
+                      <PrivateRoute path="/editUser" component={PageEditUser} />
                       {/*<PublicRoute path="/currentStatus" component={PageCurrentStatus} />*/}
                     {/*  <PublicRoute path="/history" component={PageHistory} />*/}
                       <Route exact path="/errors" component={PageErrorView} />
@@ -103,6 +103,11 @@ export default class App extends React.Component {
                           exact
                           path="/dashboard"
                           component={PageDashboard}
+                      />
+                      <PrivateRoute
+                          exact
+                          path="/adminDashboard"
+                          component={PageAdminDashboard}
                       />
                       <PrivateRoute
                           exact

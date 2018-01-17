@@ -33,7 +33,7 @@ const PageAdminDashboardInner = props => {
               <div className="card bg-white">
                 <div className="card-content">
                   <section className="logo text-center">
-                    <h1><a href="#/">Wellcome Admin</a></h1>
+                    <h1><a href="#">Wellcome Admin</a></h1>
                     {
                       renderMessage()
                     }
@@ -172,7 +172,7 @@ const PageAdminDashboardInner = props => {
 
                       <div className="divider" />
                     </fieldset>
-										<div className="card-action no-border text-right">
+									{/*	<div className="card-action no-border text-right">
 
 											{
 												renderSubmitButton({
@@ -180,7 +180,7 @@ const PageAdminDashboardInner = props => {
 													labelWhenSubmitting: 'Logout'
 												})
 											}
-										</div>
+										</div>*/}
                   </form>
                 </div>
               </div>
