@@ -45,6 +45,15 @@ module.exports ={
       callback(null,obj)
 
     })
+  },
+  findSensorById:function(data,callback){
+    var query_data = {sensor_id:data.id};
+    sensorManager.getById(query_data).then(function(result){
+      if(result)
+        callback(null,{sensorDetail:result});
+      else
+        callback('error',null);
+    })
   }
 
 

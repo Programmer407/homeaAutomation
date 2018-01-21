@@ -24,7 +24,7 @@ module.exports ={
 
 
           console.log('query data')
-      console.log(query_data)
+         console.log(query_data)
 
 
         homeManager.getByAccount(query_data).then(function(home){
@@ -74,6 +74,31 @@ module.exports ={
       callback(null,obj)
 
     })
+  },
+  getOneHomeDetail:function(callback){
+    var query_data={account:data.account}
+
+
+    console.log('query data')
+    console.log(query_data)
+
+
+    homeManager.getByAccount(query_data).then(function(home){
+
+      if(home)
+      {
+        console.log('home result')
+        data.home= home
+        callback(null,data);
+
+      }
+
+      else
+        callback('error in getting home data',null);
+
+
+    });
+
   }
 
 

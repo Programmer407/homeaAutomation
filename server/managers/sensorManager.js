@@ -21,6 +21,10 @@ module.exports = {
   addSensor:function(Obj){
 
     return Obj.save()
+  },
+  getById:function(Obj){
+
+    return  models.sensor.findOne({where:{sensor_id:obj.sensor_id},include:models.sensor_type})
   }
 
 

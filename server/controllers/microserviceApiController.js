@@ -13,7 +13,7 @@ var sensorService = require('../services/sensorServices');
 var switchLogService = require('../services/switchLogService');
 var sensorlogService = require('../services/sensorlogServices');
 
-
+var homeService = require('../services/homeServices');
 
 module.exports=function(io){
 
@@ -53,6 +53,16 @@ module.exports=function(io){
                     },
                     function addSensorLog(data,callback){
                         sensorlogService.addSensorLog(data,callback)
+                    },
+                    function findSensor(data,callback){
+                      sensorlogService.addSensorLog(data,callback)
+                    },function findHome(data,callback){
+                     homeService.getOneHomeDetail(data,callback)
+
+                    //now check mode and take the required action.if mode is automatic then update the things
+                    //implementation pending
+
+
                     }
 
                 ],function(error,result){
