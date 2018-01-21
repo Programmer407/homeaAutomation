@@ -112,7 +112,7 @@ if(isLoading ==true)
                 <div className="col-lg-3 col-lg-offset-2 col-md-4 col-sm-6  " style={{paddingTop : "30px"}}>
                     {NowData.switches.map((switch1,key) => {
                         if((switch1.palacePalaceId == roomSelected && (switch1.appliance.type == "Light"))) {
-
+                       debugger;
                             return(
                                 <div>
                                     <WidgetOnOffAppliance
@@ -120,6 +120,9 @@ if(isLoading ==true)
                                         picture="fa fa-comments fa-5x"
                                         applianceType="bulb"
                                         applianceId = {switch1.applianceApplianceId}
+                                        switchId = {switch1.switch_id}
+                                        palaceId = {switch1.palacePalaceId}
+                                        floorId = {floorSelected}
                                         applianceName={switch1.name}
                                         applianceCondition={switch1.status}
                                         roomName={roomSelected}
@@ -147,6 +150,9 @@ if(isLoading ==true)
                                         picture="fa fa-comments fa-5x"
                                         applianceType="fan"
                                         applianceId = {switch1.applianceApplianceId}
+                                        switchId = {switch1.switch_id}
+                                        palaceId = {switch1.palacePalaceId}
+                                        floorId = {floorSelected}
                                         applianceName={switch1.name}
                                         applianceCondition={switch1.status}
                                         roomName={roomSelected}

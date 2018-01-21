@@ -27,8 +27,8 @@ class StatWidget extends Component{ // eslint-disable-line
   }
 
   handleToggle(event,newValue){
-      const {toggleAppliance,applianceId} = this.props
-      toggleAppliance(applianceId,newValue);
+      const {toggleAppliance,applianceId,switchId,palaceId,floorId} = this.props
+      toggleAppliance(switchId,applianceId,palaceId,floorId,newValue);
   }
 
     render() {
