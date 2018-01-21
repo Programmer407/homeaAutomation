@@ -57,7 +57,7 @@ module.exports=function(io){
 
                 ],function(error,result){
                     if(error)
-                        console.log('error in saving logs')
+                        console.log('error in saving logs');
                     else
                         console.log('sucessfully saved');
 
@@ -66,8 +66,8 @@ module.exports=function(io){
             }
 
             console.log('a new msg received from microservice '+data);
-            now_io.to(data.home_id).emit('msg',data);
-            dashboard_io.to(data.home_id).emit('msg',data);
+            now_io.to(data.home_id).emit('sensorStatus',data);
+            dashboard_io.to(data.home_id).emit('sensorStatus',data);
         })
     });
 

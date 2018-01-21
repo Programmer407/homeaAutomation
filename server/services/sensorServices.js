@@ -29,7 +29,7 @@ module.exports ={
 
     },
     updateSensorValue:function(data,callback){
-        var query_data = {sensor_id:data.sensor_id,value:data.value};
+        var query_data = {sensor_id:data.id,value:data.value};
         sensorManager.updateValueById(query_data).then(function(result){
             if(result)
                  callback(null,data);

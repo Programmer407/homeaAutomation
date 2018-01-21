@@ -79,7 +79,14 @@ module.exports ={
         var switches = data.switches;
         let total =0;
         let total_on=0;
+        console.log('switches')
+
+      console.log(data.appliance_id)
+      console.log('data of switch')
+      console.log(data)
         for(var i=0;i<switches.length;i++){
+            console.log("inside the loop of switches ")
+
             if(switches[i].dataValues.applianceApplianceId==data.appliance_id)
             {
                 total++;

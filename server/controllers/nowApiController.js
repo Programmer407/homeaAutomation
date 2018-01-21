@@ -126,7 +126,7 @@ module.exports= function(io){
       return
     }
 
-    const { switch_id,status} = body
+    const { switch_id,appliance_id,palace_id,floor_id,status} = body
     if ( !switch_id || (typeof(status) == undefined )) {
       rejectRequest('Missing required arguments', res)
       return
@@ -136,8 +136,12 @@ module.exports= function(io){
     //save it in the db
     //update relay and relaylog table.
 
-    var data = {switch_id,status,account:user.accountAccountId}
-    var receive_data = data;
+    console.log('appliance id'+appliance_id)
+    console.log('user')
+    console.log(user)
+    var data = {switch_id,status,account:user.accountAccountId,appliance_id,palace_id,floor_id}
+
+    var receive_data = {id:switch_id,type:'relay',value:(status==true)?1:0};
 
 
     async.waterfall([
@@ -184,13 +188,28 @@ module.exports= function(io){
         const { user } = req
 
         if(user.accountAccountId){
-          console.log('sending message to room '+user.accountAccountId);
-          now_io.to(user.accountAccountId).emit('switchStatus',{ switch_id,status} );
+          homeService.findHome({account:user.accountAccountId},function(error,result){
+
+            if(!error)
+            {
+              console.log('sending message to room '+result.home_id);
+              now_io.to(result.home_id).emit('switchStatus',{ switch_id,status} );
+
+            }else {
+              console.log('error in sending socket msg to desktop app')
+            }
+
+
+          })
+
         }
 
+        console.log('receive_data')
+        console.log(receive_data)
         //send it to gateway raspberry pi
         micro_io.to(data.home_id).emit('message',receive_data);
         console.log('done');
+
 
 
       }
@@ -218,7 +237,20 @@ module.exports= function(io){
 
           if(user.accountAccountId){
               console.log('In /now end point i am connecting to room ' + user.accountAccountId);
-              socket.join(user.accountAccountId);
+              homeService.findHome({account:user.accountAccountId},function(error,result){
+
+                if(!error)
+                {
+                  console.log('In /now end point i am connecting to room ' + result.home_id);
+                  socket.join(result.home_id);
+
+                }else {
+                  console.log('error in getting home id ');
+                }
+
+
+              })
+
           }
           else {
               console.log('user not found')
