@@ -15,6 +15,7 @@ const mapStateToProps = (state, ownProps) => {
     const {feed : {currentStatus : {currentStatus : {now}}}} = state
     const {auth : {user}} = state
     const {feed : {currentStatus : {isLoading }}} = state
+    debugger;
     return {now,isLoading,user}
 }
 

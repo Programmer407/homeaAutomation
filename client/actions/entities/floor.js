@@ -33,7 +33,6 @@ export const FLOOR_READ_ALL_FOR_SPECIFIC_HOME_FAILURE = 'FLOOR_READ_ALL_FOR_SPEC
 
 export function getAllFloorsForSpecificHome(home_id) {
     console.log("get All floor for specific home action has been called")
-    debugger;
     return {
         [CALL_API]: {
             types: [

@@ -63,7 +63,6 @@ export const USER_REGISTER_FAILURE = 'USER_REGISTER_FAILURE'
 
 export function register(firstName, lastName, email, password,accountId) {
   console.log("firstName \n"+firstName+"\n LastName \n"+lastName+"\n Email \n"+email+"\n Password \n"+password)
-    debugger;
   return {
     [CALL_API]: {
       types: [
