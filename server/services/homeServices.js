@@ -44,6 +44,7 @@ module.exports ={
 
                 if(home.length>0){
                   console.log('lenght greater then zero')
+                  console.log(home)
                   data.home_id = home[0].dataValues.home_id
                   callback(null,data);
                 }

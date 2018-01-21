@@ -57,7 +57,7 @@ module.exports=function(io){
 
                 ],function(error,result){
                     if(error)
-                        console.log('error in saving logs')
+                        console.log('error in saving logs');
                     else
                         console.log('sucessfully saved');
 

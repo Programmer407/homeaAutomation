@@ -115,7 +115,7 @@ module.exports  = {
     addSensorLog:function(data,callback){
         var now_date = new Date();
         var query_data = {
-            sensor_id:data.sensor_id,
+            sensor_id:data.id,
             value:data.value,
             time:dateformat(now_date,'isoTime'),
             date:dateformat(now_date,'isoDate')
