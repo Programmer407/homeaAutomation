@@ -25,3 +25,15 @@ export function addSensor(homeId,floorId,palaceId,sensorType,name) {
         payload: {name,sensorType,palaceId,floorId,homeId}
     }
 }
+
+export const SENSOR_VALUE_SOCKET = 'SENSOR_VALUE_SOCKET'
+
+
+export function changeSensorValueSocket(sensorData) {
+    const {value,sensor_id} = sensorData
+    console.log("sensor value socket action has been called")
+    return {
+        type: SENSOR_VALUE_SOCKET,
+        payload: { sensor_id,value}
+    }
+}
