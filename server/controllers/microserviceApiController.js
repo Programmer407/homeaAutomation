@@ -66,8 +66,8 @@ module.exports=function(io){
             }
 
             console.log('a new msg received from microservice '+data);
-            now_io.to(data.home_id).emit('msg',data);
-            dashboard_io.to(data.home_id).emit('msg',data);
+            now_io.to(data.home_id).emit('sensorStatus',data);
+            dashboard_io.to(data.home_id).emit('sensorStatus',data);
         })
     });
 
