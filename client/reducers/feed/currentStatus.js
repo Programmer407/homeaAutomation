@@ -51,10 +51,10 @@ function currentStatus(state = "", action) {
 
         case ActionTypes.SENSOR_VALUE_SOCKET: {
             debugger;
-            const {payload : {sensor_id,value}} = action
+            const {payload : {id,value,type,home_id}} = action
             let updatedSensorValue = state.now.sensors;
             updatedSensorValue.map((sensor1=>{
-                if(sensor1.sensor_id == sensor_id){
+                if(sensor1.sensor_id == id){
                     sensor1.value = value
                 }
             }))

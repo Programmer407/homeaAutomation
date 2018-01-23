@@ -24,7 +24,7 @@ import io from 'socket.io-client'
 
 import {toggleApplianceSocket,changeSensorValueSocket} from '../actions'
 
-import {SWITCH_STATUS,SENSOR_VAVLUE} from '../../shared/socketIoMessageTypes'
+import {SWITCH_STATUS,sensorStatus} from '../../shared/socketIoMessageTypes'
 
 let socket
 
@@ -62,7 +62,7 @@ export const configureSocketNowPage = function (user) {
         store.dispatch(toggleApplianceSocket(msg))
     })
 
-    socket.on(SENSOR_VAVLUE,     (msg)     => {
+    socket.on(sensorStatus,     (msg)     => {
         console.log('sensorValue')
         console.log(msg)
         store.dispatch(changeSensorValueSocket(msg))

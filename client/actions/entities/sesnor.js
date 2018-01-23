@@ -30,10 +30,10 @@ export const SENSOR_VALUE_SOCKET = 'SENSOR_VALUE_SOCKET'
 
 
 export function changeSensorValueSocket(sensorData) {
-    const {value,sensor_id} = sensorData
+    const {id,value,type,home_id} = sensorData
     console.log("sensor value socket action has been called")
     return {
         type: SENSOR_VALUE_SOCKET,
-        payload: { sensor_id,value}
+        payload: {id,value,type,home_id}
     }
 }
