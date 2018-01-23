@@ -20,6 +20,7 @@ var sensorlogService = require('../services/sensorlogServices');
 var dashboarduserdataService = require('../services/dashboarduserdataServices');
 
 import {ensureAuthorization} from "./../utils/"
+import { ensureAnonymity, rejectRequest, caughtError } from '../utils'
 
 var models = require('./../models')
 
@@ -227,6 +228,56 @@ module.exports= function(io){
                 });
 
     });
+
+
+
+
+    //for setting mode
+  router.post('/setMode',function(req,res,nex){
+
+    console.log('/setMode called')
+    const { body } = req
+    if ( !body ) {
+      rejectRequest('Missing request body', res)
+      return
+    }
+
+    let { mode,home_id} = body
+    if ( !mode || !home_id) {
+      rejectRequest('Missing required arguments', res)
+      return
+    }
+
+    if(mode =='manual')
+    {
+      mode =2
+
+    }
+    else
+    {
+      mode =1
+    }
+
+    dashboarduserdataService.updateMode({ mode,home_id},function(err,result){
+
+      if(!err)
+      {
+        res
+          .status(200)
+          .send({
+            message: 'saved!'
+          })
+      }
+      else
+      {
+        rejectRequest('Unkown Error occured', res)
+      }
+    })
+
+
+
+
+  });
 
     io.on('connection',function(socket ){
         console.log('a new user connected in /dashboard end point');

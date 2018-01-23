@@ -53,28 +53,30 @@ module.exports=function(io){
                     },
                     function addSensorLog(data,callback){
                         sensorlogService.addSensorLog(data,callback)
-                    },
-                    function findSensor(data,callback){
-                      sensorlogService.addSensorLog(data,callback)
-                    },function findHome(data,callback){
-                     homeService.getOneHomeDetail(data,callback)
+                    }//,
+                    // function findSensor(data,callback){
+                    //   sensorService.findSensorById(data,callback)
+                    // },function findHome(data,callback){
+                    //  homeService.getOneHomeDetail(data,callback)
+                    //
+                    // //now check mode and take the required action.if mode is automatic then update the things
+                    // //implementation pending
 
-                    //now check mode and take the required action.if mode is automatic then update the things
-                    //implementation pending
 
-
-                    }
+                    // }
 
                 ],function(error,result){
                     if(error)
                         console.log('error in saving logs');
                     else
+                    {
                         console.log('sucessfully saved');
+                        console.log(result);
+                    }
 
                 });
 
             }
-
             console.log('a new msg received from microservice '+data);
             now_io.to(data.home_id).emit('sensorStatus',data);
             dashboard_io.to(data.home_id).emit('sensorStatus',data);
