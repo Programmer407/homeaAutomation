@@ -24,3 +24,26 @@ export function fetchDashboardData() {
         },
     }
 }
+
+
+
+export const CHANGE_HOME_MODE = 'CHANGE_HOME_MODE'
+export const CHANGE_HOME_MODE_SUCCESS = 'CHANGE_HOME_MODE_SUCCESS'
+export const CHANGE_HOME_MODE_FAILURE = 'CHANGE_HOME_MODE_FAILURE'
+
+export function changeHomeMode(home_id,mode) {
+    debugger;
+    console.log("change mode  action has been called")
+    return {
+        [CALL_API]: {
+            types: [
+                CHANGE_HOME_MODE,
+                CHANGE_HOME_MODE_SUCCESS,
+                CHANGE_HOME_MODE_FAILURE
+            ],
+            endpoint: `/api/dashboard/setMode`,
+            method: 'POST'
+        },
+        payload: {home_id,mode}
+    }
+}

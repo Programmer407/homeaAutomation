@@ -5,86 +5,33 @@ import MenuItem from 'material-ui/MenuItem';
 
 import './Widget.scss'
 
+import {connect} from 'react-redux'
+import {changeHomeMode} from '../../actions/entities/dashboard'
+
+const mapStateToProps = (state, ownProps) => {
+    return {}
+}
+
+@connect(mapStateToProps,{changeHomeMode})
 
 class StatWidget extends Component{ // eslint-disable-line
-  static propTypes = {
-    style: React.PropTypes.string,
-    applianceOn: React.PropTypes.number,
-    totalAppliance: React.PropTypes.number,
-    picture: React.PropTypes.string,
-    floorName: React.PropTypes.string,
-    applianceType : React.PropTypes.string,
-  }
+    constructor(props){
+        super(props);
+        this.state = {
+          modeName : this.props.applianceOn
+        }
+        this.handleChangeMode = this.handleChangeMode.bind(this);
+    }
+    handleChangeMode(event, index, value){
+        const {changeHomeMode,homeId} = this.props
+        this.setState({modeName : value})
+             changeHomeMode(homeId,value);
+    }
+
   render() {
+      console.log(this.props);
+      debugger;
     return (
-    /*    <div class="panel panel-default" style={{backgroundColor : "#ddd"}}>
-          <div class="panel-heading" style={{backgroundColor : "#d9534f"}}>
-            <div className="row">
-              <div className="col-xs-3">
-                <div className="imag">
-
-                    {
-                        this.props.applianceType  == 'bulb'
-                            ?    <img src={require("../../Public/Images/BulbNew.jpg")}   width="60" height="80"  />
-                            :
-                            (
-                                this.props.applianceType == 'fan'
-                                    ?   <img src={require("../../Public/Images/Fan2New.jpg")}   width="60" height="80"  />
-                                    :   <img src={require("../../Public/Images/modeNew.jpg")}   width="60" height="80"  />  )
-
-                    }
-
-                </div>
-
-              </div>
-
-
-              <div className="col-xs-9 text-right">
-                <div className="huge">
-                    {
-                        this.props.applianceOn
-                    }
-                </div>
-                <div>
-                    {
-                        this.props.applianceType == 'bulb'
-                            ? "Bulb On Out Of"
-                            :
-                            (  this.props.applianceType == 'fan'
-                                ? "Fan On Out Of"
-                                :  "Mode" )
-                    }
-                </div>
-                <div>
-                    {
-                        this.props.totalAppliance== "" ? 'Activated' :  this.props.totalAppliance
-                    }
-                </div>
-
-              </div>
-            </div>
-          </div>
-          <div class="panel-body">
-              {
-                  this.props.floorName == "homeMode" ?
-                      <div className="row">
-                        <div className="col-lg-6 col-md-6 text-center ">
-                          Change Mood
-                        </div>
-
-                        <div className="col-lg-6 col-md-6 text-center">
-                          <select>
-                            <option value="" >Select Mood</option>
-                            <option value="General"  >Auto</option>
-                            <option value="Manual"  >Manual</option>
-                            <option value="Manual"  >Sleep</option>
-                          </select>
-                        </div>
-                      </div> :
-                      <div>Home</div>
-              }
-          </div>
-        </div>*/
     <div className="Widget">
     <Panel
         header={<div className="row" style={{backgroundColor : this.props.applianceType  == 'bulb' ? "#0088FE" : (this.props.applianceType == 'fan' ?  "#5cb85c" : "#00AF98"),   width : "108%", height : "117%", marginTop : "-10px",color:"white","fontWeight": "900"}}>
@@ -121,12 +68,17 @@ class StatWidget extends Component{ // eslint-disable-line
                     :
                  (  this.props.applianceType == 'fan'
                    ? "Fan On Out Of"
-                   :  "Mode" )
+                   :   <DropDownMenu value={this.state.modeName} onChange={this.handleChangeMode} >
+                                    <MenuItem value="Automatic" primaryText="Automatic" />
+                      <MenuItem value="Manual" primaryText="Manual" />
+                    </DropDownMenu>
+
+                     )
               }
             </div>
              <div>
               {
-                this.props.totalAppliance== "" ? 'Activated' :  this.props.totalAppliance
+                this.props.totalAppliance== "" ? '' :  this.props.totalAppliance
               }
             </div>
 
@@ -135,20 +87,10 @@ class StatWidget extends Component{ // eslint-disable-line
       >
           {
               this.props.floorName == "homeMode" ?
-                  <div className="row">
-                    <div className="col-lg-6 col-md-6 text-center ">
-                      Change Mood
-                    </div>
-
-                    <div className="col-lg-6 col-md-6 text-center">
-                      <select>
-                        <option value="" >Select Mood</option>
-                        <option value="General"  >Auto</option>
-                        <option value="Manual"  >Manual</option>
-                        <option value="Manual"  >Sleep</option>
-                      </select>
-                    </div>
-                  </div> :
+                 <div>
+                  Home
+                  </div>
+                  :
                   <div>Home</div>
           }
       </Panel>

@@ -31,6 +31,17 @@ function dashboard(state = "", action) {
         case ActionTypes.DASHBOARD_ALL_DATA_SUCCESS: {
             return action.payload;
         }
+        case ActionTypes.CHANGE_HOME_MODE:
+            {
+            const {payload} = action
+            debugger;
+                state.DashboardData.overview.mode.name
+            let updatedMode = state.DashboardData;
+                updatedMode.overview.mode.name = payload.mode;
+            return {...state,
+                DashboardData : updatedMode}
+
+        }
 
         default: {
             return state

@@ -63,6 +63,7 @@ debugger;
                            applianceOn={DashboardData.overview.bulb.totalon}
                            totalAppliance={DashboardData.overview.bulb.total}
                            floorName=" "
+                           homeId = {NowData.floors[0].homeHomeId}
                            linkTo="/"
                        />
                    </div>
@@ -82,6 +83,7 @@ debugger;
                            applianceOn={DashboardData.overview.fan.totalon}
                            totalAppliance={DashboardData.overview.fan.total}
                            floorName=" "
+                           homeId = {NowData.floors[0].homeHomeId}
                            linkTo="/"
                        />
                    </div>
@@ -100,6 +102,7 @@ debugger;
                            applianceOn={DashboardData.overview.mode.name}
                            totalAppliance=""
                            floorName="homeMode"
+                           homeId = {NowData.floors[0].homeHomeId}
                            linkTo="/"
                        />
                    </div>
