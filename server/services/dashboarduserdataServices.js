@@ -21,7 +21,28 @@ module.exports = {
 
         })
 
-        }
+        },
+
+
+  updateMode:function(data,callback){
+    console.log('updateMode   called')
+    let { mode,home_id} = data
+    let query_data = { mode,home_id}
+    dashboarduserdataManager.updateHomeMode(query_data).then(function(result) {
+
+        console.log('update mode result')
+       console.log(result)
+      if (result) {
+        callback(null, result);
+      }
+      else
+        callback('error in getting data', null);
+
+
+    })
+
+
+  }
 
 
 
